@@ -1,0 +1,21 @@
+{
+  "workpackages": [
+    {
+      "id": "number",
+      "flowId": "string",
+      "entryPoint": "string",
+      "modules": ["string"],
+      "priorityScore": "number",
+      "preExistentModules": ["string"],
+      "dependencies": ["number"],
+      "phase": "number"
+    }
+  ],
+  "phases": [
+    {
+      "id": "number",
+      "workpackages": ["number"],
+      "dependencies": ["number"]
+    }
+  ]
+}

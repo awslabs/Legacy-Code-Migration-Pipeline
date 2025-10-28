@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "timestamp": "ISO8601",
+      "type": "MISSING_FLOW|CIRCULAR_DEPENDENCY|INCONSISTENT_MODULE|PRIORITY_CALCULATION",
+      "flowId": "string",
+      "message": "string",
+      "resolution": "string"
+    }
+  ]
+}

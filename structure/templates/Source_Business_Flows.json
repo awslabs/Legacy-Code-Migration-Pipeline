@@ -1,0 +1,28 @@
+{
+  "flows": [
+    {
+      "flowId": "string",
+      "name": "string",
+      "entryPoint": "string",
+      "entryType": "JCL|CICS|ONLINE",
+      "modules": ["string"],
+      "copybooks": ["string"],
+      "databaseOperations": [
+        {
+          "type": "SQLIO|DBIO",
+          "operation": "READ|WRITE|UPDATE|DELETE",
+          "target": "string"
+        }
+      ],
+      "fileOperations": [
+        {
+          "operation": "IN|OUT|INOUT",
+          "target": "string"
+        }
+      ],
+      "businessDomain": "string",
+      "complexity": "number",
+      "priority": "number"
+    }
+  ]
+}

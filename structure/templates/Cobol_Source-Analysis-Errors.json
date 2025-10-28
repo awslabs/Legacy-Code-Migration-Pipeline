@@ -1,0 +1,12 @@
+{
+  "errors": [
+    {
+      "timestamp": "ISO8601",
+      "type": "PARSE_ERROR|MISSING_DEPENDENCY|DOMAIN_AMBIGUITY|DYNAMIC_CALL",
+      "file": "string",
+      "line": "number",
+      "message": "string",
+      "resolution": "string"
+    }
+  ]
+}
