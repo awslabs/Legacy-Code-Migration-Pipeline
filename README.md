@@ -1,10 +1,48 @@
 # Legacy Code Migration Framework
 
+## Agenda
+
+### ✍️ Project Description
 A comprehensive toolset and framework for migrating legacy code using agentic AI. This framework provides a standardized approach to analyze, plan, and execute legacy code migrations with AI-powered automation.
 
-## Overview
-
 This project enables systematic migration of legacy codebases (particularly COBOL and database systems) to modern architectures using AI agents. The framework provides structured workflows, templates, and validation tools to ensure consistent and reliable migration outcomes.
+
+### 🎯 Goals
+
+1. **Systematic Legacy System Analysis and Understanding**  
+   Transform complex, undocumented legacy systems (particularly COBOL and database systems) into well-understood, documented architectures through AI-powered analysis that extracts business logic, dependencies, and data flows.
+
+2. **Structured Migration Planning and Risk Management**  
+   Break down monolithic legacy migrations into manageable, prioritized workpackages with clear dependencies, timelines, and risk assessments to ensure predictable and controlled migration execution.
+
+3. **Business Rule Extraction and Test Case Definition**  
+   Extract embedded business rules from legacy code and define comprehensive test cases that validate both functional requirements and edge cases, ensuring business logic preservation during migration.
+
+4. **Quality-Assured Automated Code Generation**  
+   Generate modern, maintainable code from legacy systems using AI agents while maintaining comprehensive validation and quality assurance through template-driven deliverables and automated validation frameworks.
+
+5. **Test Case Implementation and Validation**  
+   Implement automated test suites that validate migrated code against extracted business rules and original system behavior, ensuring functional equivalence and regression prevention throughout the migration process.
+
+### 👥 Team
+
+| Role | Name |
+|------|------|
+| Project Manager | kerimman@amazon.de |
+| Implementation | @[add someone] |
+| Marketing / Sales| @[add someone] |
+| QA Lead | @[add someone] |
+| Technical Architect | kerimman@amazon.de |
+
+### ✅ Task Tracker
+
+We use this task tracker to keep track of team tasks: TBD
+
+### 🔑 Key Resources
+
+- [Migration Best Practices Guide](structure/doc/)
+- [AI Agent Configuration](structure/doc/agents/)
+- [Template Library](structure/doc/templates/)
 
 ## Key Features
 
