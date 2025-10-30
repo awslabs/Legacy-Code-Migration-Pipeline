@@ -58,15 +58,31 @@ We use this task tracker to keep track of team tasks: TBD
 ### Prerequisites
 
 - Python 3.7+
+- Git
 - Access to AI agents/models for code analysis
 
 ### Creating a New Migration Project
 
+1. **Create the project structure:**
 ```bash
 python create_project.py <project_name>
 ```
 
-This command creates a complete project structure in the specified directory with all necessary folders, templates, and configuration files.
+2. **Install CLI Agent Orchestrator (CAO) - Optional but Recommended:**
+```bash
+python install_cao.py <project_name>
+```
+
+The first command creates a complete project structure with all necessary folders, templates, and configuration files. The second command downloads and configures the [CLI Agent Orchestrator (CAO)](https://github.com/awslabs/cli-agent-orchestrator) which provides advanced agent management capabilities for your migration project.
+
+### CAO Installation Features
+
+The `install_cao.py` script automatically:
+- Downloads CAO from the official GitHub repository
+- Installs required dependencies (tmux, uv, etc.)
+- Discovers and configures all 28 agents across team subdirectories
+- Sets up the CAO environment for immediate use
+- Provides organized agent listing with team structure visibility
 
 ### Project Structure
 
@@ -79,16 +95,72 @@ project_name/
 ├── templates/            # Report and tracking templates
 ├── prompts/             # AI prompts for different migration phases
 ├── acm/                 # Framework tools and validators
-└── agents/              # AI agent configurations
+└── agents/              # AI agent configurations (28 agents in 5 teams)
+    ├── migration_supervisor.md
+    ├── analysis_team/    # Legacy code and database analysis (5 agents)
+    ├── planning_team/    # Migration workpackage planning (3 agents)
+    ├── business_team/    # Business logic and requirements (7 agents)
+    ├── development_team/ # Code generation and testing (5 agents)
+    └── deployment_team/  # Migration scripts and deployment (7 agents)
 ```
 
 ## Usage
 
 1. **Initialize Project**: Use `create_project.py` to create your migration project
-2. **Configure Paths**: Update `config/paths.cfg` if needed
-3. **Add Legacy Code**: Place source code in `input/legacy/`
-4. **Run Analysis**: Execute analysis workflows using the provided prompts
-5. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
+2. **Install CAO (Optional)**: Run `install_cao.py` to set up agent orchestration
+3. **Configure Paths**: Update `config/paths.cfg` if needed
+4. **Add Legacy Code**: Place source code in `input/legacy/`
+5. **Run Analysis**: Execute analysis workflows using the provided prompts or CAO agents
+6. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
+
+### Using CAO Agents
+
+If you installed CAO, you can use the configured agents directly. The framework includes 28 specialized agents organized in teams:
+
+```bash
+cd <project_name>
+
+# Start the CAO server (required)
+cao-server
+
+# In another terminal, launch an agent session
+cao launch --agents <agent_name>
+
+# Examples:
+# Launch the top-level migration orchestrator
+cao launch --agents migration_supervisor
+
+# Launch team supervisors
+cao launch --agents analysis_team_supervisor
+cao launch --agents business_team_supervisor
+cao launch --agents development_team_supervisor
+
+# Launch specialist agents
+cao launch --agents analysis_specialist_legacy_code
+cao launch --agents business_specialist_requirements
+cao launch --agents development_specialist_code_generation
+```
+
+#### Agent Organization
+
+The framework uses a hierarchical team structure:
+
+- **Analysis Team** (5 agents): Legacy code and database analysis
+- **Planning Team** (3 agents): Migration workpackage planning  
+- **Business Team** (7 agents): Business logic extraction and requirements
+- **Development Team** (5 agents): Code generation and testing
+- **Deployment Team** (7 agents): Migration scripts and deployment
+- **Migration Supervisor** (1 agent): Top-level orchestration
+
+Each team includes specialist agents paired with dedicated reviewers for quality assurance.
+
+### Uninstalling CAO
+
+If you need to remove CAO:
+
+```bash
+uv tool uninstall cli-agent-orchestrator
+```
 
 ### Validation
 

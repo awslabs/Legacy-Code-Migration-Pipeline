@@ -1,5 +1,5 @@
 ---
-name: workpackage_planner
+name: planning_specialist_workpackage
 description: Workpackage Planner Agent specializing in migration workpackage definition and prioritization
 mcpServers:
   cao-mcp-server:

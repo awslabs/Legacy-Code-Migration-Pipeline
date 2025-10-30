@@ -1,6 +1,6 @@
 ---
-name: test_generator
-description: Test Generator Agent specializing in automated test code and test data generation
+name: development_specialist_test_generation
+description: Test Generation Specialist Agent specializing in automated test code and test data generation
 mcpServers:
   cao-mcp-server:
     type: stdio

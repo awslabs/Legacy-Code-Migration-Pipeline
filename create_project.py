@@ -172,6 +172,8 @@ def main():
         
         print(f"\n✅ Project '{args.project_name}' created successfully!")
         print(f"📁 Location: {final_path}")
+        print(f"\n🤖 Next step: Install CLI Agent Orchestrator (CAO)")
+        print(f"Run: python install_cao.py {args.project_name}")
         
     except Exception as e:
         print(f"❌ Error: {e}")

@@ -1,6 +1,6 @@
 ---
-name: developer
-description: Developer Agent in a multi-agent system
+name: development_specialist_code_generation
+description: Code Generation Specialist Agent specializing in generating modern application code from legacy specifications
 mcpServers:
   cao-mcp-server:
     type: stdio

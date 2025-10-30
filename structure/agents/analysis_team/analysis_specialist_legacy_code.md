@@ -1,5 +1,5 @@
 ---
-name: legacy_code_analyst
+name: analysis_specialist_legacy_code
 description: Legacy Code Analyst Agent specializing in COBOL source code analysis and dependency mapping
 mcpServers:
   cao-mcp-server:

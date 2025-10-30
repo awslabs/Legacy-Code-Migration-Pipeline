@@ -1,5 +1,5 @@
 ---
-name: planning_reviewer
+name: planning_reviewer_workpackage
 description: Planning Reviewer Agent specializing in validation of migration workpackage and roadmap planning outputs
 mcpServers:
   cao-mcp-server:

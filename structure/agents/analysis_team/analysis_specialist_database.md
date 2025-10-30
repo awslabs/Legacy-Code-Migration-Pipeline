@@ -1,5 +1,5 @@
 ---
-name: database_analyst
+name: analysis_specialist_database
 description: Database Analyst Agent specializing in database schema analysis and migration assessment
 mcpServers:
   cao-mcp-server:

@@ -1,5 +1,5 @@
 ---
-name: analysis_reviewer
+name: analysis_reviewer_legacy_code
 description: Analysis Reviewer Agent specializing in validation of legacy system analysis outputs
 mcpServers:
   cao-mcp-server:

@@ -11,67 +11,99 @@ The migration framework implements a hierarchical multi-agent system with specia
 ```
 Migration Supervisor (Top Level)
 ├── Analysis Team Supervisor
-│   ├── Legacy Code Analyst
-│   ├── Database Analyst
-│   └── Analysis Reviewer
+│   ├── Legacy Code Specialist ↔ Legacy Code Reviewer
+│   └── Database Specialist ↔ Database Reviewer
 ├── Planning Team Supervisor
-│   ├── Workpackage Planner
-│   └── Planning Reviewer
-├── Business Team Supervisor (Future Phase 3)
-│   ├── Business Logic Analyst*
-│   ├── Requirements Extractor*
-│   ├── Test Case Designer*
-│   └── Business Reviewer*
-├── Development Team Supervisor (Enhanced)
-│   ├── Code Developer
-│   ├── Test Generator
-│   └── Code Reviewer
-└── Deployment Team Supervisor (Future Phase 5)
-    ├── Migration Script Generator*
-    ├── Database Migration Specialist*
-    ├── Deployment Orchestrator*
-    └── Deployment Reviewer*
+│   └── Workpackage Specialist ↔ Workpackage Reviewer
+├── Business Team Supervisor
+│   ├── Logic Extraction Specialist ↔ Logic Extraction Reviewer
+│   ├── Requirements Specialist ↔ Requirements Reviewer
+│   └── Test Design Specialist ↔ Test Design Reviewer
+├── Development Team Supervisor
+│   ├── Code Generation Specialist ↔ Code Generation Reviewer
+│   └── Test Generation Specialist ↔ Test Generation Reviewer
+└── Deployment Team Supervisor
+    ├── Migration Scripts Specialist ↔ Migration Scripts Reviewer
+    ├── Database Migration Specialist ↔ Database Migration Reviewer
+    └── Orchestration Specialist ↔ Orchestration Reviewer
 ```
 
-*Agents marked with asterisk are defined in supervisors but individual agent files await prompt development.
+**Total: 28 Agents** organized in 6 teams with 1:1 specialist-reviewer pairing for granular quality control.
 
 ## Agent Categories
 
-### Supervisor Agents
+### Supervisor Agents (6 agents)
 Coordinate teams and manage workflow phases:
 - **Migration Supervisor**: Top-level orchestrator ensuring sequential phase completion
-- **Analysis Team Supervisor**: Coordinates legacy system analysis activities
+- **Analysis Team Supervisor**: Coordinates legacy system analysis activities  
 - **Planning Team Supervisor**: Manages workpackage definition and migration roadmap creation
 - **Business Team Supervisor**: Orchestrates business logic extraction and requirements specification
-- **Development Team Supervisor**: Manages code generation and testing (existing code_supervisor)
+- **Development Team Supervisor**: Manages code generation and testing
 - **Deployment Team Supervisor**: Coordinates deployment scripts and production rollout
 
-### Analysis Agents
-Specialized agents for legacy system analysis:
-- **Legacy Code Analyst**: Analyzes COBOL source code, dependencies, and business flows
-- **Database Analyst**: Processes database schemas and creates migration assessments
-- **Analysis Reviewer**: Validates all analysis outputs for completeness and accuracy
+### Specialist Agents (11 agents)
+Domain experts performing technical work:
 
-### Planning Agents
-Agents responsible for migration planning and prioritization:
-- **Workpackage Planner**: Creates prioritized migration workpackages based on complexity analysis
-- **Planning Reviewer**: Validates workpackage definitions and migration roadmaps
+**Analysis Specialists:**
+- **Legacy Code Specialist**: Analyzes COBOL source code, dependencies, and business flows
+- **Database Specialist**: Processes database schemas and creates migration assessments
 
-### Development Agents
-Agents focused on code generation and testing:
-- **Code Developer**: Generates target language code from business specifications (existing)
-- **Test Generator**: Creates automated test code and comprehensive test data
-- **Code Reviewer**: Validates generated code quality and standards compliance (existing)
+**Planning Specialists:**
+- **Workpackage Specialist**: Creates prioritized migration workpackages based on complexity analysis
 
-### Quality Assurance Agents
-Specialized reviewers ensuring deliverable quality:
-- **Analysis Reviewer**: Reviews and approves all analysis phase outputs
-- **Planning Reviewer**: Reviews and approves all planning phase outputs
-- **Business Reviewer**: Reviews and approves business specifications and test definitions
-- **Code Reviewer**: Reviews and approves all generated code and tests
-- **Deployment Reviewer**: Reviews and approves deployment scripts and procedures
+**Business Specialists:**
+- **Logic Extraction Specialist**: Extracts business rules and logic from legacy code analysis
+- **Requirements Specialist**: Converts business logic into modern requirements specifications
+- **Test Design Specialist**: Creates comprehensive test case definitions
+
+**Development Specialists:**
+- **Code Generation Specialist**: Generates modern application code from business specifications
+- **Test Generation Specialist**: Implements comprehensive test suites and test data
+
+**Deployment Specialists:**
+- **Migration Scripts Specialist**: Creates database migration and data transfer scripts
+- **Database Migration Specialist**: Plans and executes database migration procedures
+- **Orchestration Specialist**: Coordinates deployment automation and production rollout
+
+### Reviewer Agents (11 agents)
+Quality assurance specialists with 1:1 pairing to specialists:
+
+**Analysis Reviewers:**
+- **Legacy Code Reviewer**: Reviews and validates legacy code analysis outputs
+- **Database Reviewer**: Reviews and validates database analysis outputs
+
+**Planning Reviewers:**
+- **Workpackage Reviewer**: Reviews and validates workpackage definitions and migration roadmaps
+
+**Business Reviewers:**
+- **Logic Extraction Reviewer**: Reviews and validates business logic extraction deliverables
+- **Requirements Reviewer**: Reviews and validates requirements specification deliverables  
+- **Test Design Reviewer**: Reviews and validates test case design deliverables
+
+**Development Reviewers:**
+- **Code Generation Reviewer**: Reviews and validates generated application code
+- **Test Generation Reviewer**: Reviews and validates generated test implementations
+
+**Deployment Reviewers:**
+- **Migration Scripts Reviewer**: Reviews and validates migration script deliverables
+- **Database Migration Reviewer**: Reviews and validates database migration plans
+- **Orchestration Reviewer**: Reviews and validates deployment orchestration deliverables
 
 ## Agent Configuration and Structure
+
+### Naming Convention
+All agents follow a consistent naming pattern: `{team}_{role}_{specialization}.md`
+
+**Examples:**
+- `analysis_specialist_legacy_code.md` - Analysis team's legacy code specialist
+- `business_reviewer_requirements.md` - Business team's requirements reviewer  
+- `development_team_supervisor.md` - Development team supervisor
+
+This naming convention ensures:
+- **Self-documenting filenames** when flattened in CAO installation
+- **Clear team identification** for easy organization
+- **Role clarity** (supervisor/specialist/reviewer)
+- **Specialization visibility** for specific domain expertise
 
 ### CAO Agent Profile Format
 All agents follow the CLI Agent Orchestrator (CAO) agent profile format:
@@ -152,15 +184,26 @@ Supervisors follow a consistent task assignment protocol:
 
 ### Installation Options
 
+#### Automated Installation (Recommended)
+Use the framework's installation script to install all 28 agents automatically:
+
+```bash
+# Create project and install all agents
+python create_project.py my_project
+python install_cao.py my_project
+
+# The script will discover and install all agents from subdirectories
+```
+
 #### Individual Agent Installation
 You can install and use individual agents for specific tasks:
 
 ```bash
 # Install a single agent (using CAO)
-cao install ./structure/agents/legacy_code_analyst.md
+cao install ./agents/analysis_team/analysis_specialist_legacy_code.md
 
 # Run the agent directly
-cao run legacy_code_analyst
+cao run analysis_specialist_legacy_code
 ```
 
 #### Team Installation
@@ -168,10 +211,11 @@ Install an entire team starting with the supervisor:
 
 ```bash
 # Install analysis team
-cao install ./structure/agents/analysis_team_supervisor.md
-cao install ./structure/agents/legacy_code_analyst.md
-cao install ./structure/agents/database_analyst.md
-cao install ./structure/agents/analysis_reviewer.md
+cao install ./agents/analysis_team/analysis_team_supervisor.md
+cao install ./agents/analysis_team/analysis_specialist_legacy_code.md
+cao install ./agents/analysis_team/analysis_reviewer_legacy_code.md
+cao install ./agents/analysis_team/analysis_specialist_database.md
+cao install ./agents/analysis_team/analysis_reviewer_database.md
 
 # Run the team supervisor
 cao run analysis_team_supervisor
@@ -181,9 +225,11 @@ cao run analysis_team_supervisor
 Install the full hierarchical system:
 
 ```bash
-# Install all agents starting with the migration supervisor
-cao install ./structure/agents/migration_supervisor.md
-# ... install all team supervisors and their agents
+# Install all 28 agents starting with the migration supervisor
+cao install ./agents/migration_supervisor.md
+
+# Install all team directories
+find ./agents -name "*.md" -exec cao install {} \;
 
 # Run the complete migration
 cao run migration_supervisor
@@ -202,24 +248,52 @@ You can start at any level of the hierarchy depending on your needs:
 
 #### Legacy Code Analysis Only
 ```bash
-# Just analyze legacy COBOL code
+# Coordinate complete analysis with team supervisor
 cao run analysis_team_supervisor
-# or directly
-cao run legacy_code_analyst
+
+# Or run individual specialists
+cao run analysis_specialist_legacy_code
+cao run analysis_specialist_database
 ```
 
 #### Workpackage Planning Only
 ```bash
 # Create migration workpackages from existing analysis
 cao run planning_team_supervisor
-# or directly  
-cao run workpackage_planner
+
+# Or run specialist directly
+cao run planning_specialist_workpackage
+```
+
+#### Business Requirements Extraction
+```bash
+# Coordinate business specification activities
+cao run business_team_supervisor
+
+# Or run individual specialists
+cao run business_specialist_logic_extraction
+cao run business_specialist_requirements
+cao run business_specialist_test_design
 ```
 
 #### Code Generation Only
 ```bash
-# Generate code from existing specifications
-cao run code_supervisor  # existing development team supervisor
+# Coordinate development activities
+cao run development_team_supervisor
+
+# Or run individual specialists
+cao run development_specialist_code_generation
+cao run development_specialist_test_generation
+```
+
+#### Deployment Preparation
+```bash
+# Coordinate deployment activities
+cao run deployment_team_supervisor
+
+# Or run individual specialists
+cao run deployment_specialist_migration_scripts
+cao run deployment_specialist_orchestration
 ```
 
 ## Framework Integration
@@ -240,41 +314,98 @@ Many agents create reusable tools:
 
 ## Available Agents
 
-### Currently Implemented Agents
-The following agents are fully implemented and ready for use:
+### Complete Agent Implementation (28 agents)
+All agents are fully implemented and organized in team directories:
 
-#### Analysis Team
+#### Root Level (1 agent)
 - **`migration_supervisor.md`**: Top-level migration orchestrator
-- **`analysis_team_supervisor.md`**: Coordinates analysis activities
-- **`legacy_code_analyst.md`**: Analyzes COBOL source code (implements sourcecode analysis prompt)
-- **`database_analyst.md`**: Analyzes database schemas (implements database analysis prompt)
-- **`analysis_reviewer.md`**: Reviews and validates analysis outputs
 
-#### Planning Team
-- **`planning_team_supervisor.md`**: Coordinates workpackage planning
-- **`workpackage_planner.md`**: Creates migration workpackages (implements workpackage prompts)
-- **`planning_reviewer.md`**: Reviews and validates planning outputs
+#### Analysis Team (5 agents)
+- **`analysis_team/analysis_team_supervisor.md`**: Coordinates analysis activities
+- **`analysis_team/analysis_specialist_legacy_code.md`**: Analyzes COBOL source code
+- **`analysis_team/analysis_reviewer_legacy_code.md`**: Reviews legacy code analysis
+- **`analysis_team/analysis_specialist_database.md`**: Analyzes database schemas  
+- **`analysis_team/analysis_reviewer_database.md`**: Reviews database analysis
 
-#### Development Team (Enhanced)
-- **`code_supervisor.md`**: Development team supervisor (existing)
-- **`code_developer.md`**: Generates target code (existing)
-- **`test_generator.md`**: Creates automated tests and test data
-- **`code_reviewer.md`**: Reviews generated code (existing)
+#### Planning Team (3 agents)
+- **`planning_team/planning_team_supervisor.md`**: Coordinates workpackage planning
+- **`planning_team/planning_specialist_workpackage.md`**: Creates migration workpackages
+- **`planning_team/planning_reviewer_workpackage.md`**: Reviews workpackage planning
 
-#### Future Teams (Structured but Awaiting Prompts)
-- **`business_team_supervisor.md`**: Coordinates business specification (Phase 3)
-- **`deployment_team_supervisor.md`**: Coordinates deployment activities (Phase 5)
+#### Business Team (7 agents)
+- **`business_team/business_team_supervisor.md`**: Coordinates business specification
+- **`business_team/business_specialist_logic_extraction.md`**: Extracts business logic
+- **`business_team/business_reviewer_logic_extraction.md`**: Reviews logic extraction
+- **`business_team/business_specialist_requirements.md`**: Creates requirements specifications
+- **`business_team/business_reviewer_requirements.md`**: Reviews requirements
+- **`business_team/business_specialist_test_design.md`**: Designs test cases
+- **`business_team/business_reviewer_test_design.md`**: Reviews test design
+
+#### Development Team (5 agents)
+- **`development_team/development_team_supervisor.md`**: Coordinates code generation
+- **`development_team/development_specialist_code_generation.md`**: Generates application code
+- **`development_team/development_reviewer_code_generation.md`**: Reviews generated code
+- **`development_team/development_specialist_test_generation.md`**: Implements test suites
+- **`development_team/development_reviewer_test_generation.md`**: Reviews test implementation
+
+#### Deployment Team (7 agents)
+- **`deployment_team/deployment_team_supervisor.md`**: Coordinates deployment activities
+- **`deployment_team/deployment_specialist_migration_scripts.md`**: Creates migration scripts
+- **`deployment_team/deployment_reviewer_migration_scripts.md`**: Reviews migration scripts
+- **`deployment_team/deployment_specialist_database_migration.md`**: Plans database migration
+- **`deployment_team/deployment_reviewer_database_migration.md`**: Reviews database migration
+- **`deployment_team/deployment_specialist_orchestration.md`**: Coordinates deployment
+- **`deployment_team/deployment_reviewer_orchestration.md`**: Reviews deployment orchestration
 
 ### Agent Status by Implementation Phase
 
-#### Phase 1 & 2 - Ready for Production
-- ✅ Analysis Team: Complete with existing prompts
-- ✅ Planning Team: Complete with existing prompts
-- ✅ Enhanced Development Team: Test Generator added
+#### All Phases - Production Ready ✅
+- ✅ **Analysis Team**: Complete with 1:1 specialist-reviewer pairing
+- ✅ **Planning Team**: Complete with 1:1 specialist-reviewer pairing  
+- ✅ **Business Team**: Complete with comprehensive business logic extraction and requirements
+- ✅ **Development Team**: Complete with code generation and test implementation
+- ✅ **Deployment Team**: Complete with migration scripts and deployment orchestration
 
-#### Phase 3 & 5 - Awaiting Prompt Development
-- 🔄 Business Team: Supervisor ready, individual agents await prompts
-- 🔄 Deployment Team: Supervisor ready, individual agents await prompts
+### Agent File Organization
+
+The agents are organized in a hierarchical directory structure for development convenience, but when installed via `install_cao.py`, all agents are flattened into the CAO system with self-documenting filenames:
+
+```
+structure/agents/
+├── migration_supervisor.md
+├── analysis_team/
+│   ├── analysis_team_supervisor.md
+│   ├── analysis_specialist_legacy_code.md
+│   ├── analysis_reviewer_legacy_code.md
+│   ├── analysis_specialist_database.md
+│   └── analysis_reviewer_database.md
+├── planning_team/
+│   ├── planning_team_supervisor.md
+│   ├── planning_specialist_workpackage.md
+│   └── planning_reviewer_workpackage.md
+├── business_team/
+│   ├── business_team_supervisor.md
+│   ├── business_specialist_logic_extraction.md
+│   ├── business_reviewer_logic_extraction.md
+│   ├── business_specialist_requirements.md
+│   ├── business_reviewer_requirements.md
+│   ├── business_specialist_test_design.md
+│   └── business_reviewer_test_design.md
+├── development_team/
+│   ├── development_team_supervisor.md
+│   ├── development_specialist_code_generation.md
+│   ├── development_reviewer_code_generation.md
+│   ├── development_specialist_test_generation.md
+│   └── development_reviewer_test_generation.md
+└── deployment_team/
+    ├── deployment_team_supervisor.md
+    ├── deployment_specialist_migration_scripts.md
+    ├── deployment_reviewer_migration_scripts.md
+    ├── deployment_specialist_database_migration.md
+    ├── deployment_reviewer_database_migration.md
+    ├── deployment_specialist_orchestration.md
+    └── deployment_reviewer_orchestration.md
+```
 
 ## Best Practices
 
@@ -298,6 +429,44 @@ The following agents are fully implemented and ready for use:
 - **Use Standard Templates**: All outputs must conform to framework templates
 - **Preserve File Paths**: Maintain absolute path references throughout the workflow
 - **Enable Flexibility**: Support both complete migration and individual task execution
+
+## Quick Reference
+
+### Agent Count by Team
+- **Total Agents**: 28
+- **Analysis Team**: 5 agents (1 supervisor + 2 specialists + 2 reviewers)
+- **Planning Team**: 3 agents (1 supervisor + 1 specialist + 1 reviewer)  
+- **Business Team**: 7 agents (1 supervisor + 3 specialists + 3 reviewers)
+- **Development Team**: 5 agents (1 supervisor + 2 specialists + 2 reviewers)
+- **Deployment Team**: 7 agents (1 supervisor + 3 specialists + 3 reviewers)
+- **Migration Supervisor**: 1 agent (top-level orchestrator)
+
+### Key Agent Names for CAO
+```bash
+# Team Supervisors
+cao run migration_supervisor
+cao run analysis_team_supervisor
+cao run planning_team_supervisor
+cao run business_team_supervisor
+cao run development_team_supervisor
+cao run deployment_team_supervisor
+
+# Key Specialists
+cao run analysis_specialist_legacy_code
+cao run business_specialist_requirements
+cao run development_specialist_code_generation
+cao run deployment_specialist_orchestration
+```
+
+### Installation Commands
+```bash
+# Complete setup
+python create_project.py my_project
+python install_cao.py my_project
+
+# Verify installation
+find my_project/agents -name "*.md" | wc -l  # Should show 28
+```
 
 ## Compatibility and Extensibility
 

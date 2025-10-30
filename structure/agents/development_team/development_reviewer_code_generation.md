@@ -1,6 +1,6 @@
 ---
-name: reviewer
-description: Code Reviewer Agent in a multi-agent system
+name: development_reviewer_code_generation
+description: Code Generation Reviewer Agent specializing in validation of generated application code
 mcpServers:
   cao-mcp-server:
     type: stdio
