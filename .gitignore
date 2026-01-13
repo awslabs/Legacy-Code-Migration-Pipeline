@@ -1,3 +1,12 @@
 *.pyc
 *.pdf
 .kiro
+.hypothesis
+*.DS_Store
+__pycache__
+.pytest_cache
+zapp.yaml
+docs/PRFAQ_ReImagine_Framework_Final.md
+docs/ReImagine_Framework_Business_Case.md
+docs/reimagine.md
+docs/research_summary.md

@@ -1,0 +1,18 @@
+{
+  "modules": [
+    {
+      "name": "string",
+      "path": "string",
+      "type": "ENTRY_POINT|COMMONLY_USED|SINGLE_USE",
+      "functionality": "FUNCTIONAL|UTILITY",
+      "businessDomain": "string|null",
+      "usage": "Batch|Online|Both",
+      "entryPoint": "boolean",
+      "dependencies": ["string"],
+      "dependents": ["string"],
+      "complexity": "number",
+      "linesOfCode": "number",
+      "lastModified": "ISO8601"
+    }
+  ]
+}

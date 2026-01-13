@@ -4,22 +4,16 @@
       "flowId": "string",
       "name": "string",
       "entryPoint": "string",
-      "entryType": "JCL|CICS|ONLINE",
+      "entryType": "MAIN_PROGRAM|TRANSACTION|BATCH",
       "modules": ["string"],
-      "copybooks": ["string"],
       "databaseOperations": [
         {
-          "type": "SQLIO|DBIO",
-          "operation": "READ|WRITE|UPDATE|DELETE",
+          "type": "ADABAS|SQL|FILE",
+          "operation": "FIND|READ|STORE|UPDATE|DELETE",
           "target": "string"
         }
       ],
-      "fileOperations": [
-        {
-          "operation": "IN|OUT|INOUT",
-          "target": "string"
-        }
-      ],
+      "mapInteractions": ["string"],
       "businessDomain": "string",
       "complexity": "number",
       "priority": "number"

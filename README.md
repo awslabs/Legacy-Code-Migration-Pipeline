@@ -80,9 +80,11 @@ The first command creates a complete project structure with all necessary folder
 The `install_cao.py` script automatically:
 - Downloads CAO from the official GitHub repository
 - Installs required dependencies (tmux, uv, etc.)
-- Discovers and configures all 28 agents across team subdirectories
-- Sets up the CAO environment for immediate use
+- Supports provider selection (K-CLI default, Amazon Q CLI, Claude Code)
+- Discovers and configures all 28 agents across team subdirectories using `cao agent install` commands
+- Sets up the CAO environment with your selected provider for immediate use
 - Provides organized agent listing with team structure visibility
+- Supports multiple agent installation sources (built-in, local files, URLs)
 
 ### Project Structure
 
@@ -120,30 +122,36 @@ If you installed CAO, you can use the configured agents directly. The framework 
 ```bash
 cd <project_name>
 
-# Start the CAO server (required)
-cao-server
+# Install agents with provider selection (K-CLI is default)
+python install_cao.py . --provider k_cli     # K-CLI (default)
+python install_cao.py . --provider q_cli     # Amazon Q CLI  
+python install_cao.py . --provider claude_code  # Claude Code
 
-# In another terminal, launch an agent session
-cao launch --agents <agent_name>
+# Verify agent installation
+cao agent list
 
-# Examples:
-# Launch the top-level migration orchestrator
-cao launch --agents migration_supervisor
+# Install individual agents as needed
+cao agent install ./structure/agents/migration_supervisor.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
 
-# Launch team supervisors
-cao launch --agents analysis_team_supervisor
-cao launch --agents business_team_supervisor
-cao launch --agents development_team_supervisor
+# Examples of agent usage:
+# Install and use the top-level migration orchestrator
+cao agent install ./structure/agents/migration_supervisor.md --provider k_cli
 
-# Launch specialist agents
-cao launch --agents analysis_specialist_legacy_code
-cao launch --agents business_specialist_requirements
-cao launch --agents development_specialist_code_generation
+# Install and use team supervisors
+cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/business_team/business_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/development_team/development_team_supervisor.md --provider k_cli
+
+# Install and use specialist agents
+cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md --provider k_cli
+cao agent install ./structure/agents/business_team/business_specialist_requirements.md --provider k_cli
+cao agent install ./structure/agents/development_team/development_specialist_code_generation.md --provider k_cli
 ```
 
 #### Agent Organization
 
-The framework uses a hierarchical team structure:
+The framework uses a hierarchical team structure with provider selection support:
 
 - **Analysis Team** (5 agents): Legacy code and database analysis
 - **Planning Team** (3 agents): Migration workpackage planning  
@@ -151,6 +159,12 @@ The framework uses a hierarchical team structure:
 - **Development Team** (5 agents): Code generation and testing
 - **Deployment Team** (7 agents): Migration scripts and deployment
 - **Migration Supervisor** (1 agent): Top-level orchestration
+
+Each team includes specialist agents paired with dedicated reviewers for quality assurance. All agents support multiple CLI providers:
+
+- **K-CLI (default)**: Best integration with Kiro development environment
+- **Amazon Q CLI**: AWS-native AI assistant integration  
+- **Claude Code**: Anthropic Claude integration
 
 Each team includes specialist agents paired with dedicated reviewers for quality assurance.
 

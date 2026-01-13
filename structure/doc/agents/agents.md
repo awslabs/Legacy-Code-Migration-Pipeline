@@ -185,54 +185,100 @@ Supervisors follow a consistent task assignment protocol:
 ### Installation Options
 
 #### Automated Installation (Recommended)
-Use the framework's installation script to install all 28 agents automatically:
+Use the framework's installation script to install all 28 agents automatically with provider selection:
 
 ```bash
-# Create project and install all agents
+# Create project and install all agents with K-CLI (default provider)
 python create_project.py my_project
 python install_cao.py my_project
+
+# Install with specific provider
+python install_cao.py my_project --provider k_cli     # K-CLI (default)
+python install_cao.py my_project --provider q_cli     # Amazon Q CLI
+python install_cao.py my_project --provider claude_code  # Claude Code
 
 # The script will discover and install all agents from subdirectories
 ```
 
 #### Individual Agent Installation
-You can install and use individual agents for specific tasks:
+You can install and use individual agents for specific tasks using the new CAO command syntax:
 
 ```bash
-# Install a single agent (using CAO)
-cao install ./agents/analysis_team/analysis_specialist_legacy_code.md
+# Install a single agent from local file with default provider (K-CLI)
+cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md
 
-# Run the agent directly
-cao run analysis_specialist_legacy_code
+# Install with specific provider
+cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md --provider q_cli
+
+# Install built-in agents (if available in CAO)
+cao agent install developer --provider k_cli
+
+# Install from URL
+cao agent install https://example.com/custom-agent.md --provider k_cli
+
+# List installed agents
+cao agent list
 ```
 
 #### Team Installation
 Install an entire team starting with the supervisor:
 
 ```bash
-# Install analysis team
-cao install ./agents/analysis_team/analysis_team_supervisor.md
-cao install ./agents/analysis_team/analysis_specialist_legacy_code.md
-cao install ./agents/analysis_team/analysis_reviewer_legacy_code.md
-cao install ./agents/analysis_team/analysis_specialist_database.md
-cao install ./agents/analysis_team/analysis_reviewer_database.md
+# Install analysis team with K-CLI provider
+cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_reviewer_legacy_code.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_specialist_database.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_reviewer_database.md --provider k_cli
 
-# Run the team supervisor
-cao run analysis_team_supervisor
+# Verify installation
+cao agent list
 ```
 
 #### Complete Migration System Installation
 Install the full hierarchical system:
 
 ```bash
-# Install all 28 agents starting with the migration supervisor
-cao install ./agents/migration_supervisor.md
+# Install all 28 agents with provider selection
+python install_cao.py my_project --provider k_cli
+
+# Or install manually starting with the migration supervisor
+cao agent install ./structure/agents/migration_supervisor.md --provider k_cli
 
 # Install all team directories
-find ./agents -name "*.md" -exec cao install {} \;
+find ./structure/agents -name "*.md" -exec cao agent install {} --provider k_cli \;
 
-# Run the complete migration
-cao run migration_supervisor
+# Verify complete installation
+cao agent list
+```
+
+### Provider Selection
+
+#### Supported Providers
+
+| Provider | Display Name | Description | CLI Required |
+|----------|--------------|-------------|--------------|
+| `k_cli` | K-CLI (Kiro) | **Default provider** - Best integration with Kiro development environment | Yes (kiro command) |
+| `q_cli` | Amazon Q CLI | AWS-native AI assistant integration | Yes (q command) |
+| `claude_code` | Claude Code | Anthropic Claude integration | No |
+
+#### K-CLI Setup (Default Provider)
+
+K-CLI is the recommended default provider for the best integration experience:
+
+1. **Install Kiro**: Follow the [Kiro installation guide](https://kiro.ai/docs/installation)
+2. **Verify Installation**: Run `kiro --version` to confirm K-CLI is available
+3. **Configure Workspace**: Ensure your project is in a Kiro workspace
+
+```bash
+# Verify K-CLI availability
+kiro --version
+
+# Install agents with K-CLI (default)
+python install_cao.py my_project
+
+# Or explicitly specify K-CLI
+python install_cao.py my_project --provider k_cli
 ```
 
 ### Flexible Entry Points
@@ -248,52 +294,53 @@ You can start at any level of the hierarchy depending on your needs:
 
 #### Legacy Code Analysis Only
 ```bash
-# Coordinate complete analysis with team supervisor
-cao run analysis_team_supervisor
+# Install and coordinate complete analysis with team supervisor
+cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
+# Use CAO session management to run the supervisor
 
-# Or run individual specialists
-cao run analysis_specialist_legacy_code
-cao run analysis_specialist_database
+# Or install and run individual specialists
+cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_specialist_database.md --provider k_cli
 ```
 
 #### Workpackage Planning Only
 ```bash
-# Create migration workpackages from existing analysis
-cao run planning_team_supervisor
+# Install and create migration workpackages from existing analysis
+cao agent install ./structure/agents/planning_team/planning_team_supervisor.md --provider k_cli
 
-# Or run specialist directly
-cao run planning_specialist_workpackage
+# Or install and run specialist directly
+cao agent install ./structure/agents/planning_team/planning_specialist_workpackage.md --provider k_cli
 ```
 
 #### Business Requirements Extraction
 ```bash
-# Coordinate business specification activities
-cao run business_team_supervisor
+# Install and coordinate business specification activities
+cao agent install ./structure/agents/business_team/business_team_supervisor.md --provider k_cli
 
-# Or run individual specialists
-cao run business_specialist_logic_extraction
-cao run business_specialist_requirements
-cao run business_specialist_test_design
+# Or install and run individual specialists
+cao agent install ./structure/agents/business_team/business_specialist_logic_extraction.md --provider k_cli
+cao agent install ./structure/agents/business_team/business_specialist_requirements.md --provider k_cli
+cao agent install ./structure/agents/business_team/business_specialist_test_design.md --provider k_cli
 ```
 
 #### Code Generation Only
 ```bash
-# Coordinate development activities
-cao run development_team_supervisor
+# Install and coordinate development activities
+cao agent install ./structure/agents/development_team/development_team_supervisor.md --provider k_cli
 
-# Or run individual specialists
-cao run development_specialist_code_generation
-cao run development_specialist_test_generation
+# Or install and run individual specialists
+cao agent install ./structure/agents/development_team/development_specialist_code_generation.md --provider k_cli
+cao agent install ./structure/agents/development_team/development_specialist_test_generation.md --provider k_cli
 ```
 
 #### Deployment Preparation
 ```bash
-# Coordinate deployment activities
-cao run deployment_team_supervisor
+# Install and coordinate deployment activities
+cao agent install ./structure/agents/deployment_team/deployment_team_supervisor.md --provider k_cli
 
-# Or run individual specialists
-cao run deployment_specialist_migration_scripts
-cao run deployment_specialist_orchestration
+# Or install and run individual specialists
+cao agent install ./structure/agents/deployment_team/deployment_specialist_migration_scripts.md --provider k_cli
+cao agent install ./structure/agents/deployment_team/deployment_specialist_orchestration.md --provider k_cli
 ```
 
 ## Framework Integration
@@ -443,29 +490,36 @@ structure/agents/
 
 ### Key Agent Names for CAO
 ```bash
-# Team Supervisors
-cao run migration_supervisor
-cao run analysis_team_supervisor
-cao run planning_team_supervisor
-cao run business_team_supervisor
-cao run development_team_supervisor
-cao run deployment_team_supervisor
+# Install Team Supervisors with K-CLI (default provider)
+cao agent install ./structure/agents/migration_supervisor.md --provider k_cli
+cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/planning_team/planning_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/business_team/business_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/development_team/development_team_supervisor.md --provider k_cli
+cao agent install ./structure/agents/deployment_team/deployment_team_supervisor.md --provider k_cli
 
-# Key Specialists
-cao run analysis_specialist_legacy_code
-cao run business_specialist_requirements
-cao run development_specialist_code_generation
-cao run deployment_specialist_orchestration
+# Install Key Specialists
+cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md --provider k_cli
+cao agent install ./structure/agents/business_team/business_specialist_requirements.md --provider k_cli
+cao agent install ./structure/agents/development_team/development_specialist_code_generation.md --provider k_cli
+cao agent install ./structure/agents/deployment_team/deployment_specialist_orchestration.md --provider k_cli
+
+# Verify installations
+cao agent list
 ```
 
 ### Installation Commands
 ```bash
-# Complete setup
+# Complete setup with K-CLI provider (default)
 python create_project.py my_project
 python install_cao.py my_project
 
+# Complete setup with specific provider
+python install_cao.py my_project --provider q_cli
+
 # Verify installation
-find my_project/agents -name "*.md" | wc -l  # Should show 28
+find my_project/structure/agents -name "*.md" | wc -l  # Should show 28
+cao agent list  # Should show installed agents with providers
 ```
 
 ## Compatibility and Extensibility

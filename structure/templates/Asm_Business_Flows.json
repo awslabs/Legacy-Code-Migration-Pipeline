@@ -1,0 +1,22 @@
+{
+  "flows": [
+    {
+      "flowId": "string",
+      "name": "string",
+      "entryPoint": "string",
+      "entryType": "JCL|CICS|TSO|SYSTEM",
+      "modules": ["string"],
+      "databaseOperations": [
+        {
+          "type": "DB2|VSAM|QSAM|BDAM",
+          "operation": "READ|WRITE|UPDATE|DELETE",
+          "target": "string"
+        }
+      ],
+      "systemCalls": ["string"],
+      "businessDomain": "string",
+      "complexity": "number",
+      "priority": "number"
+    }
+  ]
+}
