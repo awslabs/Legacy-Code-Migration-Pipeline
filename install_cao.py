@@ -74,16 +74,16 @@ class InstallationResult:
 class ProviderManager:
     """Manages CLI providers for agent integration."""
     
-    SUPPORTED_PROVIDERS = ['k_cli', 'q_cli', 'claude_code']
-    DEFAULT_PROVIDER = 'k_cli'
+    SUPPORTED_PROVIDERS = ['kiro_cli', 'q_cli', 'claude_code']
+    DEFAULT_PROVIDER = 'kiro_cli'
     
     PROVIDER_CONFIGS = {
-        'k_cli': ProviderConfig(
-            name='k_cli',
-            display_name='K-CLI (Kiro)',
+        'kiro_cli': ProviderConfig(
+            name='kiro_cli',
+            display_name='Kiro CLI',
             requires_cli=True,
-            cli_command='kiro',
-            installation_notes='Ensure Kiro is installed and accessible'
+            cli_command='kiro-cli',
+            installation_notes='Ensure Kiro CLI is installed and accessible via kiro-cli command'
         ),
         'q_cli': ProviderConfig(
             name='q_cli', 
@@ -178,8 +178,10 @@ class AgentSourceClassifier:
     
     def get_installation_command(self, source_type: AgentSourceType, 
                                 agent_input: str, provider: str) -> List[str]:
-        """Generate appropriate cao agent install command."""
-        base_cmd = ["cao", "agent", "install"]
+        """Generate appropriate cao install command."""
+        # FIXED: Changed from ["cao", "agent", "install"] to ["cao", "install"]
+        # According to CAO documentation, the correct command is "cao install" not "cao agent install"
+        base_cmd = ["cao", "install"]
         
         if source_type == AgentSourceType.BUILTIN:
             base_cmd.append(agent_input)
@@ -357,8 +359,8 @@ class NetworkErrorHandler:
             alternatives.extend([
                 f"Download the agent file manually from: {source_path}",
                 "Save the downloaded file to your project's agents/ directory",
-                "Install using local file: cao agent install /path/to/downloaded/agent.md",
-                "Check if the agent is available as a built-in: cao agent list --available"
+                "Install using local file: cao install /path/to/downloaded/agent.md",
+                "Check if the agent is available as a built-in: cao list --available"
             ])
         
         elif source_type == AgentSourceType.BUILTIN:
@@ -494,14 +496,14 @@ class OfflineInstallationManager:
             for cached_file in cached_agents:
                 print(f"  • {cached_file.name}")
             print("\nTo install cached agents:")
-            print("  cao agent install ~/.cao_cache/<agent_file>.md --provider <provider>")
+            print("  cao install ~/.cao_cache/<agent_file>.md --provider <provider>")
         
         print("\n💡 Manual Download Options:")
         for source in failed_sources:
             if source.startswith(('http://', 'https://')):
                 print(f"  1. Download manually: {source}")
                 print(f"  2. Save to: agents/{Path(source).name}")
-                print(f"  3. Install: cao agent install agents/{Path(source).name}")
+                print(f"  3. Install: cao install agents/{Path(source).name}")
                 print()
         
         print("🔧 Troubleshooting Steps:")
@@ -570,6 +572,9 @@ class EnhancedAgentSourceClassifier(AgentSourceClassifier):
         
         # Attempt installation
         try:
+            # DEBUG: Print the command before execution
+            print(f"   🔧 Executing command: {' '.join(install_command)}")
+            
             success = run_command(install_command, check=False)
             
             if success:
@@ -577,7 +582,7 @@ class EnhancedAgentSourceClassifier(AgentSourceClassifier):
                     agent_name=config.name,
                     success=True,
                     provider=config.provider,
-                    installation_method="cao agent install"
+                    installation_method="cao install"
                 )
             else:
                 # Installation failed - check if it's network-related
@@ -942,6 +947,14 @@ def check_command_exists(command):
     except (subprocess.CalledProcessError, FileNotFoundError):
         pass
     
+    # For tmux, try -V instead of --version
+    if command == "tmux":
+        try:
+            subprocess.run([command, "-V"], capture_output=True, check=True)
+            return True
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            pass
+    
     # For CAO, try --help instead of --version
     if command == "cao":
         try:
@@ -1252,18 +1265,18 @@ def install_agents_v2(project_dir: Path, provider_manager: ProviderManager,
             print(f"📝 Installation guidance: {config.installation_notes}")
         
         # For K-CLI specifically, provide detailed instructions and alternatives (Requirements 5.4, 5.5)
-        if provider_manager.provider == 'k_cli':
-            print("\n🔧 K-CLI (Kiro) Setup Instructions:")
-            print("   K-CLI is required for optimal integration with the Kiro development environment.")
-            print("   To install Kiro:")
+        if provider_manager.provider == 'kiro_cli':
+            print("\n🔧 Kiro CLI Setup Instructions:")
+            print("   Kiro CLI is required for agent integration with CAO.")
+            print("   To install Kiro CLI:")
             print("   1. Visit: https://kiro.ai")
             print("   2. Follow the installation instructions for your platform")
-            print("   3. Ensure 'kiro' command is available in your PATH")
-            print("   4. Verify installation: kiro --version")
+            print("   3. Ensure 'kiro-cli' command is available in your PATH")
+            print("   4. Verify installation: kiro-cli --version")
             
             # Offer alternative providers (Requirement 5.5)
             print("\n🔄 Alternative Provider Options:")
-            alternatives = [p for p in provider_manager.get_supported_providers() if p != 'k_cli']
+            alternatives = [p for p in provider_manager.get_supported_providers() if p != 'kiro_cli']
             for alt_provider in alternatives:
                 alt_config = ProviderManager.PROVIDER_CONFIGS.get(alt_provider)
                 if alt_config:
@@ -1314,10 +1327,10 @@ def install_agents_v2(project_dir: Path, provider_manager: ProviderManager,
     
     else:
         # Provider is available - provide usage instructions (Requirement 5.4)
-        if provider_manager.provider == 'k_cli':
-            print("✅ K-CLI (Kiro) is available and ready for use")
+        if provider_manager.provider == 'kiro_cli':
+            print("✅ Kiro CLI is available and ready for use")
             print("📋 After installation, you can use agents with:")
-            print("   • kiro chat --agent <agent_name>")
+            print("   • kiro-cli chat --agent <agent_name>")
             print("   • Or through the Kiro IDE interface")
         else:
             print(f"✅ {provider_manager.get_provider_display_name()} is available and ready for use")
@@ -1541,7 +1554,7 @@ def install_agent_legacy(config: AgentInstallConfig, project_dir: Path) -> bool:
 
 def parse_agent_list_output(output: str) -> Dict[str, Dict[str, str]]:
     """
-    Parse the output from 'cao agent list' command.
+    Parse the output from 'cao list' command.
     
     Returns:
         Dict mapping agent names to their information (provider, etc.)
@@ -1575,15 +1588,15 @@ def parse_agent_list_output(output: str) -> Dict[str, Dict[str, str]]:
 
 def verify_installation_results(results: List[InstallationResult], 
                                provider_manager: ProviderManager) -> None:
-    """Enhanced verification using cao agent list command."""
+    """Enhanced verification using cao list command."""
     print("\n🔍 Installation Verification:")
     
     try:
         # Try to get list of installed agents from CAO
-        output = run_command(["cao", "agent", "list"], capture_output=True, check=False)
+        output = run_command(["cao", "list"], capture_output=True, check=False)
         
         if output:
-            print("✅ CAO agent list command successful")
+            print("✅ CAO list command successful")
             installed_agents = parse_agent_list_output(output)
             
             # Verify each installation result
@@ -1609,7 +1622,7 @@ def verify_installation_results(results: List[InstallationResult],
                     provider_display = info.get('provider', 'unknown')
                     print(f"  • {agent_name} ({provider_display})")
         else:
-            print("⚠️  Could not verify installations using 'cao agent list'")
+            print("⚠️  Could not verify installations using 'cao list'")
             print("Falling back to file-based verification...")
             
             # Fallback verification by checking files
@@ -1670,9 +1683,9 @@ def main():
     )
     parser.add_argument(
         "--provider",
-        default="k_cli",
-        choices=['k_cli', 'q_cli', 'claude_code'],
-        help="CLI provider for agent integration (default: k_cli)"
+        default="kiro_cli",
+        choices=['kiro_cli', 'q_cli', 'claude_code'],
+        help="CLI provider for agent integration (default: kiro_cli)"
     )
     parser.add_argument(
         "--agent-sources",
@@ -1819,45 +1832,45 @@ def main():
             print(f"📝 Provider notes: {config.installation_notes}")
         
         # K-CLI specific post-installation guidance
-        if provider_manager.provider == 'k_cli':
+        if provider_manager.provider == 'kiro_cli':
             provider_available = provider_manager.check_provider_availability()
             if provider_available:
-                print("\n🚀 K-CLI Integration Ready!")
-                print("Your agents are now configured for use with Kiro. You can:")
+                print("\n🚀 Kiro CLI Integration Ready!")
+                print("Your agents are now configured for use with Kiro CLI. You can:")
                 print("• Use agents directly in the Kiro IDE")
-                print("• Launch agents via: kiro chat --agent <agent_name>")
+                print("• Launch agents via: kiro-cli chat --agent <agent_name>")
                 print("• Access agent management through Kiro's interface")
             else:
-                print("\n⚠️  K-CLI Integration Pending")
-                print("Your agents have been installed but K-CLI is not yet available.")
+                print("\n⚠️  Kiro CLI Integration Pending")
+                print("Your agents have been installed but Kiro CLI is not yet available.")
                 print("To complete the setup:")
-                print("1. Install Kiro from https://kiro.ai")
-                print("2. Ensure 'kiro' command is in your PATH")
+                print("1. Install Kiro CLI from https://kiro.ai")
+                print("2. Ensure 'kiro-cli' command is in your PATH")
                 print("3. Your agents will then be ready for use with Kiro")
         
         print("\nNext steps:")
         print(f"1. cd {project_dir}")
         
         # Provider-specific next steps
-        if provider_manager.provider == 'k_cli':
+        if provider_manager.provider == 'kiro_cli':
             if provider_manager.check_provider_availability():
-                print("2. Launch Kiro IDE or use: kiro chat --agent <agent_name>")
+                print("2. Launch Kiro IDE or use: kiro-cli chat --agent <agent_name>")
             else:
-                print("2. Install K-CLI (Kiro) from https://kiro.ai")
-                print("3. Use: kiro chat --agent <agent_name>")
+                print("2. Install Kiro CLI from https://kiro.ai")
+                print("3. Use: kiro-cli chat --agent <agent_name>")
         else:
             print("2. Start CAO server: cao-server")
             print("3. In another terminal: cao launch --agents <agent_name>")
         
         print("\nUseful commands:")
-        if provider_manager.provider == 'k_cli':
-            print("• Launch agent: kiro chat --agent <agent_name>")
+        if provider_manager.provider == 'kiro_cli':
+            print("• Launch agent: kiro-cli chat --agent <agent_name>")
             print("• Kiro IDE: kiro (if installed)")
         
         print("• Start server: cao-server")
-        print("• Install agent: cao agent install <agent_file> --provider", args.provider)
+        print("• Install agent: cao install <agent_file> --provider", args.provider)
         print("• Launch session: cao launch --agents <agent_name>")
-        print("• List agents: cao agent list")
+        print("• List agents: cao list")
         print("• Get help: cao --help")
         print("• Available agents are in the agents/ directory")
         print("\nNote: The CAO server must be running to launch agent sessions.")
@@ -1881,45 +1894,45 @@ def main():
             print(f"📝 Provider notes: {config.installation_notes}")
         
         # K-CLI specific post-installation guidance
-        if provider_manager.provider == 'k_cli':
+        if provider_manager.provider == 'kiro_cli':
             provider_available = provider_manager.check_provider_availability()
             if provider_available:
-                print("\n🚀 K-CLI Integration Ready!")
-                print("Your agents are now configured for use with Kiro. You can:")
+                print("\n🚀 Kiro CLI Integration Ready!")
+                print("Your agents are now configured for use with Kiro CLI. You can:")
                 print("• Use agents directly in the Kiro IDE")
-                print("• Launch agents via: kiro chat --agent <agent_name>")
+                print("• Launch agents via: kiro-cli chat --agent <agent_name>")
                 print("• Access agent management through Kiro's interface")
             else:
-                print("\n⚠️  K-CLI Integration Pending")
-                print("Your agents have been installed but K-CLI is not yet available.")
+                print("\n⚠️  Kiro CLI Integration Pending")
+                print("Your agents have been installed but Kiro CLI is not yet available.")
                 print("To complete the setup:")
-                print("1. Install Kiro from https://kiro.ai")
-                print("2. Ensure 'kiro' command is in your PATH")
+                print("1. Install Kiro CLI from https://kiro.ai")
+                print("2. Ensure 'kiro-cli' command is in your PATH")
                 print("3. Your agents will then be ready for use with Kiro")
         
         print("\nNext steps:")
         print(f"1. cd {project_dir}")
         
         # Provider-specific next steps
-        if provider_manager.provider == 'k_cli':
+        if provider_manager.provider == 'kiro_cli':
             if provider_manager.check_provider_availability():
-                print("2. Launch Kiro IDE or use: kiro chat --agent <agent_name>")
+                print("2. Launch Kiro IDE or use: kiro-cli chat --agent <agent_name>")
             else:
-                print("2. Install K-CLI (Kiro) from https://kiro.ai")
-                print("3. Use: kiro chat --agent <agent_name>")
+                print("2. Install Kiro CLI from https://kiro.ai")
+                print("3. Use: kiro-cli chat --agent <agent_name>")
         else:
             print("2. Start CAO server: cao-server")
             print("3. In another terminal: cao launch --agents <agent_name>")
         
         print("\nUseful commands:")
-        if provider_manager.provider == 'k_cli':
-            print("• Launch agent: kiro chat --agent <agent_name>")
+        if provider_manager.provider == 'kiro_cli':
+            print("• Launch agent: kiro-cli chat --agent <agent_name>")
             print("• Kiro IDE: kiro (if installed)")
         
         print("• Start server: cao-server")
-        print("• Install agent: cao agent install <agent_file> --provider", args.provider)
+        print("• Install agent: cao install <agent_file> --provider", args.provider)
         print("• Launch session: cao launch --agents <agent_name>")
-        print("• List agents: cao agent list")
+        print("• List agents: cao list")
         print("• Get help: cao --help")
         print("• Available agents are in the agents/ directory")
         print("\nNote: The CAO server must be running to launch agent sessions.")

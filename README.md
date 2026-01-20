@@ -55,11 +55,30 @@ We use this task tracker to keep track of team tasks: TBD
 
 ## Quick Start
 
+### Recent Updates (January 2026)
+
+The installer has been updated with critical fixes:
+- ✅ Fixed CAO command: Now uses `cao install` (not `cao agent install`)
+- ✅ Fixed provider name: Now uses `kiro_cli` (not `k_cli`)
+- ✅ Fixed CLI command: Now checks for `kiro-cli` (not `kiro`)
+- ✅ Added command preview: Shows exact command before execution
+- ✅ Tested with all 28 agents: Complete end-to-end verification
+
+See `FINAL_SUMMARY.md` for complete details.
+
 ### Prerequisites
 
+**Required:**
 - Python 3.7+
 - Git
-- Access to AI agents/models for code analysis
+
+**Optional (for CAO agent orchestration):**
+- tmux 3.3+ (installed automatically by installer)
+- uv (Python package manager, installed automatically)
+- Kiro CLI (for `kiro_cli` provider) - Install from https://kiro.ai
+  - Verify: `kiro-cli --version`
+- Amazon Q CLI (for `q_cli` provider)
+- Claude Code (for `claude_code` provider)
 
 ### Creating a New Migration Project
 
@@ -70,21 +89,21 @@ python create_project.py <project_name>
 
 2. **Install CLI Agent Orchestrator (CAO) - Optional but Recommended:**
 ```bash
-python install_cao.py <project_name>
+python install_cao.py <project_name> --provider kiro_cli
 ```
 
-The first command creates a complete project structure with all necessary folders, templates, and configuration files. The second command downloads and configures the [CLI Agent Orchestrator (CAO)](https://github.com/awslabs/cli-agent-orchestrator) which provides advanced agent management capabilities for your migration project.
+The first command creates a complete project structure with all necessary folders, templates, and configuration files. The second command installs and configures the [CLI Agent Orchestrator (CAO)](https://github.com/awslabs/cli-agent-orchestrator) which provides advanced agent management capabilities for your migration project.
 
 ### CAO Installation Features
 
 The `install_cao.py` script automatically:
-- Downloads CAO from the official GitHub repository
-- Installs required dependencies (tmux, uv, etc.)
-- Supports provider selection (K-CLI default, Amazon Q CLI, Claude Code)
-- Discovers and configures all 28 agents across team subdirectories using `cao agent install` commands
+- Installs required dependencies (tmux 3.3+, uv, CAO)
+- Supports provider selection (Kiro CLI default, Amazon Q CLI, Claude Code)
+- Discovers and installs all 28 agents across team subdirectories using `cao install` commands
 - Sets up the CAO environment with your selected provider for immediate use
 - Provides organized agent listing with team structure visibility
 - Supports multiple agent installation sources (built-in, local files, URLs)
+- Shows command preview before execution for transparency and debugging
 
 ### Project Structure
 
@@ -122,51 +141,91 @@ If you installed CAO, you can use the configured agents directly. The framework 
 ```bash
 cd <project_name>
 
-# Install agents with provider selection (K-CLI is default)
-python install_cao.py . --provider k_cli     # K-CLI (default)
-python install_cao.py . --provider q_cli     # Amazon Q CLI  
+# Install all agents with provider selection (Kiro CLI is default)
+python install_cao.py . --provider kiro_cli     # Kiro CLI (default, recommended)
+python install_cao.py . --provider q_cli        # Amazon Q CLI  
 python install_cao.py . --provider claude_code  # Claude Code
 
 # Verify agent installation
-cao agent list
+cao list
 
 # Install individual agents as needed
-cao agent install ./structure/agents/migration_supervisor.md --provider k_cli
-cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
+cao install ./agents/migration_supervisor.md --provider kiro_cli
+cao install ./agents/analysis_team/analysis_team_supervisor.md --provider kiro_cli
 
 # Examples of agent usage:
 # Install and use the top-level migration orchestrator
-cao agent install ./structure/agents/migration_supervisor.md --provider k_cli
+cao install ./agents/migration_supervisor.md --provider kiro_cli
 
 # Install and use team supervisors
-cao agent install ./structure/agents/analysis_team/analysis_team_supervisor.md --provider k_cli
-cao agent install ./structure/agents/business_team/business_team_supervisor.md --provider k_cli
-cao agent install ./structure/agents/development_team/development_team_supervisor.md --provider k_cli
+cao install ./agents/analysis_team/analysis_team_supervisor.md --provider kiro_cli
+cao install ./agents/business_team/business_team_supervisor.md --provider kiro_cli
+cao install ./agents/development_team/development_team_supervisor.md --provider kiro_cli
 
 # Install and use specialist agents
-cao agent install ./structure/agents/analysis_team/analysis_specialist_legacy_code.md --provider k_cli
-cao agent install ./structure/agents/business_team/business_specialist_requirements.md --provider k_cli
-cao agent install ./structure/agents/development_team/development_specialist_code_generation.md --provider k_cli
+cao install ./agents/analysis_team/analysis_specialist_legacy_code.md --provider kiro_cli
+cao install ./agents/business_team/business_specialist_requirements.md --provider kiro_cli
+cao install ./agents/development_team/development_specialist_code_generation.md --provider kiro_cli
+
+# Launch agents with Kiro CLI
+kiro-cli chat --agent migration_supervisor
+kiro-cli chat --agent analysis_team_supervisor
+
+# Or use CAO directly
+cao launch --agents migration_supervisor
 ```
 
 #### Agent Organization
 
 The framework uses a hierarchical team structure with provider selection support:
 
+- **Migration Supervisor** (1 agent): Top-level orchestration
 - **Analysis Team** (5 agents): Legacy code and database analysis
 - **Planning Team** (3 agents): Migration workpackage planning  
 - **Business Team** (7 agents): Business logic extraction and requirements
 - **Development Team** (5 agents): Code generation and testing
 - **Deployment Team** (7 agents): Migration scripts and deployment
-- **Migration Supervisor** (1 agent): Top-level orchestration
+
+**Total: 28 agents** organized in 5 specialized teams plus 1 supervisor
 
 Each team includes specialist agents paired with dedicated reviewers for quality assurance. All agents support multiple CLI providers:
 
-- **K-CLI (default)**: Best integration with Kiro development environment
-- **Amazon Q CLI**: AWS-native AI assistant integration  
-- **Claude Code**: Anthropic Claude integration
+- **Kiro CLI** (`kiro_cli`, default): Best integration with Kiro development environment
+  - Command: `kiro-cli chat --agent <agent_name>`
+  - Verify: `kiro-cli --version`
+- **Amazon Q CLI** (`q_cli`): AWS-native AI assistant integration  
+- **Claude Code** (`claude_code`): Anthropic Claude integration
 
-Each team includes specialist agents paired with dedicated reviewers for quality assurance.
+#### Installation Output
+
+When you run the installer, you'll see:
+
+```
+📋 Found 28 agents to install:
+============================================================
+1. migration_supervisor
+2-6. Development Team (5 agents)
+7-13. Business Team (7 agents)
+14-20. Deployment Team (7 agents)
+21-23. Planning Team (3 agents)
+24-28. Analysis Team (5 agents)
+============================================================
+
+Install all 28 agents with Kiro CLI? (Y/n): Y
+
+📦 Installing agent: migration_supervisor
+   🔧 Executing command: cao install /path/to/migration_supervisor.md --provider kiro_cli
+✅ Successfully installed agent: migration_supervisor
+
+... (continues for all 28 agents)
+
+🎉 Successfully installed 28/28 agents
+
+✅ Kiro CLI is available and ready for use
+📋 After installation, you can use agents with:
+   • kiro-cli chat --agent <agent_name>
+   • Or through the Kiro IDE interface
+```
 
 ### Uninstalling CAO
 
@@ -175,6 +234,51 @@ If you need to remove CAO:
 ```bash
 uv tool uninstall cli-agent-orchestrator
 ```
+
+### Troubleshooting
+
+#### Verify Kiro CLI Installation
+```bash
+which kiro-cli
+kiro-cli --version
+```
+
+#### Verify CAO Installation
+```bash
+which cao
+cao --help
+cao list  # List installed agents
+```
+
+#### Check Agent Installation
+The installer shows the exact command being executed:
+```
+🔧 Executing command: cao install /path/to/agent.md --provider kiro_cli
+```
+
+If you see errors, verify:
+1. CAO is installed: `which cao`
+2. Kiro CLI is installed (if using kiro_cli provider): `which kiro-cli`
+3. The agent file exists at the specified path
+
+#### Common Issues
+
+**Issue**: "No such command 'agent'"
+- **Solution**: This was fixed. Ensure you're using the latest version of `install_cao.py`
+
+**Issue**: "Invalid value for '--provider': 'k_cli'"
+- **Solution**: Use `kiro_cli` not `k_cli`. The correct provider names are:
+  - `kiro_cli` (Kiro CLI)
+  - `q_cli` (Amazon Q CLI)
+  - `claude_code` (Claude Code)
+
+**Issue**: "Kiro CLI is not available"
+- **Solution**: Install Kiro CLI from https://kiro.ai and ensure `kiro-cli` command is in your PATH
+
+For more details, see:
+- `KIRO_CLI_FIX.md` - CLI command fixes
+- `CAO_COMMAND_FIX.md` - Command and provider fixes
+- `FULL_INSTALLATION_TEST_REPORT.md` - Complete test results
 
 ### Validation
 

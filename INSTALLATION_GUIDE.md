@@ -8,7 +8,14 @@ Before starting, ensure you have:
 - Python 3.7 or higher
 - Git
 - Internet connection for downloading dependencies
-- Your preferred CLI provider (K-CLI recommended as default)
+
+**Optional (for CAO agent orchestration):**
+- tmux 3.3+ (installed automatically by installer)
+- uv (Python package manager, installed automatically)
+- **Kiro CLI** (for `kiro_cli` provider, recommended) - Install from https://kiro.ai
+  - Verify: `kiro-cli --version`
+- Amazon Q CLI (for `q_cli` provider)
+- Claude Code (for `claude_code` provider)
 
 ## Step-by-Step Installation
 
@@ -29,19 +36,19 @@ This creates a complete project structure with:
 
 ### 2. Install CLI Agent Orchestrator (CAO) with Provider Selection
 
-After creating your project, install CAO with your preferred provider. **K-CLI is the default provider** and provides the best integration with Kiro development environments.
+After creating your project, install CAO with your preferred provider. **Kiro CLI is the default provider** and provides the best integration with Kiro development environments.
 
-#### Basic Installation (K-CLI Default)
+#### Basic Installation (Kiro CLI Default)
 ```bash
-python3 install_cao.py my_migration_project
+python3 install_cao.py my_migration_project --provider kiro_cli
 ```
 
 #### Provider Selection
 Choose your preferred CLI provider for agent integration:
 
 ```bash
-# K-CLI (Default - Recommended for Kiro users)
-python3 install_cao.py my_migration_project --provider k_cli
+# Kiro CLI (Default - Recommended for Kiro users)
+python3 install_cao.py my_migration_project --provider kiro_cli
 
 # Amazon Q CLI
 python3 install_cao.py my_migration_project --provider q_cli
@@ -54,67 +61,69 @@ python3 install_cao.py my_migration_project --provider claude_code
 
 | Provider | Display Name | Description | CLI Required |
 |----------|--------------|-------------|--------------|
-| `k_cli` | K-CLI (Kiro) | **Default provider** - Best integration with Kiro development environment | Yes (kiro command) |
-| `q_cli` | Amazon Q CLI | AWS-native AI assistant integration | Yes (q command) |
+| `kiro_cli` | Kiro CLI | **Default provider** - Best integration with Kiro development environment | Yes (`kiro-cli` command) |
+| `q_cli` | Amazon Q CLI | AWS-native AI assistant integration | Yes (`q` command) |
 | `claude_code` | Claude Code | Anthropic Claude integration | No |
 
-#### K-CLI Setup Instructions
+#### Kiro CLI Setup Instructions
 
-K-CLI is the recommended default provider. To set up K-CLI:
+Kiro CLI is the recommended default provider. To set up Kiro CLI:
 
-1. **Install Kiro**: Follow the [Kiro installation guide](https://kiro.ai/docs/installation)
-2. **Verify Installation**: Run `kiro --version` to confirm K-CLI is available
-3. **Configure Workspace**: Ensure your project is in a Kiro workspace
+1. **Install Kiro CLI**: Follow the [Kiro installation guide](https://kiro.ai)
+2. **Verify Installation**: Run `kiro-cli --version` to confirm Kiro CLI is available
+3. **Configure Workspace**: Ensure your project is in a Kiro workspace (optional)
 
-Example K-CLI usage:
+Example Kiro CLI usage:
 ```bash
-# Install with K-CLI (default)
-python3 install_cao.py my_migration_project
+# Install with Kiro CLI (default)
+python3 install_cao.py my_migration_project --provider kiro_cli
 
-# Verify K-CLI integration
-kiro --help
+# Verify Kiro CLI integration
+kiro-cli --version
+kiro-cli --help
 ```
 
 The CAO installation script will:
 - **Install tmux**: Uses the official CAO tmux installer (version 3.3+ required)
 - **Install uv**: Downloads and installs the uv Python package manager
 - **Install CAO**: Uses `uv tool install` to install CAO from the official repository
-- **Configure Provider**: Sets up your selected provider (K-CLI by default)
-- **Install Agents**: Discovers and installs agents using the new `cao agent install` commands
+- **Configure Provider**: Sets up your selected provider (Kiro CLI by default)
+- **Install Agents**: Discovers and installs all 28 agents using `cao install` commands
 - **Setup Environment**: Initializes CAO in your project directory with provider integration
+- **Show Progress**: Displays command preview before each installation for transparency
 
 ### 3. Agent Installation Methods
 
-CAO supports multiple methods for installing agents, all using the modern `cao agent install` command syntax:
+CAO supports multiple methods for installing agents, all using the `cao install` command syntax:
 
 #### Built-in Agents
 Install pre-packaged agents that come with CAO:
 ```bash
-# Install a built-in agent with default provider (K-CLI)
-cao agent install developer
+# Install a built-in agent with default provider (Kiro CLI)
+cao install developer --provider kiro_cli
 
 # Install with specific provider
-cao agent install developer --provider q_cli
+cao install developer --provider q_cli
 ```
 
 #### Local Agent Files
 Install agents from local markdown files:
 ```bash
 # Install from local file with default provider
-cao agent install /path/to/my_agent.md
+cao install /path/to/my_agent.md --provider kiro_cli
 
 # Install with specific provider
-cao agent install ./agents/custom_agent.md --provider k_cli
+cao install ./agents/custom_agent.md --provider kiro_cli
 ```
 
 #### URL-based Agents
 Install agents directly from URLs:
 ```bash
 # Install from URL with default provider
-cao agent install https://example.com/agents/specialist_agent.md
+cao install https://example.com/agents/specialist_agent.md --provider kiro_cli
 
 # Install with specific provider
-cao agent install https://github.com/user/repo/agent.md --provider claude_code
+cao install https://github.com/user/repo/agent.md --provider claude_code
 ```
 
 #### Agent Source Selection
@@ -144,8 +153,8 @@ python3 install_cao.py my_migration_project --skip-agents
 #### Combined Options
 Combine provider selection with installation options:
 ```bash
-# K-CLI with custom agents and skip dependencies
-python3 install_cao.py my_migration_project --provider k_cli --agent-sources custom_agent --skip-deps
+# Kiro CLI with custom agents and skip dependencies
+python3 install_cao.py my_migration_project --provider kiro_cli --agent-sources custom_agent --skip-deps
 
 # Q-CLI with no agents initially
 python3 install_cao.py my_migration_project --provider q_cli --skip-agents
@@ -171,16 +180,16 @@ Use these commands to manage your installed agents:
 
 ```bash
 # List all installed agents
-cao agent list
+cao list
 
 # Install additional agents
-cao agent install <agent_name_or_path> --provider <provider>
+cao install <agent_name_or_path> --provider <provider>
 
-# Remove an agent
-cao agent remove <agent_name>
+# Remove an agent (if supported by CAO)
+cao remove <agent_name>
 
-# Update agent information
-cao agent info <agent_name>
+# Get help
+cao --help
 ```
 
 ### Using CAO Agents
@@ -207,16 +216,17 @@ cao-server
 
 #### Launch Agent Sessions with Provider Integration
 
-**K-CLI Integration (Default)**:
+**Kiro CLI Integration (Default)**:
 ```bash
-# Terminal 1: Start server
+# Terminal 1: Start server (if needed)
 cao-server
 
-# Terminal 2: Launch agent with K-CLI
-cao launch --agents developer --provider k_cli
+# Terminal 2: Launch agent with Kiro CLI
+cao launch --agents developer
 
-# Use Kiro commands within the agent session
-kiro --help
+# Or use Kiro CLI directly
+kiro-cli chat --agent developer
+kiro-cli chat --agent migration_supervisor
 ```
 
 **Amazon Q CLI Integration**:
@@ -236,14 +246,17 @@ cao launch --agents developer --provider claude_code
 
 #### Provider-Specific Examples
 
-**K-CLI Workflow**:
+**Kiro CLI Workflow**:
 ```bash
-# Start CAO with K-CLI integration
-cao launch --agents developer --provider k_cli
+# Use Kiro CLI to chat with agents
+kiro-cli chat --agent migration_supervisor
+kiro-cli chat --agent analysis_team_supervisor
 
-# Within the agent session, use Kiro features
-kiro analyze legacy_code/
-kiro generate modern_equivalent.py
+# Or start CAO with Kiro CLI integration
+cao launch --agents developer
+
+# Check Kiro CLI version
+kiro-cli --version
 ```
 
 **Q-CLI Workflow**:
@@ -284,27 +297,28 @@ Your project includes these pre-configured agents:
 
 ### Provider-Specific Issues
 
-#### K-CLI (Default Provider) Issues
+#### Kiro CLI (Default Provider) Issues
 
-**K-CLI Not Found**:
+**Kiro CLI Not Found**:
 ```bash
-# Check if Kiro is installed
-kiro --version
+# Check if Kiro CLI is installed
+which kiro-cli
+kiro-cli --version
 
-# If not installed, install Kiro first
-# Follow: https://kiro.ai/docs/installation
+# If not installed, install Kiro CLI first
+# Follow: https://kiro.ai
 
-# Verify K-CLI integration
-python3 install_cao.py my_project --provider k_cli
+# Verify Kiro CLI integration
+python3 install_cao.py my_project --provider kiro_cli
 ```
 
-**K-CLI Permission Issues**:
+**Kiro CLI Permission Issues**:
 ```bash
-# Ensure Kiro workspace is properly configured
-kiro workspace init
+# Ensure Kiro workspace is properly configured (if using workspace features)
+kiro-cli --help
 
-# Check workspace permissions
-ls -la ~/.kiro/
+# Check Kiro CLI installation
+ls -la ~/.local/bin/kiro-cli
 ```
 
 #### Amazon Q CLI Issues
@@ -344,17 +358,44 @@ cao agent list
 
 ### Agent Installation Issues
 
-#### New Command Syntax Issues
-If you encounter issues with agent installation, ensure you're using the new command syntax:
+#### Command Syntax
+Ensure you're using the correct command syntax:
 
 ```bash
-# Correct new syntax
-cao agent install developer --provider k_cli
-cao agent install /path/to/agent.md --provider q_cli
-cao agent install https://example.com/agent.md --provider claude_code
+# Correct syntax
+cao install developer --provider kiro_cli
+cao install /path/to/agent.md --provider q_cli
+cao install https://example.com/agent.md --provider claude_code
 
-# Verify installation
-cao agent list
+# List installed agents
+cao list
+
+# NOT: cao agent install (old syntax, doesn't work)
+# NOT: cao agent list (old syntax, doesn't work)
+```
+
+#### Common Command Errors
+
+**Error: "No such command 'agent'"**
+- **Cause**: Using old command syntax `cao agent install`
+- **Solution**: Use `cao install` instead
+```bash
+# Wrong
+cao agent install developer
+
+# Correct
+cao install developer --provider kiro_cli
+```
+
+**Error: "Invalid value for '--provider': 'k_cli'"**
+- **Cause**: Using incorrect provider name
+- **Solution**: Use `kiro_cli` not `k_cli`
+```bash
+# Wrong
+cao install developer --provider k_cli
+
+# Correct
+cao install developer --provider kiro_cli
 ```
 
 #### Agent Store Issues
@@ -375,8 +416,13 @@ cao agent install developer
 python3 install_cao.py --help
 
 # Use valid provider names
-python3 install_cao.py my_project --provider k_cli    # Correct
-python3 install_cao.py my_project --provider kiro     # Incorrect
+python3 install_cao.py my_project --provider kiro_cli  # Correct
+python3 install_cao.py my_project --provider k_cli     # Incorrect - will fail
+
+# Valid provider names:
+# - kiro_cli (Kiro CLI)
+# - q_cli (Amazon Q CLI)
+# - claude_code (Claude Code)
 ```
 
 ### General Installation Issues
@@ -410,16 +456,18 @@ If CAO installation fails:
 - For provider-specific issues, see the Provider-Specific Issues section above
 
 #### Legacy Agent Installation Issues
-If you're upgrading from an older CAO version:
+If you're upgrading from an older CAO version or seeing old command references:
 ```bash
-# Remove old agent installations
+# Remove old agent installations (if any)
 rm -rf .cao/agents/
 
-# Use new installation method
-cao agent install developer --provider k_cli
+# Use correct installation method
+cao install developer --provider kiro_cli
 
-# Verify with new command
-cao agent list
+# Verify with correct command
+cao list
+
+# NOT: cao agent list (old command)
 ```
 
 #### Network Issues for URL-based Agents
@@ -429,7 +477,7 @@ curl -I https://example.com/agent.md
 
 # Use local file as fallback
 wget https://example.com/agent.md
-cao agent install ./agent.md --provider k_cli
+cao install ./agent.md --provider kiro_cli
 ```
 
 ### Migration from Legacy Installations
@@ -448,24 +496,35 @@ cp -r .cao/ .cao_backup/
 #### Update to New System
 ```bash
 # Reinstall with new system and provider selection
-python3 install_cao.py my_migration_project --provider k_cli
+python3 install_cao.py my_migration_project --provider kiro_cli
 
 # Verify new agent store location
 ls -la ~/.aws/cli-agent-orchestrator/agent-store/
 
-# Test new command syntax
-cao agent list
-cao agent install developer --provider k_cli
+# Test correct command syntax
+cao list
+cao install developer --provider kiro_cli
 ```
 
 #### Troubleshooting Migration Issues
 ```bash
 # If agents don't appear after migration
-cao agent install /path/to/old/agent.md --provider k_cli
+cao install /path/to/old/agent.md --provider kiro_cli
 
 # If provider integration fails
-python3 install_cao.py my_project --provider k_cli --skip-agents
+python3 install_cao.py my_project --provider kiro_cli --skip-agents
+cao install developer --provider kiro_cli
+```
+
+#### Important: Command Changes
+```bash
+# OLD (doesn't work anymore)
 cao agent install developer --provider k_cli
+cao agent list
+
+# NEW (correct)
+cao install developer --provider kiro_cli
+cao list
 ```
 
 ### Getting Help
@@ -473,12 +532,16 @@ cao agent install developer --provider k_cli
 For additional support:
 1. Check the [CAO documentation](https://github.com/awslabs/cli-agent-orchestrator)
 2. Review provider-specific documentation:
-   - [K-CLI Documentation](https://kiro.ai/docs)
+   - [Kiro CLI Documentation](https://kiro.ai)
    - [Amazon Q CLI Documentation](https://docs.aws.amazon.com/amazonq/)
    - [Claude Code Documentation](https://claude.ai/docs)
-3. Review the project's README.md
+3. Review the project's README.md and fix documentation:
+   - `README.md` - Main documentation
+   - `KIRO_CLI_FIX.md` - CLI command fixes
+   - `CAO_COMMAND_FIX.md` - Command and provider fixes
+   - `COMPLETE_FIX_SUMMARY.md` - All fixes summary
 4. Examine the generated project structure for guidance
-5. Use `cao --help` and `cao agent --help` for command reference
+5. Use `cao --help` for command reference
 
 ### Uninstalling CAO
 If you need to uninstall CAO:
@@ -500,7 +563,7 @@ After successful installation with your chosen provider:
 1. **Add Legacy Code**: Place your legacy source code in `my_migration_project/input/legacy/`
 2. **Configure Specifications**: Add target system specifications to `my_migration_project/input/target/`
 3. **Choose Your Provider Workflow**:
-   - **K-CLI Users**: Use `kiro` commands alongside CAO agents for integrated development
+   - **Kiro CLI Users**: Use `kiro-cli chat --agent <name>` to interact with agents
    - **Q-CLI Users**: Leverage AWS Q integration for cloud-native modernization
    - **Claude Code Users**: Utilize Claude's code understanding for complex transformations
 4. **Run Analysis**: Use CAO agents with your provider to analyze your legacy system
@@ -509,17 +572,18 @@ After successful installation with your chosen provider:
 
 ### Provider-Specific Next Steps
 
-#### K-CLI (Kiro) Users
+#### Kiro CLI Users
 ```bash
-# Initialize Kiro workspace
-kiro workspace init
+# Use Kiro CLI to chat with agents
+kiro-cli chat --agent migration_supervisor
+kiro-cli chat --agent analysis_team_supervisor
 
-# Use CAO agents with Kiro integration
-cao launch --agents developer --provider k_cli
+# Or use CAO directly
+cao launch --agents migration_supervisor
 
-# Leverage Kiro's development tools
-kiro analyze legacy_system/
-kiro generate modern_code/
+# Verify installation
+kiro-cli --version
+cao list
 ```
 
 #### Amazon Q CLI Users
@@ -541,6 +605,26 @@ cao launch --agents developer --provider claude_code
 
 # Leverage Claude's advanced code understanding
 # (No additional CLI setup required)
+```
+
+### Quick Command Reference
+
+```bash
+# List installed agents
+cao list
+
+# Install additional agents
+cao install <agent_file> --provider kiro_cli
+
+# Launch agent with Kiro CLI
+kiro-cli chat --agent <agent_name>
+
+# Launch agent with CAO
+cao launch --agents <agent_name>
+
+# Get help
+cao --help
+kiro-cli --help
 ```
 
 Happy migrating with your chosen provider! 🚀
