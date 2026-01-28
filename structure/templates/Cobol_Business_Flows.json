@@ -5,12 +5,14 @@
       "name": "string",
       "entryPoint": "string",
       "entryType": "JCL|CICS|ONLINE",
-      "modules": ["string"],
-      "copybooks": ["string"],
+      "modulesInFlow": ["string"],
+      "copybooksInFlow": ["string"],
+      "inboundCalls": ["string"],
+      "outboundCalls": ["string"],
       "databaseOperations": [
         {
-          "type": "SQLIO|DBIO",
-          "operation": "READ|WRITE|UPDATE|DELETE",
+          "type": "DB2|IMS|IDMS|ADABAS|VSAM|QSAM|BDAM|SQL|FILE",
+          "operation": "READ|WRITE|UPDATE|DELETE|FIND|STORE",
           "target": "string"
         }
       ],
