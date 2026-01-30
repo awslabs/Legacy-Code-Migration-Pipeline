@@ -1,0 +1,21 @@
+{
+  "phaseId": "03-business-extraction",
+  "status": "in_progress|completed",
+  "workpackages": [
+    {
+      "workpackageId": "WP-001",
+      "status": "completed",
+      "businessSpecification": "output/specifications/business/WP-001-specification.md",
+      "completedDate": "YYYY-MM-DD"
+    },
+    {
+      "workpackageId": "WP-002",
+      "status": "in_progress",
+      "businessSpecification": null,
+      "completedDate": null
+    }
+  ],
+  "completedCount": 1,
+  "totalCount": 5,
+  "lastUpdated": "YYYY-MM-DD"
+}

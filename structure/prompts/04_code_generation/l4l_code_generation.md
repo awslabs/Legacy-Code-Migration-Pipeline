@@ -1,3 +1,5 @@
+## NOTE THIS IS JUST A STUB FOR A 1:1 REWRITE of Assembler to Cobol
+
 # Objective: 
 You are tasked with converting the assembler program in file /User/kerimman/demoproject/input/legacy_code/app/asm/MVSWAIT.asm to a functionally equivalent COBOL program. Please perform the following tasks in sequence:
 
