@@ -18,14 +18,20 @@ from pathlib import Path
 from configparser import ConfigParser
 
 
-def load_config_parameters(config_path, project_path):
+def load_config_parameters(config_path, project_path, project_name):
     """Load and resolve all parameters from config file with dependency resolution."""
     if not os.path.exists(config_path):
-        print(f"Warning: Config file '{config_path}' not found. Only PROJECT_BASE_PATH will be replaced.")
-        return {'PROJECT_BASE_PATH': str(project_path)}
+        print(f"Warning: Config file '{config_path}' not found. Only PROJECT_BASE_PATH and PROJECT_NAME will be replaced.")
+        return {
+            'PROJECT_BASE_PATH': str(project_path),
+            'PROJECT_NAME': project_name
+        }
     
     # Read config file manually to handle the custom format
-    parameters = {'PROJECT_BASE_PATH': str(project_path)}
+    parameters = {
+        'PROJECT_BASE_PATH': str(project_path),
+        'PROJECT_NAME': project_name
+    }
     
     with open(config_path, 'r', encoding='utf-8') as f:
         for line in f:
@@ -117,7 +123,7 @@ def copy_structure_and_replace(source_dir, target_dir, config_path):
     
     # Load and resolve all parameters from config
     print("Loading configuration parameters...")
-    parameters = load_config_parameters(config_path, target_path)
+    parameters = load_config_parameters(config_path, target_path, target_path.name)
     
     print("Resolved parameters:")
     for key, value in parameters.items():

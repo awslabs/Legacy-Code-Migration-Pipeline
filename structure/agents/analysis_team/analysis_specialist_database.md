@@ -95,8 +95,8 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 ## Required Deliverables
 
 ### 1. Database Analysis Report
-**File**: `{{DATABASE_REPORTING}}`
-**Template**: `{{DATABASE_REPORTING_TEMPLATE}}`
+**File**: `{{DATABASE_ANALYSIS_REPORT}}`
+**Template**: `{{DATABASE_ANALYSIS_REPORT_TEMPLATE}}`
 **Content**:
 - Database inventory and architecture overview
 - Compatibility assessment for each target system
@@ -157,9 +157,10 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 - Automated compatibility assessment and script generation
 
 ### 6. Progress Tracking
-**File**: `{{DATABASE_PROGRESS_TRACKING}}`
-**Template**: `{{DATABASE_PROGRESS_TRACKING_TEMPLATE}}`
-**Content**: Analysis progress, deliverable status, quality metrics, completion confirmation
+**Description**: Analysis progress, deliverable status, quality metrics, completion confirmation
+**Format**: JSON following template structure
+
+**Note**: Actual file path and template will be provided in your task file.
 
 ## Quality Assurance Requirements
 

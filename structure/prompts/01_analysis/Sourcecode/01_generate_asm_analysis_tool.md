@@ -10,10 +10,10 @@
 - Output Location:
   -- Database analysis related files: `{{DATABASE_ANALYSIS_OUTPUT}}` 
   -- Reporting: `{{ASM_SOURCE_CODE_ANALYSIS_REPORTING}}`
-  -- Module Dependency Table: `{{ASM_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-  -- Progress Tracking: `{{ASM_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING}}`
-  -- Business Flow: `{{ASM_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-  -- ASM Module Classification: `{{ASM_MODULE_CLASSIFICATION}}`
+  -- Module Dependency Table: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+  -- Progress Tracking: `{{ANALYSIS_STATUS}}`
+  -- Business Flow: `{{BUSINESS_FLOWS}}`
+  -- Module Classification: `{{MODULE_CLASSIFICATIONS}}`
   -- Location of task-related files: `{{TASKS_BASE_PATH}}`
 
 ## Objective
@@ -146,14 +146,16 @@ Analyze module functionality and assign business domains:
 **Template for the file**: `{{ASM_SOURCE_CODE_ANALYSIS_REPORTING_TEMPLATE}}`
  
 #### 2. Dependency Analysis Table
-**File**: `{{ASM_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-**Template for the file**: `{{ASM_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE_TEMPLATE}}`
+**File**: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+**Template for the file**: `{{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}`
  
 Where the fields of the template shall be filled like this:
 - **Name**: Name of the calling module
 - **Filetype**: ASM|ASM_MACRO|JCL
 - **ModuleType**: ENTRY_POINT|COMMONLY_USED|SINGLE_USE (usage pattern classification)
 - **ModuleFunctionality**: FUNCTIONAL|UTILITY (business logic classification)
+- **Language**: ASM
+- **NaturalObjectType**: (leave empty for ASM)
 - **BusinessDomain**: Assigned business domain or NONE
 - **Usage**: Batch|Online|Both
 - **EntryPoint**: Yes|No (if module is an entry point)
@@ -166,13 +168,13 @@ Where the fields of the template shall be filled like this:
 - **FileTarget**: Dataset name or file name (for file operations, empty for module calls)
  
 #### 3. Business Flow Specifications
-**File**: `{{ASM_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-**Template for the file**: `{{ASM_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW_TEMPLATE}}`
+**File**: `{{BUSINESS_FLOWS}}`
+**Template for the file**: `{{BUSINESS_FLOWS_TEMPLATE}}`
  
  
 #### 4. Module Classification Report
-**File**: `{{ASM_MODULE_CLASSIFICATION}}`
-**Template for the file**: `{{ASM_MODULE_CLASSIFICATION_TEMPLATE}}`
+**File**: `{{MODULE_CLASSIFICATIONS}}`
+**Template for the file**: `{{MODULE_CLASSIFICATIONS_TEMPLATE}}`
 
  
 #### 5. Dependency Analysis Tool
@@ -182,8 +184,8 @@ Where the fields of the template shall be filled like this:
 - Include comprehensive error handling and logging
  
 #### 6. Progress Tracking
-**File**: `{{ASM_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING}}`
-**Template for the file**: `{{ASM_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING_TEMPLATE}}`
+**File**: `{{ANALYSIS_STATUS}}`
+**Template for the file**: `{{ANALYSIS_STATUS_TEMPLATE}}`
 
 ## Quality Criteria
  
@@ -231,8 +233,8 @@ Where the fields of the template shall be filled like this:
 - Escalation: Document for manual analysis
 
 ### Error Reporting Format
-**File**: `{{ASM_SOURCE_CODE_ANALYSIS_ERRORS}}`
-**Template for the file**: `{{ASM_SOURCE_CODE_ANALYSIS_ERRORS_TEMPLATE}}`
+**File**: `{{ANALYSIS_ERRORS}}`
+**Template for the file**: `{{ANALYSIS_ERRORS_TEMPLATE}}`
 
 ### Fallback Strategies
 - **Simplified Analysis**: If full parsing fails, perform basic pattern matching

@@ -1,5 +1,109 @@
 # Phase 3.1: Business Extraction
- 
+
+---
+
+## Orchestration Information
+
+**Phase**: Phase 3 - Business Specification
+**Step**: Step 3.1 - Business Logic Extraction
+**Team Supervisor**: business_team_supervisor
+**Assigned Agent**: business_specialist_logic_extraction
+**Task File Name**: {{TASKS_BASE_PATH}}/business_extraction_specialist_task.md
+
+### Expected Deliverables
+
+1. **Business Specification Documents**
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
+   - Template: {{BUSINESS_SPECIFICATION_TEMPLATE}}
+   - Description: IEEE-formatted business specifications for each workpackage flow
+
+2. **Progress Tracking**
+   - File: {{BUSINESS_SPECIFICATION_STATUS}}
+   - Template: {{BUSINESS_SPECIFICATION_STATUS_TEMPLATE}}
+   - Description: Business extraction progress and status tracking
+
+3. **Review Files**
+   - File: {{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md
+   - Description: Review documentation for each workpackage (created by reviewer)
+
+4. **Error Reports** (if applicable)
+   - File: {{BUSINESS_SPECIFICATION_ERRORS}}
+   - Template: {{BUSINESS_SPECIFICATION_ERRORS_TEMPLATE}}
+   - Description: Documentation of errors and issues encountered
+
+### Success Criteria
+- [ ] All workpackage flows have business specifications created
+- [ ] All business entities extracted and documented
+- [ ] All business rules identified and cataloged
+- [ ] All business functions specified
+- [ ] IEEE standard compliance verified
+- [ ] Technology-agnostic documentation achieved
+- [ ] Legacy implementation references complete
+- [ ] All deliverables produced at specified paths
+- [ ] Quality criteria met
+- [ ] Ready for review
+
+---
+
+## For Team Supervisor: Task File Creation
+
+When creating the task file for this step:
+
+### 1. Extract from this prompt:
+- **Objective section**: Extract business rules, entities, and functions from legacy code
+- **Detailed instructions**: All Steps 1-10 below (Preparation, Business Entity Extraction, Business Rule Extraction, etc.)
+- **Technical specifications**: IEEE 830-1998 format, generic data types, camelCase naming conventions
+- **Business rules and constraints**: Technology-agnostic documentation, no invented rules, exact legacy code matching
+- **Error handling guidance**: Incomplete legacy code, ambiguous business logic, complex technical implementation
+- **Output format requirements**: Business specification documents, progress tracking
+- **Quality criteria**: IEEE compliance, business rule quality, entity completeness, technology independence, traceability
+
+### 2. Add project context:
+- **Project name**: {{PROJECT_NAME}}
+- **Project base path**: {{PROJECT_BASE_PATH}}
+- **All input locations** (resolved paths):
+  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+  - Source code files: {{SOURCE_CODE}}
+  - Database source code: {{DATABASE_SOURCE_CODE}}
+  - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
+  - Module dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
+- **All output locations** (resolved paths):
+  - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}
+  - Review files: {{BUSINESS_SPECIFICATION_REVIEW}}
+  - Reporting: {{BUSINESS_SPECIFICATION_REPORTING}}
+  - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
+  - Error reports: {{BUSINESS_SPECIFICATION_ERRORS}}
+  - Task files location: {{TASKS_BASE_PATH}}
+- **All template locations** (resolved paths):
+  - Business specification template: {{BUSINESS_SPECIFICATION_TEMPLATE}}
+  - Status template: {{BUSINESS_SPECIFICATION_STATUS_TEMPLATE}}
+  - Errors template: {{BUSINESS_SPECIFICATION_ERRORS_TEMPLATE}}
+
+### 3. Reference agent definition:
+- **Agent name**: business_specialist_logic_extraction
+- **Agent definition file**: structure/agents/business_team/business_specialist_logic_extraction.md
+- **Note**: Don't duplicate agent definition, just reference it
+
+### 4. Task file structure:
+Use the standard task file template with these sections:
+- **Agent Assignment**: Agent name, task ID, created by, timestamp, phase, step
+- **Project Context**: Project info, input locations (Phase 1 and Phase 2 outputs), output locations, reference data
+- **Task Instructions**: Objective, detailed steps (1-10), business rules, error handling
+- **Expected Deliverables**: All 4 deliverables with paths, templates, descriptions, validation checklists
+- **Quality Criteria**: IEEE compliance, business rule quality, entity completeness, technology independence, traceability
+- **Success Criteria**: Task completion verification steps
+
+### 5. Path resolution:
+Ensure all {{PARAMETERS}} are replaced with actual absolute paths before creating the task file.
+
+### 6. Dependencies from previous phases:
+This step requires outputs from Phase 1 (Analysis) and Phase 2 (Workpackage Planning):
+- **From Phase 1**: Source code analysis, dependency analysis table, module classifications, business flows
+- **From Phase 2**: Workpackage definitions with prioritized flows
+- Verify these artifacts exist before creating the task file
+
+---
+
 ## Context
 - Project Structure: Standard migration project folder structure
 
@@ -18,8 +122,8 @@
   -- Review: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md``
      --- (IMPORTANT: **Reviewer must create review files, NOT output to STDOUT**)
   -- Reporting: `{{BUSINESS_SPECIFICATION_REPORTING}}`
-  -- Module Dependency Table: `{{COBOL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-  -- Progress Tracking: `{{BUSINESS_SPECIFICATION_PROGRESS_TRACKING}}`
+  -- Module Dependency Table: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+  -- Progress Tracking: `{{BUSINESS_SPECIFICATION_STATUS}}`
   -- Location of task-related files: `{{TASKS_BASE_PATH}}` 
 
 
@@ -127,8 +231,8 @@ Extract business rules, entities, and functions from legacy code in a technology
  
  
 ### 6. Progress Tracking
-**File**: `{{BUSINESS_SPECIFICATION_PROGRESS_TRACKING}}`
-**Template for the file**: `{{BUSINESS_SPECIFICATION_PROGRESS_TRACKING_TEMPLATE}}`
+**File**: `{{BUSINESS_SPECIFICATION_STATUS}}`
+**Template for the file**: `{{BUSINESS_SPECIFICATION_STATUS_TEMPLATE}}`
  
 ## Quality Criteria
  

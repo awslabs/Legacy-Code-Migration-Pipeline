@@ -10,10 +10,10 @@
 - Output Location:
   -- Database analysis related files: `{{DATABASE_ANALYSIS_OUTPUT}}` 
   -- Reporting: `{{NATURAL_SOURCE_CODE_ANALYSIS_REPORTING}}`
-  -- Module Dependency Table: `{{NATURAL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-  -- Progress Tracking: `{{NATURAL_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING}}`
-  -- Business Flow: `{{NATURAL_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-  -- Natural Module Classification: `{{NATURAL_MODULE_CLASSIFICATION}}`
+  -- Module Dependency Table: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+  -- Progress Tracking: `{{ANALYSIS_STATUS}}`
+  -- Business Flow: `{{BUSINESS_FLOWS}}`
+  -- Module Classification: `{{MODULE_CLASSIFICATIONS}}`
   -- Location of task-related files: `{{TASKS_BASE_PATH}}`
 
 ## Objective
@@ -142,14 +142,15 @@ Analyze module functionality and assign business domains:
 **Template for the file**: `{{NATURAL_SOURCE_CODE_ANALYSIS_REPORTING_TEMPLATE}}`
  
 #### 2. Dependency Analysis Table
-**File**: `{{NATURAL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-**Template for the file**: `{{NATURAL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE_TEMPLATE}}`
+**File**: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+**Template for the file**: `{{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}`
  
 Where the fields of the template shall be filled like this:
 - **Name**: Name of the calling module
 - **Filetype**: NATURAL_PROGRAM|NATURAL_SUBPROGRAM|NATURAL_MAP|NATURAL_LDA|NATURAL_GDA|NATURAL_COPYCODE
 - **ModuleType**: ENTRY_POINT|COMMONLY_USED|SINGLE_USE (usage pattern classification)
 - **ModuleFunctionality**: FUNCTIONAL|UTILITY (business logic classification)
+- **Language**: Natural
 - **NaturalObjectType**: PROGRAM|SUBPROGRAM|MAP|LDA|GDA|COPYCODE
 - **BusinessDomain**: Assigned business domain or NONE
 - **Usage**: Batch|Online|Both
@@ -159,15 +160,17 @@ Where the fields of the template shall be filled like this:
 - **TargetFound**: True|False - True if target module exists in any source directory OR if target table exists in DDL directory, False otherwise
 - **FlowId**: Identifier for the end-to-end flow this call belongs to
 - **Complexity**: Numeric complexity score for the calling module
+- **FileOperation**: (leave empty for Natural - no file operations in CSV)
+- **FileTarget**: (leave empty for Natural - no file operations in CSV)
  
 #### 3. Business Flow Specifications
-**File**: `{{NATURAL_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-**Template for the file**: `{{NATURAL_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW_TEMPLATE}}`
+**File**: `{{BUSINESS_FLOWS}}`
+**Template for the file**: `{{BUSINESS_FLOWS_TEMPLATE}}`
  
  
 #### 4. Module Classification Report
-**File**: `{{NATURAL_MODULE_CLASSIFICATION}}`
-**Template for the file**: `{{NATURAL_MODULE_CLASSIFICATION_TEMPLATE}}`
+**File**: `{{MODULE_CLASSIFICATIONS}}`
+**Template for the file**: `{{MODULE_CLASSIFICATIONS_TEMPLATE}}`
 
  
 #### 5. Dependency Analysis Tool
@@ -177,8 +180,8 @@ Where the fields of the template shall be filled like this:
 - Include comprehensive error handling and logging
  
 #### 6. Progress Tracking
-**File**: `{{NATURAL_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING}}`
-**Template for the file**: `{{NATURAL_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING_TEMPLATE}}`
+**File**: `{{ANALYSIS_STATUS}}`
+**Template for the file**: `{{ANALYSIS_STATUS_TEMPLATE}}`
 
 ## Quality Criteria
  
@@ -226,8 +229,8 @@ Where the fields of the template shall be filled like this:
 - Escalation: Document for manual analysis
 
 ### Error Reporting Format
-**File**: `{{NATURAL_SOURCE_CODE_ANALYSIS_ERRORS}}`
-**Template for the file**: `{{NATURAL_SOURCE_CODE_ANALYSIS_ERRORS_TEMPLATE}}`
+**File**: `{{ANALYSIS_ERRORS}}`
+**Template for the file**: `{{ANALYSIS_ERRORS_TEMPLATE}}`
 
 ### Fallback Strategies
 - **Simplified Analysis**: If full parsing fails, perform basic pattern matching

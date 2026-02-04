@@ -2,6 +2,19 @@
 
 The ACM framework provides quality assurance and validation tools for the legacy code migration process. It ensures that all deliverables meet specified standards and maintains consistency across migration projects.
 
+## Integration with Orchestration Architecture
+
+The ACM framework integrates with the 3-layer orchestration architecture at multiple points:
+
+1. **Specialist Level**: Specialists can self-validate deliverables before reporting completion
+2. **Reviewer Level**: Reviewers use ACM validation as part of their quality criteria checks
+3. **Team Supervisor Level**: Supervisors can verify deliverables exist and are valid before proceeding
+4. **Migration Supervisor Level**: Can validate entire phase outputs before moving to next phase
+
+The iterative review process orchestrated by team supervisors ensures deliverables pass both ACM validation and reviewer quality checks before phase completion.
+
+For more information on the orchestration architecture, see [Orchestration Architecture Documentation](../orchestration_architecture.md)
+
 ## Framework Overview
 
 The ACM framework is built around the principle of template-driven validation, where every deliverable in the migration process has a corresponding template that defines its expected structure and content.
@@ -50,9 +63,17 @@ The underlying framework that supports:
 - Path configurations ensure proper template resolution
 - Validation scripts are included in every project
 
+#### Orchestration Workflow
+- **Specialist Agents**: Can run validation before reporting completion
+- **Reviewer Agents**: Include ACM validation in quality criteria
+- **Team Supervisors**: Verify deliverables before creating review tasks
+- **Iterative Review**: Validation failures trigger remediation cycles
+- **Phase Completion**: All deliverables validated before phase approval
+
 #### Migration Workflow
 - Validation checkpoints at each migration phase
 - Continuous validation during deliverable generation
+- Iterative review cycles ensure quality before proceeding
 - Final validation before project completion
 
 #### CI/CD Integration
@@ -70,13 +91,15 @@ The underlying framework that supports:
 
 ### Deliverable Generation
 - **Template Compliance**: Generate outputs that match template structures
-- **Incremental Validation**: Validate deliverables as they're created
+- **Incremental Validation**: Validate deliverables as they're created (specialists can self-check)
 - **Error Handling**: Address validation issues promptly
+- **Iterative Improvement**: Reviewer feedback + ACM validation = high quality deliverables
 - **Documentation**: Document any deviations from standard templates
 
 ### Quality Assurance
 - **Regular Validation**: Run validation checks frequently during migration
-- **Issue Resolution**: Address validation issues before proceeding
+- **Iterative Review**: Team supervisors orchestrate specialist → reviewer → remediation cycles
+- **Issue Resolution**: Address validation issues before proceeding to next phase
 - **Continuous Improvement**: Update templates based on lessons learned
 - **Stakeholder Communication**: Share validation results with project stakeholders
 

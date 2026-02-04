@@ -1,0 +1,20 @@
+{
+  "modules": [
+    {
+      "name": "string",
+      "path": "string",
+      "type": "string (ENTRY_POINT|COMMONLY_USED|SINGLE_USE)",
+      "functionality": "string (FUNCTIONAL|UTILITY)",
+      "language": "string (COBOL|Natural|ASM - optional)",
+      "naturalObjectType": "string (PROGRAM|SUBPROGRAM|MAP|LDA|GDA|COPYCODE - optional, Natural specific)",
+      "businessDomain": "string|null",
+      "usage": "string (Batch|Online|Both)",
+      "entryPoint": "boolean",
+      "dependencies": ["string"],
+      "dependents": ["string"],
+      "complexity": "number",
+      "linesOfCode": "number",
+      "lastModified": "ISO8601"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "phaseId": "test-generation-service",
+  "status": "in_progress|completed",
+  "services": [
+    {
+      "serviceId": "S-001",
+      "serviceName": "Customer Management",
+      "status": "completed",
+      "testCases": {
+        "total": 25,
+        "positive": 10,
+        "negative": 10,
+        "boundary": 5
+      },
+      "functionCoverage": "100%",
+      "entityCoverage": "100%",
+      "testDefinition": "output/specifications/tests/S-001-customer-management-tests.md",
+      "completedDate": "YYYY-MM-DD"
+    },
+    {
+      "serviceId": "S-002",
+      "serviceName": "Order Processing",
+      "status": "in_progress",
+      "testCases": {
+        "total": 0,
+        "positive": 0,
+        "negative": 0,
+        "boundary": 0
+      },
+      "functionCoverage": "0%",
+      "entityCoverage": "0%",
+      "testDefinition": null,
+      "completedDate": null
+    }
+  ],
+  "completedCount": 1,
+  "totalCount": 5,
+  "lastUpdated": "YYYY-MM-DD"
+}

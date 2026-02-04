@@ -1,0 +1,22 @@
+{
+  "phase": "string (SOURCE_ANALYSIS|DB_ANALYSIS|WORKPACKAGE_ANALYSIS)",
+  "language": "string (COBOL|Natural|ASM|DB|N/A - optional)",
+  "status": "string (IN_PROGRESS|COMPLETED|FAILED)",
+  "startTime": "ISO8601",
+  "endTime": "ISO8601",
+  "tasksCompleted": ["string"],
+  "totalModules": "number (use for source code analysis)",
+  "processedModules": "number (use for source code analysis)",
+  "totalDatabaseTables": "number (use for database analysis)",
+  "processedTables": "number (use for database analysis)",
+  "totalWorkpackages": "number (use for workpackage analysis - optional)",
+  "processedWorkpackages": "number (use for workpackage analysis - optional)",
+  "errors": ["string"],
+  "artifacts": [
+    {
+      "name": "string",
+      "path": "string",
+      "status": "string (CREATED|FAILED)"
+    }
+  ]
+}

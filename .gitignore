@@ -6,8 +6,8 @@
 __pycache__
 .pytest_cache
 zapp.yaml
-docs/PRFAQ_ReImagine_Framework_Final.md
-docs/ReImagine_Framework_Business_Case.md
-docs/ReImagine_Framework_Presentation.md
-docs/reimagine.md
-docs/research_summary.md
+docs/
+temp/
+test_orchestration/
+test_e2e_integration/
+TEST_PROTOCOL_E2E.md

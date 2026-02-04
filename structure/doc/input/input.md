@@ -2,6 +2,16 @@
 
 This directory contains all source materials and specifications needed for the migration process. The input structure is organized to separate legacy materials from target specifications and guidance documents.
 
+## Integration with Orchestration Architecture
+
+Input paths are configured in `config/paths.cfg` and resolved in prompts using `{{PARAMETER}}` placeholders. When team supervisors create task files, they resolve these parameters to absolute paths that specialists can use directly.
+
+For example:
+- Phase prompt: `{{LEGACY_SOURCE_CODE}}`
+- Task file: `/absolute/path/to/project/input/legacy/source`
+
+This ensures agents receive complete, resolved paths without needing to interpret configuration files.
+
 ## Directory Structure
 
 ### Legacy Materials (`legacy/`)
@@ -76,8 +86,13 @@ Contains guidance documents and standards for the migration:
 
 ## Integration with Analysis
 
-The input structure is designed to support automated analysis:
+The input structure is designed to support the orchestration architecture:
 - File paths are configurable via `config/paths.cfg`
+- Paths are resolved in phase prompts using `{{PARAMETERS}}`
+- Team supervisors resolve paths when creating task files
+- Specialists receive absolute paths in task files
 - Analysis tools scan these directories systematically
 - Results are cross-referenced with input materials
 - Traceability is maintained throughout the process
+
+For more information on how paths flow through the orchestration architecture, see [Orchestration Architecture Documentation](../orchestration_architecture.md)

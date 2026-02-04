@@ -2,6 +2,18 @@
 
 The deliverable validator ensures that all deliverable files in the project output have corresponding templates and validates their content structure against those templates.
 
+## Integration with Orchestration Architecture
+
+The validator can be used at multiple points in the orchestration workflow:
+
+1. **Specialist Self-Check**: Specialists can run validation before reporting completion
+2. **Reviewer Validation**: Reviewers can use validation as part of quality criteria checks
+3. **Team Supervisor Verification**: Supervisors can verify deliverables before creating review tasks
+4. **Phase Gate**: Migration Supervisor can validate all phase outputs before proceeding
+5. **Continuous Integration**: Automated validation in CI/CD pipelines
+
+The iterative review process ensures deliverables pass validation before phase completion.
+
 ## Usage
 
 ### Python Script
@@ -36,6 +48,12 @@ python3 acm/deliverable_validator.py --quiet
 4. Reports deliverables that don't have matching templates as errors
 5. Reports deliverables with content validation issues as warnings
 6. Provides a comprehensive summary of validation results
+
+**Use Cases in Orchestration:**
+- **Specialists**: Run before reporting task completion
+- **Reviewers**: Include in quality criteria validation
+- **Team Supervisors**: Verify deliverables before review delegation
+- **Migration Supervisor**: Validate phase outputs before proceeding
 
 ## Output
 

@@ -35,12 +35,12 @@ You are the Database Analysis Reviewer Agent in a multi-agent legacy migration s
 ## Review Scope and Deliverables
 
 ### Database Analysis Deliverables to Review
-1. **Database Analysis Report**: `{{DATABASE_REPORTING}}`
+1. **Database Analysis Report**: `{{DATABASE_ANALYSIS_REPORT}}`
 2. **Target System DDL Scripts**: `{{DATABASE_GEN_SRC}}/`
 3. **Migration Scripts**: `{{DATABASE_GEN_SRC}}/migration/`
 4. **Compatibility Assessment**: `{{DATABASE_ANALYSIS_OUTPUT}}/compatibility/`
 5. **Database Analyzer Tool**: `{{DATABASE_ANALYZER_TOOL}}`
-6. **Progress Tracking**: `{{DATABASE_PROGRESS_TRACKING}}`
+6. **Progress Tracking** - Database analysis progress and status
 
 ## Review Methodology
 

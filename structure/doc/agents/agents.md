@@ -4,7 +4,19 @@ This directory contains AI agent configurations and specifications for automated
 
 ## Agent Architecture Overview
 
-The migration framework implements a hierarchical multi-agent system with specialized teams coordinated by supervisors. Each agent is designed as a markdown file with YAML frontmatter following the CAO agent profile specification.
+The migration framework implements a **3-layer orchestration architecture** with hierarchical multi-agent teams coordinated by supervisors. Each agent is designed as a markdown file with YAML frontmatter following the CAO agent profile specification.
+
+### Orchestration Architecture
+
+The framework uses a supervisor-based delegation model where:
+
+1. **Layer 1 - Migration Supervisor**: Receives the main migration prompt and delegates entire phases to team supervisors
+2. **Layer 2 - Team Supervisors**: Receive phase prompts, create task files, and delegate to specialists/reviewers
+3. **Layer 3 - Specialists & Reviewers**: Receive task files and execute technical work or validate deliverables
+
+**Key Principle:** Agents are generic and reusable. Project-specific context is provided through task files created at runtime by team supervisors.
+
+For detailed information about the orchestration architecture, see [Orchestration Architecture Documentation](../orchestration_architecture.md).
 
 ### Hierarchical Structure
 
@@ -33,16 +45,23 @@ Migration Supervisor (Top Level)
 ## Agent Categories
 
 ### Supervisor Agents (6 agents)
-Coordinate teams and manage workflow phases:
-- **Migration Supervisor**: Top-level orchestrator ensuring sequential phase completion
-- **Analysis Team Supervisor**: Coordinates legacy system analysis activities  
-- **Planning Team Supervisor**: Manages workpackage definition and migration roadmap creation
-- **Business Team Supervisor**: Orchestrates business logic extraction and requirements specification
-- **Development Team Supervisor**: Manages code generation and testing
-- **Deployment Team Supervisor**: Coordinates deployment scripts and production rollout
+Coordinate teams and manage workflow phases using the orchestration architecture:
+- **Migration Supervisor**: Top-level orchestrator ensuring sequential phase completion, delegates phases to team supervisors
+- **Analysis Team Supervisor**: Coordinates analysis activities, creates task files for specialists/reviewers, orchestrates iterative review
+- **Planning Team Supervisor**: Manages workpackage definition, creates task files, orchestrates review within phase
+- **Business Team Supervisor**: Orchestrates business logic extraction, creates task files, manages iterative quality assurance
+- **Development Team Supervisor**: Manages code generation and testing, creates task files, coordinates review cycles
+- **Deployment Team Supervisor**: Coordinates deployment scripts and production rollout, creates task files, ensures quality gates
+
+**Key Responsibilities:**
+- Receive phase prompts from Migration Supervisor (or main prompt for Migration Supervisor)
+- Create task files for specialists and reviewers with project-specific context
+- Delegate tasks to team members
+- Orchestrate iterative review (specialist → reviewer → remediation → repeat until approved)
+- Report phase completion only after review approval
 
 ### Specialist Agents (11 agents)
-Domain experts performing technical work:
+Domain experts performing technical work based on task files:
 
 **Analysis Specialists:**
 - **Legacy Code Specialist**: Analyzes COBOL source code, dependencies, and business flows
@@ -65,8 +84,15 @@ Domain experts performing technical work:
 - **Database Migration Specialist**: Plans and executes database migration procedures
 - **Orchestration Specialist**: Coordinates deployment automation and production rollout
 
+**Key Responsibilities:**
+- Receive task files from team supervisors
+- Execute technical work according to task instructions
+- Produce deliverables at specified paths using provided templates
+- Report completion to team supervisor
+- Remediate issues when reviewer finds problems
+
 ### Reviewer Agents (11 agents)
-Quality assurance specialists with 1:1 pairing to specialists:
+Quality assurance specialists with 1:1 pairing to specialists, working within iterative review cycles:
 
 **Analysis Reviewers:**
 - **Legacy Code Reviewer**: Reviews and validates legacy code analysis outputs
@@ -88,6 +114,12 @@ Quality assurance specialists with 1:1 pairing to specialists:
 - **Migration Scripts Reviewer**: Reviews and validates migration script deliverables
 - **Database Migration Reviewer**: Reviews and validates database migration plans
 - **Orchestration Reviewer**: Reviews and validates deployment orchestration deliverables
+
+**Key Responsibilities:**
+- Receive review task files from team supervisors
+- Validate deliverables against quality criteria
+- Provide detailed feedback on issues found (or approval if quality criteria met)
+- Support iterative improvement through multiple review cycles
 
 ## Agent Configuration and Structure
 
@@ -150,21 +182,50 @@ Agents integrate with the framework's prompt system:
 
 ## Agent Workflows and Execution
 
+### Orchestration-Based Workflow
+
+The migration follows the 3-layer orchestration architecture:
+
+**Layer 1 - Migration Supervisor:**
+1. Receives main migration prompt with all phases
+2. Understands phase dependencies and execution order
+3. Delegates entire phases to team supervisors
+4. Monitors phase completion and verifies deliverables
+5. Enforces sequential phase execution
+
+**Layer 2 - Team Supervisors:**
+1. Receive phase prompts from Migration Supervisor
+2. Create task files for specialists with project-specific context
+3. Delegate tasks to specialists
+4. Orchestrate iterative review within the phase:
+   - Delegate to reviewer after specialist completes
+   - Handle feedback (approved or issues found)
+   - Create remediation tasks if issues found
+   - Iterate until reviewer approves
+5. Report phase completion only after review approval
+
+**Layer 3 - Specialists & Reviewers:**
+1. Receive task files from team supervisors
+2. Execute work according to task instructions
+3. Produce deliverables (specialists) or validate deliverables (reviewers)
+4. Report completion or feedback to team supervisor
+
 ### Sequential Phase Processing
 The migration follows a strict sequential workflow managed by the Migration Supervisor:
 
-1. **Phase 1 - Analysis**: Legacy Code Analyst and Database Analyst work in parallel, validated by Analysis Reviewer
-2. **Phase 2 - Planning**: Workpackage Planner creates migration roadmap, validated by Planning Reviewer
-3. **Phase 3 - Business Specification**: Business team extracts requirements and defines test cases
-4. **Phase 4 - Development**: Code Developer and Test Generator create code and tests, validated by Code Reviewer
-5. **Phase 5 - Deployment**: Deployment team creates migration scripts and deployment procedures
+1. **Phase 1 - Analysis**: Legacy Code Analyst and Database Analyst work in parallel, validated by reviewers through iterative cycles
+2. **Phase 2 - Planning**: Workpackage Planner creates migration roadmap, validated by reviewer through iterative cycles
+3. **Phase 3 - Business Specification**: Business team extracts requirements and defines test cases, validated through iterative review
+4. **Phase 4 - Development**: Code Developer and Test Generator create code and tests, validated through iterative review
+5. **Phase 5 - Deployment**: Deployment team creates migration scripts and deployment procedures, validated through iterative review
 
 ### Quality Gate Enforcement
-Each phase has mandatory quality gates:
+Each phase has mandatory quality gates enforced through iterative review:
 - **No phase starts** until the previous phase is approved by its reviewer
 - **All deliverables** must pass review before proceeding to the next phase
-- **Iterative review cycles** continue until all quality criteria are met
+- **Iterative review cycles** orchestrated by team supervisors: specialist → reviewer → (if issues) → remediation → reviewer → ... → approved
 - **Migration Supervisor** enforces sequential execution and quality standards
+- **Team Supervisors** track iteration count and escalate if excessive (>3 iterations)
 
 ### Parallel Execution Within Teams
 Within each team, agents can work in parallel:
@@ -173,12 +234,22 @@ Within each team, agents can work in parallel:
 - **Future Teams**: Business and Deployment teams will have parallel workflows
 
 ### Task Assignment Protocol
-Supervisors follow a consistent task assignment protocol:
+Supervisors follow the orchestration architecture's task assignment protocol:
 1. **Verify Prerequisites**: Ensure previous phase completion and input availability
-2. **Create Task Files**: Write detailed task descriptions with absolute paths
-3. **Assign to Agents**: Reference task files for agent execution
-4. **Monitor Progress**: Track deliverable production and quality
-5. **Coordinate Review**: Send all outputs to appropriate reviewer agents
+2. **Read Phase Prompt**: Understand phase objectives, instructions, and deliverables
+3. **Create Task Files**: Write detailed task files with:
+   - Agent assignment information
+   - Project-specific context (all resolved paths)
+   - Extracted instructions relevant to the agent
+   - Expected deliverables with templates
+   - Quality and success criteria
+4. **Assign to Agents**: Provide task file path when delegating
+5. **Monitor Progress**: Track deliverable production and quality
+6. **Orchestrate Review**: Create review task files and delegate to reviewers
+7. **Handle Feedback**: Create remediation tasks if issues found, iterate until approved
+8. **Report Completion**: Notify Migration Supervisor only after review approval
+
+For detailed task file creation guidance, see [Task File Template Documentation](../task_file_template.md)
 
 ## Agent Installation and Usage
 

@@ -1,0 +1,1881 @@
+{
+  "flows": [
+    {
+      "flowId": "FLOW_COBSWAIT",
+      "name": "Cobswait",
+      "entryPoint": {
+        "program": "COBSWAIT",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "WAITSTEP",
+                "metadata": {
+                  "jclName": "WAITSTEP",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/WAITSTEP.jcl",
+                  "jobName": "WAITSTEP"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COBSWAIT",
+            "is_utility": false
+          },
+          {
+            "name": "MVSWAIT",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 27,
+        "cyclomaticComplexity": 7,
+        "compositeScore": 1.58,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBACT02C",
+      "name": "Cbact02C",
+      "entryPoint": {
+        "program": "CBACT02C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "READCARD",
+                "metadata": {
+                  "jclName": "READCARD",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/READCARD.jcl",
+                  "jobName": "READCARD"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBACT02C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 129,
+        "cyclomaticComplexity": 20,
+        "compositeScore": 3.43,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBACT03C",
+      "name": "Cbact03C",
+      "entryPoint": {
+        "program": "CBACT03C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "READXREF",
+                "metadata": {
+                  "jclName": "READXREF",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/READXREF.jcl",
+                  "jobName": "READXREF"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBACT03C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 130,
+        "cyclomaticComplexity": 20,
+        "compositeScore": 3.44,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBCUS01C",
+      "name": "Cbcus01C",
+      "entryPoint": {
+        "program": "CBCUS01C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "READCUST",
+                "metadata": {
+                  "jclName": "READCUST",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/READCUST.jcl",
+                  "jobName": "READCUST"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBCUS01C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 130,
+        "cyclomaticComplexity": 20,
+        "compositeScore": 3.44,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COSGN00C",
+      "name": "Cosgn00C",
+      "entryPoint": {
+        "program": "COSGN00C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COSGN00C",
+                "metadata": {
+                  "programName": "COSGN00C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "LOGIN"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CC00",
+                "metadata": {
+                  "transactionId": "CC00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COSGN00C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-USRSEC-FILE",
+            "program": "COSGN00C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 172,
+        "cyclomaticComplexity": 21,
+        "compositeScore": 3.46,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COUSR01C",
+      "name": "Cousr01C",
+      "entryPoint": {
+        "program": "COUSR01C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COUSR01C",
+                "metadata": {
+                  "programName": "COUSR01C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CU01",
+                "metadata": {
+                  "transactionId": "CU01",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COUSR01C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-USRSEC-FILE",
+            "program": "COUSR01C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 198,
+        "cyclomaticComplexity": 30,
+        "compositeScore": 4.38,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COTRN01C",
+      "name": "Cotrn01C",
+      "entryPoint": {
+        "program": "COTRN01C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COTRN01C",
+                "metadata": {
+                  "programName": "COTRN01C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CT01",
+                "metadata": {
+                  "transactionId": "CT01",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COTRN01C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "TRANSACT",
+            "program": "COTRN01C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 231,
+        "cyclomaticComplexity": 27,
+        "compositeScore": 4.41,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COADM01C",
+      "name": "Coadm01C",
+      "entryPoint": {
+        "program": "COADM01C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COADM01C",
+                "metadata": {
+                  "programName": "COADM01C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CA00",
+                "metadata": {
+                  "transactionId": "CA00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COADM01C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 189,
+        "cyclomaticComplexity": 32,
+        "compositeScore": 4.47,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COUSR03C",
+      "name": "Cousr03C",
+      "entryPoint": {
+        "program": "COUSR03C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COUSR03C",
+                "metadata": {
+                  "programName": "COUSR03C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CU03",
+                "metadata": {
+                  "transactionId": "CU03",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COUSR03C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-USRSEC-FILE",
+            "program": "COUSR03C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 251,
+        "cyclomaticComplexity": 35,
+        "compositeScore": 5.21,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COMEN01C",
+      "name": "Comen01C",
+      "entryPoint": {
+        "program": "COMEN01C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COMEN01C",
+                "metadata": {
+                  "programName": "COMEN01C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CM00",
+                "metadata": {
+                  "transactionId": "CM00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COMEN01C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 213,
+        "cyclomaticComplexity": 39,
+        "compositeScore": 5.22,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COUSR02C",
+      "name": "Cousr02C",
+      "entryPoint": {
+        "program": "COUSR02C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COUSR02C",
+                "metadata": {
+                  "programName": "COUSR02C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CU02",
+                "metadata": {
+                  "transactionId": "CU02",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COUSR02C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-USRSEC-FILE",
+            "program": "COUSR02C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 303,
+        "cyclomaticComplexity": 48,
+        "compositeScore": 6.66,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBACT01C",
+      "name": "Cbact01C",
+      "entryPoint": {
+        "program": "CBACT01C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "READACCT",
+                "metadata": {
+                  "jclName": "READACCT",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/READACCT.jcl",
+                  "jobName": "READACCT"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBACT01C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          },
+          {
+            "name": "COBDATFT",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 3,
+        "totalLines": 419,
+        "cyclomaticComplexity": 36,
+        "compositeScore": 7.43,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COBIL00C",
+      "name": "Cobil00C",
+      "entryPoint": {
+        "program": "COBIL00C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COBIL00C",
+                "metadata": {
+                  "programName": "COBIL00C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CB00",
+                "metadata": {
+                  "transactionId": "CB00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COBIL00C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "TRANSACT",
+            "program": "COBIL00C"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-ACCTDAT-FILE",
+            "program": "COBIL00C"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-CXACAIX-FILE",
+            "program": "COBIL00C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 420,
+        "cyclomaticComplexity": 55,
+        "compositeScore": 8.16,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBACT04C",
+      "name": "Cbact04C",
+      "entryPoint": {
+        "program": "CBACT04C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "INTCALC",
+                "metadata": {
+                  "jclName": "INTCALC",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/INTCALC.jcl",
+                  "jobName": "INTCALC"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBACT04C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 552,
+        "cyclomaticComplexity": 52,
+        "compositeScore": 9.38,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBTRN03C",
+      "name": "Cbtrn03C",
+      "entryPoint": {
+        "program": "CBTRN03C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "TRANREPT",
+                "metadata": {
+                  "jclName": "TRANREPT",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/TRANREPT.jcl",
+                  "jobName": "TRANREPT"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBTRN03C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 545,
+        "cyclomaticComplexity": 53,
+        "compositeScore": 9.4,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBTRN02C",
+      "name": "Cbtrn02C",
+      "entryPoint": {
+        "program": "CBTRN02C",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "POSTTRAN",
+                "metadata": {
+                  "jclName": "POSTTRAN",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/POSTTRAN.jcl",
+                  "jobName": "POSTTRAN"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBTRN02C",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "totalLines": 619,
+        "cyclomaticComplexity": 57,
+        "compositeScore": 10.31,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COACTVWC",
+      "name": "Coactvwc",
+      "entryPoint": {
+        "program": "COACTVWC",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COACTVWC",
+                "metadata": {
+                  "programName": "COACTVWC",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "VIEW ACCT"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CAVW",
+                "metadata": {
+                  "transactionId": "CAVW",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COACTVWC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-ACCTFILENAME",
+            "program": "COACTVWC"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CARDXREFNAME-ACCT-PATH",
+            "program": "COACTVWC"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CUSTFILENAME",
+            "program": "COACTVWC"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 703,
+        "cyclomaticComplexity": 76,
+        "compositeScore": 12.1,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CORPT00C",
+      "name": "Corpt00C",
+      "entryPoint": {
+        "program": "CORPT00C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "CORPT00C",
+                "metadata": {
+                  "programName": "CORPT00C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CR00",
+                "metadata": {
+                  "transactionId": "CR00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CEEDAYS",
+            "is_utility": false
+          },
+          {
+            "name": "CORPT00C",
+            "is_utility": false
+          },
+          {
+            "name": "CSUTLDTC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 3,
+        "totalLines": 612,
+        "cyclomaticComplexity": 83,
+        "compositeScore": 12.74,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COCRDSLC",
+      "name": "Cocrdslc",
+      "entryPoint": {
+        "program": "COCRDSLC",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COCRDSLC",
+                "metadata": {
+                  "programName": "COCRDSLC",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "VIEW CARD DETAIL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CCDL",
+                "metadata": {
+                  "transactionId": "CCDL",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COCRDSLC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CARDFILENAME",
+            "program": "COCRDSLC"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CARDFILENAME-ACCT-PATH",
+            "program": "COCRDSLC"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 642,
+        "cyclomaticComplexity": 92,
+        "compositeScore": 12.9,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COTRN00C",
+      "name": "Cotrn00C",
+      "entryPoint": {
+        "program": "COTRN00C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COTRN00C",
+                "metadata": {
+                  "programName": "COTRN00C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CT00",
+                "metadata": {
+                  "transactionId": "CT00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COTRN00C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 529,
+        "cyclomaticComplexity": 119,
+        "compositeScore": 14.15,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COUSR00C",
+      "name": "Cousr00C",
+      "entryPoint": {
+        "program": "COUSR00C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COUSR00C",
+                "metadata": {
+                  "programName": "COUSR00C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CU00",
+                "metadata": {
+                  "transactionId": "CU00",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COUSR00C",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 531,
+        "cyclomaticComplexity": 121,
+        "compositeScore": 14.33,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_CBSTM03A",
+      "name": "Cbstm03A",
+      "entryPoint": {
+        "program": "CBSTM03A",
+        "types": [
+          {
+            "type": "JCL",
+            "callers": [
+              {
+                "source": "CREASTMT",
+                "metadata": {
+                  "jclName": "CREASTMT",
+                  "filePath": "./examples/code/cobol/carddemoV2/app/jcl/CREASTMT.jcl",
+                  "jobName": "CREASTMT"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "JCL"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CBSTM03A",
+            "is_utility": false
+          },
+          {
+            "name": "CBSTM03B",
+            "is_utility": false
+          },
+          {
+            "name": "CEE3ABD",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 3,
+        "totalLines": 946,
+        "cyclomaticComplexity": 78,
+        "compositeScore": 15.01,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COTRN02C",
+      "name": "Cotrn02C",
+      "entryPoint": {
+        "program": "COTRN02C",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COTRN02C",
+                "metadata": {
+                  "programName": "COTRN02C",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "language": "COBOL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CT02",
+                "metadata": {
+                  "transactionId": "CT02",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "CEEDAYS",
+            "is_utility": false
+          },
+          {
+            "name": "COTRN02C",
+            "is_utility": false
+          },
+          {
+            "name": "CSUTLDTC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "TRANSACT",
+            "program": "COTRN02C"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-CCXREF-FILE",
+            "program": "COTRN02C"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "WS-CXACAIX-FILE",
+            "program": "COTRN02C"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 3,
+        "totalLines": 728,
+        "cyclomaticComplexity": 117,
+        "compositeScore": 16.38,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COCRDLIC",
+      "name": "Cocrdlic",
+      "entryPoint": {
+        "program": "COCRDLIC",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COCRDLIC",
+                "metadata": {
+                  "programName": "COCRDLIC",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "LIST CARDS"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CCLI",
+                "metadata": {
+                  "transactionId": "CCLI",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COCRDLIC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 1093,
+        "cyclomaticComplexity": 183,
+        "compositeScore": 23.78,
+        "tier": "LOW"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COCRDUPC",
+      "name": "Cocrdupc",
+      "entryPoint": {
+        "program": "COCRDUPC",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COCRDUPC",
+                "metadata": {
+                  "programName": "COCRDUPC",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "CREDIT CARD UPDATE SCREEN"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CCUP",
+                "metadata": {
+                  "transactionId": "CCUP",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "CREDIT CARD UPDATE TRANSACTION"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COCRDUPC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CARDFILENAME",
+            "program": "COCRDUPC"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 1195,
+        "cyclomaticComplexity": 236,
+        "compositeScore": 28.84,
+        "tier": "MEDIUM"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COACTUPC",
+      "name": "Coactupc",
+      "entryPoint": {
+        "program": "COACTUPC",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COACTUPC",
+                "metadata": {
+                  "programName": "COACTUPC",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "CREDIT CARD DEMO ACCOUNT UPDATE"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CAUP",
+                "metadata": {
+                  "transactionId": "CAUP",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "CREDIT CARD DEMO ACCOUNT UPDATE"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COACTUPC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-ACCTFILENAME",
+            "program": "COACTUPC"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CARDXREFNAME-ACCT-PATH",
+            "program": "COACTUPC"
+          },
+          {
+            "type": "VSAM",
+            "operation": "UNKNOWN",
+            "target": "LIT-CUSTFILENAME",
+            "program": "COACTUPC"
+          }
+        ],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 3368,
+        "cyclomaticComplexity": 516,
+        "compositeScore": 68.62,
+        "tier": "HIGH"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    },
+    {
+      "flowId": "FLOW_COCRDSEC",
+      "name": "Cocrdsec",
+      "entryPoint": {
+        "program": "COCRDSEC",
+        "types": [
+          {
+            "type": "CICS_PROGRAM",
+            "callers": [
+              {
+                "source": "COCRDSEC",
+                "metadata": {
+                  "programName": "COCRDSEC",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "CREDIT CARD SEARCH"
+                }
+              }
+            ]
+          },
+          {
+            "type": "CICS_TRANSACTION",
+            "callers": [
+              {
+                "source": "CDV1",
+                "metadata": {
+                  "transactionId": "CDV1",
+                  "csdGroup": "CARDDEMO",
+                  "status": "ENABLED",
+                  "description": "DEVELOPER TRANSACTION - 1"
+                }
+              }
+            ]
+          }
+        ],
+        "primaryType": "CICS_TRANSACTION"
+      },
+      "scope": {
+        "programs": [
+          {
+            "name": "COCRDSEC",
+            "is_utility": false
+          }
+        ],
+        "copybooks": [],
+        "datasets": []
+      },
+      "interfaces": {
+        "inbound": [],
+        "outbound": []
+      },
+      "dataOperations": {
+        "databases": [],
+        "datasets": []
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "totalLines": 0,
+        "cyclomaticComplexity": 0,
+        "compositeScore": 0.4,
+        "tier": "UNKNOWN"
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      },
+      "invokedByJobs": []
+    }
+  ]
+}

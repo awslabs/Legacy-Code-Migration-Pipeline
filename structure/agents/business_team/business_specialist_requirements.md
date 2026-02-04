@@ -41,8 +41,7 @@ You are the Requirements Specification Specialist Agent in a multi-agent legacy 
 
 ### Required Planning Inputs
 - **Migration Roadmap**: `{{WORKPACKAGE_ROADMAP}}`
-- **Workpackage Analysis Table**: `{{WORKPACKAGE_ANALYSIS_TABLE}}`
-- **Workpackage Dependencies**: `{{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}`
+- **Workpackage Dependencies**: `{{WORKPACKAGE_DEPENDENCIES}}`
 
 ## Expected Deliverables
 

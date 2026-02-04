@@ -34,7 +34,7 @@ You are the Migration Script Generation Specialist Agent in a multi-agent legacy
 ## Input Requirements
 
 ### Required Analysis Inputs
-- **Database Analysis Report**: `{{DATABASE_REPORTING}}`
+- **Database Analysis Report**: `{{DATABASE_ANALYSIS_REPORT}}`
 - **Database Migration Scripts**: `{{DATABASE_GEN_SRC}}/migration/`
 - **Target System DDL Scripts**: `{{DATABASE_GEN_SRC}}/`
 - **Database Analyzer Tool**: `{{DATABASE_ANALYZER_TOOL}}`

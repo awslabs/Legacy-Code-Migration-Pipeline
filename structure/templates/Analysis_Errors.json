@@ -1,0 +1,13 @@
+{
+  "errors": [
+    {
+      "timestamp": "ISO8601",
+      "type": "string (PARSE_ERROR|MISSING_DEPENDENCY|DOMAIN_AMBIGUITY|DYNAMIC_CALL|MISSING_FLOW|CIRCULAR_DEPENDENCY|INCONSISTENT_MODULE|PRIORITY_CALCULATION)",
+      "file": "string (optional - for source code errors)",
+      "line": "number (optional - for source code errors)",
+      "flowId": "string (optional - for workpackage errors)",
+      "message": "string",
+      "resolution": "string"
+    }
+  ]
+}

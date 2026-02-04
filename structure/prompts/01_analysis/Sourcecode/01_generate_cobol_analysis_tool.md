@@ -1,4 +1,327 @@
 # Phase 1.1: Generate COBOL Source Code Analysis Tool
+
+---
+
+## Orchestration Information
+
+**Phase**: Phase 1 - Source Code Analysis
+**Step**: Step 1.2 - Source Code Analysis
+**Team Supervisor**: analysis_team_supervisor
+**Assigned Agent**: analysis_specialist_legacy_code
+**Task File Name**: {{TASKS_BASE_PATH}}/analysis_sourcecode_specialist_task.md
+
+### Expected Deliverables
+
+1. **Source Code Analysis Report**
+   - File: {{COBOL_SOURCE_ANALYSIS_REPORT}}
+   - Template: {{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}
+   - Description: Comprehensive analysis methodology, findings, and recommendations
+
+2. **Dependency Analysis Table**
+   - File: {{DEPENDENCY_ANALYSIS_TABLE}}
+   - Template: {{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}
+   - Description: Complete module dependency relationships
+
+3. **Business Flow Specifications**
+   - File: {{BUSINESS_FLOWS}}
+   - Template: {{BUSINESS_FLOWS_TEMPLATE}}
+   - Description: End-to-end flow identification and mapping
+
+4. **Module Classification Report**
+   - File: {{MODULE_CLASSIFICATIONS}}
+   - Template: {{MODULE_CLASSIFICATIONS_TEMPLATE}}
+   - Description: Module type and functionality classifications
+
+5. **Dependency Analysis Tool**
+   - File: {{COBOL_SOURCE_CODE_ANALYSIS_ANALYZER_TOOL}}
+   - Description: Python tool that performs the analysis
+
+6. **Progress Tracking**
+   - File: {{ANALYSIS_STATUS}}
+   - Template: {{ANALYSIS_STATUS_TEMPLATE}}
+   - Description: Analysis progress and status tracking
+
+### Success Criteria
+- [ ] All COBOL source files analyzed and documented
+- [ ] All dependencies mapped and captured
+- [ ] All entry points identified
+- [ ] All business flows traced from entry to data persistence
+- [ ] All deliverables produced at specified paths
+- [ ] Quality criteria met
+- [ ] Ready for review
+
+---
+
+## For Team Supervisor: Task File Creation
+
+When creating the task file for this step:
+
+### 1. Extract from this prompt:
+- **Objective section**: The goal of analyzing COBOL legacy source code
+- **Detailed instructions**: All Steps 1-6 below
+- **Technical specifications**: COBOL call patterns, file operations, database operations
+- **Business rules and constraints**: System utilities to exclude, things to ignore
+- **Error handling guidance**: Common error scenarios and recovery strategies
+- **Output format requirements**: All primary outputs and their specifications
+- **Quality criteria**: Completeness, accuracy, consistency requirements
+
+### 2. Add project context:
+- **Project name**: {{PROJECT_NAME}}
+- **Project base path**: {{PROJECT_BASE_PATH}}
+- **All input locations** (resolved paths):
+  - Source code directory: {{SOURCE_CODE}}
+  - Database source code: {{DATABASE_SOURCE_CODE}}
+  - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
+  - Preexisting tools: {{SOURCE_CODE_ANALYSIS_OUTPUT}}/tools/
+- **All output locations** (resolved paths):
+  - Database analysis: {{DATABASE_ANALYSIS_OUTPUT}}
+  - Analysis report: {{COBOL_SOURCE_ANALYSIS_REPORT}}
+  - Dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
+  - Progress tracking: {{ANALYSIS_STATUS}}
+  - Business flows: {{BUSINESS_FLOWS}}
+  - Module classifications: {{MODULE_CLASSIFICATIONS}}
+  - Task files location: {{TASKS_BASE_PATH}}
+- **All template locations** (resolved paths):
+  - Report template: {{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}
+  - Dependency table template: {{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}
+  - Business flows template: {{BUSINESS_FLOWS_TEMPLATE}}
+  - Module classifications template: {{MODULE_CLASSIFICATIONS_TEMPLATE}}
+  - Analysis status template: {{ANALYSIS_STATUS_TEMPLATE}}
+  - Analysis errors template: {{ANALYSIS_ERRORS_TEMPLATE}}
+
+### 3. Reference agent definition:
+- **Agent name**: analysis_specialist_legacy_code
+- **Agent definition file**: structure/agents/analysis_team/analysis_specialist_legacy_code.md
+- **Note**: Don't duplicate agent definition, just reference it
+
+### 4. Task file structure:
+Use the standard task file template with these sections:
+- **Agent Assignment**: Agent name, task ID, created by, timestamp, phase, step
+- **Project Context**: Project info, input locations, output locations, reference data
+- **Task Instructions**: Objective, detailed steps (1-6), business rules, error handling
+- **Expected Deliverables**: All 6 deliverables with paths, templates, descriptions, validation checklists
+- **Quality Criteria**: Completeness, accuracy, consistency (from this prompt)
+- **Success Criteria**: Task completion verification steps
+
+### 5. Path resolution:
+Ensure all {{PARAMETERS}} are replaced with actual absolute paths before creating the task file.
+
+---
+
+## Task File Creation Example
+
+Below is a concrete example showing how to create the task file for this step:
+
+### Example: Creating analysis_sourcecode_specialist_task.md
+
+**Given:**
+- Project Name: MyMigration
+- Project Base Path: /absolute/path/to/MyMigration
+- Tasks Base Path: /absolute/path/to/MyMigration/tasks
+
+**Step 1: Extract Objective from this prompt**
+```
+Objective: Analyze COBOL legacy source code to understand structure, dependencies, and business flows.
+```
+
+**Step 2: Extract Instructions (Steps 1-6 from this prompt)**
+```
+Step 1: Source Code Discovery and Inventory
+- Scan all source files in the source directory
+- Include file extensions: .cbl, .cob, .CBL, .COB, .jcl, .JCL, .csd, .bms, .copy, .cpy, .txt
+- Create inventory of all discovered files with basic metadata
+[... continue with all steps ...]
+```
+
+**Step 3: Resolve All Paths**
+```
+Input Locations:
+- Source code: /absolute/path/to/MyMigration/input/legacy/source
+- Database source: /absolute/path/to/MyMigration/input/legacy/database
+- Legacy specs: /absolute/path/to/MyMigration/input/legacy_specifications
+
+Output Locations:
+- Analysis report: /absolute/path/to/MyMigration/output/analysis/source_code/reports/cobol_analysis.md
+- Dependency table: /absolute/path/to/MyMigration/output/analysis/source_code/reports/dependency_table.csv
+- Business flows: /absolute/path/to/MyMigration/output/analysis/source_code/progress/business_flows.json
+[... continue with all paths ...]
+```
+
+**Step 4: Create Task File Structure**
+
+The resulting task file should look like this:
+
+```markdown
+# Task: Source Code Analysis
+
+## Agent Assignment
+**Agent**: analysis_specialist_legacy_code
+**Agent Definition**: structure/agents/analysis_team/analysis_specialist_legacy_code.md
+**Task ID**: analysis-sourcecode-001
+**Created By**: analysis_team_supervisor
+**Created At**: 2024-01-15T10:00:00Z
+**Phase**: analysis
+**Step**: sourcecode
+
+---
+
+## Project Context
+
+### Project Information
+**Project Name**: MyMigration
+**Project Base Path**: /absolute/path/to/MyMigration
+
+### Input Locations
+- **Legacy Source Code**: /absolute/path/to/MyMigration/input/legacy/source
+  - Description: COBOL source files (.cbl, .cob)
+  - Format: COBOL source code
+- **Legacy Database**: /absolute/path/to/MyMigration/input/legacy/database
+  - Description: Database DDL files
+  - Format: SQL DDL
+- **Legacy Specifications**: /absolute/path/to/MyMigration/input/legacy_specifications/
+  - Description: Legacy framework documentation
+  - Format: Documentation files
+
+### Output Locations
+- **Analysis Report**: /absolute/path/to/MyMigration/output/analysis/source_code/reports/cobol_analysis.md
+  - Template: /absolute/path/to/MyMigration/templates/Cobol_Source_Analysis_Report.md
+  - Description: Comprehensive analysis findings
+  - Format: Markdown
+- **Dependency Table**: /absolute/path/to/MyMigration/output/analysis/source_code/reports/dependency_table.csv
+  - Template: /absolute/path/to/MyMigration/templates/Dependency_Analysis_Table.csv
+  - Description: Module dependency relationships
+  - Format: CSV
+- **Business Flows**: /absolute/path/to/MyMigration/output/analysis/source_code/progress/business_flows.json
+  - Template: /absolute/path/to/MyMigration/templates/Business_Flows.json
+  - Description: End-to-end flow identification
+  - Format: JSON
+[... continue with all deliverables ...]
+
+---
+
+## Task Instructions
+
+### Objective
+Analyze COBOL legacy source code to understand structure, dependencies, and business flows. Generate comprehensive dependency analysis, module classifications, end-to-end flow identification, and business domain assignments to support migration planning.
+
+### Detailed Steps
+
+#### Step 1: Source Code Discovery and Inventory
+Scan all source files in /absolute/path/to/MyMigration/input/legacy/source
+
+**Actions:**
+1. Identify all files with extensions: .cbl, .cob, .CBL, .COB, .jcl, .JCL, .csd, .bms, .copy, .cpy, .txt
+2. Create inventory with metadata (size, last modified)
+3. Log any files that cannot be parsed
+
+**System Utilities to Exclude:**
+- DMBATCH, IDCAMS, IEBCOPY, ICEMAN, SORT, SYNCSORT
+- DSNTEP2, DSNTIAUL, IKJEFT01, FMNMAIN, IEBGENER, IEFBR14
+
+#### Step 2: Dependency Analysis
+Identify all dependencies between modules using COBOL-specific call patterns
+
+**COBOL Call Types to Recognize:**
+- Standard CALL: `CALL 'program-name'`
+- Dynamic CALL: `CALL variable-name`
+- CICS LINK: `EXEC CICS LINK PROGRAM('program-name')`
+- CICS XCTL: `EXEC CICS XCTL PROGRAM('program-name')`
+[... continue with all call types ...]
+
+**File Operations to Recognize:**
+- JCL DD statements
+- COBOL FD/SD
+- COBOL SELECT statements
+[... continue with all operations ...]
+
+[... continue with Steps 3-6 ...]
+
+---
+
+## Expected Deliverables
+
+### 1. Source Code Analysis Report
+**File**: /absolute/path/to/MyMigration/output/analysis/source_code/reports/cobol_analysis.md
+**Template**: /absolute/path/to/MyMigration/templates/Cobol_Source_Analysis_Report.md
+**Description**: Comprehensive analysis methodology, findings, and recommendations
+
+**Content Requirements:**
+- Analysis methodology section
+- Findings summary
+- Dependency analysis results
+- Module classification results
+- Recommendations
+
+**Validation:**
+- [ ] File exists at specified path
+- [ ] File format matches template
+- [ ] All required sections present
+- [ ] All findings documented
+
+[... continue with all deliverables ...]
+
+---
+
+## Quality Criteria
+
+### Completeness
+- [ ] All COBOL source files analyzed
+- [ ] All dependency relationships captured
+- [ ] All entry points identified
+- [ ] All business flows traced
+
+### Accuracy
+- [ ] Module classifications consistent
+- [ ] Dependency relationships verified
+- [ ] Business domain assignments logical
+
+### Consistency
+- [ ] Output formats match templates
+- [ ] Naming conventions followed
+- [ ] All required fields populated
+
+---
+
+## Success Criteria
+
+**Task is complete when:**
+- [ ] All deliverables produced at specified paths
+- [ ] All quality criteria met
+- [ ] All validation checks pass
+- [ ] Ready for review
+
+**Verification Steps:**
+1. Check all output files exist
+2. Validate file formats match templates
+3. Verify content completeness
+4. Confirm quality criteria met
+5. Report completion to analysis_team_supervisor
+
+---
+
+## Notes
+
+### Agent Definition Reference
+Your complete role definition and capabilities are in:
+structure/agents/analysis_team/analysis_specialist_legacy_code.md
+
+This task file provides project-specific context and instructions.
+
+### Escalation
+If you encounter issues beyond your capability:
+1. Document the issue clearly
+2. Report to analysis_team_supervisor
+3. Provide context and attempted solutions
+```
+
+**Key Points:**
+- All {{PARAMETERS}} replaced with actual absolute paths
+- Instructions extracted and adapted from this prompt
+- Agent definition referenced, not duplicated
+- Complete deliverables list with validation checklists
+- Quality and success criteria included
+
+---
  
 ## Context
 - Input Location:
@@ -9,11 +332,11 @@
 
 - Output Location:
   -- Database analysis related files: `{{DATABASE_ANALYSIS_OUTPUT}}` 
-  -- Reporting: `{{COBOL_SOURCE_CODE_ANALYSIS_REPORTING}}`
-  -- Module Dependency Table: `{{COBOL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-  -- Progress Tracking: `{{COBOL_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING}}`
-  -- Business Flow: `{{COBOL_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-  -- Cobol Module Classification: `{{COBOL_MODULE_CLASSIFICATION}}`
+  -- Reporting: `{{COBOL_SOURCE_ANALYSIS_REPORT}}`
+  -- Module Dependency Table: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+  -- Progress Tracking: `{{ANALYSIS_STATUS}}`
+  -- Business Flow: `{{BUSINESS_FLOWS}}`
+  -- Module Classification: `{{MODULE_CLASSIFICATIONS}}`
   -- Location of task-related files: `{{TASKS_BASE_PATH}}` 
   
  
@@ -133,18 +456,20 @@ Analyze module functionality and assign business domains:
 ### Primary Outputs
  
 #### 1. Source Code Analysis Report
-**File**: `{{COBOL_SOURCE_CODE_ANALYSIS_REPORTING}}`
-**Template for the file**: `{{COBOL_SOURCE_CODE_ANALYSIS_REPORTING_TEMPLATE}}`
+**File**: `{{COBOL_SOURCE_ANALYSIS_REPORT}}`
+**Template for the file**: `{{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}`
  
 #### 2. Dependency Analysis Table
-**File**: `{{COBOL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-**Template for the file**: `{{COBOL_SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE_TEMPLATE}}`
+**File**: `{{DEPENDENCY_ANALYSIS_TABLE}}`
+**Template for the file**: `{{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}`
  
-Where the fileds of the template shall be filled like this:
+Where the fields of the template shall be filled like this:
 - **Name**: Name of the calling module
 - **Filetype**: COBOL|COPYBOOK|JCL
 - **ModuleType**: ENTRY_POINT|COMMONLY_USED|SINGLE_USE (usage pattern classification)
 - **ModuleFunctionality**: FUNCTIONAL|UTILITY (business logic classification)
+- **Language**: COBOL
+- **NaturalObjectType**: (leave empty for COBOL)
 - **BusinessDomain**: Assigned business domain or NONE
 - **Usage**: Batch|Online|Both
 - **EntryPoint**: Yes|No (if module is an entry point)
@@ -157,13 +482,13 @@ Where the fileds of the template shall be filled like this:
 - **FileTarget**: Dataset name or file name (for file operations, empty for module calls)
  
 #### 3. Business Flow Specifications
-**File**: `{{COBOL_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-**Template for the file**: `{{COBOL_SOURCE_CODE_ANALYSIS_BUSINESS_FLOW_TEMPLATE}}`
+**File**: `{{BUSINESS_FLOWS}}`
+**Template for the file**: `{{BUSINESS_FLOWS_TEMPLATE}}`
  
  
 #### 4. Module Classification Report
-**File**: `{{COBOL_MODULE_CLASSIFICATION}}`
-**Template for the file**: `{{COBOL_MODULE_CLASSIFICATION_TEMPLATE}}`
+**File**: `{{MODULE_CLASSIFICATIONS}}`
+**Template for the file**: `{{MODULE_CLASSIFICATIONS_TEMPLATE}}`
 
  
 #### 5. Dependency Analysis Tool
@@ -173,8 +498,8 @@ Where the fileds of the template shall be filled like this:
 - Include comprehensive error handling and logging
  
 #### 6. Progress Tracking
-**File**: `{{COBOL_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING}}`
-**Template for the file**: `{{COBOL_SOURCE_CODE_ANALYSIS_PROGRESS_TRACKING_TEMPLATE}}`
+**File**: `{{ANALYSIS_STATUS}}`
+**Template for the file**: `{{ANALYSIS_STATUS_TEMPLATE}}`
 
  
 ## Quality Criteria
@@ -225,8 +550,8 @@ Where the fileds of the template shall be filled like this:
 - Escalation: Document for manual analysis
  
 ### Error Reporting Format
-**File**: `{{COBOL_SOURCE_CODE_ANALYSIS_ERRORS}}`
-**Template for the file**: `{{COBOL_SOURCE_CODE_ANALYSIS_ERRORS_TEMPLATE}}`
+**File**: `{{ANALYSIS_ERRORS}}`
+**Template for the file**: `{{ANALYSIS_ERRORS_TEMPLATE}}`
  
 ### Fallback Strategies
 - **Simplified Analysis**: If full parsing fails, perform basic pattern matching

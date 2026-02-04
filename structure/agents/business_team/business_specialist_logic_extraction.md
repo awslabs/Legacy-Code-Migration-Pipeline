@@ -34,16 +34,17 @@ You are the Business Logic Extraction Specialist Agent in a multi-agent legacy m
 ## Input Requirements
 
 ### Required Analysis Inputs
-- **Source Code Analysis Report**: `{{SOURCE_CODE_ANALYSIS_REPORTING}}`
-- **Business Flow Specifications**: `{{SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}`
-- **Module Classification Report**: `{{COBOL_MODULE_CLASSIFICATION}}`
-- **Dependency Analysis Table**: `{{SOURCE_CODE_ANALYSIS_DEPENDENCY_TABLE}}`
-- **Database Analysis Report**: `{{DATABASE_REPORTING}}`
+- **Source Code Analysis Report** - Language-specific analysis reports
+- **Business Flow Specifications** - End-to-end flow mappings
+- **Module Classification Report** - Module categorization
+- **Dependency Analysis Table** - Module dependency relationships
+- **Database Analysis Report** - Database inventory and analysis
 
 ### Required Planning Inputs
-- **Migration Roadmap**: `{{WORKPACKAGE_ROADMAP}}`
-- **Workpackage Analysis Table**: `{{WORKPACKAGE_ANALYSIS_TABLE}}`
-- **Workpackage Dependencies**: `{{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}`
+- **Migration Roadmap** - Prioritized migration strategy
+- **Workpackage Dependencies** - Workpackage relationships and sequencing
+
+**Note**: Actual file paths will be provided in your task file.
 
 ## Expected Deliverables
 

@@ -1,0 +1,25 @@
+{
+  "phaseId": "domain-consolidation",
+  "status": "in_progress|completed",
+  "domains": [
+    {
+      "domainId": "D-001",
+      "domainName": "Customer Management",
+      "status": "completed",
+      "specification": "output/specifications/domain/D-001-customer-management.md",
+      "relatedWorkpackages": ["WP-001", "WP-003"],
+      "completedDate": "YYYY-MM-DD"
+    },
+    {
+      "domainId": "D-002",
+      "domainName": "Order Processing",
+      "status": "in_progress",
+      "specification": null,
+      "relatedWorkpackages": ["WP-002", "WP-004"],
+      "completedDate": null
+    }
+  ],
+  "completedCount": 1,
+  "totalCount": 5,
+  "lastUpdated": "YYYY-MM-DD"
+}

@@ -1,0 +1,39 @@
+{
+  "phaseId": "test-generation-domain",
+  "status": "in_progress|completed",
+  "domains": [
+    {
+      "domainId": "D-001",
+      "domainName": "Customer Management",
+      "status": "completed",
+      "testCases": {
+        "total": 25,
+        "positive": 10,
+        "negative": 10,
+        "boundary": 5
+      },
+      "businessRuleCoverage": "100%",
+      "businessEntityCoverage": "100%",
+      "testDefinition": "output/specifications/tests/D-001-customer-management-tests.md",
+      "completedDate": "YYYY-MM-DD"
+    },
+    {
+      "domainId": "D-002",
+      "domainName": "Order Processing",
+      "status": "in_progress",
+      "testCases": {
+        "total": 0,
+        "positive": 0,
+        "negative": 0,
+        "boundary": 0
+      },
+      "businessRuleCoverage": "0%",
+      "businessEntityCoverage": "0%",
+      "testDefinition": null,
+      "completedDate": null
+    }
+  ],
+  "completedCount": 1,
+  "totalCount": 5,
+  "lastUpdated": "YYYY-MM-DD"
+}

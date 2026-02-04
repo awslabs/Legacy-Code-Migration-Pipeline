@@ -2,6 +2,22 @@
 
 This directory contains all generated artifacts, analysis results, and migration deliverables. The output structure is organized by analysis type and includes comprehensive tracking and reporting.
 
+## Integration with Orchestration Architecture
+
+Output paths are configured in `config/paths.cfg` and resolved in the orchestration workflow:
+
+1. **Main Prompt Level**: Migration Supervisor sees all output base paths
+2. **Phase Prompt Level**: Team Supervisors see phase-specific output paths with `{{PARAMETERS}}`
+3. **Task File Level**: Specialists receive fully resolved absolute paths for each deliverable
+
+This ensures:
+- Agents know exactly where to write deliverables
+- No path resolution or guessing required
+- Consistent file locations across the project
+- Easy verification of deliverable production
+
+For more information on path resolution in the orchestration architecture, see [Orchestration Architecture Documentation](../orchestration_architecture.md)
+
 ## Directory Structure
 
 ### Analysis Results (`analysis/`)
@@ -59,16 +75,27 @@ Contains migration workpackage definitions and tracking:
 ## Quality Assurance
 
 ### Validation Framework
-All outputs are validated using the ACM (Application Configuration Management) framework:
+All outputs are validated using the ACM (Application Configuration Management) framework within the orchestration architecture:
 - **Deliverable Validation**: Ensures all required outputs are present
 - **Format Validation**: Verifies file formats and structure
 - **Content Validation**: Checks for completeness and consistency
 - **Cross-Reference Validation**: Ensures traceability between inputs and outputs
+- **Review Validation**: Reviewer agents validate deliverables against quality criteria in iterative cycles
+
+### Iterative Quality Assurance
+The orchestration architecture includes built-in quality assurance:
+- Team supervisors orchestrate review cycles within each phase
+- Specialists produce deliverables
+- Reviewers validate against quality criteria
+- If issues found, supervisors create remediation tasks
+- Iteration continues until reviewer approves
+- Only then does phase complete
 
 ### Tracking and Metrics
 - **Progress Tracking**: Real-time status of all migration activities
 - **Error Tracking**: Comprehensive logging of issues and resolutions
 - **Quality Metrics**: Measurements of analysis completeness and accuracy
+- **Iteration Tracking**: Number of review cycles per deliverable
 
 ## Integration Points
 

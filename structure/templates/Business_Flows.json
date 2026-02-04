@@ -53,8 +53,7 @@
         "tier": "string (LOW|MEDIUM|HIGH|UNKNOWN)"
       },
       "dependencies": {
-        "requiredFlows": ["string (flowIds this flow depends on - from Phase 1)"],
-        "dependentFlows": ["string (flowIds that depend on this flow - added by Phase 2)"]
+        "requiredFlows": ["string"]
       },
       "invokedByJobs": ["string"],
       "businessDomain": "string (optional)",
@@ -65,21 +64,7 @@
           "operation": "string (IN|OUT|INOUT - optional)",
           "target": "string"
         }
-      ],
-      "workpackage": {
-        "workpackageId": "number (sequential workpackage number - added by Phase 2)",
-        "priorityScore": "number (calculated priority score - added by Phase 2)",
-        "phase": "number (migration phase number - added by Phase 2)",
-        "preExistentModules": ["string (modules already in higher priority flows - added by Phase 2)"]
-      }
-    }
-  ],
-  "phases": [
-    {
-      "phaseId": "number",
-      "name": "string",
-      "workpackages": ["number (workpackageIds in this phase)"],
-      "description": "string (optional)"
+      ]
     }
   ]
 }

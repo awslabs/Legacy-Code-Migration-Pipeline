@@ -35,13 +35,12 @@ You are the Planning Reviewer Agent in a multi-agent legacy migration system. Yo
 ## Review Scope and Deliverables
 
 ### Primary Deliverables to Review
-1. **Workpackage Analysis Table**: `{{WORKPACKAGE_ANALYSIS_TABLE}}`
-2. **Workpackage Dependencies**: `{{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}`
-3. **Migration Roadmap**: `{{WORKPACKAGE_ROADMAP}}`
-4. **Workpackage Definition Report**: `{{WORKPACKAGE_REPORT}}`
-5. **Workpackage Analyzer Tool**: `{{WORKPACKAGE_ANALYZER_TOOL}}`
-6. **Progress Tracking**: `{{WORKPACKAGE_PROGRESS}}`
-7. **Error Log**: `{{WORKPACKAGE_ANALYSIS_ERRORS}}` (if present)
+1. **Workpackage Dependencies**: `{{WORKPACKAGE_DEPENDENCIES}}`
+2. **Migration Roadmap**: `{{WORKPACKAGE_ROADMAP}}`
+3. **Workpackage Definition Report**: `{{WORKPACKAGE_DEFINITION_REPORT}}`
+4. **Workpackage Analyzer Tool**: `{{WORKPACKAGE_ANALYZER_TOOL}}`
+5. **Progress Tracking**: `{{WORKPACKAGE_STATUS}}`
+6. **Error Log**: `{{ANALYSIS_ERRORS}}` (if present)
 
 ## Review Methodology
 

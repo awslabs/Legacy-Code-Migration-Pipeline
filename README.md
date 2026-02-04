@@ -3,9 +3,9 @@
 ## Agenda
 
 ### ✍️ Project Description
-A comprehensive toolset and framework for migrating legacy code using agentic AI. This framework provides a standardized approach to analyze, plan, and execute legacy code migrations with AI-powered automation.
+A comprehensive multi-agent framework for migrating legacy code using a **3-layer orchestration architecture**. This framework provides a standardized approach to analyze, plan, and execute legacy code migrations with AI-powered automation through hierarchical agent coordination.
 
-This project enables systematic migration of legacy codebases (particularly COBOL and database systems) to modern architectures using AI agents. The framework provides structured workflows, templates, and validation tools to ensure consistent and reliable migration outcomes.
+This project enables systematic migration of legacy codebases (particularly COBOL and database systems) to modern architectures using 28 specialized AI agents organized in teams. The framework uses supervisor-based delegation, iterative quality assurance, and runtime task file creation to ensure consistent and reliable migration outcomes.
 
 ### 🎯 Goals
 
@@ -40,12 +40,24 @@ We use this task tracker to keep track of team tasks: TBD
 
 ### 🔑 Key Resources
 
-- [Migration Best Practices Guide](structure/doc/)
-- [AI Agent Configuration](structure/doc/agents/)
-- [Template Library](structure/doc/templates/)
+- **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
+- **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - Complete architecture documentation
+- **[Agent Documentation](structure/doc/agents/agents.md)** - AI agent configurations and team structure
+- **[Prompt Documentation](structure/doc/prompts/prompts.md)** - AI prompts for migration phases
+- **[Template Library](structure/doc/templates/templates.md)** - Standardized deliverable templates
+- **[Task File Template](structure/doc/task_file_template.md)** - Guide for creating task files
+- **[Documentation Index](structure/doc/README.md)** - Complete documentation overview
 
 ## Key Features
 
+### Orchestration Architecture
+- **3-Layer Hierarchical Model**: Migration Supervisor → Team Supervisors → Specialists/Reviewers
+- **28 Specialized Agents**: Organized in 5 teams (Analysis, Planning, Business, Development, Deployment)
+- **Supervisor-Based Delegation**: Team supervisors create task files and orchestrate work
+- **Iterative Quality Assurance**: Built-in review cycles within each phase
+- **Runtime Task Creation**: Dynamic task files combine generic agents with project-specific context
+
+### Migration Capabilities
 - **Standardized Project Structure**: Automated project setup with consistent folder organization
 - **AI-Powered Analysis**: Intelligent source code and database analysis
 - **Workpackage Management**: Structured approach to breaking down migration tasks
@@ -54,6 +66,22 @@ We use this task tracker to keep track of team tasks: TBD
 - **Configuration Management**: Flexible path configuration system
 
 ## Quick Start
+
+### Understanding the Architecture
+
+The framework uses a **3-layer orchestration architecture**:
+
+```
+Layer 1: Migration Supervisor
+    ↓ (delegates phases)
+Layer 2: Team Supervisors (create task files, orchestrate review)
+    ↓ (delegates tasks)
+Layer 3: Specialists & Reviewers (execute work, validate deliverables)
+```
+
+**Key Principle**: Agents are generic and reusable. Project-specific context is provided through task files created at runtime by team supervisors.
+
+For a complete understanding, see the [Orchestration Architecture Documentation](structure/doc/orchestration_architecture.md).
 
 ### Recent Updates (January 2026)
 
@@ -127,12 +155,33 @@ project_name/
 
 ## Usage
 
+### Getting Started
+
+For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.md)**.
+
+**Quick Start Steps:**
+
 1. **Initialize Project**: Use `create_project.py` to create your migration project
 2. **Install CAO (Optional)**: Run `install_cao.py` to set up agent orchestration
-3. **Configure Paths**: Update `config/paths.cfg` if needed
+3. **Configure Paths**: Review `config/paths.cfg` (auto-configured)
 4. **Add Legacy Code**: Place source code in `input/legacy/`
-5. **Run Analysis**: Execute analysis workflows using the provided prompts or CAO agents
-6. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
+5. **Start Migration**: Use Migration Supervisor with main prompt
+6. **Monitor Progress**: Check task files and deliverables
+7. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
+
+### Understanding the Workflow
+
+The framework uses a **supervisor-based orchestration model**:
+
+1. **Migration Supervisor** receives the main prompt (`prompts/ReImagine_Main_Prompt.md`)
+2. **Delegates phases** to team supervisors (Analysis, Planning, Business, Development, Deployment)
+3. **Team Supervisors** create task files for specialists and reviewers
+4. **Specialists** execute technical work and produce deliverables
+5. **Reviewers** validate deliverables against quality criteria
+6. **Iterative cycles** continue until reviewers approve
+7. **Phase completes** only after review approval
+
+For detailed workflow information, see the [Orchestration Architecture Documentation](structure/doc/orchestration_architecture.md).
 
 ### Using CAO Agents
 
@@ -177,18 +226,28 @@ cao launch --agents migration_supervisor
 
 #### Agent Organization
 
-The framework uses a hierarchical team structure with provider selection support:
+The framework uses a **3-layer hierarchical team structure** with provider selection support:
 
-- **Migration Supervisor** (1 agent): Top-level orchestration
-- **Analysis Team** (5 agents): Legacy code and database analysis
-- **Planning Team** (3 agents): Migration workpackage planning  
-- **Business Team** (7 agents): Business logic extraction and requirements
-- **Development Team** (5 agents): Code generation and testing
-- **Deployment Team** (7 agents): Migration scripts and deployment
+**Layer 1 - Top-Level Orchestration:**
+- **Migration Supervisor** (1 agent): Receives main prompt, delegates phases to team supervisors
 
-**Total: 28 agents** organized in 5 specialized teams plus 1 supervisor
+**Layer 2 - Team Supervisors:**
+- **Analysis Team Supervisor**: Creates task files, orchestrates analysis and review
+- **Planning Team Supervisor**: Creates task files, orchestrates planning and review
+- **Business Team Supervisor**: Creates task files, orchestrates business extraction and review
+- **Development Team Supervisor**: Creates task files, orchestrates code generation and review
+- **Deployment Team Supervisor**: Creates task files, orchestrates deployment and review
 
-Each team includes specialist agents paired with dedicated reviewers for quality assurance. All agents support multiple CLI providers:
+**Layer 3 - Specialists & Reviewers:**
+- **Analysis Team** (5 agents): Legacy code and database analysis with reviewers
+- **Planning Team** (3 agents): Migration workpackage planning with reviewers
+- **Business Team** (7 agents): Business logic extraction and requirements with reviewers
+- **Development Team** (5 agents): Code generation and testing with reviewers
+- **Deployment Team** (7 agents): Migration scripts and deployment with reviewers
+
+**Total: 28 agents** organized in 5 specialized teams plus 1 top-level supervisor
+
+Each team includes specialist agents paired with dedicated reviewers for iterative quality assurance. All agents support multiple CLI providers:
 
 - **Kiro CLI** (`kiro_cli`, default): Best integration with Kiro development environment
   - Command: `kiro-cli chat --agent <agent_name>`
@@ -294,14 +353,34 @@ The framework includes comprehensive validation tools to ensure migration qualit
 
 ## Documentation
 
+### Quick Links
+
+- **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
+- **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - Complete architecture documentation
+- **[Documentation Index](structure/doc/README.md)** - Complete documentation overview
+
+### Detailed Documentation
+
 Detailed documentation for each component is available in the `structure/doc/` directory:
 
-- [ACM Framework](structure/doc/acm/) - Framework tools and validation
-- [Templates](structure/doc/templates/) - Available templates and their usage
-- [Prompts](structure/doc/prompts/) - AI prompts for migration phases
-- [Input Structure](structure/doc/input/) - How to organize source materials
-- [Output Structure](structure/doc/output/) - Understanding generated artifacts
-- [Agents](structure/doc/agents/) - AI agent configuration and usage
+- **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - 3-layer architecture, delegation protocol, review orchestration
+- **[Task File Template](structure/doc/task_file_template.md)** - Guide for creating task files
+- **[Agents](structure/doc/agents/agents.md)** - AI agent configuration, team structure, and usage
+- **[Prompts](structure/doc/prompts/prompts.md)** - AI prompts for migration phases
+- **[Templates](structure/doc/templates/templates.md)** - Available templates and their usage
+- **[ACM Framework](structure/doc/acm/)** - Framework tools and validation
+- **[Input Structure](structure/doc/input/)** - How to organize source materials
+- **[Output Structure](structure/doc/output/)** - Understanding generated artifacts
+
+### Key Concepts
+
+**Orchestration Architecture**: The framework uses a 3-layer model where the Migration Supervisor delegates phases to team supervisors, who create task files for specialists and reviewers. This ensures agents remain generic while providing project-specific context at runtime.
+
+**Task Files**: Runtime-generated documents that combine generic agent capabilities with project-specific context (paths, instructions, deliverables). Created by team supervisors for each task.
+
+**Iterative Review**: Quality assurance is built into each phase through review cycles orchestrated by team supervisors. Specialists produce deliverables, reviewers validate, and the cycle repeats until approved.
+
+**Path Resolution**: All paths flow through the architecture: `{{PARAMETERS}}` in prompts → resolved by supervisors → absolute paths in task files → used by specialists/reviewers.
 
 ## Security
 
