@@ -1,0 +1,50 @@
+{
+  "phaseId": "03-business-context-discovery",
+  "phaseName": "Business Context Discovery (Phase 3.0)",
+  "lastUpdated": "ISO8601",
+  "totalErrors": 0,
+  "openErrors": 0,
+  "resolvedErrors": 0,
+  "escalatedErrors": 0,
+  "errors": [
+    {
+      "timestamp": "ISO8601",
+      "workpackageId": "WP-XXX",
+      "type": "AMBIGUOUS_DOMAIN|MISSING_STAKEHOLDERS|INCOMPLETE_VOCABULARY|UNCLEAR_CONSTRAINTS|MISSING_DOCUMENTATION|LOW_CONFIDENCE|CONFLICTING_EVIDENCE",
+      "severity": "HIGH|MEDIUM|LOW",
+      "message": "string",
+      "impact": "string",
+      "recoveryAction": "string",
+      "requiresBAInput": true,
+      "status": "OPEN|RESOLVED|ESCALATED",
+      "resolvedDate": "ISO8601 (optional)",
+      "resolutionNotes": "string (optional)"
+    }
+  ],
+  "errorStatistics": {
+    "byType": {
+      "AMBIGUOUS_DOMAIN": 0,
+      "MISSING_STAKEHOLDERS": 0,
+      "INCOMPLETE_VOCABULARY": 0,
+      "UNCLEAR_CONSTRAINTS": 0,
+      "MISSING_DOCUMENTATION": 0,
+      "LOW_CONFIDENCE": 0,
+      "CONFLICTING_EVIDENCE": 0
+    },
+    "bySeverity": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "byWorkpackage": {}
+  },
+  "escalations": [
+    {
+      "workpackageId": "WP-XXX",
+      "errorType": "string",
+      "description": "string",
+      "status": "OPEN|RESOLVED",
+      "escalatedDate": "ISO8601"
+    }
+  ]
+}

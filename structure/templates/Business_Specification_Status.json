@@ -1,21 +1,105 @@
+
 {
-  "phaseId": "03-business-extraction",
-  "status": "in_progress|completed",
+  "phaseId": "03-business-specification",
+  "phaseName": "Business Specification Extraction",
+  "status": "in_progress",
+  "lastUpdated": "YYYY-MM-DDTHH:MM:SSZ",
+  "totalWorkpackages": 0,
+  "completedWorkpackages": 0,
+  "inProgressWorkpackages": 0,
+  "pendingWorkpackages": 0,
+  "rejectedWorkpackages": 0,
+  "progressPercentage": 0,
+  
+  "phaseProgress": {
+    "phase_3_0": {
+      "phaseName": "Business Context Discovery",
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0,
+      "failed": 0
+    },
+    "phase_3_1": {
+      "phaseName": "Business Specification Extraction",
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0,
+      "failed": 0
+    },
+    "phase_3_2": {
+      "phaseName": "Business Analyst Review",
+      "approved": 0,
+      "approvedWithChanges": 0,
+      "rejected": 0,
+      "inReview": 0,
+      "pending": 0
+    }
+  },
+  
   "workpackages": [
     {
       "workpackageId": "WP-001",
-      "status": "completed",
-      "businessSpecification": "output/specifications/business/WP-001-specification.md",
-      "completedDate": "YYYY-MM-DD"
-    },
-    {
-      "workpackageId": "WP-002",
-      "status": "in_progress",
-      "businessSpecification": null,
-      "completedDate": null
+      "workpackageName": "Example Workpackage",
+      "priority": 1,
+      "overallStatus": "in_progress",
+      
+      "phase_3_0": {
+        "status": "completed",
+        "businessContextDocument": "output/business_specification/context/WP-001-business-context.md",
+        "completedDate": "YYYY-MM-DDTHH:MM:SSZ",
+        "confidenceLevel": "High",
+        "errors": []
+      },
+      
+      "phase_3_1": {
+        "status": "completed",
+        "specificationEN": "output/business_specification/specifications/WP-001-FLOW_001-specification-EN.md",
+        "specificationDN": "output/business_specification/specifications/WP-001-FLOW_001-specification-DN.md",
+        "completedDate": "YYYY-MM-DDTHH:MM:SSZ",
+        "entityCount": 0,
+        "ruleCount": 0,
+        "functionCount": 0,
+        "errors": []
+      },
+      
+      "phase_3_2": {
+        "status": "approved",
+        "reviewedSpecificationEN": "output/business_specification/specifications/WP-001-FLOW_001-specification-EN-reviewed.md",
+        "reviewedSpecificationDN": "output/business_specification/specifications/WP-001-FLOW_001-specification-DN-reviewed.md",
+        "reviewReport": "output/business_specification/review/business-extraction-WP-001-review.md",
+        "approvalStatus": "Approved",
+        "reviewerName": "business_analyst_reviewer",
+        "reviewDate": "YYYY-MM-DDTHH:MM:SSZ",
+        "changesRequired": [],
+        "errors": []
+      },
+      
+      "reworkHistory": [
+        {
+          "originalPhase": "3.1",
+          "returnedFrom": "3.2",
+          "reason": "Technical rules in Chapter 3",
+          "reworkDate": "YYYY-MM-DDTHH:MM:SSZ",
+          "reworkStatus": "resolved",
+          "resolvedDate": "YYYY-MM-DDTHH:MM:SSZ"
+        }
+      ],
+      
+      "reworkCount": 0,
+      "lastUpdated": "YYYY-MM-DDTHH:MM:SSZ"
     }
   ],
-  "completedCount": 1,
-  "totalCount": 5,
-  "lastUpdated": "YYYY-MM-DD"
+  
+  "issuesAndBlockers": [
+    {
+      "workpackageId": "WP-002",
+      "phase": "3.1",
+      "issueType": "Extraction",
+      "description": "Missing business context",
+      "status": "open",
+      "resolution": "Escalated to BA",
+      "createdDate": "YYYY-MM-DDTHH:MM:SSZ"
+    }
+  ]
 }
+
