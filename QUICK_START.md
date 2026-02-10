@@ -1,6 +1,16 @@
 # Quick Start Guide
 
-## Three Simple Steps
+## Fastest Way: One Command! ⚡
+
+```bash
+./install_all.sh my_migration_project
+```
+
+That's it! This installs everything you need.
+
+## Three Simple Steps (Manual)
+
+If you prefer step-by-step control:
 
 ### 1️⃣ Install CAO (One-Time Setup)
 
@@ -30,6 +40,20 @@ Installs: All 28 specialized migration agents
 ## That's It! 🎉
 
 You're now ready to start your migration project.
+
+## Uninstalling
+
+To remove everything:
+
+```bash
+./uninstall_all.sh
+```
+
+To reinstall:
+
+```bash
+./install_all.sh my_new_project
+```
 
 ## Common Commands
 

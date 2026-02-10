@@ -40,9 +40,10 @@ We use this task tracker to keep track of team tasks: TBD
 
 ### 🔑 Key Resources
 
-- **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
+- **[Quick Start](QUICK_START.md)** - Get started in 3 simple steps (or 1 command!)
 - **[Installation Guide](INSTALLATION_GUIDE.md)** - Complete installation instructions
-- **[Quick Start](QUICK_START.md)** - Get started in 3 simple steps
+- **[Scripts Guide](SCRIPTS_GUIDE.md)** - Installation and uninstallation scripts reference
+- **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
 - **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - Complete architecture documentation
 - **[Agent Documentation](structure/doc/agents/agents.md)** - AI agent configurations and team structure
 - **[ACM Framework](structure/doc/acm/acm.md)** - Agent management and validation tools
@@ -69,6 +70,35 @@ We use this task tracker to keep track of team tasks: TBD
 - **Configuration Management**: Flexible path configuration system
 
 ## Quick Start
+
+### One-Command Installation
+
+For the fastest setup, use the all-in-one installation script:
+
+```bash
+./install_all.sh my_migration_project
+```
+
+This single command will:
+1. Install CAO and its dependencies
+2. Create your project structure
+3. Install all 28 agents
+
+**Options:**
+```bash
+# Install with a specific provider
+./install_all.sh my_project --provider q_cli
+
+# Skip validation (not recommended)
+./install_all.sh my_project --skip-validation
+
+# Get help
+./install_all.sh --help
+```
+
+### Manual Step-by-Step Installation
+
+If you prefer more control, follow these steps:
 
 ### Understanding the Architecture
 

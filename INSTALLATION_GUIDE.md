@@ -2,6 +2,48 @@
 
 This guide walks you through the complete installation process for the Legacy Code Migration Framework with CLI Agent Orchestrator (CAO) integration, including provider selection and agent management.
 
+## Quick Installation
+
+### One-Command Installation (Recommended for New Users)
+
+The fastest way to get started is using the all-in-one installation script:
+
+```bash
+./install_all.sh my_migration_project
+```
+
+This single command performs all three installation steps automatically:
+1. Installs CAO and dependencies (tmux, uv)
+2. Creates your project structure
+3. Installs all 28 agents with your chosen provider
+
+**Options:**
+```bash
+# Install with a specific provider
+./install_all.sh my_project --provider kiro_cli  # Default
+./install_all.sh my_project --provider q_cli
+./install_all.sh my_project --provider claude_code
+
+# Skip validation (not recommended)
+./install_all.sh my_project --skip-validation
+
+# Get help
+./install_all.sh --help
+```
+
+**When to use:**
+- First-time installation
+- Quick setup for demos or testing
+- When you want the default configuration
+
+### Manual Installation (Recommended for Advanced Users)
+
+If you prefer more control over each step, follow the manual installation process below. This is useful when:
+- You want to customize each step
+- You're installing CAO for multiple projects
+- You need to troubleshoot specific steps
+- You want to use different providers for different projects
+
 ## Overview
 
 The installation process is now separated into three distinct steps for maximum flexibility:
@@ -607,16 +649,31 @@ For additional support:
 5. Use `cao --help` for command reference
 
 ### Uninstalling CAO
-If you need to uninstall CAO:
+
+If you need to uninstall CAO and remove all agents:
+
 ```bash
-# Uninstall CAO
-uv tool uninstall cli-agent-orchestrator
+# Complete uninstallation
+./uninstall_all.sh
 
-# Clean up agent store (optional)
-rm -rf ~/.aws/cli-agent-orchestrator/
+# Keep configuration files
+./uninstall_all.sh --keep-config
 
-# Clean up project CAO configuration (optional)
-rm -rf .cao/
+# Keep agent cache
+./uninstall_all.sh --keep-cache
+
+# Get help
+./uninstall_all.sh --help
+```
+
+**Note:** This removes CAO and agents but preserves:
+- Project directories and files
+- Python, uv, tmux, and Git
+- Project-specific .cao directories
+
+To reinstall after uninstalling:
+```bash
+./install_all.sh my_new_project
 ```
 
 ## Next Steps
