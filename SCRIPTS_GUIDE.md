@@ -4,11 +4,12 @@ This guide explains the installation and uninstallation scripts for the Legacy C
 
 ## Overview
 
-The framework provides two convenience scripts for managing installations:
+The framework provides several scripts for managing installations:
 
 | Script | Purpose | When to Use |
 |--------|---------|-------------|
 | `install_all.sh` | Complete installation in one command | First-time setup, quick demos |
+| `install_acm_tools.py` | Download and install ACM tools | Standalone or during project creation |
 | `uninstall_all.sh` | Remove CAO and all agents | Cleanup, troubleshooting |
 
 ## install_all.sh
@@ -69,6 +70,7 @@ Performs a complete installation of the Legacy Code Migration Framework:
 
 #### Step 2: Create Project
 - Runs `create_project.py` to create project structure
+- Automatically installs ACM tools from AWS Code repository
 - Automatically answers "no" to agent installation prompt (agents installed in next step)
 - Creates all necessary directories and files
 - Copies templates, prompts, and agent configurations
@@ -113,10 +115,201 @@ export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc  # or ~/.zshrc
 ```
 
+**Kiro CLI Authentication Error:**
+
+If you see `AccessDeniedException` or "bearer token is invalid" error:
+```bash
+# Logout and login again to refresh authentication
+kiro-cli logout
+kiro-cli login
+```
+
+This is a common issue when your Kiro CLI session has expired or AWS credentials have been refreshed.
+
 **Project already exists:**
 - The script will warn you and ask for confirmation
 - Continuing may overwrite existing files
 - Consider using a different project name
+
+**Agent installation fails:**
+- Check CAO is working: `cao --help`
+- Verify provider CLI is installed (if required)
+- Retry manually: `cd project_name && python3 acm/install_agents.py`
+
+## install_acm_tools.py
+
+### Description
+
+Downloads and installs ACM (Agentic Code Migration) tools from the AWS Code repository. This script is automatically executed during project creation but can also be run standalone to install or update the tools.
+
+### Usage
+
+```bash
+python3 install_acm_tools.py [OPTIONS]
+```
+
+### Options
+
+- `--tools-dir PATH`: Target directory for tools installation (default: `./tools`)
+- `--zip-file PATH`: Use existing ZIP file instead of downloading (useful for private repositories)
+- `--skip-on-error`: Skip installation if download fails (for automation scripts)
+- `--help`: Show help message
+
+### Examples
+
+**Install to default location (./tools):**
+```bash
+python3 install_acm_tools.py
+```
+
+**Install to custom location:**
+```bash
+python3 install_acm_tools.py --tools-dir /path/to/custom/tools
+```
+
+**Install from local ZIP file (private repository):**
+```bash
+# Download the ZIP file manually first, then:
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+```
+
+**Install to existing project:**
+```bash
+cd my_project
+python3 ../install_acm_tools.py --tools-dir ./tools
+```
+
+**Skip on error (for automation):**
+```bash
+python3 install_acm_tools.py --skip-on-error
+```
+
+### What It Does
+
+#### Step 1: Download ACM Tools
+- Downloads the latest ACM tools from AWS Code repository
+- URL: `https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools`
+- Shows download progress with size and percentage
+- Saves to temporary directory
+
+#### Step 2: Extract ACM Tools
+- Extracts the downloaded ZIP archive
+- Removes any existing `acm-tools` directory in target location
+- Moves extracted files to `<tools-dir>/acm-tools/`
+- Preserves all file permissions and structure
+
+#### Step 3: Install Dependencies
+- Locates `requirements.txt` in the extracted tools
+- Installs Python dependencies using pip
+- Reports success or provides manual installation instructions
+
+### Output
+
+The script provides:
+- Formatted headers for each step
+- Download progress indicator
+- File extraction details
+- Dependency installation status
+- Final summary with installation location
+- Next steps and usage instructions
+
+### Exit Codes
+
+- `0`: Success
+- `1`: Error (download failed, extraction failed, etc.)
+
+### Requirements
+
+- **Python 3**: Required to run the script
+- **pip/pip3**: Required for dependency installation
+- **Internet connection**: Required to download from AWS Code
+- **Write permissions**: Required for target directory
+
+### When to Use
+
+**Automatic (during project creation):**
+- ACM tools are automatically installed when you create a new project
+- No manual intervention needed
+
+**Manual (standalone execution):**
+- Update ACM tools to latest version
+- Install tools in existing project
+- Reinstall after corruption or deletion
+- Install to custom location
+
+### Troubleshooting
+
+**Download fails:**
+```bash
+# Check internet connection
+ping code.aws.dev
+
+# Check firewall/proxy settings
+# Retry the installation
+python3 install_acm_tools.py
+```
+
+**Access denied (HTTP 403) - Private Repository:**
+```bash
+# Option 1: Use local ZIP file
+# Download manually from the repository
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+
+# Option 2: Request repository access
+# Contact the repository owner
+
+# Option 3: Skip installation (if optional)
+python3 install_acm_tools.py --skip-on-error
+```
+
+**Permission denied:**
+```bash
+# Ensure you have write permissions
+ls -la ./tools
+
+# Or install to a different location
+python3 install_acm_tools.py --tools-dir ~/my-tools
+```
+
+**Dependency installation fails:**
+```bash
+# Install dependencies manually
+cd tools/acm-tools
+pip3 install -r requirements.txt
+```
+
+**Network/proxy issues:**
+```bash
+# If behind corporate proxy, set proxy environment variables
+export HTTP_PROXY=http://proxy.example.com:8080
+export HTTPS_PROXY=http://proxy.example.com:8080
+python3 install_acm_tools.py
+```
+
+### Integration with Project Creation
+
+The `install_acm_tools.py` script is automatically called by `create_project.py`:
+
+1. Project structure is created
+2. ACM tools are downloaded and installed to `<project>/tools/acm-tools/`
+3. Dependencies are installed
+4. User is prompted for agent installation
+
+This ensures every new project has the latest ACM tools available.
+
+### Updating ACM Tools
+
+To update ACM tools in an existing project:
+
+```bash
+cd my_existing_project
+python3 ../install_acm_tools.py --tools-dir ./tools
+```
+
+This will:
+- Remove the old `tools/acm-tools` directory
+- Download the latest version
+- Install updated dependencies
 
 **Agent installation fails:**
 - Check CAO is working: `cao --help`

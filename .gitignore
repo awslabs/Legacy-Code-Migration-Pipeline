@@ -11,3 +11,5 @@ temp/
 test_orchestration/
 test_e2e_integration/
 TEST_PROTOCOL_E2E.md
+carddemo/
+tools/

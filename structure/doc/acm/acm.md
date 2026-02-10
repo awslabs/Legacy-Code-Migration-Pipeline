@@ -93,23 +93,39 @@ If agent installation fails:
    q --version
    ```
 
-3. **Check Agents Directory**
+3. **Kiro CLI Authentication Issues**
+   
+   If you see `AccessDeniedException` or "bearer token is invalid":
+   ```bash
+   # Logout and login to refresh authentication
+   kiro-cli logout
+   kiro-cli login
+   ```
+   
+   This is needed when:
+   - Your session has expired
+   - You haven't used kiro-cli in a while
+   - AWS credentials have been refreshed
+
+4. **Check Agents Directory**
    - Ensure the agents directory exists
    - Verify agent files have `.md` extension
    - Check that agent files have valid YAML frontmatter
 
-4. **View Detailed Logs**
+5. **View Detailed Logs**
    - Check the script output for specific error messages
    - Verify network connectivity for URL-based agents
 
-5. **Manual Installation**
+6. **Manual Installation**
    ```bash
    # Install a single agent manually
    cao install /path/to/agent.md --provider kiro_cli
    
-   # List installed agents
-   cao list
+   # Check installed agents
+   ls ~/.kiro/agents/
    ```
+
+For more troubleshooting help, see the [Troubleshooting Guide](../../../TROUBLESHOOTING.md).
 
 ### 2. Deliverable Validation
 

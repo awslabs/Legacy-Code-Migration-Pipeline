@@ -161,7 +161,7 @@ echo ""
 
 # Step 2: Create Project
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 2/3: Creating Project                                ║${NC}"
+echo -e "${BLUE}║  Step 2/4: Creating Project                                ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -170,6 +170,7 @@ echo ""
 
 # Create project with automatic "no" response to agent installation prompt
 # We'll install agents in the next step with the specified provider
+# Note: ACM tools will be installed automatically during project creation
 echo "n" | python3 create_project.py "$PROJECT_NAME"
 
 if [ ! -d "$PROJECT_NAME" ]; then
@@ -182,7 +183,7 @@ echo ""
 
 # Step 3: Install Agents
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 3/3: Installing Agents                               ║${NC}"
+echo -e "${BLUE}║  Step 3/4: Installing Agents                               ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -224,6 +225,7 @@ echo ""
 echo "Summary:"
 echo "  ✓ CAO installed and verified"
 echo "  ✓ Project '$PROJECT_NAME' created"
+echo "  ✓ ACM tools installed"
 echo "  ✓ Agents installed with provider: $PROVIDER"
 echo ""
 

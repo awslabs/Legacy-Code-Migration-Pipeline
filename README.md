@@ -42,6 +42,7 @@ We use this task tracker to keep track of team tasks: TBD
 
 - **[Quick Start](QUICK_START.md)** - Get started in 3 simple steps (or 1 command!)
 - **[Installation Guide](INSTALLATION_GUIDE.md)** - Complete installation instructions
+- **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues and solutions
 - **[Scripts Guide](SCRIPTS_GUIDE.md)** - Installation and uninstallation scripts reference
 - **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
 - **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - Complete architecture documentation
@@ -194,6 +195,8 @@ project_name/
 ├── output/               # Analysis results and generated artifacts
 ├── templates/            # Report and tracking templates
 ├── prompts/             # AI prompts for different migration phases
+├── tools/               # ACM tools and utilities
+│   └── acm-tools/       # Downloaded ACM tools (auto-installed)
 ├── acm/                 # Framework tools and validators
 │   ├── install_agents.py      # Agent installation/update script
 │   └── deliverable_validator.py  # Deliverable validation tool
@@ -206,7 +209,10 @@ project_name/
     └── deployment_team/  # Migration scripts and deployment (7 agents)
 ```
 
-**Note**: For detailed ACM documentation, see [structure/doc/acm/acm.md](structure/doc/acm/acm.md)
+**Note**: 
+- ACM tools are automatically downloaded and installed during project creation
+- For detailed ACM documentation, see [structure/doc/acm/acm.md](structure/doc/acm/acm.md)
+- To update ACM tools: `python install_acm_tools.py --tools-dir ./tools`
 
 ## Usage
 
@@ -217,7 +223,7 @@ For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.m
 **Quick Start Steps:**
 
 1. **Install CAO**: Run `install_cao.py` to set up agent orchestration (one-time setup)
-2. **Initialize Project**: Use `create_project.py` to create your migration project
+2. **Initialize Project**: Use `create_project.py` to create your migration project (ACM tools auto-installed)
 3. **Install Agents**: Run `acm/install_agents.py` from your project directory
 4. **Configure Paths**: Review `config/paths.cfg` (auto-configured)
 5. **Add Legacy Code**: Place source code in `input/legacy/`
@@ -225,6 +231,7 @@ For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.m
 7. **Monitor Progress**: Check task files and deliverables
 8. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
 9. **Update Agents**: Modify agent files and run `acm/install_agents.py` to reinstall
+10. **Update ACM Tools**: Run `python ../install_acm_tools.py --tools-dir ./tools` when needed
 
 ### Understanding the Workflow
 
@@ -239,6 +246,40 @@ The framework uses a **supervisor-based orchestration model**:
 7. **Phase completes** only after review approval
 
 For detailed workflow information, see the [Orchestration Architecture Documentation](structure/doc/orchestration_architecture.md).
+
+### ACM Tools Installation
+
+ACM tools are automatically installed during project creation. For manual installation or updates:
+
+**Standard Installation:**
+```bash
+python3 install_acm_tools.py
+```
+
+**Private Repository (Use Local ZIP):**
+```bash
+# If repository is private, download ZIP manually then:
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+```
+
+**Update Existing Project:**
+```bash
+cd my_project
+python3 ../install_acm_tools.py --tools-dir ./tools
+```
+
+**Available Options:**
+- `--tools-dir PATH` - Target directory (default: ./tools)
+- `--zip-file PATH` - Use local ZIP file instead of downloading
+- `--skip-on-error` - Continue on failure (for automation)
+
+**If Download Fails:**
+The repository may be private. Solutions:
+1. Download ZIP manually and use `--zip-file` option
+2. Request repository access from owner
+3. Use `--skip-on-error` to continue without ACM tools
+
+For complete details, see [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) (install_acm_tools.py section) or [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) (ACM Tools Installation Reference section).
 
 ### Using CAO Agents
 

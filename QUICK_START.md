@@ -26,7 +26,9 @@ Installs: tmux, uv, and CLI Agent Orchestrator
 python create_project.py my_migration_project
 ```
 
-Creates: Complete project structure with agents, templates, and tools
+Creates: Complete project structure with agents, templates, tools, and ACM utilities
+
+**Note**: ACM tools are automatically downloaded and installed during project creation.
 
 ### 3️⃣ Install Agents
 
@@ -81,11 +83,53 @@ python acm/install_agents.py
 python acm/install_agents.py --provider q_cli
 ```
 
+### Update ACM Tools
+```bash
+# From project directory
+python ../install_acm_tools.py --tools-dir ./tools
+
+# Or from repository root
+python install_acm_tools.py --tools-dir my_project/tools
+```
+
+## ACM Tools Installation
+
+ACM tools are automatically installed during project creation. If you need to install manually:
+
+### Standard Installation
+```bash
+python3 install_acm_tools.py
+```
+
+### Private Repository (Use Local ZIP)
+```bash
+# If repository is private, download ZIP manually then:
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+```
+
+### Common Options
+```bash
+# Custom directory
+python3 install_acm_tools.py --tools-dir /custom/path
+
+# Skip on error (automation)
+python3 install_acm_tools.py --skip-on-error
+
+# Get help
+python3 install_acm_tools.py --help
+```
+
+### If Download Fails
+The repository may be private. Solutions:
+1. Download ZIP manually and use `--zip-file` option
+2. Request repository access from owner
+3. Use `--skip-on-error` to continue without ACM tools
+
 ## Need Help?
 
 - **Full Guide**: See [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)
+- **Scripts Guide**: See [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md)
 - **Documentation**: See [README.md](README.md)
-- **ACM Tools**: See [structure/doc/acm/acm.md](structure/doc/acm/acm.md)
 - **User Guide**: See [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
 
 ## Troubleshooting
@@ -94,6 +138,13 @@ python acm/install_agents.py --provider q_cli
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc
+```
+
+### Kiro CLI Authentication Error?
+```bash
+# If you see "AccessDeniedException" or "bearer token is invalid"
+kiro-cli logout
+kiro-cli login
 ```
 
 ### Provider Not Available?

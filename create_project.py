@@ -179,6 +179,35 @@ def main():
         print(f"\n✅ Project '{args.project_name}' created successfully!")
         print(f"📁 Location: {final_path}")
         
+        # Install ACM tools
+        print(f"\n🔧 Installing ACM Tools")
+        print("Downloading and installing ACM tools from AWS Code repository...")
+        try:
+            import subprocess
+            install_tools_script = current_dir / "install_acm_tools.py"
+            tools_dir = final_path / "tools"
+            
+            result = subprocess.run(
+                ["python3", str(install_tools_script), "--tools-dir", str(tools_dir), "--skip-on-error"],
+                cwd=str(current_dir)
+            )
+            
+            if result.returncode == 0:
+                print("✅ ACM tools installed successfully!")
+            else:
+                print("⚠️  ACM tools installation had issues")
+                print("   This may be due to repository access restrictions.")
+                print(f"   You can install manually later using:")
+                print(f"   python3 {install_tools_script} --tools-dir {tools_dir}")
+                print(f"   Or use a local ZIP file:")
+                print(f"   python3 {install_tools_script} --zip-file /path/to/acm-tools.zip --tools-dir {tools_dir}")
+        except Exception as e:
+            print(f"⚠️  Error installing ACM tools: {e}")
+            print(f"   You can install manually later using:")
+            print(f"   python3 install_acm_tools.py --tools-dir {tools_dir}")
+            print(f"   Or use a local ZIP file:")
+            print(f"   python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir {tools_dir}")
+        
         # Ask if user wants to install agents
         print(f"\n🤖 Agent Installation")
         print("Would you like to install agents now?")

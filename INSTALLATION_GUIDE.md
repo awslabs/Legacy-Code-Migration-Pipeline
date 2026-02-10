@@ -12,10 +12,11 @@ The fastest way to get started is using the all-in-one installation script:
 ./install_all.sh my_migration_project
 ```
 
-This single command performs all three installation steps automatically:
+This single command performs all installation steps automatically:
 1. Installs CAO and dependencies (tmux, uv)
 2. Creates your project structure
-3. Installs all 28 agents with your chosen provider
+3. Downloads and installs ACM tools
+4. Installs all 28 agents with your chosen provider
 
 **Options:**
 ```bash
@@ -46,17 +47,20 @@ If you prefer more control over each step, follow the manual installation proces
 
 ## Overview
 
-The installation process is now separated into three distinct steps for maximum flexibility:
+The installation process is separated into distinct steps for maximum flexibility:
 
 1. **CAO Installation** - Install the CLI Agent Orchestrator (one-time setup)
 2. **Project Creation** - Create a new migration project
-3. **Agent Installation** - Install agents into the project (can be repeated)
+3. **ACM Tools Installation** - Download and install ACM tools (automatic during project creation)
+4. **Agent Installation** - Install agents into the project (can be repeated)
 
 This separation allows you to:
 - Install CAO once and use it for multiple projects
+- Automatically get the latest ACM tools with each project
 - Modify agent files and easily reinstall them
 - Switch providers without reinstalling CAO
 - Update agents independently of CAO installation
+- Update ACM tools separately when needed
 
 ## Prerequisites
 
@@ -110,7 +114,12 @@ This creates a complete project structure with:
 - Template files for reports and tracking
 - AI agent configurations (28 agents in 5 teams)
 - Validation tools
-- **ACM tools** including the agent installation script
+- **ACM tools** (automatically downloaded and installed to `./tools/acm-tools/`)
+
+**ACM Tools Installation**: The script automatically:
+1. Downloads the latest ACM tools from AWS Code repository
+2. Extracts them to `<project>/tools/acm-tools/`
+3. Installs Python dependencies from requirements.txt
 
 **Interactive Prompt**: The script will ask if you want to install agents now:
 ```
@@ -124,6 +133,190 @@ Install agents now? (y/N):
 - Choose **N** to install agents later
 
 **When to run**: Once for each migration project.
+
+### Step 2.5: ACM Tools Installation (Automatic)
+
+ACM tools are automatically installed during project creation, but you can also install or update them manually:
+
+```bash
+# Install to default location (./tools)
+python3 install_acm_tools.py
+
+# Install from local ZIP file (if repository is private)
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+
+# Install to custom location
+python3 install_acm_tools.py --tools-dir /path/to/tools
+
+# Update ACM tools in existing project
+cd my_existing_project
+python3 ../install_acm_tools.py --tools-dir ./tools
+```
+
+**What gets installed:**
+- Latest ACM tools from AWS Code repository (or local ZIP file)
+- Source: `https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools`
+- Target: `<tools-dir>/acm-tools/`
+- Python dependencies from requirements.txt
+
+**Private Repository Access:**
+If the repository is private or you encounter access issues:
+1. Download the ZIP file manually
+2. Use `--zip-file` option: `python3 install_acm_tools.py --zip-file /path/to/zip`
+3. Or use `--skip-on-error` during project creation to continue without ACM tools
+
+**When to run manually:**
+- To update ACM tools to the latest version
+- To install tools in an existing project
+- To reinstall after corruption or deletion
+- To install to a custom location
+- When repository access is restricted (use --zip-file)
+
+**Note**: During normal project creation, this step happens automatically with `--skip-on-error` flag, so the installation continues even if download fails.
+
+## ACM Tools Installation Reference
+
+### Overview
+
+ACM tools are automatically installed during project creation. This section provides complete reference for manual installation, troubleshooting, and private repository scenarios.
+
+### Automatic Installation
+
+During project creation (`create_project.py`), ACM tools are automatically:
+1. Downloaded from AWS Code repository
+2. Extracted to `<project>/tools/acm-tools/`
+3. Dependencies installed from requirements.txt
+4. Installation continues even if download fails (uses `--skip-on-error`)
+
+### Manual Installation
+
+#### Standard Installation (Public Repository)
+```bash
+python3 install_acm_tools.py
+```
+
+#### Private Repository Installation
+If the repository is private or you encounter HTTP 403 errors:
+
+**Step 1: Obtain ZIP File**
+- Request access from repository owner
+- Download manually: `https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools/-/archive/main/acm-tools-main.zip`
+- Or receive ZIP file through approved channels
+
+**Step 2: Install from Local ZIP**
+```bash
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+```
+
+#### Custom Installation Location
+```bash
+python3 install_acm_tools.py --tools-dir /custom/path
+```
+
+#### Update Existing Project
+```bash
+cd my_project
+python3 ../install_acm_tools.py --tools-dir ./tools
+
+# Or with local ZIP
+python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools
+```
+
+### Command-Line Options
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `--tools-dir PATH` | Target directory | `--tools-dir ./tools` |
+| `--zip-file PATH` | Use local ZIP file | `--zip-file ~/acm-tools.zip` |
+| `--skip-on-error` | Continue on failure | `--skip-on-error` |
+| `--help` | Show help message | `--help` |
+
+### Common Scenarios
+
+#### Scenario 1: First Time Installation
+```bash
+# Try automatic download
+python3 install_acm_tools.py
+
+# If fails with "Access Denied", use local ZIP
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+```
+
+#### Scenario 2: Project Creation with Private Repository
+```bash
+# Create project (ACM tools installation may fail gracefully)
+python3 create_project.py my_project
+
+# Install ACM tools manually with local ZIP
+cd my_project
+python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools
+```
+
+#### Scenario 3: Automation/CI-CD
+```bash
+# Use skip-on-error for automation
+python3 install_acm_tools.py --skip-on-error
+```
+
+### Error Handling
+
+#### HTTP 403 - Access Denied (Private Repository)
+**Error Message:**
+```
+❌ HTTP Error 403: Forbidden
+⚠️  Access Denied - This may be a private repository
+```
+
+**Solutions:**
+1. Download ZIP manually and use `--zip-file` option
+2. Request repository access from owner
+3. Use `--skip-on-error` to continue without ACM tools
+
+#### HTTP 404 - Repository Not Found
+**Error Message:**
+```
+❌ HTTP Error 404: Not Found
+⚠️  Repository Not Found
+```
+
+**Solutions:**
+1. Verify repository URL is correct
+2. Check if repository has been moved
+3. Contact repository owner
+
+#### Network/DNS Issues
+**Error Message:**
+```
+❌ URL Error: [reason]
+⚠️  Network or DNS issue
+```
+
+**Solutions:**
+1. Check internet connection: `ping code.aws.dev`
+2. Check firewall/proxy settings
+3. Use `--zip-file` with local ZIP
+
+### Verification
+
+After installation, verify ACM tools:
+```bash
+# Check directory exists
+ls -la tools/acm-tools/
+
+# View contents
+ls tools/acm-tools/
+
+# Read documentation
+cat tools/acm-tools/README.md
+
+# Verify dependencies
+pip3 list | grep -i acm
+```
+
+### Additional Resources
+
+- **Script Reference**: [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) - See "install_acm_tools.py" section
+- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - See "ACM Tools Issues" section
 
 ### Step 3: Install Agents
 
@@ -230,8 +423,20 @@ python3 acm/install_agents.py
 ```bash
 # CAO already installed, just create and configure
 python3 create_project.py project2
+# ACM tools are automatically installed
 cd project2
 python3 acm/install_agents.py
+```
+
+### Updating ACM Tools
+
+```bash
+# Update ACM tools in existing project
+cd my_project
+python3 ../install_acm_tools.py --tools-dir ./tools
+
+# Or from repository root
+python3 install_acm_tools.py --tools-dir my_project/tools
 ```
 
 ### Updating Agents
@@ -416,6 +621,27 @@ kiro-cli --version
 # Verify Kiro CLI integration
 python3 install_cao.py my_project --provider kiro_cli
 ```
+
+**Kiro CLI Authentication Error (AccessDeniedException)**:
+
+If you see this error when using `kiro-cli`:
+```
+Error { code: "AccessDeniedException", message: "The bearer token included in the request is invalid." }
+```
+
+**Solution**: Logout and login again to refresh your authentication token:
+```bash
+# Logout from Kiro CLI
+kiro-cli logout
+
+# Login again to get a fresh token
+kiro-cli login
+```
+
+This refreshes your bearer token and resolves authentication issues. This is a common issue when:
+- Your session has expired
+- You haven't used `kiro-cli` in a while
+- AWS credentials have been refreshed
 
 **Kiro CLI Permission Issues**:
 ```bash
