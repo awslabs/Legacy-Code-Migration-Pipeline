@@ -2,6 +2,20 @@
 
 This guide walks you through the complete installation process for the Legacy Code Migration Framework with CLI Agent Orchestrator (CAO) integration, including provider selection and agent management.
 
+## Overview
+
+The installation process is now separated into three distinct steps for maximum flexibility:
+
+1. **CAO Installation** - Install the CLI Agent Orchestrator (one-time setup)
+2. **Project Creation** - Create a new migration project
+3. **Agent Installation** - Install agents into the project (can be repeated)
+
+This separation allows you to:
+- Install CAO once and use it for multiple projects
+- Modify agent files and easily reinstall them
+- Switch providers without reinstalling CAO
+- Update agents independently of CAO installation
+
 ## Prerequisites
 
 Before starting, ensure you have:
@@ -19,9 +33,30 @@ Before starting, ensure you have:
 
 ## Step-by-Step Installation
 
-### 1. Create Your Migration Project
+### Step 1: Install CLI Agent Orchestrator (CAO)
 
-First, create a new migration project using the framework:
+**This is a one-time setup.** Install CAO and its dependencies:
+
+```bash
+python3 install_cao.py
+```
+
+This installs:
+- **tmux 3.3+**: Terminal multiplexer (uses official CAO installer)
+- **uv**: Python package manager
+- **CAO**: CLI Agent Orchestrator from the official repository
+
+The script will:
+- Validate system prerequisites
+- Install required dependencies
+- Verify CAO installation
+- Provide next steps
+
+**When to run**: Once on your system, before creating any projects.
+
+### Step 2: Create Your Migration Project
+
+Create a new migration project using the framework:
 
 ```bash
 python3 create_project.py my_migration_project
@@ -31,31 +66,59 @@ This creates a complete project structure with:
 - Input directories for legacy code and specifications
 - Output directories for analysis results
 - Template files for reports and tracking
-- AI agent configurations
+- AI agent configurations (28 agents in 5 teams)
 - Validation tools
+- **ACM tools** including the agent installation script
 
-### 2. Install CLI Agent Orchestrator (CAO) with Provider Selection
-
-After creating your project, install CAO with your preferred provider. **Kiro CLI is the default provider** and provides the best integration with Kiro development environments.
-
-#### Basic Installation (Kiro CLI Default)
-```bash
-python3 install_cao.py my_migration_project --provider kiro_cli
+**Interactive Prompt**: The script will ask if you want to install agents now:
+```
+🤖 Agent Installation
+Would you like to install agents now?
+(You can also install them later using: python acm/install_agents.py)
+Install agents now? (y/N):
 ```
 
-#### Provider Selection
-Choose your preferred CLI provider for agent integration:
+- Choose **Y** to install agents immediately (requires CAO)
+- Choose **N** to install agents later
+
+**When to run**: Once for each migration project.
+
+### Step 3: Install Agents
+
+Install the 28 specialized agents into CAO with your preferred provider:
+
 
 ```bash
-# Kiro CLI (Default - Recommended for Kiro users)
-python3 install_cao.py my_migration_project --provider kiro_cli
+cd my_migration_project
+python3 acm/install_agents.py
+```
+
+**Provider Selection**: Choose your preferred CLI provider for agent integration:
+
+```bash
+# Kiro CLI (Default - Recommended)
+python3 acm/install_agents.py --provider kiro_cli
 
 # Amazon Q CLI
-python3 install_cao.py my_migration_project --provider q_cli
+python3 acm/install_agents.py --provider q_cli
 
 # Claude Code
-python3 install_cao.py my_migration_project --provider claude_code
+python3 acm/install_agents.py --provider claude_code
 ```
+
+The script will:
+- Discover all 28 agents from the agents directory
+- Parse agent metadata (name, description, version)
+- Install each agent using `cao install` commands
+- Configure agents for your selected provider
+- Show command preview before execution
+- Provide installation summary
+
+**When to run**:
+- After creating a project (if you skipped during creation)
+- After modifying agent markdown files
+- When switching providers
+- To reinstall/update agents
 
 #### Supported Providers
 
@@ -71,96 +134,96 @@ Kiro CLI is the recommended default provider. To set up Kiro CLI:
 
 1. **Install Kiro CLI**: Follow the [Kiro installation guide](https://kiro.ai)
 2. **Verify Installation**: Run `kiro-cli --version` to confirm Kiro CLI is available
-3. **Configure Workspace**: Ensure your project is in a Kiro workspace (optional)
+3. **Install Agents**: Run `python3 acm/install_agents.py --provider kiro_cli`
 
 Example Kiro CLI usage:
 ```bash
-# Install with Kiro CLI (default)
-python3 install_cao.py my_migration_project --provider kiro_cli
+# Install agents with Kiro CLI (default)
+python3 acm/install_agents.py --provider kiro_cli
 
 # Verify Kiro CLI integration
 kiro-cli --version
 kiro-cli --help
+
+# Use agents with Kiro CLI
+kiro-cli chat --agent migration_supervisor
 ```
 
-The CAO installation script will:
-- **Install tmux**: Uses the official CAO tmux installer (version 3.3+ required)
-- **Install uv**: Downloads and installs the uv Python package manager
-- **Install CAO**: Uses `uv tool install` to install CAO from the official repository
-- **Configure Provider**: Sets up your selected provider (Kiro CLI by default)
-- **Install Agents**: Discovers and installs all 28 agents using `cao install` commands
-- **Setup Environment**: Initializes CAO in your project directory with provider integration
-- **Show Progress**: Displays command preview before each installation for transparency
+### Installation Options
 
-### 3. Agent Installation Methods
+#### Install Specific Agents Only
 
-CAO supports multiple methods for installing agents, all using the `cao install` command syntax:
-
-#### Built-in Agents
-Install pre-packaged agents that come with CAO:
 ```bash
-# Install a built-in agent with default provider (Kiro CLI)
-cao install developer --provider kiro_cli
-
-# Install with specific provider
-cao install developer --provider q_cli
+# Install only certain agents
+python3 acm/install_agents.py --agent-sources \
+    migration_supervisor.md \
+    agents/analysis_team/analysis_team_supervisor.md
 ```
 
-#### Local Agent Files
-Install agents from local markdown files:
-```bash
-# Install from local file with default provider
-cao install /path/to/my_agent.md --provider kiro_cli
+#### Custom Agents Directory
 
-# Install with specific provider
-cao install ./agents/custom_agent.md --provider kiro_cli
+```bash
+# Install from a different directory
+python3 acm/install_agents.py --agents-dir /path/to/custom/agents
 ```
 
-#### URL-based Agents
-Install agents directly from URLs:
-```bash
-# Install from URL with default provider
-cao install https://example.com/agents/specialist_agent.md --provider kiro_cli
+## Common Workflows
 
-# Install with specific provider
-cao install https://github.com/user/repo/agent.md --provider claude_code
+### Initial Setup (New User)
+
+```bash
+# Step 1: Install CAO (one-time)
+python3 install_cao.py
+
+# Step 2: Create first project
+python3 create_project.py project1
+
+# Step 3: Install agents
+cd project1
+python3 acm/install_agents.py
 ```
 
-#### Agent Source Selection
-You can specify which agents to install during the initial setup:
-```bash
-# Install specific agents only
-python3 install_cao.py my_migration_project --agent-sources developer analyst
+### Creating Additional Projects
 
-# Install from mixed sources
-python3 install_cao.py my_migration_project --agent-sources developer /path/to/custom.md https://example.com/agent.md
+```bash
+# CAO already installed, just create and configure
+python3 create_project.py project2
+cd project2
+python3 acm/install_agents.py
 ```
 
-### 4. Installation Options and Customization
+### Updating Agents
 
-#### Skip Dependency Installation
-If you already have the required dependencies installed:
 ```bash
-python3 install_cao.py my_migration_project --skip-deps
+# Modify agent files in agents/ directory
+vim agents/migration_supervisor.md
+
+# Reinstall agents
+python3 acm/install_agents.py
 ```
 
-#### Skip Agent Installation
-If you want to manually configure agents later:
-```bash
-python3 install_cao.py my_migration_project --skip-agents
-```
+### Switching Providers
 
-#### Combined Options
-Combine provider selection with installation options:
 ```bash
-# Kiro CLI with custom agents and skip dependencies
-python3 install_cao.py my_migration_project --provider kiro_cli --agent-sources custom_agent --skip-deps
-
-# Q-CLI with no agents initially
-python3 install_cao.py my_migration_project --provider q_cli --skip-agents
+# Reinstall with different provider
+python3 acm/install_agents.py --provider q_cli
 ```
 
 ## Post-Installation Usage
+
+### Verify Installation
+
+```bash
+# Check CAO is installed
+cao --help
+
+# List installed agents
+cao list
+
+# Verify provider CLI (if applicable)
+kiro-cli --version  # For Kiro CLI
+q --version         # For Amazon Q CLI
+```
 
 ### Agent Store Location
 

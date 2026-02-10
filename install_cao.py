@@ -2,16 +2,17 @@
 """
 CAO (CLI Agent Orchestrator) Installation Script
 
-This script should be run AFTER create_project.py to install and configure
-the CLI Agent Orchestrator (CAO) from https://github.com/awslabs/cli-agent-orchestrator
+This script installs the CLI Agent Orchestrator (CAO) and its dependencies.
+Agent installation is now handled separately by install_agents.py
 
 Features:
 1. Installs tmux (version 3.3+) using official installer
 2. Installs uv using official installer
 3. Installs CAO using uv tool install
-4. Configures all agents found in the project's agents folder
 
-Usage: python install_cao.py <project_directory>
+Usage: python install_cao.py
+
+Note: To install agents, use the install_agents.py script in your project's acm folder
 """
 
 import os
@@ -1675,32 +1676,7 @@ def setup_cao_environment(project_dir):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Install CLI Agent Orchestrator (CAO) and configure agents"
-    )
-    parser.add_argument(
-        "project_directory",
-        help="Path to the project directory created by create_project.py"
-    )
-    parser.add_argument(
-        "--provider",
-        default="kiro_cli",
-        choices=['kiro_cli', 'q_cli', 'claude_code'],
-        help="CLI provider for agent integration (default: kiro_cli)"
-    )
-    parser.add_argument(
-        "--agent-sources",
-        nargs='*',
-        help="Specific agent sources to install (built-in names, file paths, or URLs)"
-    )
-    parser.add_argument(
-        "--skip-deps",
-        action="store_true",
-        help="Skip dependency installation"
-    )
-    parser.add_argument(
-        "--skip-agents",
-        action="store_true", 
-        help="Skip agent installation"
+        description="Install CLI Agent Orchestrator (CAO) and its dependencies"
     )
     parser.add_argument(
         "--skip-validation",
@@ -1711,9 +1687,7 @@ def main():
     args = parser.parse_args()
     
     # Initialize progress indicator
-    total_steps = 4 if not args.skip_deps else 3
-    if not args.skip_agents:
-        total_steps += 1
+    total_steps = 3
     progress = ProgressIndicator(total_steps)
     
     try:
@@ -1723,63 +1697,23 @@ def main():
             validator = PrerequisiteValidator()
             
             if not validator.validate_all_prerequisites():
-                progress.complete_step(True)  # Validation worked, it just found issues
+                progress.complete_step(True)
                 print("\n❌ Critical prerequisites not met. Installation cannot continue.")
                 print("Please resolve the issues above and try again.")
                 sys.exit(1)
             
             progress.complete_step(True)
         
-        # Initialize provider manager with enhanced validation
-        progress.start_step("Validating provider configuration")
-        provider_manager = ProviderManager(args.provider)
-        
-        # Validate provider
-        if not provider_manager.validate_provider():
-            error_msg = provider_manager.get_error_message_for_invalid_provider()
+        # Step 1: Install dependencies
+        progress.start_step("Installing system dependencies (tmux, uv, CAO)")
+        if not install_dependencies():
             raise InstallationError(
-                error_msg,
-                source="provider_validation",
-                error_type="invalid_provider",
-                suggestion="Use one of the supported providers listed above"
+                "Failed to install required dependencies",
+                source="dependency_installation",
+                error_type="installation_failure",
+                suggestion="Check network connectivity and system permissions"
             )
-        
-        print(f"🔧 Using provider: {provider_manager.get_provider_display_name()}")
-        
-        # Enhanced project directory validation
-        project_dir = Path(args.project_directory).resolve()
-        if not project_dir.exists():
-            raise InstallationError(
-                f"Project directory does not exist: {project_dir}",
-                source="project_validation",
-                error_type="missing_directory",
-                suggestion="Run create_project.py first to create the project structure"
-            )
-        
-        if not project_dir.is_dir():
-            raise InstallationError(
-                f"Project path exists but is not a directory: {project_dir}",
-                source="project_validation", 
-                error_type="invalid_directory",
-                suggestion="Ensure the project path points to a directory"
-            )
-        
-        print(f"🚀 Installing CAO for project: {project_dir}")
         progress.complete_step(True)
-        
-        # Step 1: Install dependencies with progress tracking
-        if not args.skip_deps:
-            progress.start_step("Installing system dependencies (tmux, uv, CAO)")
-            if not install_dependencies():
-                raise InstallationError(
-                    "Failed to install required dependencies",
-                    source="dependency_installation",
-                    error_type="installation_failure",
-                    suggestion="Check network connectivity and system permissions"
-                )
-            progress.complete_step(True)
-        else:
-            print("⏭️  Skipping dependency installation")
         
         # Step 2: Verify CAO installation
         progress.start_step("Verifying CAO installation")
@@ -1792,87 +1726,22 @@ def main():
             )
         progress.complete_step(True)
         
-        # Step 3: Setup CAO environment in project
-        progress.start_step("Setting up CAO environment in project")
-        if not setup_cao_environment(project_dir):
-            raise InstallationError(
-                "Failed to setup CAO environment",
-                source="cao_setup",
-                error_type="setup_failure",
-                suggestion="Check project directory permissions and CAO installation"
-            )
-        progress.complete_step(True)
-        
-        # Step 4: Install agents with provider support
-        if not args.skip_agents:
-            progress.start_step("Installing and configuring agents")
-            try:
-                if not install_agents_v2(project_dir, provider_manager, args.agent_sources):
-                    print("⚠️  Agent installation completed with some issues")
-                    progress.complete_step(False)
-                else:
-                    progress.complete_step(True)
-            except Exception as e:
-                print(f"⚠️  Agent installation encountered errors: {str(e)}")
-                progress.complete_step(False)
-        else:
-            print("⏭️  Skipping agent installation")
-        
         # Show final summary
-        successful_steps = sum(1 for i in range(progress.current_step) if i > 0)  # Approximate
-        progress.show_summary(successful_steps)
+        progress.show_summary(progress.current_step)
         
         print(f"\n🎉 CAO installation complete!")
-        print(f"📁 Project location: {project_dir}")
-        print(f"🔧 Provider: {provider_manager.get_provider_display_name()}")
-        
-        # Enhanced provider-specific instructions (Requirements 5.4, 5.5)
-        config = provider_manager.get_provider_config()
-        if config and config.installation_notes:
-            print(f"📝 Provider notes: {config.installation_notes}")
-        
-        # K-CLI specific post-installation guidance
-        if provider_manager.provider == 'kiro_cli':
-            provider_available = provider_manager.check_provider_availability()
-            if provider_available:
-                print("\n🚀 Kiro CLI Integration Ready!")
-                print("Your agents are now configured for use with Kiro CLI. You can:")
-                print("• Use agents directly in the Kiro IDE")
-                print("• Launch agents via: kiro-cli chat --agent <agent_name>")
-                print("• Access agent management through Kiro's interface")
-            else:
-                print("\n⚠️  Kiro CLI Integration Pending")
-                print("Your agents have been installed but Kiro CLI is not yet available.")
-                print("To complete the setup:")
-                print("1. Install Kiro CLI from https://kiro.ai")
-                print("2. Ensure 'kiro-cli' command is in your PATH")
-                print("3. Your agents will then be ready for use with Kiro")
         
         print("\nNext steps:")
-        print(f"1. cd {project_dir}")
-        
-        # Provider-specific next steps
-        if provider_manager.provider == 'kiro_cli':
-            if provider_manager.check_provider_availability():
-                print("2. Launch Kiro IDE or use: kiro-cli chat --agent <agent_name>")
-            else:
-                print("2. Install Kiro CLI from https://kiro.ai")
-                print("3. Use: kiro-cli chat --agent <agent_name>")
-        else:
-            print("2. Start CAO server: cao-server")
-            print("3. In another terminal: cao launch --agents <agent_name>")
+        print("1. Create a project using: python create_project.py <project_name>")
+        print("2. Install agents using the install_agents.py script in your project")
         
         print("\nUseful commands:")
-        if provider_manager.provider == 'kiro_cli':
-            print("• Launch agent: kiro-cli chat --agent <agent_name>")
-            print("• Kiro IDE: kiro (if installed)")
-        
         print("• Start server: cao-server")
-        print("• Install agent: cao install <agent_file> --provider", args.provider)
+        print("• Install agent: cao install <agent_file> --provider <provider>")
         print("• Launch session: cao launch --agents <agent_name>")
         print("• List agents: cao list")
         print("• Get help: cao --help")
-        print("• Available agents are in the agents/ directory")
+        
         print("\nNote: The CAO server must be running to launch agent sessions.")
         print("\nUninstall CAO (if needed):")
         print("• uv tool uninstall cli-agent-orchestrator")
@@ -1886,64 +1755,6 @@ def main():
     except Exception as e:
         print(f"\n❌ Unexpected error during installation: {str(e)}")
         print("💡 Suggestion: Check the error details above and try again")
-        sys.exit(1)
-        
-        # Enhanced provider-specific instructions (Requirements 5.4, 5.5)
-        config = provider_manager.get_provider_config()
-        if config and config.installation_notes:
-            print(f"📝 Provider notes: {config.installation_notes}")
-        
-        # K-CLI specific post-installation guidance
-        if provider_manager.provider == 'kiro_cli':
-            provider_available = provider_manager.check_provider_availability()
-            if provider_available:
-                print("\n🚀 Kiro CLI Integration Ready!")
-                print("Your agents are now configured for use with Kiro CLI. You can:")
-                print("• Use agents directly in the Kiro IDE")
-                print("• Launch agents via: kiro-cli chat --agent <agent_name>")
-                print("• Access agent management through Kiro's interface")
-            else:
-                print("\n⚠️  Kiro CLI Integration Pending")
-                print("Your agents have been installed but Kiro CLI is not yet available.")
-                print("To complete the setup:")
-                print("1. Install Kiro CLI from https://kiro.ai")
-                print("2. Ensure 'kiro-cli' command is in your PATH")
-                print("3. Your agents will then be ready for use with Kiro")
-        
-        print("\nNext steps:")
-        print(f"1. cd {project_dir}")
-        
-        # Provider-specific next steps
-        if provider_manager.provider == 'kiro_cli':
-            if provider_manager.check_provider_availability():
-                print("2. Launch Kiro IDE or use: kiro-cli chat --agent <agent_name>")
-            else:
-                print("2. Install Kiro CLI from https://kiro.ai")
-                print("3. Use: kiro-cli chat --agent <agent_name>")
-        else:
-            print("2. Start CAO server: cao-server")
-            print("3. In another terminal: cao launch --agents <agent_name>")
-        
-        print("\nUseful commands:")
-        if provider_manager.provider == 'kiro_cli':
-            print("• Launch agent: kiro-cli chat --agent <agent_name>")
-            print("• Kiro IDE: kiro (if installed)")
-        
-        print("• Start server: cao-server")
-        print("• Install agent: cao install <agent_file> --provider", args.provider)
-        print("• Launch session: cao launch --agents <agent_name>")
-        print("• List agents: cao list")
-        print("• Get help: cao --help")
-        print("• Available agents are in the agents/ directory")
-        print("\nNote: The CAO server must be running to launch agent sessions.")
-        print("\nUninstall CAO (if needed):")
-        print("• uv tool uninstall cli-agent-orchestrator")
-        
-    except KeyboardInterrupt:
-        print("\n❌ Installation cancelled by user")
-        sys.exit(1)
-    except Exception as e:
-        print(f"❌ Unexpected error: {e}")
         sys.exit(1)
 
 

@@ -41,8 +41,11 @@ We use this task tracker to keep track of team tasks: TBD
 ### 🔑 Key Resources
 
 - **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
+- **[Installation Guide](INSTALLATION_GUIDE.md)** - Complete installation instructions
+- **[Quick Start](QUICK_START.md)** - Get started in 3 simple steps
 - **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - Complete architecture documentation
 - **[Agent Documentation](structure/doc/agents/agents.md)** - AI agent configurations and team structure
+- **[ACM Framework](structure/doc/acm/acm.md)** - Agent management and validation tools
 - **[Prompt Documentation](structure/doc/prompts/prompts.md)** - AI prompts for migration phases
 - **[Template Library](structure/doc/templates/templates.md)** - Standardized deliverable templates
 - **[Task File Template](structure/doc/task_file_template.md)** - Guide for creating task files
@@ -110,28 +113,46 @@ See `FINAL_SUMMARY.md` for complete details.
 
 ### Creating a New Migration Project
 
-1. **Create the project structure:**
+1. **Install CLI Agent Orchestrator (CAO) - Optional but Recommended:**
+```bash
+python install_cao.py
+```
+
+2. **Create the project structure:**
 ```bash
 python create_project.py <project_name>
 ```
 
-2. **Install CLI Agent Orchestrator (CAO) - Optional but Recommended:**
+3. **Install agents (if you chose to skip during project creation):**
 ```bash
-python install_cao.py <project_name> --provider kiro_cli
+cd <project_name>
+python acm/install_agents.py --provider kiro_cli
 ```
 
-The first command creates a complete project structure with all necessary folders, templates, and configuration files. The second command installs and configures the [CLI Agent Orchestrator (CAO)](https://github.com/awslabs/cli-agent-orchestrator) which provides advanced agent management capabilities for your migration project.
+The first command installs [CLI Agent Orchestrator (CAO)](https://github.com/awslabs/cli-agent-orchestrator) and its dependencies (tmux, uv). The second command creates a complete project structure with all necessary folders, templates, and configuration files. The third command installs the 28 specialized agents into CAO with your chosen provider.
 
 ### CAO Installation Features
 
-The `install_cao.py` script automatically:
+The installation process is now separated into two parts:
+
+**CAO Installation (`install_cao.py`):**
 - Installs required dependencies (tmux 3.3+, uv, CAO)
+- Validates system prerequisites
+- Sets up CAO for use across all projects
+
+**Agent Installation (`acm/install_agents.py`):**
+- Discovers and installs all 28 agents from the project's agents directory
 - Supports provider selection (Kiro CLI default, Amazon Q CLI, Claude Code)
-- Discovers and installs all 28 agents across team subdirectories using `cao install` commands
-- Sets up the CAO environment with your selected provider for immediate use
+- Can be run at any time to install or update agents
 - Provides organized agent listing with team structure visibility
 - Supports multiple agent installation sources (built-in, local files, URLs)
-- Shows command preview before execution for transparency and debugging
+- Shows command preview before execution for transparency
+
+**Benefits of Separation:**
+- Install CAO once, use for multiple projects
+- Modify agent files and easily reinstall them
+- Switch providers without reinstalling CAO
+- Update agents independently of CAO installation
 
 ### Project Structure
 
@@ -144,6 +165,8 @@ project_name/
 ├── templates/            # Report and tracking templates
 ├── prompts/             # AI prompts for different migration phases
 ├── acm/                 # Framework tools and validators
+│   ├── install_agents.py      # Agent installation/update script
+│   └── deliverable_validator.py  # Deliverable validation tool
 └── agents/              # AI agent configurations (28 agents in 5 teams)
     ├── migration_supervisor.md
     ├── analysis_team/    # Legacy code and database analysis (5 agents)
@@ -153,6 +176,8 @@ project_name/
     └── deployment_team/  # Migration scripts and deployment (7 agents)
 ```
 
+**Note**: For detailed ACM documentation, see [structure/doc/acm/acm.md](structure/doc/acm/acm.md)
+
 ## Usage
 
 ### Getting Started
@@ -161,13 +186,15 @@ For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.m
 
 **Quick Start Steps:**
 
-1. **Initialize Project**: Use `create_project.py` to create your migration project
-2. **Install CAO (Optional)**: Run `install_cao.py` to set up agent orchestration
-3. **Configure Paths**: Review `config/paths.cfg` (auto-configured)
-4. **Add Legacy Code**: Place source code in `input/legacy/`
-5. **Start Migration**: Use Migration Supervisor with main prompt
-6. **Monitor Progress**: Check task files and deliverables
-7. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
+1. **Install CAO**: Run `install_cao.py` to set up agent orchestration (one-time setup)
+2. **Initialize Project**: Use `create_project.py` to create your migration project
+3. **Install Agents**: Run `acm/install_agents.py` from your project directory
+4. **Configure Paths**: Review `config/paths.cfg` (auto-configured)
+5. **Add Legacy Code**: Place source code in `input/legacy/`
+6. **Start Migration**: Use Migration Supervisor with main prompt
+7. **Monitor Progress**: Check task files and deliverables
+8. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
+9. **Update Agents**: Modify agent files and run `acm/install_agents.py` to reinstall
 
 ### Understanding the Workflow
 
@@ -188,34 +215,28 @@ For detailed workflow information, see the [Orchestration Architecture Documenta
 If you installed CAO, you can use the configured agents directly. The framework includes 28 specialized agents organized in teams:
 
 ```bash
-cd <project_name>
+# Install CAO (one-time setup)
+python install_cao.py
+
+# Create a project
+python create_project.py my_migration_project
+cd my_migration_project
 
 # Install all agents with provider selection (Kiro CLI is default)
-python install_cao.py . --provider kiro_cli     # Kiro CLI (default, recommended)
-python install_cao.py . --provider q_cli        # Amazon Q CLI  
-python install_cao.py . --provider claude_code  # Claude Code
+python acm/install_agents.py --provider kiro_cli     # Kiro CLI (default, recommended)
+python acm/install_agents.py --provider q_cli        # Amazon Q CLI  
+python acm/install_agents.py --provider claude_code  # Claude Code
 
 # Verify agent installation
 cao list
 
-# Install individual agents as needed
-cao install ./agents/migration_supervisor.md --provider kiro_cli
-cao install ./agents/analysis_team/analysis_team_supervisor.md --provider kiro_cli
+# Update agents after modifying agent files
+python acm/install_agents.py
+
+# Install specific agents only
+python acm/install_agents.py --agent-sources migration_supervisor.md
 
 # Examples of agent usage:
-# Install and use the top-level migration orchestrator
-cao install ./agents/migration_supervisor.md --provider kiro_cli
-
-# Install and use team supervisors
-cao install ./agents/analysis_team/analysis_team_supervisor.md --provider kiro_cli
-cao install ./agents/business_team/business_team_supervisor.md --provider kiro_cli
-cao install ./agents/development_team/development_team_supervisor.md --provider kiro_cli
-
-# Install and use specialist agents
-cao install ./agents/analysis_team/analysis_specialist_legacy_code.md --provider kiro_cli
-cao install ./agents/business_team/business_specialist_requirements.md --provider kiro_cli
-cao install ./agents/development_team/development_specialist_code_generation.md --provider kiro_cli
-
 # Launch agents with Kiro CLI
 kiro-cli chat --agent migration_supervisor
 kiro-cli chat --agent analysis_team_supervisor

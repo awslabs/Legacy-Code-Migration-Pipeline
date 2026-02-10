@@ -178,8 +178,54 @@ def main():
         
         print(f"\n✅ Project '{args.project_name}' created successfully!")
         print(f"📁 Location: {final_path}")
-        print(f"\n🤖 Next step: Install CLI Agent Orchestrator (CAO)")
-        print(f"Run: python install_cao.py {args.project_name}")
+        
+        # Ask if user wants to install agents
+        print(f"\n🤖 Agent Installation")
+        print("Would you like to install agents now?")
+        print("(You can also install them later using: python acm/install_agents.py)")
+        response = input("Install agents now? (y/N): ")
+        
+        if response.lower() == 'y':
+            # Check if CAO is installed
+            try:
+                import subprocess
+                subprocess.run(["cao", "--help"], capture_output=True, check=True)
+                cao_installed = True
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                cao_installed = False
+            
+            if not cao_installed:
+                print("\n⚠️  CAO (CLI Agent Orchestrator) is not installed")
+                print("Please install CAO first using: python install_cao.py")
+                print("Then run: python acm/install_agents.py from your project directory")
+            else:
+                # Run the agent installation script
+                print("\n🚀 Running agent installation...")
+                try:
+                    import subprocess
+                    install_script = final_path / "acm" / "install_agents.py"
+                    result = subprocess.run(
+                        ["python3", str(install_script), "--agents-dir", str(final_path / "agents")],
+                        cwd=str(final_path)
+                    )
+                    if result.returncode == 0:
+                        print("\n✅ Agents installed successfully!")
+                    else:
+                        print("\n⚠️  Agent installation completed with issues")
+                        print("You can retry later using: python acm/install_agents.py")
+                except Exception as e:
+                    print(f"\n⚠️  Error running agent installation: {e}")
+                    print("You can install agents manually using: python acm/install_agents.py")
+        else:
+            print("\n📝 To install agents later, run from your project directory:")
+            print("   python acm/install_agents.py")
+        
+        print(f"\n🎉 Setup complete!")
+        print(f"\nNext steps:")
+        print(f"1. cd {final_path}")
+        if response.lower() != 'y' or not cao_installed:
+            print(f"2. Install agents: python acm/install_agents.py")
+        print(f"{'2' if response.lower() == 'y' and cao_installed else '3'}. Start using your agents with CAO")
         
     except Exception as e:
         print(f"❌ Error: {e}")

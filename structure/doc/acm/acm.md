@@ -1,6 +1,164 @@
-# ACM (Application Configuration Management) Framework
+# ACM (Agent Configuration Management) Framework
 
-The ACM framework provides quality assurance and validation tools for the legacy code migration process. It ensures that all deliverables meet specified standards and maintains consistency across migration projects.
+The ACM framework provides quality assurance, validation tools, and agent management for the legacy code migration process. It ensures that all deliverables meet specified standards, maintains consistency across migration projects, and manages the installation and configuration of AI agents.
+
+## Framework Components
+
+### 1. Agent Installation and Management
+
+The ACM framework includes tools for installing and managing the 28 specialized AI agents used in the migration process.
+
+#### install_agents.py
+
+A standalone script for installing or updating agents from the `agents` directory into CAO (CLI Agent Orchestrator).
+
+**Location**: `acm/install_agents.py` (copied to each project during creation)
+
+**Usage**:
+```bash
+# Install all agents from the agents directory
+python acm/install_agents.py
+
+# Install with a specific provider
+python acm/install_agents.py --provider kiro_cli
+
+# Install specific agent sources
+python acm/install_agents.py --agent-sources agent1.md agent2.md
+
+# Install from a custom agents directory
+python acm/install_agents.py --agents-dir /path/to/agents
+```
+
+**Options**:
+- `--agents-dir PATH`: Path to agents directory (default: ./agents or ../agents)
+- `--provider PROVIDER`: CLI provider for agent integration (choices: kiro_cli, q_cli, claude_code; default: kiro_cli)
+- `--agent-sources SOURCE [SOURCE ...]`: Specific agent sources to install (built-in names, file paths, or URLs)
+
+**Supported Providers**:
+
+1. **kiro_cli** (default): Kiro CLI integration
+   - Requires: `kiro-cli` command available in PATH
+   - Installation: https://kiro.ai
+
+2. **q_cli**: Amazon Q CLI integration
+   - Requires: `q` command available in PATH
+   - Installation: AWS documentation
+
+3. **claude_code**: Claude Code integration
+   - No additional CLI installation required
+
+**When to Use**:
+- **Initial Setup**: After creating a project with `create_project.py`
+- **Agent Updates**: When you modify agent markdown files
+- **Adding New Agents**: After adding new agent files to the agents directory
+- **Provider Changes**: When switching between different CLI providers
+- **Troubleshooting**: If agents are not working correctly, reinstall them
+
+**Examples**:
+```bash
+# Standard installation with Kiro CLI
+cd my_project
+python acm/install_agents.py
+
+# Install with Amazon Q CLI
+python acm/install_agents.py --provider q_cli
+
+# Install only specific agents
+python acm/install_agents.py --agent-sources migration_supervisor.md code_generator.md
+
+# Install from a different directory
+python acm/install_agents.py --agents-dir /path/to/custom/agents
+```
+
+**Prerequisites**:
+- CAO (CLI Agent Orchestrator) must be installed
+  - Install using: `python install_cao.py` from the project root
+- The selected provider CLI tool should be available (if required)
+
+**Troubleshooting**:
+
+If agent installation fails:
+
+1. **Check CAO Installation**
+   ```bash
+   cao --help
+   ```
+
+2. **Verify Provider Availability**
+   ```bash
+   # For Kiro CLI
+   kiro-cli --version
+   
+   # For Amazon Q CLI
+   q --version
+   ```
+
+3. **Check Agents Directory**
+   - Ensure the agents directory exists
+   - Verify agent files have `.md` extension
+   - Check that agent files have valid YAML frontmatter
+
+4. **View Detailed Logs**
+   - Check the script output for specific error messages
+   - Verify network connectivity for URL-based agents
+
+5. **Manual Installation**
+   ```bash
+   # Install a single agent manually
+   cao install /path/to/agent.md --provider kiro_cli
+   
+   # List installed agents
+   cao list
+   ```
+
+### 2. Deliverable Validation
+
+The ACM framework provides comprehensive validation tools for ensuring migration quality and completeness.
+
+## ACM Directory Structure
+
+When the ACM directory is copied to a project, it maintains the following structure:
+
+```
+project_name/
+├── acm/
+│   ├── install_agents.py         # Agent installation script
+│   └── deliverable_validator.py  # Deliverable validation tool
+├── agents/                       # Agent markdown files
+│   ├── migration_supervisor.md
+│   ├── analysis_team/
+│   ├── business_team/
+│   ├── development_team/
+│   ├── planning_team/
+│   └── deployment_team/
+├── templates/                    # Deliverable templates
+└── output/                       # Generated deliverables
+```
+
+## Workflow Integration
+
+### Agent Management Workflow
+
+1. **Create Project**: `python create_project.py <project_name>`
+2. **Install CAO**: `python install_cao.py` (if not already installed)
+3. **Install Agents**: `python acm/install_agents.py` (from project directory)
+4. **Update Agents**: Modify agent files, then run `python acm/install_agents.py` again
+5. **Use Agents**: Launch with CAO or your chosen provider
+
+### Validation Workflow
+
+1. **Generate Deliverables**: Agents produce outputs in the output directory
+2. **Run Validation**: Execute `./validate_deliverables.sh` to check quality
+3. **Review Results**: Address any validation issues
+4. **Iterate**: Repeat until all deliverables pass validation
+
+## Notes
+
+- The `install_agents.py` script is copied to each project during creation
+- You can modify agent files at any time and reinstall them
+- Different projects can use different providers
+- Agent installation is independent of CAO installation
+- Validation can be run at any time during the migration process
 
 ## Integration with Orchestration Architecture
 
@@ -21,7 +179,10 @@ The ACM framework is built around the principle of template-driven validation, w
 
 ### Core Components
 
-#### Deliverable Validator
+#### 1. Agent Installation Script (install_agents.py)
+Manages the installation and configuration of AI agents for the migration process. See the Agent Installation and Management section above for detailed usage.
+
+#### 2. Deliverable Validator (deliverable_validator.py)
 The primary tool for ensuring migration quality and completeness. See [Deliverable Validator Documentation](deliverable_validator.md) for detailed usage instructions.
 
 **Key Features:**
