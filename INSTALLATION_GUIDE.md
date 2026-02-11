@@ -143,7 +143,7 @@ ACM tools are automatically installed during project creation, but you can also 
 python3 install_acm_tools.py
 
 # Install from local ZIP file (if repository is private)
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
 
 # Install to custom location
 python3 install_acm_tools.py --tools-dir /path/to/tools
@@ -162,7 +162,7 @@ python3 ../install_acm_tools.py --tools-dir ./tools
 **Private Repository Access:**
 If the repository is private or you encounter access issues:
 1. Download the ZIP file manually
-2. Use `--zip-file` option: `python3 install_acm_tools.py --zip-file /path/to/zip`
+2. Use `--zip-file` option: `python3 install_acm_tools.py --zip-file /path/to/zip --tools-dir ./tools`
 3. Or use `--skip-on-error` during project creation to continue without ACM tools
 
 **When to run manually:**
@@ -205,7 +205,7 @@ If the repository is private or you encounter HTTP 403 errors:
 
 **Step 2: Install from Local ZIP**
 ```bash
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
 ```
 
 #### Custom Installation Location
@@ -236,10 +236,10 @@ python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./
 #### Scenario 1: First Time Installation
 ```bash
 # Try automatic download
-python3 install_acm_tools.py
+python3 install_acm_tools.py --tools-dir ./tools
 
 # If fails with "Access Denied", use local ZIP
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
 ```
 
 #### Scenario 2: Project Creation with Private Repository

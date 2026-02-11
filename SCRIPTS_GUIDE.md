@@ -170,7 +170,7 @@ python3 install_acm_tools.py --tools-dir /path/to/custom/tools
 **Install from local ZIP file (private repository):**
 ```bash
 # Download the ZIP file manually first, then:
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
 ```
 
 **Install to existing project:**
@@ -253,7 +253,7 @@ python3 install_acm_tools.py
 ```bash
 # Option 1: Use local ZIP file
 # Download manually from the repository
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
 
 # Option 2: Request repository access
 # Contact the repository owner

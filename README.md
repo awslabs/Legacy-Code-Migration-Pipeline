@@ -259,7 +259,7 @@ python3 install_acm_tools.py
 **Private Repository (Use Local ZIP):**
 ```bash
 # If repository is private, download ZIP manually then:
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip
+python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
 ```
 
 **Update Existing Project:**

@@ -253,7 +253,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
             print("\n1. Manual Download:")
             print(f"   • Visit: {ACM_TOOLS_URL}")
             print("   • Download the ZIP file manually")
-            print("   • Run: python3 install_acm_tools.py --zip-file /path/to/downloaded.zip")
+            print("   • Run: python3 install_acm_tools.py --zip-file /path/to/downloaded.zip --tools-dir ./tools")
             print("\n2. Request Access:")
             print("   • Contact the repository owner for access")
             print("   • The repository may be private or require authentication")
@@ -393,7 +393,7 @@ def main():
             print("\n❌ Installation failed")
             if not args.skip_on_error:
                 print("\nTip: Use --zip-file option if you have the ZIP file locally")
-                print("Example: python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip")
+                print("Example: python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools")
             sys.exit(1)
             
     except KeyboardInterrupt:
