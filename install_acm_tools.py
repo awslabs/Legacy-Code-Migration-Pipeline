@@ -276,12 +276,24 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         step_num = 2 if zip_file else 2
         total_steps = 2 if zip_file else 3
         print_step(step_num, total_steps, "Extracting ACM tools")
-        extracted_dir = extract_zip(zip_path, temp_path if not zip_file else zip_path.parent)
+        
+        # Always use a temporary directory for extraction to avoid conflicts
+        if zip_file:
+            # Create a temporary directory for extraction even when using provided ZIP
+            extract_temp_dir = tempfile.TemporaryDirectory()
+            extract_path = Path(extract_temp_dir.name)
+        else:
+            extract_temp_dir = None
+            extract_path = temp_path
+        
+        extracted_dir = extract_zip(zip_path, extract_path)
         
         if not extracted_dir:
             print("\n❌ Failed to extract ACM tools")
             if temp_dir_obj:
                 temp_dir_obj.cleanup()
+            if zip_file and extract_temp_dir:
+                extract_temp_dir.cleanup()
             return False
         
         # Move to target directory
@@ -295,6 +307,10 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         print(f"   Moving to: {target_acm_dir}")
         shutil.move(str(extracted_dir), str(target_acm_dir))
         print("   ✅ ACM tools installed")
+        
+        # Cleanup extraction temporary directory if used
+        if zip_file and extract_temp_dir:
+            extract_temp_dir.cleanup()
         
         # Step 3: Install dependencies
         step_num = 3 if not zip_file else 3
@@ -319,6 +335,8 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         print(f"\n❌ Installation error: {str(e)}")
         if temp_dir_obj:
             temp_dir_obj.cleanup()
+        if zip_file and 'extract_temp_dir' in locals() and extract_temp_dir:
+            extract_temp_dir.cleanup()
         return False
     
     # Success
