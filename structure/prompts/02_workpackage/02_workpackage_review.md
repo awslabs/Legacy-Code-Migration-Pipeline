@@ -89,7 +89,7 @@ Ensure all {{PARAMETERS}} are replaced with actual absolute paths before creatin
 Before creating the task file, verify that all Phase 2 Step 2.1 outputs are available:
 
 **Required Workpackage Planning Deliverables:**
-- [ ] Workpackage_Dependencies.json exists at {{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}
+- [ ] Workpackage_Planning.json exists at {{WORKPACKAGE_PLANNING}}
 - [ ] Migration_Roadmap.md exists at {{WORKPACKAGE_ROADMAP}}
 - [ ] Workpackage analyzer tool exists at {{WORKPACKAGE_ANALYZER_TOOL}}
 - [ ] Progress tracking exists at {{WORKPACKAGE_STATUS}}
@@ -108,9 +108,9 @@ If any dependencies are missing, coordinate with planning_specialist_workpackage
 ### Deliverables to Review (from Step 2.1)
 
 #### Workpackage Planning Deliverables
-- **Workpackage Dependencies File**: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}
-  - Template: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES_TEMPLATE}}
-  - Description: All Business_Flows.json data plus workpackage-specific fields (priority, phase, pre-existent modules)
+- **Workpackage Planning File**: {{WORKPACKAGE_PLANNING}}
+  - Template: {{WORKPACKAGE_PLANNING_TEMPLATE}}
+  - Description: Priority scores, workpackage assignments, phase groupings (references Business_Flows.json by flowId)
   
 - **Migration Roadmap**: {{WORKPACKAGE_ROADMAP}}
   - Template: {{WORKPACKAGE_ROADMAP_TEMPLATE}}
@@ -180,10 +180,10 @@ Perform comprehensive review and validation of all workpackage planning delivera
 
 **Format Validation Checks:**
 
-**For JSON Files** (Workpackage Dependencies, Progress Tracking):
+**For JSON Files** (Workpackage Planning, Progress Tracking):
 - [ ] Valid JSON syntax (no parsing errors)
-- [ ] All required fields present from Business_Flows.json
-- [ ] All new workpackage fields present (priorityScore, workpackageId, phase, preExistentModules)
+- [ ] All required fields present per Workpackage_Planning.json template
+- [ ] All flowIds reference valid flows in Business_Flows.json
 - [ ] Field types match schema specifications
 - [ ] No empty required fields (unless specified)
 - [ ] Consistent structure across all flow entries
@@ -207,7 +207,7 @@ Perform comprehensive review and validation of all workpackage planning delivera
 ### Step 3: Completeness Validation
 
 **Workpackage Planning Completeness:**
-- [ ] All flows from Phase 1 Business_Flows.json are present in Workpackage_Dependencies.json
+- [ ] All flows from Phase 1 Business_Flows.json are assigned workpackages in Workpackage_Planning.json
 - [ ] All flows have priority scores calculated
 - [ ] All flows have workpackage IDs assigned
 - [ ] All flows have phase assignments
@@ -218,10 +218,10 @@ Perform comprehensive review and validation of all workpackage planning delivera
 - [ ] Workpackage analyzer tool is complete and functional
 - [ ] Progress tracking shows "Complete" status
 
-**Data Preservation:**
-- [ ] All original Business_Flows.json data is preserved in Workpackage_Dependencies.json
-- [ ] No data loss during transformation
-- [ ] All flow metadata intact (complexity, scope, dependencies from Phase 1)
+**Data Integrity:**
+- [ ] Business_Flows.json remains unchanged from Phase 1
+- [ ] All flowIds in Workpackage_Planning.json reference valid flows in Business_Flows.json
+- [ ] No data loss during planning process
 
 ### Step 4: Accuracy Validation
 
@@ -261,7 +261,7 @@ Priority = (TotalPrograms × 2) + (CommonModules × 3) + (CompositeScore × 0.5)
 ### Step 5: Consistency Validation
 
 **Cross-Reference Validation:**
-- [ ] Flow IDs consistent between Business_Flows.json and Workpackage_Dependencies.json
+- [ ] Flow IDs in Workpackage_Planning.json match flows in Business_Flows.json
 - [ ] Module names consistent with Module_Classifications.json
 - [ ] Program references consistent across all outputs
 - [ ] Business domain assignments preserved from Phase 1
@@ -337,7 +337,7 @@ Priority = (TotalPrograms × 2) + (CommonModules × 3) + (CompositeScore × 0.5)
 
 **If time and resources permit:**
 1. Execute workpackage analyzer tool with Phase 1 outputs
-2. Verify tool produces expected outputs (Workpackage_Dependencies.json, Migration_Roadmap.md)
+2. Verify tool produces expected outputs (Workpackage_Planning.json, Migration_Roadmap.md)
 3. Check error handling and logging functionality
 4. Verify tool handles edge cases (missing data, invalid inputs)
 5. Confirm tool documentation is clear and complete
@@ -507,7 +507,7 @@ Create formal approval document at {{WORKPACKAGE_PHASE_APPROVAL}} with:
   "approval_date": "YYYY-MM-DD",
   "reviewer": "planning_reviewer_workpackage",
   "deliverables_validated": [
-    "absolute path to Workpackage_Dependencies.json",
+    "absolute path to Workpackage_Planning.json",
     "absolute path to Migration_Roadmap.md",
     "absolute path to workpackage analyzer tool",
     "absolute path to progress tracking"
@@ -620,9 +620,9 @@ Create formal approval document at {{WORKPACKAGE_PHASE_APPROVAL}} with:
 - **Recovery**: Document invalid phase assignments, request phase reassignment
 - **Escalation**: If phase assignment issues persist after 2 cycles, escalate to supervisor
 
-#### 6. **Data Loss or Corruption**
-- **Detection**: Original Business_Flows.json data missing or modified in Workpackage_Dependencies.json
-- **Recovery**: Document data loss, request data preservation and re-transformation
+#### 6. **Data Integrity Issues**
+- **Detection**: Business_Flows.json modified or flowIds in Workpackage_Planning.json don't match Business_Flows.json
+- **Recovery**: Document data integrity issue, verify Business_Flows.json unchanged, validate all flowId references
 - **Escalation**: Critical issue - escalate immediately if data integrity cannot be ensured
 
 #### 7. **Tool Failures**

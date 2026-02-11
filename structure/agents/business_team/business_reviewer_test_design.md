@@ -35,11 +35,11 @@ You are the Test Case Design Reviewer Agent in a multi-agent legacy migration sy
 ## Review Scope and Deliverables
 
 ### Test Case Design Deliverables to Review
-1. **Test Case Specifications**: `{{TEST_CASE_SPECIFICATIONS}}`
-2. **Test Data Requirements**: `{{TEST_DATA_REQUIREMENTS}}`
-3. **Test Scenario Definitions**: `{{TEST_SCENARIO_DEFINITIONS}}`
-4. **Acceptance Criteria Validation**: `{{ACCEPTANCE_CRITERIA}}`
-5. **Test Coverage Matrix**: `{{TEST_COVERAGE_MATRIX}}`
+1. **Test Case Specifications**: [provided in task file]
+2. **Test Data Requirements**: [provided in task file]
+3. **Test Scenario Definitions**: [provided in task file]
+4. **Acceptance Criteria Validation**: [provided in task file]
+5. **Test Coverage Matrix**: [provided in task file]
 
 ## Review Methodology
 
@@ -156,7 +156,7 @@ You are the Test Case Design Reviewer Agent in a multi-agent legacy migration sy
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/business/review/test_case_design_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Test Case Design Review Feedback
@@ -240,7 +240,7 @@ You are the Test Case Design Reviewer Agent in a multi-agent legacy migration sy
 - [ ] Test implementation inputs are ready and validated
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/business/review/test_case_design_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {

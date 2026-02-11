@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "projectName": "string",
+    "createdDate": "ISO8601",
+    "phase": "WORKPACKAGE_PLANNING",
+    "version": "string"
+  },
+  "flowPriorities": {
+    "FLOW-001": {
+      "workpackageId": "number (sequential workpackage number)",
+      "priorityScore": "number (calculated priority score 0-100)",
+      "phase": "number (migration phase number)",
+      "preExistentModules": [
+        "string (modules already migrated in higher priority flows)"
+      ],
+      "priorityFactors": {
+        "complexityScore": "number (from Business_Flows.json)",
+        "dependencyPenalty": "number (calculated based on requiredFlows)",
+        "commonModulePenalty": "number (penalty for commonly used modules)",
+        "businessValueBonus": "number (optional business priority adjustment)"
+      }
+    }
+  },
+  "phases": [
+    {
+      "phaseId": "number",
+      "name": "string",
+      "description": "string (optional)",
+      "workpackages": [
+        "number (workpackageIds in this phase)"
+      ],
+      "estimatedDuration": "string (optional - e.g., '4 weeks')",
+      "dependencies": [
+        "number (phaseIds that must complete before this phase)"
+      ]
+    }
+  ],
+  "migrationSequence": [
+    {
+      "sequenceNumber": "number",
+      "workpackageId": "number",
+      "flowId": "string (reference to Business_Flows.json)",
+      "phase": "number",
+      "estimatedEffort": "string (optional)",
+      "prerequisites": [
+        "number (workpackageIds that must complete first)"
+      ]
+    }
+  ],
+  "statistics": {
+    "totalFlows": "number",
+    "totalPhases": "number",
+    "averagePriorityScore": "number",
+    "highComplexityFlows": "number",
+    "mediumComplexityFlows": "number",
+    "lowComplexityFlows": "number"
+  }
+}

@@ -221,7 +221,7 @@ Where the fields of the template shall be filled like this:
 #### 3. **Ambiguous Business Domains**
 - Detection: Module functionality doesn't clearly fit any domain
 - Recovery: Assign "MIXED" or "UNKNOWN" domain, document rationale
-- Escalation: Flag for business analyst review
+- Escalation: Flag for business specialist review
 
 #### 4. **Complex Dynamic Calls**
 - Detection: CALLNAT statements using variables that cannot be resolved

@@ -189,8 +189,8 @@ The following is a sequential list that should be followed by you and your agent
 **Expected Deliverables:**
 1. Workpackage Definition Report: {{WORKPACKAGE_DEFINITION_REPORT}}
    - Template: {{WORKPACKAGE_DEFINITION_REPORT_TEMPLATE}}
-2. Workpackage Dependencies: {{WORKPACKAGE_DEPENDENCIES}}
-   - Template: {{WORKPACKAGE_DEPENDENCIES_TEMPLATE}}
+2. Workpackage Planning: {{WORKPACKAGE_PLANNING}}
+   - Template: {{WORKPACKAGE_PLANNING_TEMPLATE}}
 3. Migration Roadmap: {{WORKPACKAGE_ROADMAP}}
    - Template: {{WORKPACKAGE_ROADMAP_TEMPLATE}}
 4. Workpackage Status: {{WORKPACKAGE_STATUS}}
@@ -226,8 +226,7 @@ The following is a sequential list that should be followed by you and your agent
 **Task File**: {{TASKS_BASE_PATH}}/business_extraction_specialist_task.md
 
 **Input Dependencies:**
-- Workpackage Definitions: {{WORKPACKAGE_DEFINITION_REPORT}}
-- Source Code Analysis: {{COBOL_SOURCE_ANALYSIS_REPORT}}
+- Workpackage Planning: {{WORKPACKAGE_PLANNING}}
 - Business Flows: {{BUSINESS_FLOWS}}
 
 **Expected Deliverables:**

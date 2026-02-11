@@ -35,11 +35,11 @@ You are the Business Logic Extraction Reviewer Agent in a multi-agent legacy mig
 ## Review Scope and Deliverables
 
 ### Business Logic Extraction Deliverables to Review
-1. **Business Logic Inventory**: `{{BUSINESS_LOGIC_INVENTORY}}`
-2. **Business Rules Extraction**: `{{BUSINESS_RULES_EXTRACTION}}`
-3. **Domain Model Specifications**: `{{DOMAIN_MODEL_SPECIFICATIONS}}`
-4. **Business Process Mappings**: `{{BUSINESS_PROCESS_MAPPINGS}}`
-5. **Business Logic Extractor Tool**: `{{BUSINESS_LOGIC_EXTRACTOR_TOOL}}`
+1. **Business Logic Inventory**: [provided in task file]
+2. **Business Rules Extraction**: [provided in task file]
+3. **Domain Model Specifications**: [provided in task file]
+4. **Business Process Mappings**: [provided in task file]
+5. **Business Logic Extractor Tool**: [provided in task file]
 
 ## Review Methodology
 
@@ -144,7 +144,7 @@ You are the Business Logic Extraction Reviewer Agent in a multi-agent legacy mig
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/business/review/business_logic_extraction_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Business Logic Extraction Review Feedback
@@ -218,7 +218,7 @@ You are the Business Logic Extraction Reviewer Agent in a multi-agent legacy mig
 - [ ] Requirements specification inputs are ready and validated
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/business/review/business_logic_extraction_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {

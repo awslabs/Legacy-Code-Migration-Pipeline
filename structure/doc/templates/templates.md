@@ -45,7 +45,7 @@ For more information on how templates flow through the orchestration architectur
 
 #### Planning and Tracking
 - **Workpackage_Definition_Report.md** - Detailed workpackage specifications
-- **Workpackage_Dependencies.json** - Inter-workpackage dependencies with prioritization
+- **Workpackage_Planning.json** - Priority scores, workpackage assignments, phase groupings, and migration sequence
 - **Workpackage_Status.json** - Progress tracking for workpackages
 
 #### Migration Planning

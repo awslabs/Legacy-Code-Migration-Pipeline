@@ -50,14 +50,14 @@ Before starting deployment activities, verify:
 - **Infrastructure Readiness**: Target deployment environments are prepared and accessible
 
 **Required Development Inputs**:
-- Generated application code: `{{PROJECT_BASE_PATH}}/output/development/code/`
-- Test suites and validation: `{{PROJECT_BASE_PATH}}/output/development/tests/`
-- Database migration scripts: `{{DATABASE_GEN_SRC}}/migration/`
-- Performance benchmarks: `{{PROJECT_BASE_PATH}}/output/development/performance/`
+- Generated application code: `[provided in phase prompt]/output/development/code/`
+- Test suites and validation: `[provided in phase prompt]/output/development/tests/`
+- Database migration scripts: `[provided in phase prompt]/migration/`
+- Performance benchmarks: `[provided in phase prompt]/output/development/performance/`
 
 ### Step 1: Migration Script Generation and Enhancement
 **Assigned to**: Migration Script Generator
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/deployment_migration_scripts_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Database migration scripts from analysis phase
 - Generated application code and data models
@@ -65,15 +65,15 @@ Before starting deployment activities, verify:
 - Production environment specifications and constraints
 
 **Expected Deliverables**:
-- Enhanced database migration scripts: `{{ENHANCED_DATABASE_MIGRATION_SCRIPTS}}`
-- Data validation scripts: `{{DATA_VALIDATION_SCRIPTS}}`
-- Migration rollback scripts: `{{MIGRATION_ROLLBACK_SCRIPTS}}`
-- Migration monitoring tools: `{{MIGRATION_MONITORING_TOOLS}}`
-- Migration execution guide: `{{MIGRATION_EXECUTION_GUIDE}}`
+- Enhanced database migration scripts: [Path provided in phase prompt]
+- Data validation scripts: [Path provided in phase prompt]
+- Migration rollback scripts: [Path provided in phase prompt]
+- Migration monitoring tools: [Path provided in phase prompt]
+- Migration execution guide: [Path provided in phase prompt]
 
 ### Step 2: Database Migration Execution Planning
 **Assigned to**: Database Migration Specialist
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/deployment_database_migration_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Enhanced migration scripts from Step 1
 - Production database environment specifications
@@ -81,15 +81,15 @@ Before starting deployment activities, verify:
 - Performance and downtime constraints
 
 **Expected Deliverables**:
-- Database migration plan: `{{DATABASE_MIGRATION_PLAN}}`
-- Data integrity validation procedures: `{{DATA_INTEGRITY_VALIDATION}}`
-- Migration performance optimization: `{{MIGRATION_PERFORMANCE_OPTIMIZATION}}`
-- Database rollback procedures: `{{DATABASE_ROLLBACK_PROCEDURES}}`
-- Migration risk assessment: `{{MIGRATION_RISK_ASSESSMENT}}`
+- Database migration plan: [Path provided in phase prompt]
+- Data integrity validation procedures: [Path provided in phase prompt]
+- Migration performance optimization: [Path provided in phase prompt]
+- Database rollback procedures: [Path provided in phase prompt]
+- Migration risk assessment: [Path provided in phase prompt]
 
 ### Step 3: Deployment Orchestration and Automation
 **Assigned to**: Deployment Orchestrator
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/deployment_orchestration_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Application code and deployment packages
 - Database migration plans and scripts
@@ -97,15 +97,15 @@ Before starting deployment activities, verify:
 - Deployment timeline and rollout strategy requirements
 
 **Expected Deliverables**:
-- Deployment automation scripts: `{{DEPLOYMENT_AUTOMATION_SCRIPTS}}`
-- Environment configuration management: `{{ENVIRONMENT_CONFIG_MANAGEMENT}}`
-- Deployment monitoring and validation: `{{DEPLOYMENT_MONITORING}}`
-- Production rollout strategy: `{{PRODUCTION_ROLLOUT_STRATEGY}}`
-- Deployment rollback procedures: `{{DEPLOYMENT_ROLLBACK_PROCEDURES}}`
+- Deployment automation scripts: [Path provided in phase prompt]
+- Environment configuration management: [Path provided in phase prompt]
+- Deployment monitoring and validation: [Path provided in phase prompt]
+- Production rollout strategy: [Path provided in phase prompt]
+- Deployment rollback procedures: [Path provided in phase prompt]
 
 ### Step 4: Deployment Review and Production Readiness Validation
 **Assigned to**: Deployment Reviewer
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/deployment_review_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Review Scope**: ALL outputs from Steps 1, 2, and 3
 **Validation Requirements**:
 - Completeness check against deployment requirements
@@ -129,28 +129,28 @@ Create comprehensive task files for each assignment:
 
 **Migration Script Generation Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/deployment_migration_scripts_task.md
+File: [provided in phase prompt]/tasks/deployment_migration_scripts_task.md
 Content: Requirements for enhancing and completing database migration scripts
 Focus: Data migration, validation, rollback, monitoring, execution procedures
 ```
 
 **Database Migration Planning Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/deployment_database_migration_task.md
+File: [provided in phase prompt]/tasks/deployment_database_migration_task.md
 Content: Requirements for database migration execution planning and optimization
 Focus: Migration strategy, performance, integrity, risk assessment, rollback planning
 ```
 
 **Deployment Orchestration Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/deployment_orchestration_task.md
+File: [provided in phase prompt]/tasks/deployment_orchestration_task.md
 Content: Requirements for deployment automation and production rollout
 Focus: Automation scripts, environment management, monitoring, rollout strategy
 ```
 
 **Deployment Review Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/deployment_review_task.md
+File: [provided in phase prompt]/tasks/deployment_review_task.md
 Content: Comprehensive review requirements for all deployment deliverables
 Quality Criteria: Production readiness, risk mitigation, rollback capability
 ```
@@ -240,7 +240,7 @@ Before sending to Deployment Reviewer, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `{{PROJECT_BASE_PATH}}/output/deployment/progress/deployment_team_status.json`
+**File**: `[provided in phase prompt]/output/deployment/progress/deployment_team_status.json`
 **Update Frequency**: After each major deliverable completion and review cycle
 **Content**: Individual agent progress, deliverable status, review status, overall phase completion percentage
 

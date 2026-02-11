@@ -54,14 +54,14 @@ Before starting business specification activities, verify:
 - **Business Environment Ready**: All output directories, templates, and tools are prepared
 
 **Required Planning Inputs**:
-- Migration roadmap: `{{WORKPACKAGE_ROADMAP}}`
-- Workpackage dependencies: `{{WORKPACKAGE_DEPENDENCIES}}`
-- Business flows: `{{BUSINESS_FLOWS}}`
-- Module classifications: `{{MODULE_CLASSIFICATIONS}}`
+- Migration roadmap: [Path provided in phase prompt]
+- Workpackage planning: [Path provided in phase prompt]
+- Business flows: [Path provided in phase prompt]
+- Module classifications: [Path provided in phase prompt]
 
 ### Step 1: Business Logic Extraction
 **Assigned to**: Business Logic Analyst
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/business_logic_extraction_specialist_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Prioritized workpackages from planning phase
 - Legacy code analysis results with business domain classifications
@@ -69,11 +69,11 @@ Before starting business specification activities, verify:
 - Module functionality classifications and dependency mappings
 
 **Expected Deliverables**:
-- Business logic inventory: `{{BUSINESS_LOGIC_INVENTORY}}`
-- Business rules extraction: `{{BUSINESS_RULES_EXTRACTION}}`
-- Domain model specifications: `{{DOMAIN_MODEL_SPECIFICATIONS}}`
-- Business process mappings: `{{BUSINESS_PROCESS_MAPPINGS}}`
-- Logic extraction tool: `{{BUSINESS_LOGIC_EXTRACTOR_TOOL}}`
+- Business logic inventory: [Path provided in phase prompt]
+- Business rules extraction: [Path provided in phase prompt]
+- Domain model specifications: [Path provided in phase prompt]
+- Business process mappings: [Path provided in phase prompt]
+- Logic extraction tool: [Path provided in phase prompt]
 
 **Review Process**:
 1. Specialist completes deliverables
@@ -87,7 +87,7 @@ Before starting business specification activities, verify:
 
 ### Step 2: Requirements Specification Development
 **Assigned to**: Requirements Extractor
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/requirements_specification_specialist_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Business logic extraction results from Step 1
 - Workpackage prioritization and sequencing
@@ -95,11 +95,11 @@ Before starting business specification activities, verify:
 - Modern development standards and best practices
 
 **Expected Deliverables**:
-- Functional requirements specifications: `{{FUNCTIONAL_REQUIREMENTS_SPECS}}`
-- Non-functional requirements: `{{NON_FUNCTIONAL_REQUIREMENTS}}`
-- API specifications: `{{API_SPECIFICATIONS}}`
-- Data model specifications: `{{DATA_MODEL_SPECIFICATIONS}}`
-- Requirements traceability matrix: `{{REQUIREMENTS_TRACEABILITY_MATRIX}}`
+- Functional requirements specifications: [Path provided in phase prompt]
+- Non-functional requirements: [Path provided in phase prompt]
+- API specifications: [Path provided in phase prompt]
+- Data model specifications: [Path provided in phase prompt]
+- Requirements traceability matrix: [Path provided in phase prompt]
 
 **Review Process**:
 1. Specialist completes deliverables
@@ -113,7 +113,7 @@ Before starting business specification activities, verify:
 
 ### Step 3: Test Case Design and Definition
 **Assigned to**: Test Case Designer
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/test_case_design_specialist_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Functional and non-functional requirements from Step 2
 - Business logic and process mappings from Step 1
@@ -121,11 +121,11 @@ Before starting business specification activities, verify:
 - Quality assurance standards and testing frameworks
 
 **Expected Deliverables**:
-- Test case specifications: `{{TEST_CASE_SPECIFICATIONS}}`
-- Test data requirements: `{{TEST_DATA_REQUIREMENTS}}`
-- Test scenario definitions: `{{TEST_SCENARIO_DEFINITIONS}}`
-- Acceptance criteria: `{{ACCEPTANCE_CRITERIA}}`
-- Test coverage matrix: `{{TEST_COVERAGE_MATRIX}}`
+- Test case specifications: [Path provided in phase prompt]
+- Test data requirements: [Path provided in phase prompt]
+- Test scenario definitions: [Path provided in phase prompt]
+- Acceptance criteria: [Path provided in phase prompt]
+- Test coverage matrix: [Path provided in phase prompt]
 
 **Review Process**:
 1. Specialist completes deliverables
@@ -160,28 +160,28 @@ Create comprehensive task files for each assignment:
 
 **Business Logic Extraction Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/business_logic_extraction_specialist_task.md
+File: [provided in phase prompt]/tasks/business_logic_extraction_specialist_task.md
 Content: Detailed requirements for extracting business rules from legacy analysis
 Focus: Business domain identification, rule extraction, process mapping
 ```
 
 **Requirements Specification Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/requirements_specification_specialist_task.md
+File: [provided in phase prompt]/tasks/requirements_specification_specialist_task.md
 Content: Requirements for converting business logic into modern specifications
 Focus: Functional requirements, API design, data modeling, traceability
 ```
 
 **Test Case Design Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/test_case_design_specialist_task.md
+File: [provided in phase prompt]/tasks/test_case_design_specialist_task.md
 Content: Requirements for comprehensive test case definition and coverage
 Focus: Test scenarios, acceptance criteria, data requirements, coverage analysis
 ```
 
 **Review Task Files** (created after specialist completion):
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/business_[step]_review_[iteration].md
+File: [provided in phase prompt]/tasks/business_[step]_review_[iteration].md
 Content: Comprehensive review requirements for step deliverables
 Quality Criteria: Completeness, accuracy, testability, traceability
 ```
@@ -214,7 +214,7 @@ You are responsible for creating task files that combine:
 - `business_logic_extraction_review_task.md` - For Business Logic Reviewer (iteration 1)
 - `business_logic_extraction_remediation_task.md` - For remediation after review feedback
 
-**Location**: All task files MUST be created in the task files directory specified in the phase prompt (typically `{{PROJECT_BASE_PATH}}/tasks/`)
+**Location**: All task files MUST be created in the task files directory specified in the phase prompt (typically `[provided in phase prompt]/tasks/`)
 
 ### Task File Structure Template
 
@@ -365,7 +365,7 @@ If you encounter issues, report to: business_team_supervisor
 **From Project Context, Include:**
 1. **Project Name**: From phase prompt
 2. **Project Base Path**: From phase prompt
-3. **All Resolved Paths**: Convert {{PARAMETERS}} to absolute paths
+3. **All Resolved Paths**: Convert [provided in phase prompt] to absolute paths
 4. **Templates Locations**: Full paths to templates
 5. **Reference Data**: Any additional context needed
 
@@ -375,10 +375,10 @@ If you encounter issues, report to: business_team_supervisor
 - **Absolute paths** (full path from root, not relative)
 - **Verified to exist** (for inputs) or creatable (for outputs)
 - **Consistent** with paths provided in phase prompt
-- **Resolved** from {{PARAMETERS}} format to actual paths
+- **Resolved** from [provided in phase prompt] format to actual paths
 
 **Example Path Resolution:**
-- Phase Prompt: `{{BUSINESS_SPECIFICATIONS_OUTPUT}}`
+- Phase Prompt: [Path provided in phase prompt]
 - Task File: `/absolute/path/to/project/output/business/specifications/WP-001-business-spec.md`
 
 ### Pre-Assignment Verification
@@ -406,7 +406,7 @@ Before creating task files and assigning tasks, verify:
    - Extract success criteria
 
 3. **Resolve All Paths**
-   - Convert {{PARAMETERS}} to absolute paths
+   - Convert [provided in phase prompt] to absolute paths
    - Verify input paths exist
    - Verify output directories are creatable
    - Verify template paths exist
@@ -961,7 +961,7 @@ Before delegating to reviewer, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `{{PROJECT_BASE_PATH}}/output/business/progress/business_team_status.json`
+**File**: `[provided in phase prompt]/output/business/progress/business_team_status.json`
 **Update Frequency**: After each major milestone (specialist completion, review outcome, remediation completion)
 **Content**: 
 - Individual agent progress (specialists and reviewers)

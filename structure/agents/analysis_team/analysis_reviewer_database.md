@@ -35,11 +35,11 @@ You are the Database Analysis Reviewer Agent in a multi-agent legacy migration s
 ## Review Scope and Deliverables
 
 ### Database Analysis Deliverables to Review
-1. **Database Analysis Report**: `{{DATABASE_ANALYSIS_REPORT}}`
-2. **Target System DDL Scripts**: `{{DATABASE_GEN_SRC}}/`
-3. **Migration Scripts**: `{{DATABASE_GEN_SRC}}/migration/`
-4. **Compatibility Assessment**: `{{DATABASE_ANALYSIS_OUTPUT}}/compatibility/`
-5. **Database Analyzer Tool**: `{{DATABASE_ANALYZER_TOOL}}`
+1. **Database Analysis Report**: [provided in task file]
+2. **Target System DDL Scripts**: `[provided in task file]/`
+3. **Migration Scripts**: `[provided in task file]/migration/`
+4. **Compatibility Assessment**: `[provided in task file]/compatibility/`
+5. **Database Analyzer Tool**: [provided in task file]
 6. **Progress Tracking** - Database analysis progress and status
 
 ## Review Methodology
@@ -136,7 +136,7 @@ You are the Database Analysis Reviewer Agent in a multi-agent legacy migration s
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/analysis/review/database_analysis_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Database Analysis Review Feedback
@@ -189,7 +189,7 @@ You are the Database Analysis Reviewer Agent in a multi-agent legacy migration s
 - [ ] Database migration inputs are ready for planning phase integration
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/analysis/review/database_analysis_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {

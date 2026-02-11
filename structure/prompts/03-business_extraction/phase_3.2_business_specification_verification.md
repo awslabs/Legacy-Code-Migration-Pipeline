@@ -1,15 +1,15 @@
 
-# Phase 3.2: Business Analyst Review
+# Phase 3.2: Business Specialist Review
 
 ---
 
 ## Orchestration Information
 
 **Phase**: Phase 3 - Business Specification
-**Step**: Step 3.2 - Business Analyst Review
+**Step**: Step 3.2 - Business Specialist Review
 **Team Supervisor**: business_team_supervisor
-**Assigned Agent**: business_analyst_reviewer
-**Task File Name**: {{TASKS_BASE_PATH}}/phase_3.2_business_analyst_review.md
+**Assigned Agent**: business_reviewer_requirements
+**Task File Name**: {{TASKS_BASE_PATH}}/phase_3.2_business_specialist_review.md
 
 ### Expected Deliverables
 

@@ -8,7 +8,7 @@
 **Phase**: Phase 3 - Business Specification
 **Step**: Step 3.0 - Business Context Discovery
 **Team Supervisor**: business_team_supervisor
-**Assigned Agent**: business_context_analyst
+**Assigned Agent**: business_specialist_logic_extraction
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_3.0_business_context_discovery.md
 
 ### Expected Deliverables
@@ -126,7 +126,7 @@ Discover and document the business context for each workpackage BEFORE extractin
    - Code comments mentioning departments or roles
 
 3. If stakeholders cannot be determined from available evidence:
-   - Document as "Unknown - requires business analyst input"
+   - Document as "Unknown - requires business specialist input"
    - Flag for human review in Phase 3.2
 
 ### 4. Business Problem Statement
@@ -227,7 +227,7 @@ Discover and document the business context for each workpackage BEFORE extractin
 3. Ensure all sections are written from business perspective:
    - Use business terminology, not technical jargon
    - Focus on "why" and "what" not "how"
-   - Make it readable by business analysts who have never seen the code
+   - Make it readable by business specialists who have never seen the code
 
 ### 10. Business Glossary Consolidation
 1. After completing all workpackage context documents:
@@ -241,7 +241,7 @@ Discover and document the business context for each workpackage BEFORE extractin
 1. Update progress tracking for each completed workpackage:
    - Record completion status and artifacts
    - Document confidence levels for domain identification
-   - Flag areas requiring business analyst input
+   - Flag areas requiring business specialist input
    - Note any missing documentation or ambiguous business context
 
 2. Validate completeness before proceeding to Phase 3.1:
@@ -406,8 +406,8 @@ Discover and document the business context for each workpackage BEFORE extractin
 - COBOL, DB2, CICS, JCL, etc.
 
 ## 8. Notes and Flags
-### 8.1 Areas Requiring BA Input
-- [List areas where business analyst input is needed]
+### 8.1 Areas Requiring Specialist Input
+- [List areas where business specialist input is needed]
 
 ### 8.2 Ambiguities and Uncertainties
 - [List any ambiguous or uncertain aspects]
@@ -489,7 +489,7 @@ Discover and document the business context for each workpackage BEFORE extractin
 - Problem statement is written from business perspective
 - Business context and rationale are clear
 - Business value and impact are quantified where possible
-- Statement is understandable by non-technical business analysts
+- Statement is understandable by non-technical business specialists
 
 ### Vocabulary Accuracy
 - Business terms are extracted from code and documentation

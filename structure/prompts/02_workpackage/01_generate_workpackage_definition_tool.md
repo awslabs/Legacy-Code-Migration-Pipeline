@@ -12,10 +12,10 @@
 
 ### Expected Deliverables
 
-1. **Workpackage Dependencies File**
-   - File: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}
-   - Template: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES_TEMPLATE}}
-   - Description: Contains all Business_Flows.json data plus workpackage-specific fields (priority, phase, pre-existent modules)
+1. **Workpackage Planning File**
+   - File: {{WORKPACKAGE_PLANNING}}
+   - Template: {{WORKPACKAGE_PLANNING_TEMPLATE}}
+   - Description: Priority scores, workpackage assignments, phase groupings, and migration sequence
 
 2. **Migration Roadmap**
    - File: {{WORKPACKAGE_ROADMAP}}
@@ -24,7 +24,7 @@
 
 3. **Workpackage Prioritization Tool**
    - File: {{WORKPACKAGE_ANALYZER_TOOL}}
-   - Description: Python tool that performs workpackage prioritization and generates all required outputs
+   - Description: Python tool that reads Business_Flows.json and Module_Classifications.json to calculate priorities and generate planning outputs
 
 4. **Progress Tracking**
    - File: {{WORKPACKAGE_STATUS}}
@@ -144,7 +144,7 @@ If any dependencies are missing, coordinate with analysis_team_supervisor before
 - Source code analysis reports: {{ANALYSIS_OUTPUT}} 
 
 ## Objective
-Prioritize business flows for migration based on complexity, dependencies, and business value. Create Workpackage_Dependencies.json that contains all flow information from Business_Flows.json plus workpackage-specific fields (priority, phase, pre-existent modules). Generate a comprehensive migration roadmap that minimizes risk by prioritizing flows with the least complexity and fewest dependencies on commonly used modules.
+Prioritize business flows for migration based on complexity, dependencies, and business value. Create Workpackage_Planning.json that contains priority scores, workpackage assignments, phase groupings, and migration sequence. Business_Flows.json remains unchanged as the source of truth for flow analysis. Generate a comprehensive migration roadmap that minimizes risk by prioritizing flows with the least complexity and fewest dependencies on commonly used modules.
 
 ## Instructions
 
@@ -153,7 +153,7 @@ Prioritize business flows for migration based on complexity, dependencies, and b
 2. Load the Module_Classifications.json file from Phase 1
 3. Validate that all flows have required complexity metrics
 4. Validate that all module references are consistent
-5. Copy all flow data to prepare for Workpackage_Dependencies.json output
+5. Prepare to create Workpackage_Planning.json output (do NOT copy flow data)
 
 ### Step 2: Calculate Priority Scores
 For each flow, calculate a priority score using the following formula:
@@ -210,12 +210,13 @@ Create a comprehensive migration roadmap document that includes:
 
 ### Primary Outputs
 
-#### 1. Workpackage Dependencies File
-**File**: `{{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}`
-**Template**: `{{WORKPACKAGE_ANALYSIS_DEPENDENCIES_TEMPLATE}}`
-- Contains all Business_Flows.json data PLUS workpackage fields
+#### 1. Workpackage Planning File
+**File**: `{{WORKPACKAGE_PLANNING}}`
+**Template**: `{{WORKPACKAGE_PLANNING_TEMPLATE}}`
+- Contains priority scores, workpackage IDs, phase assignments, and migration sequence
+- References flows by flowId (data remains in Business_Flows.json)
 - Business_Flows.json remains unchanged (Phase 1 output preserved)
-- New file for Phase 2 with prioritization and planning data
+- New file for Phase 2 with prioritization and planning metadata only
 
 #### 2. Migration Roadmap
 **File**: `{{WORKPACKAGE_ROADMAP}}`
@@ -225,11 +226,11 @@ Create a comprehensive migration roadmap document that includes:
 **File**: `{{WORKPACKAGE_ANALYZER_TOOL}}`
 - Python tool that performs workpackage prioritization
 - Reads Business_Flows.json and Module_Classifications.json
-- Calculates priorities and creates Workpackage_Dependencies.json
+- Calculates priorities and creates Workpackage_Planning.json
 - Generates all required output formats
 - Include comprehensive error handling and logging
 
-#### 5. Progress Tracking
+#### 4. Progress Tracking
 **File**: `{{WORKPACKAGE_STATUS}}`
 **Template**: `{{ANALYSIS_STATUS_TEMPLATE}}`
 

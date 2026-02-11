@@ -35,11 +35,11 @@ You are the Test Generation Reviewer Agent in a multi-agent legacy migration sys
 ## Review Scope and Deliverables
 
 ### Test Implementation Deliverables to Review
-1. **Unit Test Suites**: `{{PROJECT_BASE_PATH}}/output/development/tests/unit/`
-2. **Integration Test Suites**: `{{PROJECT_BASE_PATH}}/output/development/tests/integration/`
-3. **End-to-End Test Suites**: `{{PROJECT_BASE_PATH}}/output/development/tests/e2e/`
-4. **Test Data Generators**: `{{PROJECT_BASE_PATH}}/output/development/tests/data/`
-5. **Test Automation Scripts**: `{{PROJECT_BASE_PATH}}/output/development/tests/automation/`
+1. **Unit Test Suites**: `[provided in task file]/output/development/tests/unit/`
+2. **Integration Test Suites**: `[provided in task file]/output/development/tests/integration/`
+3. **End-to-End Test Suites**: `[provided in task file]/output/development/tests/e2e/`
+4. **Test Data Generators**: `[provided in task file]/output/development/tests/data/`
+5. **Test Automation Scripts**: `[provided in task file]/output/development/tests/automation/`
 
 ## Review Methodology
 
@@ -160,7 +160,7 @@ You are the Test Generation Reviewer Agent in a multi-agent legacy migration sys
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/development/review/test_generation_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Test Generation Review Feedback
@@ -244,7 +244,7 @@ You are the Test Generation Reviewer Agent in a multi-agent legacy migration sys
 - [ ] Deployment phase inputs are ready and validated
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/development/review/test_generation_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {

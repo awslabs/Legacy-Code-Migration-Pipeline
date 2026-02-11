@@ -79,7 +79,7 @@ Deliverables:
 
 Why This Matters: This separation ensures business requirements can be implemented in any modern technology (Python, Java, cloud-native) while maintaining complete traceability to legacy code.
 
-Phase 3.2: Business Analyst Review
+Phase 3.2: Business Specialist Review
 
 Purpose: Validate that specifications accurately represent business requirements and are ready for modernization.
 
@@ -154,7 +154,7 @@ Key Success Factors
 Business Context First
 Don't skip Phase 3.0! Without business context, you'll translate code structures instead of extracting business concepts.
 Technology-Agnostic Focus
-Chapters 1-5 must be free of technical jargon. Ask: "Could a business analyst who has never seen COBOL understand this?"
+Chapters 1-5 must be free of technical jargon. Ask: "Could a business specialist who has never seen COBOL understand this?"
 Business vs Technical Separation
 • Business rules (would exist in any implementation) → Chapter 3
 • Technical rules (mainframe-specific) → Chapter 6
@@ -233,7 +233,7 @@ Repeated rework cycles (more than 2 iterations per workpackage)
 
 Summary
 
-Phase 3 is about rediscovering business intent from legacy code, not translating COBOL syntax. By separating business context discovery (Phase 3.0), business specification extraction (Phase 3.1), and business analyst review (Phase 3.2), you ensure that:
+Phase 3 is about rediscovering business intent from legacy code, not translating COBOL syntax. By separating business context discovery (Phase 3.0), business specification extraction (Phase 3.1), and business specialist review (Phase 3.2), you ensure that:
 • Business requirements are technology-agnostic (can be implemented in any modern language)
 • Business logic is separated from technical constraints (business rules vs technical rules)
 • Complete traceability exists between business requirements and legacy code

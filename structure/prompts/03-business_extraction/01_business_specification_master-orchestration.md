@@ -19,7 +19,7 @@ This document provides orchestration instructions for the Business Specification
 
 1. **Phase 3.0**: Business Context Discovery - Understand business domain and intent
 2. **Phase 3.1**: Business Specification Extraction - Extract business entities, rules, and processes
-3. **Phase 3.2**: Business Analyst Review - Validate and refine specifications
+3. **Phase 3.2**: Business Specialist Review - Validate and refine specifications
 
 **Critical Principle**: Extract **reimagined business requirements** (technology-agnostic) rather than **translated code structures** (technology-specific).
 
@@ -28,9 +28,9 @@ This document provides orchestration instructions for the Business Specification
 ## Phase Task Documents
 
 The complete task documents for each phase are located in the prompts directory:
-- **Phase 3.0**: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.0.md
-- **Phase 3.1**: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.1.md
-- **Phase 3.2**: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.2.md
+- **Phase 3.0**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md.md
+- **Phase 3.1**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_specification_extraction.md
+- **Phase 3.2**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_verification.md
 
 **The supervisor provides these task documents directly to agents** (no task file creation required). Each phase document is self-contained with:
 - Orchestration Information (phase, agent, deliverables, success criteria)
@@ -53,7 +53,7 @@ Phase 1 (Analysis) → Phase 2 (Workpackage Planning) → Phase 3 (Business Spec
                                                             ↓
                                                     Phase 3.1 (Specification Extraction)
                                                             ↓
-                                                    Phase 3.2 (BA Review)
+                                                    Phase 3.2 (Specialist Review)
                                                             ↓
                                                     Phase 4 (Code Generation)
 ```
@@ -77,11 +77,12 @@ WORKPACKAGE_LOOP:
     # ========================================
     
     EXECUTE Phase_3.0:
-        ASSIGN: business_context_analyst
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.0.md
+        ASSIGN: business_specialist_logic_extraction
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md.md
         
         INPUTS:
-            - Workpackage definition: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/WP-XXX-definition.md
+            - Workpackage planning: {{WORKPACKAGE_PLANNING}}
+            - Business flows: {{BUSINESS_FLOWS}}
             - Source code files: {{SOURCE_CODE}}
             - Database source code: {{DATABASE_SOURCE_CODE}}
             - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
@@ -118,12 +119,13 @@ WORKPACKAGE_LOOP:
     
     EXECUTE Phase_3.1:
         ASSIGN: business_specialist_logic_extraction
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.1.md
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_specification_extraction.md
         
         INPUTS:
             - Business context document: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
-            - Workpackage definition: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/WP-XXX-definition.md
+            - Workpackage planning: {{WORKPACKAGE_PLANNING}}
+            - Business flows: {{BUSINESS_FLOWS}}
             - Source code files: {{SOURCE_CODE}}
             - Database source code: {{DATABASE_SOURCE_CODE}}
             - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
@@ -158,12 +160,12 @@ WORKPACKAGE_LOOP:
                 PROCEED to Phase_3.2
 
     # ========================================
-    # PHASE 3.2: BUSINESS ANALYST REVIEW
+    # PHASE 3.2: BUSINESS SPECIALIST REVIEW
     # ========================================
     
     EXECUTE Phase_3.2:
-        ASSIGN: business_analyst_reviewer
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.2.md
+        ASSIGN: business_reviewer_requirements
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_verification.md
         
         INPUTS:
             - Business specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
@@ -238,9 +240,9 @@ END WORKPACKAGE_LOOP
 ## Agent Assignments
 
 ### Phase 3.0: Business Context Discovery
-**Agent**: business_context_analyst
-**Agent Definition**: structure/agents/business_team/business_context_analyst.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.0.md
+**Agent**: business_specialist_logic_extraction
+**Agent Definition**: structure/agents/business_team/business_specialist_logic_extraction.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md.md
 **Capabilities**:
 - Business domain identification
 - Stakeholder analysis
@@ -251,7 +253,7 @@ END WORKPACKAGE_LOOP
 ### Phase 3.1: Business Specification Extraction
 **Agent**: business_specialist_logic_extraction
 **Agent Definition**: structure/agents/business_team/business_specialist_logic_extraction.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.1.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_specification_extraction.md
 **Capabilities**:
 - Code analysis and interpretation
 - Business entity extraction
@@ -261,10 +263,10 @@ END WORKPACKAGE_LOOP
 - Legacy implementation traceability
 - IEEE 830-1998 documentation
 
-### Phase 3.2: Business Analyst Review
-**Agent**: business_analyst_reviewer
-**Agent Definition**: structure/agents/business_team/business_analyst_reviewer.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/03_business_extraction_phase_3.2.md
+### Phase 3.2: Business Specialist Review
+**Agent**: business_reviewer_requirements
+**Agent Definition**: structure/agents/business_team/business_reviewer_requirements.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_verification.md
 **Capabilities**:
 - Business policy validation
 - Requirement completeness verification
@@ -491,7 +493,7 @@ GET_ISSUE_TYPE(workpackage_id):
 - Minor business rationale additions
 
 **Actions**:
-1. Business analyst reviewer makes corrections directly
+1. Business specialist reviewer makes corrections directly
 2. Update reviewed specification
 3. Update review report with changes made
 4. Mark as "Approved with Changes"
@@ -547,7 +549,7 @@ GET_ISSUE_TYPE(workpackage_id):
 - In Progress: [count]
 - Pending: [count]
 
-### Phase 3.2: Business Analyst Review
+### Phase 3.2: Business Specialist Review
 - Approved: [count]
 - Approved with Changes: [count]
 - Rejected (Rework): [count]
@@ -557,7 +559,7 @@ GET_ISSUE_TYPE(workpackage_id):
 
 | WP ID | Phase | Issue Type | Description | Status | Resolution |
 |-------|-------|------------|-------------|--------|------------|
-| WP-002 | 3.1 | Extraction | Missing business context | Open | Escalated to BA |
+| WP-002 | 3.1 | Extraction | Missing business context | Open | Escalated to specialist |
 | WP-005 | 3.0 | Context | Ambiguous business domain | Open | Awaiting input |
 
 ## Rework History

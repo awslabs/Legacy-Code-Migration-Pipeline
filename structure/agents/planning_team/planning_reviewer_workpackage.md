@@ -35,12 +35,12 @@ You are the Planning Reviewer Agent in a multi-agent legacy migration system. Yo
 ## Review Scope and Deliverables
 
 ### Primary Deliverables to Review
-1. **Workpackage Dependencies**: `{{WORKPACKAGE_DEPENDENCIES}}`
-2. **Migration Roadmap**: `{{WORKPACKAGE_ROADMAP}}`
-3. **Workpackage Definition Report**: `{{WORKPACKAGE_DEFINITION_REPORT}}`
-4. **Workpackage Analyzer Tool**: `{{WORKPACKAGE_ANALYZER_TOOL}}`
-5. **Progress Tracking**: `{{WORKPACKAGE_STATUS}}`
-6. **Error Log**: `{{ANALYSIS_ERRORS}}` (if present)
+1. **Workpackage Planning**: [provided in task file]
+2. **Migration Roadmap**: [provided in task file]
+3. **Workpackage Definition Report**: [provided in task file]
+4. **Workpackage Analyzer Tool**: [provided in task file]
+5. **Progress Tracking**: [provided in task file]
+6. **Error Log**: [provided in task file] (if present)
 
 ## Review Methodology
 
@@ -170,7 +170,7 @@ Priority = (Modules × 2) + (Common Modules × 3) + (Complexity × 0.5) + (Pre-e
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/planning/review/planning_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Planning Review Feedback
@@ -237,7 +237,7 @@ Priority = (Modules × 2) + (Common Modules × 3) + (Complexity × 0.5) + (Pre-e
 - [ ] Business specification phase inputs are ready and validated
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/planning/review/planning_phase_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {

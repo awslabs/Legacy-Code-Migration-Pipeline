@@ -158,7 +158,7 @@ Write Chapter 1 from business perspective:
 • Use business terminology from Phase 3.0 glossary
 • Focus on business needs and value
 • Avoid technical implementation details
-• Make it readable by business analysts who have never seen the code
+• Make it readable by business specialists who have never seen the code
 Chapter 2: Business Entity Extraction (Business Concept Level)
 CRITICAL: Extract business entities at the business concept level, not code structure level:
 • Ask: "What real-world business concept does this data structure represent?"
@@ -317,7 +317,7 @@ CRITICAL: Ensure Chapters 1-5 are completely technology-agnostic:
 • Use instead: Business terms from Phase 3.0 glossary
 • Focus on: Business requirements, business policies, business processes, business entities, business rules
 Test for technology-agnosticism:
-• Could a business analyst who has never seen COBOL understand Chapters 1-5?
+• Could a business specialist who has never seen COBOL understand Chapters 1-5?
 • Could these requirements be implemented in Python, Java, or any other language?
 • Are all business concepts described in business terms?
 Preserve business logic without technical constraints:
@@ -466,7 +466,7 @@ Technology Independence (Chapters 1-5)
 • Business logic described without implementation details
 • Generic business terminology used throughout
 • Business intent clearly separated from implementation approach
-• Readable by business analysts who have never seen the code
+• Readable by business specialists who have never seen the code
 
 Legacy Implementation Completeness (Chapter 6)
 • All technical implementation details documented

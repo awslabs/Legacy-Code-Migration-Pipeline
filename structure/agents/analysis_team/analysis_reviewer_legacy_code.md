@@ -163,7 +163,7 @@ You are the Analysis Reviewer Agent in a multi-agent legacy migration system. Yo
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/analysis/review/analysis_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Analysis Review Feedback
@@ -216,7 +216,7 @@ You are the Analysis Reviewer Agent in a multi-agent legacy migration system. Yo
 - [ ] Migration planning inputs are ready and validated
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/analysis/review/analysis_phase_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {

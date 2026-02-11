@@ -48,16 +48,16 @@ Before starting development activities, verify:
 - **Development Environment Ready**: All output directories, templates, and development tools are prepared
 
 **Required Business Inputs**:
-- Functional requirements: `{{FUNCTIONAL_REQUIREMENTS_SPECS}}`
-- Non-functional requirements: `{{NON_FUNCTIONAL_REQUIREMENTS}}`
-- API specifications: `{{API_SPECIFICATIONS}}`
-- Data model specifications: `{{DATA_MODEL_SPECIFICATIONS}}`
-- Test case specifications: `{{TEST_CASE_SPECIFICATIONS}}`
-- Test scenario definitions: `{{TEST_SCENARIO_DEFINITIONS}}`
+- Functional requirements: [Path provided in phase prompt]
+- Non-functional requirements: [Path provided in phase prompt]
+- API specifications: [Path provided in phase prompt]
+- Data model specifications: [Path provided in phase prompt]
+- Test case specifications: [Path provided in phase prompt]
+- Test scenario definitions: [Path provided in phase prompt]
 
 ### Step 1: Application Code Generation
 **Assigned to**: Code Generation Specialist
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/development_code_generation_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Approved functional and non-functional requirements
 - API specifications and data model definitions
@@ -65,15 +65,15 @@ Before starting development activities, verify:
 - Target architecture and technology constraints
 
 **Expected Deliverables**:
-- Generated application code: `{{PROJECT_BASE_PATH}}/output/development/code/`
-- Code documentation: `{{PROJECT_BASE_PATH}}/output/development/documentation/`
-- API implementation: `{{PROJECT_BASE_PATH}}/output/development/api/`
-- Data access layer: `{{PROJECT_BASE_PATH}}/output/development/data/`
-- Configuration files: `{{PROJECT_BASE_PATH}}/output/development/config/`
+- Generated application code: `[provided in phase prompt]/output/development/code/`
+- Code documentation: `[provided in phase prompt]/output/development/documentation/`
+- API implementation: `[provided in phase prompt]/output/development/api/`
+- Data access layer: `[provided in phase prompt]/output/development/data/`
+- Configuration files: `[provided in phase prompt]/output/development/config/`
 
 ### Step 2: Test Suite Implementation
 **Assigned to**: Test Generation Specialist
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/development_test_generation_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Input Requirements**:
 - Generated application code from Step 1
 - Test case specifications and test scenario definitions
@@ -81,15 +81,15 @@ Before starting development activities, verify:
 - Testing framework and automation requirements
 
 **Expected Deliverables**:
-- Unit test suites: `{{PROJECT_BASE_PATH}}/output/development/tests/unit/`
-- Integration test suites: `{{PROJECT_BASE_PATH}}/output/development/tests/integration/`
-- End-to-end test suites: `{{PROJECT_BASE_PATH}}/output/development/tests/e2e/`
-- Test data generators: `{{PROJECT_BASE_PATH}}/output/development/tests/data/`
-- Test automation scripts: `{{PROJECT_BASE_PATH}}/output/development/tests/automation/`
+- Unit test suites: `[provided in phase prompt]/output/development/tests/unit/`
+- Integration test suites: `[provided in phase prompt]/output/development/tests/integration/`
+- End-to-end test suites: `[provided in phase prompt]/output/development/tests/e2e/`
+- Test data generators: `[provided in phase prompt]/output/development/tests/data/`
+- Test automation scripts: `[provided in phase prompt]/output/development/tests/automation/`
 
 ### Step 3: Code Quality Review and Validation
 **Assigned to**: Code Generation Reviewer
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/development_code_review_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Review Scope**: ALL outputs from Step 1
 **Validation Requirements**:
 - Code quality and standards compliance assessment
@@ -100,7 +100,7 @@ Before starting development activities, verify:
 
 ### Step 4: Test Implementation Review and Validation
 **Assigned to**: Test Generation Reviewer
-**Task Description File**: `{{PROJECT_BASE_PATH}}/tasks/development_test_review_task.md`
+**Task File Creation**: Create task file with all paths resolved from phase prompt
 **Review Scope**: ALL outputs from Step 2
 **Validation Requirements**:
 - Test coverage and completeness assessment
@@ -124,28 +124,28 @@ Create comprehensive task files for each assignment:
 
 **Code Generation Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/development_code_generation_task.md
+File: [provided in phase prompt]/tasks/development_code_generation_task.md
 Content: Requirements for generating modern application code from business specifications
 Focus: Code quality, performance, security, maintainability, business functionality preservation
 ```
 
 **Test Generation Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/development_test_generation_task.md
+File: [provided in phase prompt]/tasks/development_test_generation_task.md
 Content: Requirements for implementing comprehensive test suites based on test designs
 Focus: Test coverage, automation, data management, execution reliability
 ```
 
 **Code Review Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/development_code_review_task.md
+File: [provided in phase prompt]/tasks/development_code_review_task.md
 Content: Comprehensive review requirements for all generated application code
 Quality Criteria: Functionality, performance, security, maintainability, standards compliance
 ```
 
 **Test Review Task**:
 ```
-File: {{PROJECT_BASE_PATH}}/tasks/development_test_review_task.md
+File: [provided in phase prompt]/tasks/development_test_review_task.md
 Content: Comprehensive review requirements for all generated test implementations
 Quality Criteria: Coverage, automation, reliability, maintainability, execution effectiveness
 ```
@@ -220,7 +220,7 @@ Before sending to reviewers, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `{{PROJECT_BASE_PATH}}/output/development/progress/development_team_status.json`
+**File**: `[provided in phase prompt]/output/development/progress/development_team_status.json`
 **Update Frequency**: After each major deliverable completion and review cycle
 **Content**: Individual agent progress, deliverable status, review status, overall phase completion percentage
 

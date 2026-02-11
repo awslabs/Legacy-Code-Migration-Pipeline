@@ -35,11 +35,11 @@ You are the Migration Script Reviewer Agent in a multi-agent legacy migration sy
 ## Review Scope and Deliverables
 
 ### Migration Script Deliverables to Review
-1. **Enhanced Database Migration Scripts**: `{{ENHANCED_DATABASE_MIGRATION_SCRIPTS}}`
-2. **Data Validation Scripts**: `{{DATA_VALIDATION_SCRIPTS}}`
-3. **Migration Rollback Scripts**: `{{MIGRATION_ROLLBACK_SCRIPTS}}`
-4. **Migration Monitoring Tools**: `{{MIGRATION_MONITORING_TOOLS}}`
-5. **Migration Execution Guide**: `{{MIGRATION_EXECUTION_GUIDE}}`
+1. **Enhanced Database Migration Scripts**: [provided in task file]
+2. **Data Validation Scripts**: [provided in task file]
+3. **Migration Rollback Scripts**: [provided in task file]
+4. **Migration Monitoring Tools**: [provided in task file]
+5. **Migration Execution Guide**: [provided in task file]
 
 ## Review Methodology
 
@@ -161,7 +161,7 @@ You are the Migration Script Reviewer Agent in a multi-agent legacy migration sy
 ## Feedback and Remediation Process
 
 ### Feedback Documentation Format
-**File**: `{{PROJECT_BASE_PATH}}/output/deployment/review/migration_scripts_review_feedback.md`
+**File**: [Path provided in task file]
 **Structure**:
 ```markdown
 # Migration Scripts Review Feedback
@@ -245,7 +245,7 @@ You are the Migration Script Reviewer Agent in a multi-agent legacy migration sy
 - [ ] Migration execution is ready for production deployment
 
 ### Approval Documentation
-**File**: `{{PROJECT_BASE_PATH}}/output/deployment/review/migration_scripts_approval.json`
+**File**: [Path provided in task file]
 **Content**:
 ```json
 {
