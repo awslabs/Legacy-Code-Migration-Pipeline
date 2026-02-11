@@ -161,16 +161,17 @@ echo ""
 
 # Step 2: Create Project
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 2/4: Creating Project                                ║${NC}"
+echo -e "${BLUE}║  Step 2/4: Creating Project & Installing ACM Tools        ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
 echo "Creating project: $PROJECT_NAME"
+echo "Note: ACM tools will be automatically installed during project creation"
 echo ""
 
 # Create project with automatic "no" response to agent installation prompt
 # We'll install agents in the next step with the specified provider
-# Note: ACM tools will be installed automatically during project creation
+# ACM tools are installed automatically by create_project.py
 echo "n" | python3 create_project.py "$PROJECT_NAME"
 
 if [ ! -d "$PROJECT_NAME" ]; then
@@ -178,7 +179,17 @@ if [ ! -d "$PROJECT_NAME" ]; then
     exit 1
 fi
 
-echo -e "${GREEN}✓ Project created successfully${NC}"
+# Verify ACM tools installation
+if [ -d "$PROJECT_NAME/tools" ] && [ -f "$PROJECT_NAME/tools/acm_validator.py" ]; then
+    echo -e "${GREEN}✓ Project created successfully${NC}"
+    echo -e "${GREEN}✓ ACM tools installed successfully${NC}"
+else
+    echo -e "${GREEN}✓ Project created successfully${NC}"
+    echo -e "${YELLOW}⚠️  ACM tools may not have been installed${NC}"
+    echo "   You can install them manually:"
+    echo "   cd $PROJECT_NAME"
+    echo "   python3 ../install_acm_tools.py --tools-dir ./tools"
+fi
 echo ""
 
 # Step 3: Install Agents
