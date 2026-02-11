@@ -16,7 +16,7 @@ Usage:
     
 Options:
     --tools-dir PATH       Target directory for tools (default: ./tools)
-    --zip-file PATH        Use existing ZIP file instead of downloading
+    --zip-file PATH        Use existing ZIP file instead of downloading (default: acm-tools-main.zip)
     --skip-on-error        Skip installation if download fails (for automation)
 """
 
@@ -356,7 +356,8 @@ def main():
     parser.add_argument(
         "--zip-file",
         type=Path,
-        help="Use existing ZIP file instead of downloading (useful for private repos)"
+        default=Path("acm-tools-main.zip"),
+        help="Use existing ZIP file instead of downloading (default: acm-tools-main.zip)"
     )
     parser.add_argument(
         "--skip-on-error",
@@ -370,8 +371,18 @@ def main():
         # Resolve tools directory
         tools_dir = args.tools_dir.resolve()
         
-        # Resolve ZIP file if provided
-        zip_file = args.zip_file.resolve() if args.zip_file else None
+        # Resolve ZIP file - check if default exists, otherwise set to None for download
+        if args.zip_file:
+            zip_file_path = args.zip_file.resolve()
+            if zip_file_path.exists():
+                zip_file = zip_file_path
+                print(f"ℹ️  Using local ZIP file: {zip_file}")
+            else:
+                # Default file specified but doesn't exist - try to download
+                print(f"ℹ️  Default ZIP file '{args.zip_file}' not found, will attempt download")
+                zip_file = None
+        else:
+            zip_file = None
         
         # Run installation
         success = install_acm_tools(tools_dir, zip_file, args.skip_on_error)

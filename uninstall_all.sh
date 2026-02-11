@@ -64,7 +64,8 @@ echo -e "${YELLOW}⚠️  WARNING: This will uninstall CAO and remove all agents
 echo ""
 echo "The following will be removed:"
 echo "  • CLI Agent Orchestrator (CAO)"
-echo "  • All installed agents"
+echo "  • All installed agents (CAO and Kiro)"
+echo "  • Kiro agents directory (~/.kiro/agents)"
 
 if [ "$KEEP_CONFIG" = false ]; then
     echo "  • CAO configuration files"
@@ -101,19 +102,35 @@ else
 fi
 echo ""
 
-# Step 2: List installed agents (if CAO is available)
+# Step 2: List installed agents (check both CAO and Kiro)
 if [ "$CAO_INSTALLED" = true ]; then
     echo -e "${BLUE}[2/4] Listing installed agents...${NC}"
     if cao list &> /dev/null; then
-        echo "Currently installed agents:"
+        echo "Currently installed agents (CAO):"
         cao list | head -20
         AGENT_COUNT=$(cao list 2>/dev/null | wc -l)
-        echo -e "${YELLOW}Total agents: $AGENT_COUNT${NC}"
+        echo -e "${YELLOW}Total CAO agents: $AGENT_COUNT${NC}"
     else
-        echo -e "${YELLOW}⚠️  Could not list agents${NC}"
+        echo -e "${YELLOW}⚠️  Could not list CAO agents${NC}"
     fi
 else
-    echo -e "${BLUE}[2/4] Skipping agent listing (CAO not available)${NC}"
+    echo -e "${BLUE}[2/4] Checking for installed agents...${NC}"
+fi
+
+# Check for Kiro agents
+if [ -d "$HOME/.kiro/agents" ]; then
+    KIRO_AGENT_COUNT=$(find "$HOME/.kiro/agents" -name "*.md" -type f 2>/dev/null | wc -l)
+    if [ "$KIRO_AGENT_COUNT" -gt 0 ]; then
+        echo ""
+        echo "Found Kiro agents in: $HOME/.kiro/agents"
+        echo -e "${YELLOW}Total Kiro agents: $KIRO_AGENT_COUNT${NC}"
+        echo ""
+        echo "Agent files:"
+        find "$HOME/.kiro/agents" -name "*.md" -type f 2>/dev/null | head -10
+        if [ "$KIRO_AGENT_COUNT" -gt 10 ]; then
+            echo "... and $((KIRO_AGENT_COUNT - 10)) more"
+        fi
+    fi
 fi
 echo ""
 
@@ -134,14 +151,23 @@ echo ""
 # Step 4: Clean up configuration and cache
 echo -e "${BLUE}[4/4] Cleaning up files...${NC}"
 
+# Remove Kiro agents
+if [ -d "$HOME/.kiro/agents" ]; then
+    echo "Removing Kiro agents: $HOME/.kiro/agents"
+    rm -rf "$HOME/.kiro/agents"
+    echo -e "${GREEN}✓ Kiro agents removed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Kiro agents directory not found${NC}"
+fi
+
 # Remove agent store
 if [ "$KEEP_CACHE" = false ]; then
     if [ -d "$HOME/.aws/cli-agent-orchestrator" ]; then
-        echo "Removing agent store: $HOME/.aws/cli-agent-orchestrator"
+        echo "Removing CAO agent store: $HOME/.aws/cli-agent-orchestrator"
         rm -rf "$HOME/.aws/cli-agent-orchestrator"
-        echo -e "${GREEN}✓ Agent store removed${NC}"
+        echo -e "${GREEN}✓ CAO agent store removed${NC}"
     else
-        echo -e "${YELLOW}⚠️  Agent store not found${NC}"
+        echo -e "${YELLOW}⚠️  CAO agent store not found${NC}"
     fi
 else
     echo -e "${BLUE}ℹ️  Keeping agent cache (--keep-cache specified)${NC}"
@@ -167,7 +193,8 @@ echo ""
 
 echo "Summary:"
 echo "  • CAO has been uninstalled"
-echo "  • Agents have been removed"
+echo "  • CAO agents have been removed"
+echo "  • Kiro agents have been removed (~/.kiro/agents)"
 
 if [ "$KEEP_CONFIG" = false ]; then
     echo "  • Configuration files have been cleaned up"
