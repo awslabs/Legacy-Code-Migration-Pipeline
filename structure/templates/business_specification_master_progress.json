@@ -1,0 +1,57 @@
+{
+  "overall_status": {
+    "total_workpackages": 0,
+    "completed": 0,
+    "in_progress": 0,
+    "blocked": 0,
+    "last_updated": ""
+  },
+  "workpackages": [
+    {
+      "wp_id": "WP-001",
+      "name": "",
+      "phase_3_0_status": "pending",
+      "phase_3_1_status": "pending",
+      "phase_3_2_status": "pending",
+      "overall_status": "not_started",
+      "notes": ""
+    }
+  ],
+  "phase_progress": {
+    "phase_3_0": {
+      "completed": 0,
+      "in_progress": 0,
+      "pending": 0
+    },
+    "phase_3_1": {
+      "completed": 0,
+      "in_progress": 0,
+      "pending": 0
+    },
+    "phase_3_2": {
+      "approved": 0,
+      "approved_with_changes": 0,
+      "rejected": 0,
+      "in_review": 0
+    }
+  },
+  "issues_and_blockers": [
+    {
+      "wp_id": "",
+      "phase": "",
+      "issue_type": "",
+      "description": "",
+      "status": "open",
+      "resolution": ""
+    }
+  ],
+  "rework_history": [
+    {
+      "wp_id": "",
+      "original_phase": "",
+      "returned_from": "",
+      "reason": "",
+      "rework_status": ""
+    }
+  ]
+}

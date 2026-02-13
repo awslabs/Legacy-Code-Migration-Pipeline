@@ -16,7 +16,7 @@ Usage:
     
 Options:
     --tools-dir PATH       Target directory for tools (default: ./tools)
-    --zip-file PATH        Use existing ZIP file instead of downloading (default: acm-tools-main.zip)
+    --zip-file PATH        Use existing ZIP file instead of downloading
     --skip-on-error        Skip installation if download fails (for automation)
 """
 
@@ -36,6 +36,7 @@ from typing import Optional
 # ACM Tools repository configuration
 ACM_TOOLS_URL = "https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools/-/archive/main/acm-tools-main.zip?ref_type=heads"
 ACM_TOOLS_ARCHIVE_NAME = "acm-tools-main"
+ACM_TOOLS_DEFAULT_ZIP = "acm-tools-main.zip"
 
 
 def print_header(message: str) -> None:
@@ -227,7 +228,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
     # Create tools directory if it doesn't exist
     tools_dir.mkdir(parents=True, exist_ok=True)
     
-    # Determine ZIP file location
+    # Determine installation method
     if zip_file:
         # Use provided ZIP file
         if not zip_file.exists():
@@ -239,28 +240,52 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         zip_path = zip_file
         temp_dir_obj = None
     else:
-        # Download ZIP file
+        # Try to download ZIP file
         temp_dir_obj = tempfile.TemporaryDirectory()
         temp_path = Path(temp_dir_obj.name)
         zip_path = temp_path / "acm-tools.zip"
         
         print_step(1, 3, "Downloading ACM tools")
-        if not download_file(ACM_TOOLS_URL, zip_path):
-            print("\n❌ Failed to download ACM tools")
-            print("\n" + "=" * 60)
-            print("⚠️  ALTERNATIVE INSTALLATION METHODS")
-            print("=" * 60)
-            print("\n1. Manual Download:")
-            print(f"   • Visit: {ACM_TOOLS_URL}")
-            print("   • Download the ZIP file manually")
-            print("   • Run: python3 install_acm_tools.py --zip-file /path/to/downloaded.zip --tools-dir ./tools")
-            print("\n2. Request Access:")
-            print("   • Contact the repository owner for access")
-            print("   • The repository may be private or require authentication")
-            print("\n3. Skip Installation (if optional):")
-            print("   • Continue without ACM tools")
-            print("   • Some features may not be available")
-            print("\n" + "=" * 60)
+        download_success = download_file(ACM_TOOLS_URL, zip_path)
+        
+        if not download_success:
+            print("\n⚠️  Download failed, checking for local ZIP file...")
+            
+            # Try to find ZIP file in current directory
+            script_dir = Path(__file__).parent if '__file__' in globals() else Path.cwd()
+            local_zip = script_dir / ACM_TOOLS_DEFAULT_ZIP
+            
+            if local_zip.exists():
+                print(f"✓ Found local ZIP file: {local_zip}")
+                zip_path = local_zip
+                temp_dir_obj.cleanup()
+                temp_dir_obj = None
+            else:
+                print(f"❌ Local ZIP file not found: {local_zip}")
+                print("\n❌ Failed to download ACM tools and no local ZIP file available")
+                print("\n" + "=" * 60)
+                print("⚠️  ALTERNATIVE INSTALLATION METHODS")
+                print("=" * 60)
+                print("\n1. Manual Download:")
+                print(f"   • Download the ZIP file from the repository")
+                print(f"   • Save it as: {ACM_TOOLS_DEFAULT_ZIP}")
+                print(f"   • Place it in the same directory as this script")
+                print(f"   • Run this installation step again")
+                print("\n2. Use custom ZIP file location:")
+                print("   • python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools")
+                print("\n3. Skip Installation:")
+                print("   • Continue without ACM tools")
+                print("   • Some validation features may not be available")
+                print("\n" + "=" * 60)
+                
+                if temp_dir_obj:
+                    temp_dir_obj.cleanup()
+                
+                if skip_on_error:
+                    print("\n⚠️  Skipping ACM tools installation (--skip-on-error enabled)")
+                    return True
+                
+                return False
             
             if temp_dir_obj:
                 temp_dir_obj.cleanup()
@@ -374,8 +399,7 @@ def main():
     parser.add_argument(
         "--zip-file",
         type=Path,
-        default=Path("acm-tools-main.zip"),
-        help="Use existing ZIP file instead of downloading (default: acm-tools-main.zip)"
+        help="Use existing ZIP file instead of downloading"
     )
     parser.add_argument(
         "--skip-on-error",
@@ -389,18 +413,16 @@ def main():
         # Resolve tools directory
         tools_dir = args.tools_dir.resolve()
         
-        # Resolve ZIP file - check if default exists, otherwise set to None for download
+        # Resolve ZIP file if provided
+        zip_file = None
         if args.zip_file:
             zip_file_path = args.zip_file.resolve()
             if zip_file_path.exists():
                 zip_file = zip_file_path
                 print(f"ℹ️  Using local ZIP file: {zip_file}")
             else:
-                # Default file specified but doesn't exist - try to download
-                print(f"ℹ️  Default ZIP file '{args.zip_file}' not found, will attempt download")
-                zip_file = None
-        else:
-            zip_file = None
+                print(f"❌ Specified ZIP file not found: {zip_file_path}")
+                sys.exit(1)
         
         # Run installation
         success = install_acm_tools(tools_dir, zip_file, args.skip_on_error)
@@ -410,8 +432,8 @@ def main():
         else:
             print("\n❌ Installation failed")
             if not args.skip_on_error:
-                print("\nTip: Use --zip-file option if you have the ZIP file locally")
-                print("Example: python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools")
+                print("\nTip: Place acm-tools-main.zip in the same directory as this script, or use:")
+                print("     python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools")
             sys.exit(1)
             
     except KeyboardInterrupt:

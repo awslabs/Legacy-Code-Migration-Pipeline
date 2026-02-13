@@ -516,59 +516,48 @@ GET_ISSUE_TYPE(workpackage_id):
 ## Progress Tracking
 
 ### Master Progress Tracking
-**File**: `{{PROJECT_BASE_PATH}}/output/migration/phase_3_master_progress.md`
 
-**Structure**:
-```markdown
-# Phase 3: Business Specification - Master Progress
+**Markdown File**: `{{BUSINESS_SPECIFICATION_MASTER_PROGRESS}}`
+**JSON File**: `{{BUSINESS_SPECIFICATION_MASTER_PROGRESS_JSON}}`
 
-## Overall Status
-- Total Workpackages: [count]
-- Completed: [count]
-- In Progress: [count]
-- Blocked: [count]
+**Templates**:
+- Markdown: `{{BUSINESS_SPECIFICATION_MASTER_PROGRESS_TEMPLATE}}`
+- JSON: `{{BUSINESS_SPECIFICATION_MASTER_PROGRESS_JSON_TEMPLATE}}`
 
-## Workpackage Status
+Both files track the same information in different formats:
+- **Markdown**: Human-readable progress report
+- **JSON**: Machine-readable for programmatic analysis
 
-| WP ID | Name | Phase 3.0 | Phase 3.1 | Phase 3.2 | Overall Status | Notes |
-|-------|------|-----------|-----------|-----------|----------------|-------|
-| WP-001 | [Name] | ✅ Complete | ✅ Complete | ✅ Approved | Ready for Phase 4 | |
-| WP-002 | [Name] | ✅ Complete | 🔄 In Progress | ⏸️ Pending | In Progress | |
-| WP-003 | [Name] | 🔄 In Progress | ⏸️ Pending | ⏸️ Pending | In Progress | |
-| WP-004 | [Name] | ⏸️ Pending | ⏸️ Pending | ⏸️ Pending | Not Started | |
-
-## Phase-Specific Progress
-
-### Phase 3.0: Business Context Discovery
-- Completed: [count]
-- In Progress: [count]
-- Pending: [count]
-
-### Phase 3.1: Business Specification Extraction
-- Completed: [count]
-- In Progress: [count]
-- Pending: [count]
-
-### Phase 3.2: Business Specialist Review
-- Approved: [count]
-- Approved with Changes: [count]
-- Rejected (Rework): [count]
-- In Review: [count]
-
-## Issues and Blockers
-
-| WP ID | Phase | Issue Type | Description | Status | Resolution |
-|-------|-------|------------|-------------|--------|------------|
-| WP-002 | 3.1 | Extraction | Missing business context | Open | Escalated to specialist |
-| WP-005 | 3.0 | Context | Ambiguous business domain | Open | Awaiting input |
-
-## Rework History
-
-| WP ID | Original Phase | Returned From | Reason | Rework Status |
-|-------|----------------|---------------|--------|---------------|
-| WP-001 | 3.1 | 3.2 | Technical rules in Chapter 3 | ✅ Resolved |
-| WP-003 | 3.0 | 3.2 | Business domain incorrect | 🔄 In Progress |
+**Structure** (both formats contain):
 ```
+Overall Status:
+- Total Workpackages
+- Completed
+- In Progress
+- Blocked
+- Last Updated
+
+Workpackage Status:
+- WP ID, Name
+- Phase 3.0 Status
+- Phase 3.1 Status
+- Phase 3.2 Status
+- Overall Status
+- Notes
+
+Phase-Specific Progress:
+- Phase 3.0: Completed, In Progress, Pending
+- Phase 3.1: Completed, In Progress, Pending
+- Phase 3.2: Approved, Approved with Changes, Rejected, In Review
+
+Issues and Blockers:
+- WP ID, Phase, Issue Type, Description, Status, Resolution
+
+Rework History:
+- WP ID, Original Phase, Returned From, Reason, Rework Status
+```
+
+**Update Frequency**: After each phase completion or status change
 
 ---
 
