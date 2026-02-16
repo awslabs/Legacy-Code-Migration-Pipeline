@@ -15,9 +15,9 @@
 
 1. **Business Specification Documents**
    - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN.md
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
    - Template: {{BUSINESS_SPECIFICATION_TEMPLATE}}
-   - Description: IEEE 830-1998 formatted business specifications for each workpackage flow (English and Danish versions)
+   - Description: IEEE 830-1998 formatted business specifications for each workpackage flow (English version)
 
 2. **Progress Tracking**
    - File: {{BUSINESS_SPECIFICATION_STATUS}}
@@ -34,7 +34,7 @@
    - Description: Documentation of errors and issues encountered
 
 ### Success Criteria
-- [ ] All workpackage flows have business specifications created (EN and DN versions)
+- [ ] All workpackage flows have business specifications created (EN version)
 - [ ] All business entities extracted at business concept level (not just cleaned code structures)
 - [ ] All business rules identified and cataloged (business policies separated from technical rules)
 - [ ] All business functions and processes specified
@@ -42,7 +42,7 @@
 - [ ] Technology-agnostic documentation achieved (Chapters 1-5)
 - [ ] Legacy implementation references complete (Chapter 6)
 - [ ] Business context from Phase 3.0 incorporated throughout
-- [ ] EN and DN versions have identical structure and content
+- [ ] EN and other language versions (if they exist) have identical structure and content
 - [ ] All deliverables produced at specified paths
 - [ ] Quality criteria met
 - [ ] Ready for Phase 3.2 review
@@ -63,7 +63,7 @@
 
 ### Output Locations
 - **Business specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md`
-- **Business specifications (DN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN.md`
+- **Business specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
 - **Review files**: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md`
   - **IMPORTANT**: Reviewer creates review files in Phase 3.2, NOT output to STDOUT
 - **Reporting**: `{{BUSINESS_SPECIFICATION_REPORTING}}`
@@ -86,6 +86,7 @@
 ## Objective
 
 Extract business specifications from legacy code using the business context established in Phase 3.0. Create comprehensive IEEE 830-1998 formatted specifications that document business requirements (Chapters 1-5) separately from legacy implementation details (Chapter 6). Focus on extracting business concepts, policies, and processes rather than translating code structures.
+On demand, versions for the deliverables in multiple languages might be requested by the user.
 
 **CRITICAL PRINCIPLES**:
 1. **Use business context to guide extraction** - Reference Phase 3.0 business context throughout
@@ -374,10 +375,10 @@ Extract business specifications from legacy code using the business context esta
    - Remove technical workarounds and constraints from business requirements
    - Focus on business intent and outcomes
 
-### 9. Bilingual Documentation (English and Danish)
-1. **Create both EN and DN versions** for each workpackage:
+### 9. Bilingual Documentation (English and other language on demand)
+1. **Create EN version** for each workpackage:
    - `WP-XXX-FLOW_XXX-specification-EN.md` (English)
-   - `WP-XXX-FLOW_XXX-specification-DN.md` (Danish)
+   - `WP-XXX-FLOW_XXX-specification-{LANGUAGE SHORTFORM}.md` (English)
 
 2. **Ensure identical structure and content**:
    - Same number of business entities (BE-XXX)
@@ -386,10 +387,10 @@ Extract business specifications from legacy code using the business context esta
    - Same business logic and requirements
    - Same Chapter 6 technical details
 
-3. **Danish terminology alongside English**:
-   - Use format: "English Term (DANISH TERM)"
+3. **Foreign terminology alongside English**:
+   - Use format: "English Term (Foreign language TERM)"
    - Example: "Creation Initials (SKABELSESINITIALER)"
-   - Maintain consistency with existing Danish business vocabulary
+   - Maintain consistency with existing foreign language business vocabulary
 
 4. **Translate business concepts, not technical terms**:
    - Business terms should be translated
@@ -406,7 +407,7 @@ Extract business specifications from legacy code using the business context esta
    - **Chapter 6**: Complete legacy implementation details with code references
    - **Technology-agnostic**: Chapters 1-5 have no technical jargon
    - **Traceability**: All business requirements traced to legacy code in Chapter 6
-   - **Bilingual**: EN and DN versions have identical structure and content
+   - **Bilingual**: EN and other language versions (if they exist) have identical structure and content
 
 2. **Cross-reference with Phase 3.0 business context**:
    - Business domain matches Phase 3.0
@@ -423,7 +424,7 @@ Extract business specifications from legacy code using the business context esta
 
 ### 11. Progress Tracking
 1. Update progress tracking for each completed workpackage:
-   - Record completion status and artifacts (EN and DN versions)
+   - Record completion status and artifacts
    - Document any issues or exceptions
    - **ENSURE reviewer creates review file in `{{BUSINESS_SPECIFICATION_REVIEW}}` directory in Phase 3.2**
    - Update phase status in progress tracking system
@@ -436,12 +437,12 @@ Extract business specifications from legacy code using the business context esta
    - Verify all business rules represent business policies (not code patterns)
    - Verify all business functions represent business capabilities (not subroutines)
    - Verify Chapter 6 has complete technical details with code references
-   - Verify EN and DN versions are identical in structure and content
+   - Verify EN and other versions are identical in structure and content
    - Verify all BE-XXX, BR-XXX, F-XXX identifiers are unique and sequential
 
 ### 13. Pause Before Progressing to Next Workpackage
 - Do not proceed to next workpackage until current workpackage is complete and validated
-- Ensure both EN and DN versions are created
+- Ensure both EN and other versions are created
 - Ensure specification is ready for Phase 3.2 review
 
 ---
@@ -460,11 +461,11 @@ Extract business specifications from legacy code using the business context esta
 5. **Process Flows** (Business process level in text format)
 6. **Legacy Implementation References** (Comprehensive technical details)
 
-### Business Specification Document (Danish)
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN.md`
+### Business Specification Document (other language)
+**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
 **Template**: `{{BUSINESS_SPECIFICATION_TEMPLATE}}`
 
-**Structure**: Identical to English version with Danish translations
+**Structure**: Identical to English version with translations
 
 ### Progress Tracking
 **File**: `{{BUSINESS_SPECIFICATION_STATUS}}`
@@ -552,10 +553,10 @@ Extract business specifications from legacy code using the business context esta
 - Clear mapping between business requirements (Chapters 1-5) and legacy implementation (Chapter 6)
 
 ### Bilingual Consistency
-- EN and DN versions have identical structure
+- EN and other versions have identical structure
 - Same number of BE-XXX, BR-XXX, F-XXX identifiers
 - Same business logic and requirements
-- Danish terminology alongside English where appropriate
+- Foreign language terminology alongside English where appropriate
 - Both versions complete and validated
 
 ---
@@ -595,9 +596,9 @@ Extract business specifications from legacy code using the business context esta
    - Escalation: Flag for BA review and request Phase 3.0 completion
 
 7. **Bilingual Translation Issues**
-   - Detection: Difficulty translating business concepts to Danish
-   - Recovery: Use English term with Danish equivalent in parentheses
-   - Escalation: Flag for native Danish speaker review
+   - Detection: Difficulty translating business concepts to foreign language
+   - Recovery: Use English term with foreign language equivalent in parentheses
+   - Escalation: Flag for native foreign language speaker review
 
 ### Error Reporting Format
 **File**: `{{BUSINESS_SPECIFICATION_ERRORS}}`

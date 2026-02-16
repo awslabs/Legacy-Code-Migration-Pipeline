@@ -15,7 +15,7 @@
 
 1. **Reviewed Business Specification Documents**
    - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN-reviewed.md
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md
    - Description: Validated and refined business specifications ready for code generation
 
 2. **Review Reports**
@@ -42,7 +42,7 @@
 - [ ] Business rationale and context added where missing
 - [ ] Technology-agnostic language verified (Chapters 1-5)
 - [ ] Legacy implementation details verified (Chapter 6)
-- [ ] Bilingual consistency verified (EN and DN versions)
+- [ ] Bilingual consistency verified (EN and other versions)
 - [ ] All review reports completed
 - [ ] Specifications approved for modernization
 - [ ] Ready for code generation phase
@@ -53,7 +53,7 @@
 
 ### Input Locations
 - **Business specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md`
-- **Business specifications (DN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN.md`
+- **Business specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
 - **Business context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Source code**: `{{SOURCE_CODE}}` (for verification)
@@ -61,7 +61,7 @@
 
 ### Output Locations
 - **Reviewed specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-- **Reviewed specifications (DN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN-reviewed.md`
+- **Reviewed specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
 - **Review reports**: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md`
 - **Updated context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md`
 - **Updated glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary-updated.md`
@@ -72,7 +72,7 @@
 - **Business context template**: `{{BUSINESS_CONTEXT_TEMPLATE}}`
 
 ### Previous Phase Artifacts
-- **From Phase 3.1**: Business specification documents (EN and DN versions)
+- **From Phase 3.1**: Business specification documents (EN and other versions)
 - **From Phase 3.0**: Business context documents, business glossary
 
 ---
@@ -95,7 +95,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 ### 1. Preparation and Review Planning
 1. Review the list of workpackages requiring review
 2. For each workpackage, gather all relevant materials:
-   - Business specification (EN and DN versions)
+   - Business specification (EN and other versions)
    - Business context document from Phase 3.0
    - Business glossary
    - Source code (for verification if needed)
@@ -305,27 +305,27 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 
 ### 9. Bilingual Consistency Verification
 1. **Verify structural consistency**:
-   - Do EN and DN versions have same number of chapters?
-   - Do EN and DN versions have same number of BE-XXX identifiers?
-   - Do EN and DN versions have same number of BR-XXX identifiers?
-   - Do EN and DN versions have same number of F-XXX identifiers?
+   - Do EN and other versions have same number of chapters?
+   - Do EN and other versions have same number of BE-XXX identifiers?
+   - Do EN and other versions have same number of BR-XXX identifiers?
+   - Do EN and other versions have same number of F-XXX identifiers?
 
 2. **Verify content consistency**:
-   - Is business logic identical in EN and DN versions?
+   - Is business logic identical in EN and other versions?
    - Are business requirements identical?
    - Are Chapter 6 technical details identical?
 
-3. **Verify translation quality**:
-   - Are Danish translations accurate?
-   - Is Danish terminology consistent?
+3. **Verify translation quality**: (if translations exist)
+   - Are translations accurate?
+   - Is foreign language terminology consistent?
    - Are business terms properly translated?
    - Are technical terms appropriately handled?
 
 4. **Review actions**:
-   - Synchronize EN and DN versions if inconsistent
+   - Synchronize EN and other versions if inconsistent
    - Correct translation errors
    - Ensure identical business logic
-   - Update Danish terminology if needed
+   - Update foreign language terminology if needed
 
 ### 10. Overall Specification Review
 1. **Verify completeness**:
@@ -414,7 +414,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 
 ### 12. Specification Updates
 1. **Apply approved changes to specifications**:
-   - Update both EN and DN versions
+   - Update both EN and other versions
    - Maintain structural consistency
    - Preserve BE-XXX, BR-XXX, F-XXX identifiers
    - Update document version and date
@@ -433,7 +433,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 
 4. **Create reviewed versions**:
    - Save as: `WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-   - Save as: `WP-XXX-FLOW_XXX-specification-DN-reviewed.md`
+   - Save as: `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
    - Preserve original versions for audit trail
 
 ### 13. Progress Tracking and Approval
@@ -604,7 +604,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 **Status**: [Consistent / Issues Found]
 
 **Issues**:
-- [Issue 1: EN and DN versions have different number of rules]
+- [Issue 1: EN and other versions have different number of rules]
 - [Issue 2]
 
 **Resolutions**:
@@ -710,7 +710,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 ### Reviewed Specification Documents
 **Files**:
 - `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-DN-reviewed.md`
+- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
 
 **Changes from original**:
 - Document version updated
@@ -756,7 +756,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 - Modernization guidance sufficient
 
 ### Bilingual Consistency
-- EN and DN versions structurally identical
+- EN and other versions structurally identical
 - Business logic identical in both versions
 - Translation quality verified
 - Terminology consistent
@@ -781,7 +781,7 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
    - Detection: Technical terms found in Chapters 1-5
    - Recovery: Replace with business terms from glossary
    - Escalation: Return to Phase 3.1 if pervasive throughout your source document. **Bilingual Inconsistency**
-   - Detection: EN and DN versions have different structure or logic
+   - Detection: EN and other versions have different structure or logic
    - Recovery: Synchronize versions to ensure identical content
    - Escalation: Return to Phase 3.1 if major discrepancies exist
 

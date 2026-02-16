@@ -370,6 +370,74 @@ The following is a sequential list that should be followed by you and your agent
 
 ---
 
+# Phase 4: Code Generation
+
+**Team Supervisor**: code_generation_team_supervisor
+**Dependencies**: Phase 3 outputs (Business Specifications, Test Cases), Phase 2 (Workpackage Planning)
+**Objective**: Generate modern code from business specifications through workpackage-based processing
+
+**Review Approach**: The code_generation_team_supervisor orchestrates workpackage-by-workpackage code generation with tier-specific specialists. Each workpackage is processed completely (all required tiers) before moving to the next. Quality verification occurs after each tier through compilation checks and business rule validation.
+
+## Master Orchestration
+
+**Prompt File**: {{PROMPTS_BASE_PATH}}/05_code_generation/00_code_generation_master_orchestration.md
+**Assigned Agent**: code_generation_team_supervisor
+
+**Input Dependencies:**
+- Business Specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-*-specification.md
+- Test Cases: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/
+- Workpackage Planning: {{WORKPACKAGE_PLANNING}}
+- Target Specifications: {{TARGET_SPECIFICATION}}/
+- Sample Code: {{TARGET_SAMPLE_CODE}}/
+
+**Expected Deliverables:**
+1. Backend Code: {{CODE_GENERATION_BACKEND_OUTPUT}}/
+2. Frontend Code: {{CODE_GENERATION_FRONTEND_OUTPUT}}/
+3. Batch Code: {{CODE_GENERATION_BATCH_OUTPUT}}/
+4. Progress Tracking: {{CODE_GENERATION_STATUS}}
+   - Template: {{CODE_GENERATION_STATUS_TEMPLATE}}
+5. Master Progress: {{CODE_GENERATION_MASTER_PROGRESS}}
+   - Template: {{CODE_GENERATION_MASTER_PROGRESS_TEMPLATE}}
+6. Error Log: {{CODE_GENERATION_ERRORS}}
+
+**Phase Structure:**
+- **Phase 4.0**: Project Structure Establishment
+- **Phase 4.1**: Backend Code Generation (per workpackage)
+- **Phase 4.2**: Frontend Code Generation (per workpackage)
+- **Phase 4.3**: Batch Code Generation (per workpackage)
+
+**Success Criteria:**
+- Project structure established with valid build configurations
+- All workpackages processed in dependency order
+- All required tiers implemented for each workpackage
+- All code compiles successfully
+- All business rules implemented and traceable
+- Progress tracking shows 100% completion
+- No critical blockers remain
+
+**Delegation Instructions:**
+1. Verify Phase 3 deliverables are available
+2. Provide code_generation_team_supervisor with the master orchestration prompt file path
+3. Supervisor coordinates Phase 4.0 (project structure) first
+4. Supervisor then processes workpackages one at a time through required tiers
+5. Supervisor delegates to tier-specific specialists:
+   - code_generation_specialist_infrastructure (Phase 4.0)
+   - code_generation_specialist_backend (Phase 4.1)
+   - code_generation_specialist_frontend (Phase 4.2)
+   - code_generation_specialist_batch (Phase 4.3)
+6. Wait for all workpackages to complete
+7. Verify all deliverables exist at specified paths
+8. Verify all code compiles successfully
+
+**Quality Gate:**
+- All workpackages completed
+- All code compiles without errors
+- Business rules traceable to specifications
+- Progress tracking complete
+- Ready for integration testing
+
+---
+
 ## Step Execution Protocol
 
 ### Before Delegating a Step:
@@ -410,6 +478,14 @@ Each phase must pass quality gates before proceeding:
 - All test cases defined
 - Review approved
 
+**Phase 4 Quality Gate:**
+- Project structure established
+- All workpackages processed
+- All code compiles successfully
+- Business rules implemented and traceable
+- Progress tracking complete
+- Ready for integration testing
+
 ---
 
 ## Success Criteria
@@ -420,7 +496,8 @@ Each phase must pass quality gates before proceeding:
 - All quality gates passed
 - All reviews approved
 - Target system specifications complete
-- Ready for code generation
+- Target system code generated and compiles
+- Ready for integration testing and deployment
 
 ---
 
