@@ -1,15 +1,15 @@
 
-# Phase 3.2: Business Specialist Review
+# Phase 3.2.1: Business Specification Review
 
 ---
 
 ## Orchestration Information
 
 **Phase**: Phase 3 - Business Specification
-**Step**: Step 3.2 - Business Specialist Review
+**Step**: Step 3.2.1 - Business Specification Review
 **Team Supervisor**: business_team_supervisor
 **Assigned Agent**: business_reviewer_requirements
-**Task File Name**: {{TASKS_BASE_PATH}}/phase_3.2_business_specialist_review.md
+**Task File Name**: {{TASKS_BASE_PATH}}/phase_3.2.1_business_specification_review.md
 
 ### Expected Deliverables
 
@@ -79,14 +79,14 @@
 
 ## Objective
 
-Review and validate business specifications from Phase 3.1 to ensure they accurately represent business requirements and are ready for modernization. Verify that business requirements match actual business policies, remove accidental complexity, add missing requirements, and ensure technology-agnostic documentation. Approve specifications for code generation or return for revision.
+Review and validate business specifications from Phase 3.2 against Chapter 6 evidence to detect drift. Perform backward validation using 20% sampling, calculate drift metrics, and ensure specifications accurately represent business requirements. Approve specifications for code generation or return for revision.
 
 **CRITICAL REVIEW PRINCIPLES**:
-1. **Verify business accuracy** - Do business requirements match actual business policies?
-2. **Identify missing requirements** - What business requirements are missing?
-3. **Remove accidental complexity** - What is legacy technical constraint vs true business requirement?
-4. **Add business rationale** - Why do these requirements exist?
-5. **Ensure modernization readiness** - Are requirements clear enough for code generation?
+1. **Backward validation against Chapter 6** - Verify business elements are supported by Chapter 6 evidence
+2. **Drift detection** - Calculate drift percentage using 20% sample (full validation if drift ≥ 5%)
+3. **Verify business accuracy** - Do business requirements match actual business policies?
+4. **Ensure modernization readiness** - Are requirements clear enough for code generation?
+5. **Technology-agnostic verification** - Confirm Chapters 1-5 have no technical jargon
 
 ---
 
@@ -95,15 +95,116 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 ### 1. Preparation and Review Planning
 1. Review the list of workpackages requiring review
 2. For each workpackage, gather all relevant materials:
-   - Business specification (EN and other versions)
-   - Business context document from Phase 3.0
+   - Business specification (EN and other versions) from Phase 3.2
+   - Approved Chapter 6 from Phase 3.1.1
+   - Traceability matrix from Phase 3.2
+   - Business context document from Phase 3.0.1
    - Business glossary
-   - Source code (for verification if needed)
-   - Legacy specifications (if available)
 3. Prioritize review based on workpackage priority
-4. Allocate sufficient time for thorough review
+4. Prepare backward validation sampling plan
+5. Prepare drift detection checklist
 
-### 2. Chapter 1 Review: Introduction and Business Context
+### 2. Backward Validation Protocol
+
+**Purpose**: Validate that business elements in Chapters 1-5 are supported by Chapter 6 evidence
+
+**Sampling Strategy:**
+1. **Calculate sample size** (20% of business elements):
+   - Count total business entities (BE-XXX)
+   - Count total business rules (BR-XXX)
+   - Count total business functions (F-XXX)
+   - Total elements = entities + rules + functions
+   - Sample size = Total elements × 0.20 (round up)
+
+2. **Select sample** (random or stratified):
+   - Random: Select elements randomly across all types
+   - Stratified: Select 20% from each type (entities, rules, functions)
+   - Recommended: Stratified sampling for better coverage
+
+**Validation Process for Each Sampled Element:**
+
+1. **Locate element in Chapters 1-5**:
+   - Find BE-XXX, BR-XXX, or F-XXX identifier
+   - Read business description
+
+2. **Find Chapter 6 reference**:
+   - Check element's "Chapter 6 Reference" field
+   - Locate corresponding section in Chapter 6
+   - Read technical implementation details
+
+3. **Validate evidence support**:
+   - Does Chapter 6 evidence support this business element?
+   - Is the abstraction appropriate (allowed patterns only)?
+   - Are there drift indicators (forbidden patterns)?
+
+4. **Check for drift indicators**:
+   - **Added Functionality**: Does business element include logic not in Chapter 6 code?
+   - **Invented Entities**: Does entity exist in Chapter 6 database schema?
+   - **Assumed Patterns**: Is business rule actually implemented in Chapter 6 code?
+   - **Inappropriate Abstraction**: Is abstraction level appropriate?
+
+5. **Record validation result**:
+   - **Pass**: Chapter 6 evidence supports element, appropriate abstraction
+   - **Drift**: Evidence doesn't support element or inappropriate abstraction
+   - **Missing Evidence**: No Chapter 6 reference or reference not found
+
+**Drift Metrics Calculation:**
+
+1. **Count validation results**:
+   - Pass count: [number]
+   - Drift count: [number]
+   - Missing evidence count: [number]
+   - Sample size: [number]
+
+2. **Calculate drift percentage**:
+   - Formula: (drift count + missing evidence count) / sample size × 100
+   - **Drift %**: [calculated percentage]
+
+3. **Drift assessment**:
+   - Drift < 5%: Acceptable, approve
+   - Drift 5-10%: Concerning, approve with corrections
+   - Drift ≥ 10%: Unacceptable, reject
+
+**Full Validation Trigger:**
+- If drift ≥ 5% in sample, perform full validation of ALL elements
+- Repeat validation process for 100% of elements
+- Recalculate drift percentage
+- Use full validation results for approval decision
+
+**Backward Validation Report:**
+```markdown
+## Backward Validation Results
+
+### Sample Information
+- Total Elements: [number]
+- Sample Size (20%): [number]
+- Sampling Method: [Random / Stratified]
+
+### Validation Results
+- Pass: [number] ([X%])
+- Drift: [number] ([X%])
+- Missing Evidence: [number] ([X%])
+
+### Drift Percentage: [X.X%]
+
+### Drift Assessment: [Acceptable / Concerning / Unacceptable]
+
+### Full Validation Triggered: [Yes / No]
+- Reason: [Drift ≥ 5% in sample]
+
+### Drift Examples
+1. **Element**: BE-XXX-001 (Customer Email)
+   - **Issue**: Entity not found in Chapter 6 database schema
+   - **Drift Type**: Invented Entity
+   - **Action**: Remove or provide evidence
+
+2. **Element**: BR-XXX-005 (Timezone Handling)
+   - **Issue**: Rule includes timezone logic not in Chapter 6 code
+   - **Drift Type**: Added Functionality
+   - **Action**: Remove or provide evidence
+```
+
+### 3. Chapter 1 Review: Introduction and Business Context
 1. **Verify business context accuracy**:
    - Does the business domain match actual business organization?
    - Are business stakeholders correctly identified?
@@ -366,51 +467,60 @@ Review and validate business specifications from Phase 3.1 to ensure they accura
 1. **For each workpackage, create a comprehensive review report**:
    - **Section 1: Executive Summary**
      - Overall assessment (Approved / Approved with Changes / Rejected)
+     - Drift percentage and assessment
      - Key findings summary
      - Major changes required
      - Approval status and next steps
 
-   - **Section 2: Chapter-by-Chapter Review**
+   - **Section 2: Backward Validation Results**
+     - Sample information (size, method)
+     - Validation results (pass, drift, missing evidence)
+     - Drift percentage calculation
+     - Drift assessment (acceptable / concerning / unacceptable)
+     - Full validation triggered (yes/no)
+     - Drift examples with details
+
+   - **Section 3: Chapter-by-Chapter Review**
      - Chapter 1: Introduction findings and changes
      - Chapter 2: Business Entities findings and changes
      - Chapter 3: Business Rules findings and changes
      - Chapter 4: Business Functions findings and changes
      - Chapter 5: Process Flows findings and changes
-     - Chapter 6: Legacy Implementation findings and changes
+     - Chapter 6: Already validated in Phase 3.1.1
 
-   - **Section 3: Cross-Cutting Issues**
+   - **Section 4: Cross-Cutting Issues**
      - Technology-agnostic language issues
      - Business vocabulary consistency issues
      - Bilingual consistency issues
      - Traceability issues
 
-   - **Section 4: Missing Requirements**
+   - **Section 5: Missing Requirements**
      - Missing business entities
      - Missing business rules
      - Missing business functions
      - Missing business processes
 
-   - **Section 5: Accidental Complexity**
+   - **Section 6: Accidental Complexity**
      - Technical constraints documented as business requirements
      - Legacy workarounds that should be removed
      - Obsolete requirements
 
-   - **Section 6: Business Context Updates**
+   - **Section 7: Business Context Updates**
      - Updates to business domain
      - Updates to business stakeholders
      - Updates to business vocabulary
      - Updates to business glossary
 
-   - **Section 7: Recommendations**
+   - **Section 8: Recommendations**
      - Changes required before approval
      - Suggestions for modernization
      - Areas requiring further clarification
      - Risks and mitigation strategies
 
-   - **Section 8: Approval Decision**
-     - Approved: Ready for code generation
-     - Approved with Changes: Minor changes required
-     - Rejected: Major revision required
+   - **Section 9: Approval Decision**
+     - Approved: Drift < 5%, ready for code generation
+     - Approved with Changes: Drift < 5%, minor changes required
+     - Rejected: Drift ≥ 5%, return to Phase 3.2 with specific corrections
 
 ### 12. Specification Updates
 1. **Apply approved changes to specifications**:

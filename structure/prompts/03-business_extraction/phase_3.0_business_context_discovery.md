@@ -8,7 +8,7 @@
 **Phase**: Phase 3 - Business Specification
 **Step**: Step 3.0 - Business Context Discovery
 **Team Supervisor**: business_team_supervisor
-**Assigned Agent**: business_specialist_logic_extraction
+**Assigned Agent**: business_specialist_requirements
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_3.0_business_context_discovery.md
 
 ### Expected Deliverables

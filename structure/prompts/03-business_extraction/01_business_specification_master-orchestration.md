@@ -15,22 +15,30 @@
 
 ## Overview
 
-This document provides orchestration instructions for the Business Specification phase, which extracts business requirements from legacy code through a three-step process:
+This document provides orchestration instructions for the Business Specification phase, which extracts business requirements from legacy code through a six-phase process:
 
 1. **Phase 3.0**: Business Context Discovery - Understand business domain and intent
-2. **Phase 3.1**: Business Specification Extraction - Extract business entities, rules, and processes
-3. **Phase 3.2**: Business Specialist Review - Validate and refine specifications
+2. **Phase 3.0.1**: Business Context Review - Validate business context accuracy
+3. **Phase 3.1**: Business Logic Extraction - Extract technical evidence (Chapter 6)
+4. **Phase 3.1.1**: Business Logic Extraction Review - Validate abstractions and detect drift
+5. **Phase 3.2**: Business Specification Generation - Create business requirements (Chapters 1-5)
+6. **Phase 3.2.1**: Business Specification Review - Validate specifications and detect drift
 
 **Critical Principle**: Extract **reimagined business requirements** (technology-agnostic) rather than **translated code structures** (technology-specific).
+
+**Critical Quality Control**: Chapter 6 (Legacy Implementation References) serves as the evidence base and drift detection mechanism. All business abstractions in Chapters 1-5 must be traceable to code evidence in Chapter 6.
 
 ---
 
 ## Phase Task Documents
 
 The complete task documents for each phase are located in the prompts directory:
-- **Phase 3.0**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md.md
-- **Phase 3.1**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_specification_extraction.md
-- **Phase 3.2**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_verification.md
+- **Phase 3.0**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md
+- **Phase 3.0.1**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0.1_business_context_review.md
+- **Phase 3.1**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_logic_extraction.md
+- **Phase 3.1.1**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1.1_business_logic_extraction_review.md
+- **Phase 3.2**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_generation.md
+- **Phase 3.2.1**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2.1_business_specification_review.md
 
 **The supervisor provides these task documents directly to agents** (no task file creation required). Each phase document is self-contained with:
 - Orchestration Information (phase, agent, deliverables, success criteria)
@@ -51,9 +59,15 @@ Phase 1 (Analysis) → Phase 2 (Workpackage Planning) → Phase 3 (Business Spec
                                                             ↓
                                                     Phase 3.0 (Context Discovery)
                                                             ↓
-                                                    Phase 3.1 (Specification Extraction)
+                                                    Phase 3.0.1 (Context Review)
                                                             ↓
-                                                    Phase 3.2 (Specialist Review)
+                                                    Phase 3.1 (Logic Extraction - Chapter 6)
+                                                            ↓
+                                                    Phase 3.1.1 (Logic Extraction Review)
+                                                            ↓
+                                                    Phase 3.2 (Specification Generation - Chapters 1-5)
+                                                            ↓
+                                                    Phase 3.2.1 (Specification Review)
                                                             ↓
                                                     Phase 4 (Code Generation)
 ```
@@ -77,8 +91,8 @@ WORKPACKAGE_LOOP:
     # ========================================
     
     EXECUTE Phase_3.0:
-        ASSIGN: business_specialist_logic_extraction
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md.md
+        ASSIGN: business_specialist_requirements
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md
         
         INPUTS:
             - Workpackage planning: {{WORKPACKAGE_PLANNING}}
@@ -111,18 +125,57 @@ WORKPACKAGE_LOOP:
             
             IF verification_passed:
                 UPDATE {{BUSINESS_CONTEXT_STATUS}} with completion
-                PROCEED to Phase_3.1
+                PROCEED to Phase_3.0.1
 
     # ========================================
-    # PHASE 3.1: BUSINESS SPECIFICATION EXTRACTION
+    # PHASE 3.0.1: BUSINESS CONTEXT REVIEW
+    # ========================================
+    
+    EXECUTE Phase_3.0.1:
+        ASSIGN: business_reviewer_requirements
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0.1_business_context_review.md
+        
+        INPUTS:
+            - Business context document: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
+            - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
+            - Source code files: {{SOURCE_CODE}} (for verification if needed)
+            - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+        
+        EXPECTED_OUTPUTS:
+            - Business context review report: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-review.md
+            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
+            - Progress tracking: {{BUSINESS_CONTEXT_STATUS}}
+        
+        VERIFICATION:
+            CHECK review_report_exists(WP-XXX, "context")
+            CHECK approval_decision_documented(WP-XXX, "context")
+            
+            approval_status = GET_CONTEXT_APPROVAL_STATUS(WP-XXX)
+            
+            IF approval_status == "APPROVED":
+                UPDATE {{BUSINESS_CONTEXT_STATUS}} with "Approved"
+                PROCEED to Phase_3.1
+            
+            ELSE IF approval_status == "APPROVED_WITH_CHANGES":
+                CHECK approved_context_exists(WP-XXX)
+                UPDATE {{BUSINESS_CONTEXT_STATUS}} with "Approved with Changes"
+                PROCEED to Phase_3.1
+            
+            ELSE IF approval_status == "REJECTED":
+                LOG "Business context rejected, returning to Phase 3.0"
+                UPDATE {{BUSINESS_CONTEXT_STATUS}} with "Returned to Phase 3.0"
+                RETURN_TO Phase_3.0
+
+    # ========================================
+    # PHASE 3.1: BUSINESS LOGIC EXTRACTION (CHAPTER 6)
     # ========================================
     
     EXECUTE Phase_3.1:
         ASSIGN: business_specialist_logic_extraction
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_specification_extraction.md
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_logic_extraction.md
         
         INPUTS:
-            - Business context document: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
+            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
             - Workpackage planning: {{WORKPACKAGE_PLANNING}}
             - Business flows: {{BUSINESS_FLOWS}}
@@ -132,23 +185,23 @@ WORKPACKAGE_LOOP:
             - Module dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
         
         EXPECTED_OUTPUTS:
-            - Business specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
-            - Business specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
+            - Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md
+            - Logic extraction notes: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
             - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
             - Error reports (if any): {{BUSINESS_SPECIFICATION_ERRORS}}
         
         VERIFICATION:
-            CHECK specification_exists(WP-XXX, language="EN")
-            CHECK specification_exists(WP-XXX, language="..")
-            CHECK ieee_830_compliance(WP-XXX)
-            CHECK business_entities_extracted(WP-XXX)
-            CHECK business_rules_extracted(WP-XXX)
-            CHECK business_functions_extracted(WP-XXX)
-            CHECK process_flows_extracted(WP-XXX)
-            CHECK legacy_implementation_documented(WP-XXX)
-            CHECK technology_agnostic_chapters_1_5(WP-XXX)
-            CHECK bilingual_consistency(WP-XXX)
-            CHECK business_context_incorporated(WP-XXX)
+            CHECK chapter6_exists(WP-XXX)
+            CHECK logic_notes_exist(WP-XXX)
+            CHECK chapter6_section_complete(WP-XXX, "6.1")  # Source Files
+            CHECK chapter6_section_complete(WP-XXX, "6.2")  # Business Rule Implementation
+            CHECK chapter6_section_complete(WP-XXX, "6.3")  # Function Implementation
+            CHECK chapter6_section_complete(WP-XXX, "6.4")  # Database Tables
+            CHECK chapter6_section_complete(WP-XXX, "6.5")  # Error Codes
+            CHECK chapter6_section_complete(WP-XXX, "6.6")  # Technical Architecture
+            CHECK chapter6_section_complete(WP-XXX, "6.7")  # Data Flow Architecture
+            CHECK chapter6_section_complete(WP-XXX, "6.8")  # Technical Rules
+            CHECK abstractions_documented(WP-XXX)
             
             IF verification_failed:
                 LOG error to {{BUSINESS_SPECIFICATION_ERRORS}}
@@ -157,23 +210,108 @@ WORKPACKAGE_LOOP:
             
             IF verification_passed:
                 UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with completion
-                PROCEED to Phase_3.2
+                PROCEED to Phase_3.1.1
 
     # ========================================
-    # PHASE 3.2: BUSINESS SPECIALIST REVIEW
+    # PHASE 3.1.1: BUSINESS LOGIC EXTRACTION REVIEW
+    # ========================================
+    
+    EXECUTE Phase_3.1.1:
+        ASSIGN: business_reviewer_logic_extraction
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1.1_business_logic_extraction_review.md
+        
+        INPUTS:
+            - Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md
+            - Logic extraction notes: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
+            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
+            - Source code files: {{SOURCE_CODE}} (for verification)
+            - Database definitions: {{DATABASE_SOURCE_CODE}}
+        
+        EXPECTED_OUTPUTS:
+            - Logic extraction review report: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-extraction-review.md
+            - Drift detection report (if issues): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-drift-report.md
+            - Approved Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
+            - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
+        
+        VERIFICATION:
+            CHECK logic_review_report_exists(WP-XXX)
+            CHECK drift_metrics_calculated(WP-XXX)
+            CHECK approval_decision_documented(WP-XXX, "logic_extraction")
+            
+            approval_status = GET_LOGIC_APPROVAL_STATUS(WP-XXX)
+            drift_percentage = GET_DRIFT_PERCENTAGE(WP-XXX)
+            
+            IF approval_status == "APPROVED" AND drift_percentage < 10:
+                UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Logic Extraction Approved"
+                PROCEED to Phase_3.2
+            
+            ELSE IF approval_status == "APPROVED_WITH_CHANGES" AND drift_percentage < 10:
+                CHECK approved_chapter6_exists(WP-XXX)
+                UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Logic Extraction Approved with Changes"
+                PROCEED to Phase_3.2
+            
+            ELSE IF approval_status == "REJECTED" OR drift_percentage >= 10:
+                LOG "Logic extraction rejected or drift too high, returning to Phase 3.1"
+                UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Returned to Phase 3.1"
+                RETURN_TO Phase_3.1
+
+    # ========================================
+    # PHASE 3.2: BUSINESS SPECIFICATION GENERATION (CHAPTERS 1-5)
     # ========================================
     
     EXECUTE Phase_3.2:
+        ASSIGN: business_specialist_requirements
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_generation.md
+
+        INPUTS:
+            - Approved Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
+            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
+            - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
+            - Logic extraction notes: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
+        
+        EXPECTED_OUTPUTS:
+            - Business specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
+            - Business specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
+            - Traceability matrix: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
+            - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
+        
+        VERIFICATION:
+            CHECK specification_exists(WP-XXX, language="EN")
+            CHECK specification_exists(WP-XXX, language="..")
+            CHECK traceability_matrix_exists(WP-XXX)
+            CHECK ieee_830_compliance(WP-XXX)
+            CHECK business_entities_extracted(WP-XXX)
+            CHECK business_rules_extracted(WP-XXX)
+            CHECK business_functions_extracted(WP-XXX)
+            CHECK process_flows_extracted(WP-XXX)
+            CHECK technology_agnostic_chapters_1_5(WP-XXX)
+            CHECK bilingual_consistency(WP-XXX)
+            CHECK all_elements_trace_to_chapter6(WP-XXX)
+            
+            IF verification_failed:
+                LOG error to {{BUSINESS_SPECIFICATION_ERRORS}}
+                ESCALATE to human supervisor
+                HALT workpackage processing
+            
+            IF verification_passed:
+                UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with completion
+                PROCEED to Phase_3.2.1
+
+    # ========================================
+    # PHASE 3.2.1: BUSINESS SPECIFICATION REVIEW
+    # ========================================
+    
+    EXECUTE Phase_3.2.1:
         ASSIGN: business_reviewer_requirements
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_verification.md
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2.1_business_specification_review.md
         
         INPUTS:
             - Business specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
             - Business specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
-            - Business context document: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
+            - Approved Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
+            - Traceability matrix: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
+            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
-            - Source code files: {{SOURCE_CODE}} (for verification)
-            - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
         
         EXPECTED_OUTPUTS:
             - Reviewed specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md
@@ -185,22 +323,25 @@ WORKPACKAGE_LOOP:
         
         VERIFICATION:
             CHECK review_report_exists(WP-XXX)
+            CHECK backward_validation_performed(WP-XXX)
+            CHECK drift_metrics_calculated(WP-XXX)
             CHECK approval_decision_documented(WP-XXX)
             
             approval_status = GET_APPROVAL_STATUS(WP-XXX)
+            drift_percentage = GET_SPEC_DRIFT_PERCENTAGE(WP-XXX)
             
-            IF approval_status == "APPROVED":
+            IF approval_status == "APPROVED" AND drift_percentage < 5:
                 UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Approved"
                 MARK workpackage as ready for Phase 4 (Code Generation)
                 PROCEED to next workpackage
             
-            ELSE IF approval_status == "APPROVED_WITH_CHANGES":
+            ELSE IF approval_status == "APPROVED_WITH_CHANGES" AND drift_percentage < 5:
                 CHECK reviewed_specifications_exist(WP-XXX)
                 UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Approved with Changes"
                 MARK workpackage as ready for Phase 4 (Code Generation)
                 PROCEED to next workpackage
             
-            ELSE IF approval_status == "REJECTED":
+            ELSE IF approval_status == "REJECTED" OR drift_percentage >= 5:
                 issue_type = GET_ISSUE_TYPE(WP-XXX)
                 
                 IF issue_type == "BUSINESS_CONTEXT":
@@ -208,10 +349,15 @@ WORKPACKAGE_LOOP:
                     UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Returned to Phase 3.0"
                     RETURN_TO Phase_3.0
                 
-                ELSE IF issue_type == "EXTRACTION":
-                    LOG "Extraction issues identified, returning to Phase 3.1"
+                ELSE IF issue_type == "LOGIC_EXTRACTION":
+                    LOG "Logic extraction issues identified, returning to Phase 3.1"
                     UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Returned to Phase 3.1"
                     RETURN_TO Phase_3.1
+                
+                ELSE IF issue_type == "SPECIFICATION":
+                    LOG "Specification issues identified, returning to Phase 3.2"
+                    UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Returned to Phase 3.2"
+                    RETURN_TO Phase_3.2
                 
                 ELSE IF issue_type == "CRITICAL":
                     LOG "Critical issues identified, escalating to human supervisor"
@@ -219,9 +365,9 @@ WORKPACKAGE_LOOP:
                     HALT workpackage processing
                 
                 ELSE:
-                    LOG "Minor issues identified, fixing in Phase 3.2"
-                    UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Fixing in Phase 3.2"
-                    RETRY Phase_3.2
+                    LOG "Minor issues identified, fixing in Phase 3.2.1"
+                    UPDATE {{BUSINESS_SPECIFICATION_STATUS}} with "Fixing in Phase 3.2.1"
+                    RETRY Phase_3.2.1
 
     # ========================================
     # WORKPACKAGE COMPLETION
@@ -240,9 +386,9 @@ END WORKPACKAGE_LOOP
 ## Agent Assignments
 
 ### Phase 3.0: Business Context Discovery
-**Agent**: business_specialist_logic_extraction
-**Agent Definition**: structure/agents/business_team/business_specialist_logic_extraction.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md.md
+**Agent**: business_specialist_requirements
+**Agent Definition**: structure/agents/business_team/business_specialist_requirements.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md
 **Capabilities**:
 - Business domain identification
 - Stakeholder analysis
@@ -250,30 +396,63 @@ END WORKPACKAGE_LOOP
 - Business constraint identification
 - Business problem articulation
 
-### Phase 3.1: Business Specification Extraction
-**Agent**: business_specialist_logic_extraction
-**Agent Definition**: structure/agents/business_team/business_specialist_logic_extraction.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_specification_extraction.md
-**Capabilities**:
-- Code analysis and interpretation
-- Business entity extraction
-- Business rule extraction
-- Business function identification
-- Process flow documentation
-- Legacy implementation traceability
-- IEEE 830-1998 documentation
-
-### Phase 3.2: Business Specialist Review
+### Phase 3.0.1: Business Context Review
 **Agent**: business_reviewer_requirements
 **Agent Definition**: structure/agents/business_team/business_reviewer_requirements.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_verification.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0.1_business_context_review.md
 **Capabilities**:
+- Business domain verification
+- Stakeholder completeness validation
+- Business vocabulary consistency checking
+- Confidence assessment
+
+### Phase 3.1: Business Logic Extraction (Chapter 6)
+**Agent**: business_specialist_logic_extraction
+**Agent Definition**: structure/agents/business_team/business_specialist_logic_extraction.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_logic_extraction.md
+**Capabilities**:
+- Code analysis and interpretation
+- Technical implementation documentation
+- Evidence-based abstraction
+- Chapter 6 creation with complete traceability
+- Allowed abstraction pattern application
+
+### Phase 3.1.1: Business Logic Extraction Review
+**Agent**: business_reviewer_logic_extraction
+**Agent Definition**: structure/agents/business_team/business_reviewer_logic_extraction.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1.1_business_logic_extraction_review.md
+**Capabilities**:
+- Abstraction pattern validation
+- Drift detection
+- Chapter 6 completeness verification
+- Traceability verification
+- Evidence base quality assessment
+
+### Phase 3.2: Business Specification Generation (Chapters 1-5)
+**Agent**: business_specialist_requirements
+**Agent Definition**: structure/agents/business_team/business_specialist_requirements.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_generation.md
+**Capabilities**:
+- Business entity extraction from Chapter 6
+- Business rule extraction from Chapter 6
+- Business function identification from Chapter 6
+- Process flow documentation from Chapter 6
+- IEEE 830-1998 documentation
+- Technology-agnostic specification writing
+- Bilingual documentation
+
+### Phase 3.2.1: Business Specification Review
+**Agent**: business_reviewer_requirements
+**Agent Definition**: structure/agents/business_team/business_reviewer_requirements.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2.1_business_specification_review.md
+**Capabilities**:
+- Backward validation against Chapter 6
+- Drift metrics calculation
 - Business policy validation
 - Requirement completeness verification
 - Technology-agnostic language verification
 - Bilingual consistency verification
 - Modernization readiness assessment
-- Business rationale articulation
 
 ---
 
