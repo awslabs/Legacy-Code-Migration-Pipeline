@@ -170,9 +170,18 @@ class AgentSourceClassifier:
         
         # Check if it's a local file path
         if ('/' in agent_input or '\\' in agent_input or 
-            agent_input.endswith('.md') or 
-            Path(agent_input).exists()):
+            agent_input.endswith('.md')):
             return AgentSourceType.LOCAL_FILE
+        
+        # Check if it exists as a file (but protect against checking command names)
+        # Only check if it looks like a path (has extension or path separators)
+        try:
+            if '.' in agent_input or '/' in agent_input or '\\' in agent_input:
+                if Path(agent_input).exists():
+                    return AgentSourceType.LOCAL_FILE
+        except (OSError, ValueError):
+            # If Path operations fail, it's not a valid path
+            pass
         
         # Otherwise assume it's a built-in agent name
         return AgentSourceType.BUILTIN
@@ -663,13 +672,13 @@ class PrerequisiteValidator:
             'version_check': True,
             'min_version': '3.3',
             'install_help': 'Install tmux 3.3+ using the CAO installer or your system package manager',
-            'critical': True
+            'critical': False  # Will be installed by the installer
         },
         'uv': {
             'name': 'uv',
             'check_command': 'uv',
             'install_help': 'Install uv from https://docs.astral.sh/uv/getting-started/installation/',
-            'critical': True
+            'critical': False  # Will be installed by the installer
         },
         'cao': {
             'name': 'CLI Agent Orchestrator',
@@ -1691,6 +1700,15 @@ def main():
     progress = ProgressIndicator(total_steps)
     
     try:
+        # Check for problematic files in current directory
+        import os
+        current_dir_files = os.listdir('.')
+        problematic_files = [f for f in current_dir_files if f in ['cao', 'tmux', 'uv', 'git']]
+        if problematic_files:
+            print(f"\n⚠️  Warning: Found files with command names in current directory: {', '.join(problematic_files)}")
+            print("   These files may cause conflicts during installation.")
+            print("   Consider renaming them or running the installer from a different directory.\n")
+        
         # Enhanced prerequisite validation
         if not args.skip_validation:
             progress.start_step("Validating system prerequisites")
@@ -1752,9 +1770,20 @@ def main():
     except InstallationError as e:
         print(f"\n❌ Installation failed: {e.get_formatted_message()}")
         sys.exit(1)
+    except OSError as e:
+        print(f"\n❌ File system error during installation: {str(e)}")
+        if 'Not a directory' in str(e):
+            print("💡 This error often occurs when there are files named after commands (cao, tmux, uv, git)")
+            print("   in the current directory. Please check and rename any such files.")
+        print("💡 Suggestion: Try running the installer from a different directory")
+        sys.exit(1)
     except Exception as e:
         print(f"\n❌ Unexpected error during installation: {str(e)}")
+        print(f"   Error type: {type(e).__name__}")
+        if hasattr(e, 'errno'):
+            print(f"   Error number: {e.errno}")
         print("💡 Suggestion: Check the error details above and try again")
+        print("💡 If the error persists, try running from a different directory")
         sys.exit(1)
 
 

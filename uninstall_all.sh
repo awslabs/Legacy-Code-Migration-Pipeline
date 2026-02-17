@@ -8,9 +8,13 @@
 # Usage: ./uninstall_all.sh [OPTIONS]
 #
 # Options:
-#   --keep-config    Keep CAO configuration files
-#   --keep-cache     Keep agent cache
-#   --help           Show this help message
+#   --keep-config         Keep CAO configuration files
+#   --keep-cache          Keep agent cache
+#   --remove-tmux         Remove tmux (if installed by CAO installer)
+#   --remove-uv-packages  Remove CAO-related packages from uv (keeps uv itself)
+#   --remove-uv           Remove uv package manager completely
+#   --remove-all-deps     Remove all dependencies (tmux + uv + packages)
+#   --help                Show this help message
 #
 
 set -e  # Exit on error
@@ -25,6 +29,9 @@ NC='\033[0m' # No Color
 # Default options
 KEEP_CONFIG=false
 KEEP_CACHE=false
+REMOVE_TMUX=false
+REMOVE_UV=false
+REMOVE_UV_PACKAGES=false
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -37,13 +44,41 @@ while [[ $# -gt 0 ]]; do
             KEEP_CACHE=true
             shift
             ;;
+        --remove-tmux)
+            REMOVE_TMUX=true
+            shift
+            ;;
+        --remove-uv-packages)
+            REMOVE_UV_PACKAGES=true
+            shift
+            ;;
+        --remove-uv)
+            REMOVE_UV=true
+            shift
+            ;;
+        --remove-all-deps)
+            REMOVE_TMUX=true
+            REMOVE_UV=true
+            REMOVE_UV_PACKAGES=true
+            shift
+            ;;
         --help)
             echo "Usage: ./uninstall_all.sh [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --keep-config    Keep CAO configuration files"
-            echo "  --keep-cache     Keep agent cache"
-            echo "  --help           Show this help message"
+            echo "  --keep-config         Keep CAO configuration files"
+            echo "  --keep-cache          Keep agent cache"
+            echo "  --remove-tmux         Remove tmux (if installed by CAO installer)"
+            echo "  --remove-uv-packages  Remove CAO-related packages from uv (keeps uv itself)"
+            echo "  --remove-uv           Remove uv package manager completely"
+            echo "  --remove-all-deps     Remove all dependencies (tmux + uv + packages)"
+            echo "  --help                Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  ./uninstall_all.sh                       # Remove CAO and agents only"
+            echo "  ./uninstall_all.sh --remove-uv-packages  # Remove CAO and its uv packages"
+            echo "  ./uninstall_all.sh --remove-all-deps     # Remove everything including dependencies"
+            echo "  ./uninstall_all.sh --remove-uv           # Remove CAO, agents, and uv completely"
             exit 0
             ;;
         *)
@@ -73,6 +108,18 @@ fi
 
 if [ "$KEEP_CACHE" = false ]; then
     echo "  • Agent cache and store"
+fi
+
+if [ "$REMOVE_UV_PACKAGES" = true ]; then
+    echo "  • CAO-related packages from uv (cli-agent-orchestrator)"
+fi
+
+if [ "$REMOVE_UV" = true ]; then
+    echo "  • uv package manager (complete removal)"
+fi
+
+if [ "$REMOVE_TMUX" = true ]; then
+    echo "  • tmux (if installed by CAO installer)"
 fi
 
 echo ""
@@ -135,7 +182,7 @@ fi
 echo ""
 
 # Step 3: Uninstall CAO
-echo -e "${BLUE}[3/4] Uninstalling CAO...${NC}"
+echo -e "${BLUE}[3/6] Uninstalling CAO...${NC}"
 if command -v uv &> /dev/null; then
     if uv tool uninstall cli-agent-orchestrator 2>/dev/null; then
         echo -e "${GREEN}✓ CAO uninstalled successfully${NC}"
@@ -149,7 +196,7 @@ fi
 echo ""
 
 # Step 4: Clean up configuration and cache
-echo -e "${BLUE}[4/4] Cleaning up files...${NC}"
+echo -e "${BLUE}[4/6] Cleaning up files...${NC}"
 
 # Remove Kiro agents
 if [ -d "$HOME/.kiro/agents" ]; then
@@ -185,6 +232,114 @@ fi
 
 echo ""
 
+# Step 5: Remove CAO-related uv packages (optional)
+if [ "$REMOVE_UV_PACKAGES" = true ]; then
+    echo -e "${BLUE}[5/6] Removing CAO-related packages from uv...${NC}"
+    
+    if command -v uv &> /dev/null; then
+        echo "Checking for CAO-related packages in uv..."
+        
+        # List installed uv tools
+        if uv tool list &> /dev/null; then
+            echo "Currently installed uv tools:"
+            uv tool list
+            echo ""
+        fi
+        
+        # Remove cli-agent-orchestrator if still present
+        if uv tool list 2>/dev/null | grep -q "cli-agent-orchestrator"; then
+            echo "Removing cli-agent-orchestrator..."
+            uv tool uninstall cli-agent-orchestrator 2>/dev/null || true
+        fi
+        
+        # Note: CAO is installed as a uv tool, not as a regular package
+        # uv tools are self-contained and don't install additional packages
+        
+        echo -e "${GREEN}✓ CAO-related packages removed from uv${NC}"
+        echo -e "${BLUE}ℹ️  uv itself has been preserved and can be used for other projects${NC}"
+    else
+        echo -e "${YELLOW}⚠️  uv not found in PATH${NC}"
+    fi
+elif [ "$REMOVE_UV" = true ]; then
+    echo -e "${BLUE}[5/6] Removing uv package manager completely...${NC}"
+    
+    if command -v uv &> /dev/null; then
+        echo "Removing uv from: ~/.cargo/bin/"
+        
+        # Remove uv binaries
+        rm -f ~/.cargo/bin/uv
+        rm -f ~/.cargo/bin/uvx
+        
+        # Remove uv data directory if it exists
+        if [ -d "$HOME/.local/share/uv" ]; then
+            echo "Removing uv data: ~/.local/share/uv"
+            rm -rf "$HOME/.local/share/uv"
+        fi
+        
+        # Remove uv cache if it exists
+        if [ -d "$HOME/.cache/uv" ]; then
+            echo "Removing uv cache: ~/.cache/uv"
+            rm -rf "$HOME/.cache/uv"
+        fi
+        
+        echo -e "${GREEN}✓ uv removed completely${NC}"
+        echo -e "${YELLOW}⚠️  Note: You may need to restart your shell${NC}"
+    else
+        echo -e "${YELLOW}⚠️  uv not found in PATH${NC}"
+    fi
+else
+    echo -e "${BLUE}[5/6] Keeping uv package manager and its packages${NC}"
+fi
+
+echo ""
+
+# Step 6: Remove tmux (optional)
+if [ "$REMOVE_TMUX" = true ]; then
+    echo -e "${BLUE}[6/6] Checking tmux installation...${NC}"
+    
+    if command -v tmux &> /dev/null; then
+        TMUX_PATH=$(which tmux)
+        echo "Found tmux at: $TMUX_PATH"
+        
+        # Check if tmux is in user-local directories (likely installed by CAO)
+        if [[ "$TMUX_PATH" == "$HOME/.local/bin/tmux" ]] || [[ "$TMUX_PATH" == "$HOME/bin/tmux" ]]; then
+            echo "Removing tmux (appears to be installed by CAO installer)"
+            rm -f "$TMUX_PATH"
+            echo -e "${GREEN}✓ tmux removed${NC}"
+        elif [[ "$TMUX_PATH" == "/usr/local/bin/tmux" ]]; then
+            echo -e "${YELLOW}⚠️  tmux is in /usr/local/bin (may require sudo)${NC}"
+            read -p "Remove tmux from /usr/local/bin? (requires sudo) (y/n): " -r
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                sudo rm -f /usr/local/bin/tmux
+                echo -e "${GREEN}✓ tmux removed${NC}"
+            else
+                echo -e "${BLUE}ℹ️  Skipping tmux removal${NC}"
+            fi
+        else
+            echo -e "${YELLOW}⚠️  tmux is installed via system package manager${NC}"
+            echo "   Location: $TMUX_PATH"
+            echo "   To remove, use your system package manager:"
+            
+            # Detect OS and provide appropriate command
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                echo "   macOS: brew uninstall tmux"
+            elif [[ -f /etc/debian_version ]]; then
+                echo "   Debian/Ubuntu: sudo apt remove tmux"
+            elif [[ -f /etc/redhat-release ]]; then
+                echo "   RHEL/CentOS: sudo yum remove tmux"
+            else
+                echo "   Use your system's package manager"
+            fi
+        fi
+    else
+        echo -e "${YELLOW}⚠️  tmux not found${NC}"
+    fi
+else
+    echo -e "${BLUE}[6/6] Keeping tmux${NC}"
+fi
+
+echo ""
+
 # Summary
 echo -e "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║  Uninstallation Complete                                   ║${NC}"
@@ -208,21 +363,58 @@ else
     echo "  • Agent cache has been preserved"
 fi
 
+if [ "$REMOVE_UV_PACKAGES" = true ]; then
+    echo "  • CAO-related packages removed from uv (uv itself preserved)"
+fi
+
+if [ "$REMOVE_UV" = true ]; then
+    echo "  • uv package manager has been removed completely"
+fi
+
+if [ "$REMOVE_TMUX" = true ]; then
+    echo "  • tmux removal attempted (check messages above)"
+fi
+
 echo ""
 echo "What was NOT removed:"
+
+if [ "$REMOVE_UV" = false ]; then
+    if [ "$REMOVE_UV_PACKAGES" = true ]; then
+        echo "  • uv (Python package manager) - preserved for other projects"
+    else
+        echo "  • uv (Python package manager) and its packages"
+    fi
+fi
+
+if [ "$REMOVE_TMUX" = false ]; then
+    echo "  • tmux (terminal multiplexer)"
+fi
+
 echo "  • Python (python3)"
-echo "  • uv (Python package manager)"
-echo "  • tmux (terminal multiplexer)"
 echo "  • Git"
 echo "  • Project directories and files"
 echo "  • Project-specific .cao directories"
 echo ""
 
-echo "To remove these manually:"
-echo "  • uv: Follow instructions at https://docs.astral.sh/uv/"
-echo "  • tmux: Use your system package manager (brew, apt, etc.)"
+if [ "$REMOVE_UV" = false ] || [ "$REMOVE_TMUX" = false ]; then
+    echo "To remove remaining dependencies:"
+    
+    if [ "$REMOVE_UV_PACKAGES" = false ] && [ "$REMOVE_UV" = false ]; then
+        echo "  • CAO packages from uv: ./uninstall_all.sh --remove-uv-packages"
+        echo "  • uv completely: ./uninstall_all.sh --remove-uv"
+    fi
+    
+    if [ "$REMOVE_TMUX" = false ]; then
+        echo "  • tmux: ./uninstall_all.sh --remove-tmux"
+    fi
+    
+    echo "  • All dependencies: ./uninstall_all.sh --remove-all-deps"
+    echo ""
+fi
+
+echo "To remove manually:"
 echo "  • Projects: Delete project directories manually"
 echo ""
 
-echo -e "${BLUE}If you want to reinstall, run: ./install_all.sh${NC}"
+echo -e "${BLUE}If you want to reinstall, run: python install_cao.py${NC}"
 echo ""

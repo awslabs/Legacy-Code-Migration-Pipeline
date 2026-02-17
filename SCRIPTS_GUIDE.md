@@ -320,7 +320,7 @@ This will:
 
 ### Description
 
-Uninstalls CAO and removes all agents, with options for selective cleanup.
+Uninstalls CAO and removes all agents, with options for selective cleanup including dependency removal.
 
 ### Usage
 
@@ -332,13 +332,37 @@ Uninstalls CAO and removes all agents, with options for selective cleanup.
 
 - `--keep-config`: Keep CAO configuration files
 - `--keep-cache`: Keep agent cache and store
+- `--remove-tmux`: Remove tmux (if installed by CAO installer)
+- `--remove-uv-packages`: Remove CAO-related packages from uv (keeps uv itself)
+- `--remove-uv`: Remove uv package manager completely
+- `--remove-all-deps`: Remove all dependencies (tmux + uv + packages)
 - `--help`: Show help message
 
 ### Examples
 
-**Complete uninstallation:**
+**Complete uninstallation (CAO and agents only):**
 ```bash
 ./uninstall_all.sh
+```
+
+**Remove CAO and clean up its uv packages (recommended for most users):**
+```bash
+./uninstall_all.sh --remove-uv-packages
+```
+
+**Remove everything including all dependencies:**
+```bash
+./uninstall_all.sh --remove-all-deps
+```
+
+**Remove CAO and uv completely:**
+```bash
+./uninstall_all.sh --remove-uv
+```
+
+**Remove CAO and tmux only:**
+```bash
+./uninstall_all.sh --remove-tmux
 ```
 
 **Keep configuration files:**
@@ -351,9 +375,9 @@ Uninstalls CAO and removes all agents, with options for selective cleanup.
 ./uninstall_all.sh --keep-cache
 ```
 
-**Keep both config and cache:**
+**Keep both config and cache, but remove uv packages:**
 ```bash
-./uninstall_all.sh --keep-config --keep-cache
+./uninstall_all.sh --keep-config --keep-cache --remove-uv-packages
 ```
 
 ### What It Does
@@ -363,8 +387,9 @@ Uninstalls CAO and removes all agents, with options for selective cleanup.
 - Reports installation status
 
 #### Step 2: List Installed Agents
-- Lists all currently installed agents
-- Shows total agent count
+- Lists all currently installed CAO agents
+- Checks for Kiro agents in `~/.kiro/agents`
+- Shows total agent count for both
 - Provides overview of what will be removed
 
 #### Step 3: Uninstall CAO
@@ -373,30 +398,66 @@ Uninstalls CAO and removes all agents, with options for selective cleanup.
 - Reports success or failure
 
 #### Step 4: Clean Up Files
-- Removes agent store: `~/.aws/cli-agent-orchestrator/`
+- Removes Kiro agents directory: `~/.kiro/agents`
+- Removes agent store: `~/.aws/cli-agent-orchestrator/` (unless `--keep-cache`)
 - Preserves project-specific `.cao` directories
 - Respects `--keep-config` and `--keep-cache` options
 
-### What Is NOT Removed
+#### Step 5: Remove CAO-related uv Packages (Optional)
+When `--remove-uv-packages` is specified:
+- Lists currently installed uv tools
+- Removes `cli-agent-orchestrator` from uv
+- Preserves uv itself for use with other projects
+- Shows what tools remain installed
+
+#### Step 6: Remove uv Completely (Optional)
+When `--remove-uv` is specified:
+- Removes uv binaries: `~/.cargo/bin/uv`, `~/.cargo/bin/uvx`
+- Removes uv data directory: `~/.local/share/uv`
+- Removes uv cache: `~/.cache/uv`
+- Complete removal of uv from system
+
+#### Step 7: Remove tmux (Optional)
+When `--remove-tmux` is specified:
+- Detects tmux installation location
+- **User-local installations** (`~/.local/bin/tmux`, `~/bin/tmux`): Removes automatically
+- **System-wide installations** (`/usr/local/bin/tmux`): Asks for confirmation (requires sudo)
+- **Package manager installations** (`/usr/bin/tmux`): Provides instructions for appropriate package manager
+
+### What Is NOT Removed (by default)
 
 The script preserves:
 - **Python** (python3)
-- **uv** (Python package manager)
+- **uv** (Python package manager) and its packages
 - **tmux** (terminal multiplexer)
 - **Git**
 - **Project directories** and all project files
 - **Project-specific .cao directories**
 
-These must be removed manually if desired.
+Use the optional flags to remove these selectively.
+
+### Dependency Removal Options
+
+The script provides granular control over dependency removal:
+
+| Option | Removes | Keeps | Use Case |
+|--------|---------|-------|----------|
+| (none) | CAO, agents | uv, tmux, packages | Default cleanup, keep tools for other projects |
+| `--remove-uv-packages` | CAO, agents, CAO packages | uv, tmux | Clean CAO footprint, keep uv for other projects |
+| `--remove-uv` | CAO, agents, uv completely | tmux | Remove uv, keep tmux |
+| `--remove-tmux` | CAO, agents, tmux | uv, packages | Remove tmux, keep uv |
+| `--remove-all-deps` | CAO, agents, uv, tmux, packages | Python, Git | Complete cleanup |
 
 ### Output
 
 The script provides:
 - Warning message before uninstallation
+- List of what will be removed
 - Confirmation prompt
-- Progress indicators
-- Summary of what was removed
+- Progress indicators for each step
+- Summary of what was removed and what was kept
 - Instructions for manual cleanup (if needed)
+- Suggestions for removing remaining dependencies
 
 ### Exit Codes
 
@@ -407,8 +468,10 @@ The script provides:
 
 - **Confirmation prompt**: Requires explicit "yes" to proceed
 - **Preserves projects**: Never touches project directories
-- **Selective cleanup**: Options to keep config and cache
+- **Selective cleanup**: Options to keep config, cache, or dependencies
 - **Clear warnings**: Shows exactly what will be removed
+- **Smart tmux detection**: Identifies installation method before removal
+- **Preserves uv option**: Can remove only CAO packages while keeping uv
 
 ### Reinstalling After Uninstall
 
@@ -426,6 +489,29 @@ python3 create_project.py my_project
 cd my_project
 python3 acm/install_agents.py
 ```
+
+### Understanding Dependency Removal
+
+**When to use `--remove-uv-packages`:**
+- You want to clean up CAO's footprint in uv
+- You use uv for other Python projects
+- You want to keep uv available for future use
+- **Recommended for most users**
+
+**When to use `--remove-uv`:**
+- You don't use uv for anything else
+- You want a complete cleanup
+- You're switching to a different Python package manager
+
+**When to use `--remove-tmux`:**
+- tmux was installed by the CAO installer
+- You don't use tmux for other purposes
+- You want to remove all CAO-related tools
+
+**When to use `--remove-all-deps`:**
+- You want a complete system cleanup
+- You're uninstalling permanently
+- You don't use any of these tools for other purposes
 
 ## Comparison: Scripts vs Manual Installation
 
@@ -448,9 +534,11 @@ python3 acm/install_agents.py
 ### Use uninstall_all.sh When:
 
 ✅ You want to completely remove CAO  
+✅ You want to clean up CAO's uv packages while keeping uv  
 ✅ You're troubleshooting installation issues  
 ✅ You want to start fresh  
 ✅ You're cleaning up after testing  
+✅ You want to remove dependencies installed by CAO  
 
 ## Best Practices
 
@@ -465,8 +553,10 @@ python3 acm/install_agents.py
 
 1. **Backup First**: Save any important project files before uninstalling
 2. **Keep Config**: Use `--keep-config` if you plan to reinstall soon
-3. **Complete Cleanup**: Run without options for fresh start
-4. **Selective**: Use options to preserve specific components
+3. **Clean uv Packages**: Use `--remove-uv-packages` to clean CAO footprint while keeping uv (recommended)
+4. **Complete Cleanup**: Use `--remove-all-deps` for complete removal of all dependencies
+5. **Selective**: Use individual options (`--remove-uv`, `--remove-tmux`) for targeted cleanup
+6. **Check Other Projects**: Before removing uv or tmux, ensure they're not used by other projects
 
 ### Troubleshooting
 
@@ -523,9 +613,12 @@ If you encounter issues:
 cd my_migration_project
 # ... do migration work ...
 
-# When done, clean up
+# When done, clean up (recommended - keeps uv for other projects)
 cd ..
-./uninstall_all.sh
+./uninstall_all.sh --remove-uv-packages
+
+# Or complete cleanup if not using uv/tmux elsewhere
+./uninstall_all.sh --remove-all-deps
 ```
 
 ### Multiple Projects
@@ -541,6 +634,9 @@ python3 create_project.py project2
 # Install agents for each
 cd project1 && python3 acm/install_agents.py && cd ..
 cd project2 && python3 acm/install_agents.py && cd ..
+
+# When done with all projects, clean up
+./uninstall_all.sh --remove-uv-packages  # Keeps uv for future use
 ```
 
 ### Testing Different Providers
@@ -555,8 +651,27 @@ cd project2 && python3 acm/install_agents.py && cd ..
 # Test with Claude Code
 ./install_all.sh test_claude --provider claude_code
 
-# Clean up
-./uninstall_all.sh
+# Clean up after testing
+./uninstall_all.sh --remove-uv-packages
+```
+
+### Selective Cleanup Scenarios
+
+```bash
+# Scenario 1: Keep uv for other Python projects
+./uninstall_all.sh --remove-uv-packages
+
+# Scenario 2: Remove only tmux (keep uv and its packages)
+./uninstall_all.sh --remove-tmux
+
+# Scenario 3: Remove uv but keep tmux
+./uninstall_all.sh --remove-uv
+
+# Scenario 4: Complete cleanup
+./uninstall_all.sh --remove-all-deps
+
+# Scenario 5: Keep everything for later use
+./uninstall_all.sh --keep-config --keep-cache
 ```
 
 ---

@@ -380,11 +380,41 @@ Install all 28 agents with Kiro CLI? (Y/n): Y
 
 ### Uninstalling CAO
 
-If you need to remove CAO:
+If you need to remove CAO, the framework provides flexible uninstallation options:
 
+**Remove CAO and clean up its packages (recommended):**
 ```bash
-uv tool uninstall cli-agent-orchestrator
+./uninstall_all.sh --remove-uv-packages
 ```
+This removes CAO and its packages from uv while keeping uv itself for other projects.
+
+**Complete removal including all dependencies:**
+```bash
+./uninstall_all.sh --remove-all-deps
+```
+This removes CAO, agents, uv, and tmux completely.
+
+**Remove only CAO and agents (keep all dependencies):**
+```bash
+./uninstall_all.sh
+```
+
+**Other options:**
+```bash
+# Remove uv completely
+./uninstall_all.sh --remove-uv
+
+# Remove tmux only
+./uninstall_all.sh --remove-tmux
+
+# Keep configuration for later use
+./uninstall_all.sh --keep-config --keep-cache
+
+# See all options
+./uninstall_all.sh --help
+```
+
+For detailed information about uninstallation options, see [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md).
 
 ### Troubleshooting
 

@@ -303,21 +303,21 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         python3 install_acm_tools.py --tools-dir "$PROJECT_NAME/tools" --skip-on-error
         
         echo ""
-        # Verify installation
-        if [ -d "$PROJECT_NAME/tools/acm-tools" ]; then
+        # Verify installation by checking if directory actually exists
+        if [ -d "$PROJECT_NAME/tools/acm-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/acm-tools 2>/dev/null)" ]; then
             echo -e "${GREEN}✓ ACM tools installed successfully${NC}"
         else
-            echo -e "${YELLOW}⚠️  ACM tools download failed or repository is not accessible${NC}"
+            echo -e "${YELLOW}⚠️  ACM tools not installed${NC}"
             echo ""
             echo "This is expected if:"
             echo "  • The repository is private or requires authentication"
             echo "  • You have SSL certificate issues"
             echo "  • You don't have network access to the repository"
             echo ""
-            echo "To install ACM tools:"
-            echo "  1. Download acm-tools-main.zip and place it in the installation directory"
+            echo "To install ACM tools later:"
+            echo "  1. Download acm-tools-main.zip manually from the repository"
             echo "  2. Run: cd $PROJECT_NAME"
-            echo "  3. Run: python3 ../install_acm_tools.py --tools-dir ./tools"
+            echo "  3. Run: python3 ../install_acm_tools.py --tools-dir ./tools --zip-file /path/to/acm-tools-main.zip"
             echo ""
             echo "  Or specify the ZIP file location:"
             echo "  python3 ../install_acm_tools.py --tools-dir ./tools --zip-file /path/to/acm-tools-main.zip"
@@ -348,10 +348,10 @@ if [ -n "$SKIP_AGENTS" ]; then
 else
     echo "  ✓ Agents installed with provider: $PROVIDER"
 fi
-if [ -d "$PROJECT_NAME/tools/acm-tools" ]; then
+if [ -d "$PROJECT_NAME/tools/acm-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/acm-tools 2>/dev/null)" ]; then
     echo "  ✓ ACM tools installed"
 else
-    echo "  ⊘ ACM tools installation skipped"
+    echo "  ⊘ ACM tools not installed"
 fi
 echo ""
 
