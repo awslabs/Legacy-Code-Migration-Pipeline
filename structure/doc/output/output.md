@@ -59,7 +59,6 @@ Contains migration workpackage definitions and tracking:
 
 ### Structured Data Files
 - **JSON**: Configuration, status tracking, and structured analysis results
-- **CSV**: Tabular data for dependencies, analysis tables, and metrics
 - **Markdown**: Human-readable reports and documentation
 
 ### Generated Code

@@ -92,6 +92,12 @@ python ../install_acm_tools.py --tools-dir ./tools
 python install_acm_tools.py --tools-dir my_project/tools
 ```
 
+### Update Prompts in Existing Project
+```bash
+# After modifying prompts in structure/prompts
+python update_prompts.py /path/to/my_project
+```
+
 ## ACM Tools Installation
 
 ACM tools are automatically installed during project creation. If you need to install manually:

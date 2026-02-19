@@ -13,12 +13,12 @@
 
 ### Expected Deliverables
 
-1. **Business Context Documents**
-   - File: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
+1. **Business Context Documents (Draft)**
+   - File: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-draft.md
    - Template: {{BUSINESS_CONTEXT_TEMPLATE}}
-   - Description: Business domain, stakeholders, vocabulary, and constraints for each workpackage
+   - Description: Business domain, stakeholders, vocabulary, and constraints for each workpackage (draft for review)
 
-2. **Business Glossary**
+2. **Business Glossary** (living document)
    - File: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
    - Description: Consolidated business vocabulary across all workpackages
 
@@ -53,10 +53,9 @@
 - **Legacy specifications**: `{{PROJECT_BASE_PATH}}/input/legacy_specifications/`
 - **Legacy documentation**: `{{PROJECT_BASE_PATH}}/input/legacy_documentation/`
 - **Business documentation**: `{{PROJECT_BASE_PATH}}/input/business_documentation/`
-- **Module dependency table**: `{{DEPENDENCY_ANALYSIS_TABLE}}`
 
 ### Output Locations
-- **Business context documents**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md`
+- **Business context documents (draft)**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-draft.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Progress tracking**: `{{BUSINESS_CONTEXT_STATUS}}`
 - **Error reports**: `{{BUSINESS_CONTEXT_ERRORS}}`
@@ -78,6 +77,27 @@
 Discover and document the business context for each workpackage BEFORE extracting technical details. Understand what business problem the code solves, who the stakeholders are, what business vocabulary exists, and what business constraints apply. This context will guide the subsequent business specification extraction in Phase 3.1.
 
 **CRITICAL**: This phase is about understanding the business landscape, NOT extracting detailed business rules or entities. Focus on the "why" and "who" before the "what" and "how".
+
+---
+
+## CRITICAL RULES - Artifact Creation
+
+**YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
+
+**Allowed Outputs** (from Output Locations section above):
+- Business context document (draft): `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-draft.md`
+- Business glossary: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
+- Progress tracking: `{{BUSINESS_CONTEXT_STATUS}}`
+- Error logs (if errors occur): `{{BUSINESS_CONTEXT_ERRORS}}`
+
+**FORBIDDEN**:
+- ❌ Summary documents (e.g., "phase_3.0_summary.md", "context_discovery_summary.md")
+- ❌ Completion reports (e.g., "phase_3.0_completion.md")
+- ❌ Additional review documents beyond those specified
+- ❌ Extra markdown files for "documentation purposes"
+- ❌ Any file not explicitly listed in "Output Locations" above
+
+**Rationale**: We have defined deliverables, review reports, status tracking, and error logs. Additional summary documents create clutter and redundancy. All necessary information should be captured in the defined outputs.
 
 ---
 
@@ -258,8 +278,9 @@ Discover and document the business context for each workpackage BEFORE extractin
 
 ## Output Format
 
-### Business Context Document
-**File**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md`
+### Business Context Document (Draft)
+**File**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-draft.md`
+**Note**: This is a draft version that will be reviewed in Phase 3.0.1
 **Template**: `{{BUSINESS_CONTEXT_TEMPLATE}}`
 
 **Structure**:

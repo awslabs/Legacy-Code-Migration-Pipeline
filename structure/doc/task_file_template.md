@@ -67,7 +67,6 @@ Team Supervisor delegates to Specialist/Reviewer
 Agent reads task file and executes work
 ```
 
-
 ---
 
 ## 2. Task File Structure
@@ -255,7 +254,6 @@ If you encounter issues beyond your capability:
 | Quality Criteria | How to validate quality | Supervisor | Phase prompt quality section |
 | Success Criteria | When task is complete | Supervisor | Phase prompt success section |
 | Notes | Additional guidance | Supervisor | Context-specific |
-
 
 ---
 
@@ -529,7 +527,6 @@ Quality criteria are organized into categories:
 - **Purpose:** Guides agent through final verification
 - **Source:** Supervisor defines based on deliverables
 
-
 ---
 
 ## 4. Path Resolution Guidelines
@@ -624,7 +621,6 @@ Before creating task file, verify:
 - [ ] No `{{PARAMETERS}}` remain unresolved
 - [ ] Paths are consistent with paths.cfg definitions
 
-
 ---
 
 ## 5. Examples by Agent Type
@@ -666,8 +662,6 @@ Before creating task file, verify:
   - Template: /home/user/projects/mymigration/templates/Cobol_Source_Analysis_Report.md
   - Description: Comprehensive analysis findings
   - Format: Markdown
-- **Dependency Table**: /home/user/projects/mymigration/output/analysis/source_code/reports/dependency_table.csv
-  - Template: /home/user/projects/mymigration/templates/Dependency_Analysis_Table.csv
   - Description: Module dependency relationships
   - Format: CSV
 - **Business Flows**: /home/user/projects/mymigration/output/analysis/source_code/progress/business_flows.json
@@ -756,21 +750,9 @@ Create comprehensive analysis report.
 - Follow markdown format
 - Include code examples where relevant
 - Provide quantitative metrics (module count, dependency count, etc.)
+- Document dependency relationships within the report
 
-#### Step 6: Generate Dependency Table
-Create CSV file with all dependencies.
-
-**Actions:**
-1. Use template structure from Dependency_Analysis_Table.csv
-2. List all modules and their dependencies
-3. Include metadata (call type, frequency if available)
-
-**Technical Specifications:**
-- CSV format with headers: SourceModule, TargetModule, CallType, TargetFound
-- One row per dependency relationship
-- Sort by SourceModule
-
-#### Step 7: Generate Business Flows JSON
+#### Step 6: Generate Business Flows JSON
 Create JSON file with identified business flows.
 
 **Actions:**
@@ -782,6 +764,19 @@ Create JSON file with identified business flows.
 - Valid JSON format
 - Follow template schema
 - Include flow ID, name, description, modules involved
+
+#### Step 7: Generate Module Classifications JSON
+Create JSON file with module categorization.
+
+**Actions:**
+1. Use template structure from Module_Classifications.json
+2. Classify each module by type and business domain
+3. Include complexity metrics
+
+**Technical Specifications:**
+- Valid JSON format
+- Follow template schema
+- Include module metadata
 
 ### Business Rules and Constraints
 - All monetary calculations must be noted for precision requirements
@@ -795,7 +790,7 @@ Create JSON file with identified business flows.
   - Recovery: Log error with file name and line number, mark file as unparseable, continue with next file
 - **Scenario 2**: Missing dependency target
   - Detection: CALL target not found in source inventory
-  - Recovery: Mark as TargetFound=False in dependency table, note in analysis report
+  - Recovery: Document in analysis report, note as external dependency or missing module
 - **Scenario 3**: Template file not found
   - Detection: Template path does not exist
   - Recovery: Escalate to supervisor, do not proceed without template
@@ -813,7 +808,7 @@ Create JSON file with identified business flows.
 **Content Requirements:**
 - Analysis methodology section
 - Findings summary with statistics
-- Dependency analysis results
+- Dependency analysis results (documented within report)
 - Module classification results
 - Business flow identification
 - Recommendations for migration
@@ -826,25 +821,7 @@ Create JSON file with identified business flows.
 - [ ] All findings documented with evidence
 - [ ] Statistics are accurate and complete
 
-### 2. Dependency Analysis Table
-**File**: /home/user/projects/mymigration/output/analysis/source_code/reports/dependency_table.csv
-**Template**: /home/user/projects/mymigration/templates/Dependency_Analysis_Table.csv
-**Description**: Complete module dependency relationships
-**Format**: CSV with headers
-
-**Content Requirements:**
-- All modules listed
-- All dependencies captured
-- Call types specified
-- Target found status indicated
-
-**Validation:**
-- [ ] File exists at specified path
-- [ ] CSV format with correct headers
-- [ ] All modules accounted for
-- [ ] No empty required fields
-
-### 3. Business Flows JSON
+### 2. Business Flows JSON
 **File**: /home/user/projects/mymigration/output/analysis/source_code/progress/business_flows.json
 **Template**: /home/user/projects/mymigration/templates/Business_Flows.json
 **Description**: Identified business flows with entry points and steps
@@ -855,6 +832,24 @@ Create JSON file with identified business flows.
 - Entry points documented
 - Flow steps detailed
 - Business rules captured
+
+**Validation:**
+- [ ] File exists at specified path
+- [ ] Valid JSON format
+- [ ] Follows template schema
+- [ ] All flows have required fields
+
+### 3. Module Classifications JSON
+**File**: /home/user/projects/mymigration/output/analysis/source_code/progress/module_classifications.json
+**Template**: /home/user/projects/mymigration/templates/Module_Classifications.json
+**Description**: Module categorization and metadata
+**Format**: JSON following template schema
+
+**Content Requirements:**
+- All modules classified
+- Module types specified
+- Business domains assigned
+- Complexity metrics included
 
 **Validation:**
 - [ ] File exists at specified path
@@ -931,7 +926,6 @@ If you encounter issues beyond your capability:
 - Migration Best Practices: /home/user/projects/mymigration/input/guidance/migration-patterns.md
 ```
 
-
 ### 5.2 Reviewer Agent Task File Example
 
 **Scenario:** Analysis Team Supervisor creates task for Legacy Code Reviewer
@@ -961,8 +955,6 @@ If you encounter issues beyond your capability:
 - **Analysis Report**: /home/user/projects/mymigration/output/analysis/source_code/reports/cobol_analysis.md
   - Template: /home/user/projects/mymigration/templates/Cobol_Source_Analysis_Report.md
   - Created by: analysis_specialist_legacy_code
-- **Dependency Table**: /home/user/projects/mymigration/output/analysis/source_code/reports/dependency_table.csv
-  - Template: /home/user/projects/mymigration/templates/Dependency_Analysis_Table.csv
   - Created by: analysis_specialist_legacy_code
 - **Business Flows**: /home/user/projects/mymigration/output/analysis/source_code/progress/business_flows.json
   - Template: /home/user/projects/mymigration/templates/Business_Flows.json
@@ -986,8 +978,8 @@ Verify all expected deliverables exist at specified paths.
 
 **Actions:**
 1. Check Analysis Report exists and is readable
-2. Check Dependency Table exists and is readable
-3. Check Business Flows JSON exists and is readable
+2. Check Business Flows JSON exists and is readable
+3. Check Module Classifications JSON exists and is readable
 4. Verify file sizes are reasonable (not empty, not truncated)
 
 #### Step 2: Format Validation
@@ -995,8 +987,8 @@ Verify each deliverable matches its template structure.
 
 **Actions:**
 1. Compare Analysis Report structure to template
-2. Validate CSV format and headers in Dependency Table
-3. Validate JSON format and schema in Business Flows
+2. Validate JSON format and schema in Business Flows
+3. Validate JSON format and schema in Module Classifications
 4. Check for parsing errors or format issues
 
 #### Step 3: Completeness Review
@@ -1004,7 +996,7 @@ Verify all required content is present.
 
 **Actions:**
 1. Check Analysis Report has all required sections
-2. Verify all modules are listed in Dependency Table
+2. Verify all modules are classified in Module Classifications JSON
 3. Confirm all business flows are documented
 4. Ensure no placeholder text or TODO items remain
 
@@ -1055,8 +1047,8 @@ All source code analysis deliverables meet quality criteria.
 
 Summary:
 - Analysis Report: Complete and accurate
-- Dependency Table: All modules and dependencies captured
 - Business Flows: All flows documented
+- Module Classifications: All modules classified
 
 Minor observations (non-blocking):
 - [List any minor observations]
@@ -1080,12 +1072,12 @@ For each issue, provide:
 **Example Issue:**
 ```
 Issue ID: REV-001
-Affected Deliverable: Dependency Table
+Affected Deliverable: Module Classifications JSON
 Severity: Blocking
-Description: Missing dependencies for 15 modules
-Evidence: Modules CUSTMGMT, ORDPROC, INVUPDT have no dependencies listed
-Remediation Guidance: Re-analyze these modules for CALL statements, CICS LINK, file I/O
-Quality Criterion Violated: Completeness - "All dependency relationships captured"
+Description: Missing business domain classification for 15 modules
+Evidence: Modules CUSTMGMT, ORDPROC, INVUPDT have no business domain assigned
+Remediation Guidance: Review module functionality and assign appropriate business domains
+Quality Criterion Violated: Completeness - "All modules classified"
 ```
 
 **Issues Found Message Format:**
@@ -1190,7 +1182,6 @@ Apply consistent standards based on:
 - Industry best practices for analysis documentation
 ```
 
-
 ### 5.3 Remediation Task File Example
 
 **Scenario:** Analysis Team Supervisor creates remediation task after reviewer finds issues
@@ -1219,8 +1210,6 @@ Apply consistent standards based on:
 **Project Base Path**: /home/user/projects/mymigration
 
 ### Deliverables to Update
-- **Dependency Table**: /home/user/projects/mymigration/output/analysis/source_code/reports/dependency_table.csv
-  - Template: /home/user/projects/mymigration/templates/Dependency_Analysis_Table.csv
   - Status: Needs remediation
 - **Analysis Report**: /home/user/projects/mymigration/output/analysis/source_code/reports/cobol_analysis.md
   - Template: /home/user/projects/mymigration/templates/Cobol_Source_Analysis_Report.md
@@ -1240,30 +1229,30 @@ Address all issues identified in review report to bring deliverables to acceptab
 
 ### Issues to Address
 
-#### Issue REV-001: Missing Dependencies (BLOCKING)
-**Affected Deliverable**: Dependency Table
+#### Issue REV-001: Missing Module Classifications (BLOCKING)
+**Affected Deliverable**: Module Classifications JSON
 **Severity**: Blocking
-**Description**: Missing dependencies for 15 modules
-**Evidence**: Modules CUSTMGMT, ORDPROC, INVUPDT, PAYMPROC, ACCTUPDT, RPTGEN01, RPTGEN02, BATCHCTL, FILELOAD, DATACONV, UTILPROG, ERRHAND, LOGMGMT, SECCHECK, AUDITLOG have no dependencies listed
+**Description**: Missing business domain classification for 15 modules
+**Evidence**: Modules CUSTMGMT, ORDPROC, INVUPDT, PAYMPROC, ACCTUPDT, RPTGEN01, RPTGEN02, BATCHCTL, FILELOAD, DATACONV, UTILPROG, ERRHAND, LOGMGMT, SECCHECK, AUDITLOG have no business domain assigned
 **Remediation Guidance**: 
-1. Re-analyze these 15 modules for CALL statements
-2. Check for CICS LINK and CICS XCTL commands
-3. Identify file I/O operations (SELECT, READ, WRITE)
-4. Add all found dependencies to dependency table
-5. If truly no dependencies, document why in analysis report
+1. Review functionality of these 15 modules
+2. Analyze module purpose and business context
+3. Assign appropriate business domains
+4. Update module classifications JSON
+5. Document classification rationale in analysis report
 
-**Quality Criterion Violated**: Completeness - "All dependency relationships captured"
+**Quality Criterion Violated**: Completeness - "All modules classified"
 
 #### Issue REV-002: Inconsistent Module Names (MAJOR)
-**Affected Deliverable**: Dependency Table, Analysis Report
+**Affected Deliverable**: Module Classifications JSON, Analysis Report
 **Severity**: Major
 **Description**: Module names inconsistent between deliverables
 **Evidence**: 
-- Dependency Table uses "CUST-MGMT" but Analysis Report uses "CUSTMGMT"
-- Dependency Table uses "ORD_PROC" but Analysis Report uses "ORDPROC"
+- Module Classifications uses "CUST-MGMT" but Analysis Report uses "CUSTMGMT"
+- Module Classifications uses "ORD_PROC" but Analysis Report uses "ORDPROC"
 **Remediation Guidance**:
 1. Standardize on actual module names from source files
-2. Update both Dependency Table and Analysis Report for consistency
+2. Update both Module Classifications and Analysis Report for consistency
 3. Use exact names as they appear in PROGRAM-ID
 
 **Quality Criterion Violated**: Consistency - "Module names consistent across all deliverables"
@@ -1283,24 +1272,24 @@ Address all issues identified in review report to bring deliverables to acceptab
 
 ### Detailed Steps
 
-#### Step 1: Address Issue REV-001 (Missing Dependencies)
+#### Step 1: Address Issue REV-001 (Missing Module Classifications)
 **Actions:**
 1. Open each of the 15 modules listed in the issue
-2. Scan for CALL statements (static and dynamic)
-3. Scan for CICS LINK and CICS XCTL commands
-4. Identify file operations (SELECT, FD, READ, WRITE, REWRITE, DELETE)
-5. Add all dependencies to dependency table
-6. Document in analysis report if any module truly has no dependencies
+2. Review module functionality and purpose
+3. Analyze business context from code comments and logic
+4. Assign appropriate business domains (e.g., Customer Management, Order Processing, Inventory)
+5. Update module classifications JSON with business domains
+6. Document classification rationale in analysis report
 
 **Technical Specifications:**
-- Use same analysis methodology as original task
-- Mark TargetFound=True if target exists, False if not
-- Include call type (STATIC, DYNAMIC, CICS-LINK, etc.)
+- Use consistent business domain taxonomy
+- Include module type (batch, online, utility, common)
+- Add complexity metrics if missing
 
 #### Step 2: Address Issue REV-002 (Inconsistent Names)
 **Actions:**
 1. Create list of all module names from source files (PROGRAM-ID)
-2. Update Dependency Table to use exact names
+2. Update Module Classifications JSON to use exact names
 3. Update Analysis Report to use exact names
 4. Verify consistency across both deliverables
 
@@ -1348,18 +1337,18 @@ Address all issues identified in review report to bring deliverables to acceptab
 
 ## Expected Deliverables
 
-### 1. Updated Dependency Table
-**File**: /home/user/projects/mymigration/output/analysis/source_code/reports/dependency_table.csv
-**Description**: Corrected dependency table with all issues addressed
-**Format**: CSV
+### 1. Updated Module Classifications JSON
+**File**: /home/user/projects/mymigration/output/analysis/source_code/progress/module_classifications.json
+**Description**: Corrected module classifications with all issues addressed
+**Format**: JSON
 
 **Content Requirements:**
-- All 15 modules now have dependencies listed (or documented as none)
+- All 15 modules now have business domains assigned
 - Module names consistent with source files
 - All required fields populated
 
 **Validation:**
-- [ ] All modules have dependencies or explanation
+- [ ] All modules have business domain classifications
 - [ ] Module names match PROGRAM-ID exactly
 - [ ] No empty required fields
 - [ ] Format matches template
@@ -1370,7 +1359,7 @@ Address all issues identified in review report to bring deliverables to acceptab
 **Format**: Markdown
 
 **Content Requirements:**
-- Module names consistent with dependency table
+- Module names consistent with module classifications
 - Statistics section complete with LOC and complexity
 - Findings updated to reflect complete analysis
 - All sections complete
@@ -1463,7 +1452,6 @@ If you cannot resolve an issue:
 3. Report to analysis_team_supervisor
 4. Do not proceed if blocking issue cannot be resolved
 ```
-
 
 ---
 
@@ -1570,7 +1558,6 @@ After agent completes task, verify:
 - [ ] Success criteria verified
 - [ ] Task marked as complete
 - [ ] Ready to proceed to next step
-
 
 ---
 
@@ -1864,7 +1851,6 @@ This task file provides project-specific context and instructions.
 **Solution:** Include all required sections from template.
 
 **Rule:** Every task file must have all required sections.
-
 
 ---
 

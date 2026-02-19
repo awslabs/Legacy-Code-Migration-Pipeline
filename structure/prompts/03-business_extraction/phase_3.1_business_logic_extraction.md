@@ -12,16 +12,16 @@
 
 ### Expected Deliverables
 
-1. **Chapter 6: Legacy Implementation References**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md
-   - Description: Complete technical implementation details with code evidence
+1. **Chapter 6: Legacy Implementation References (Draft)**
+   - File: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md
+   - Description: Complete technical implementation details with code evidence (draft for review)
 
 2. **Logic Extraction Notes**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
+   - File: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
    - Description: Documented abstractions and patterns identified
 
 3. **Progress Tracking**
-   - File: {{BUSINESS_SPECIFICATION_STATUS}}
+   - File: {{BUSINESS_TRACEABILITY_STATUS}}
    - Description: Updated progress tracking
 
 ### Success Criteria
@@ -45,12 +45,11 @@
 - **Source code files**: `{{SOURCE_CODE}}`
 - **Database source code**: `{{DATABASE_SOURCE_CODE}}`
 - **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/`
-- **Module dependency table**: `{{DEPENDENCY_ANALYSIS_TABLE}}`
 
 ### Output Locations
-- **Chapter 6**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md`
-- **Logic extraction notes**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
-- **Progress tracking**: `{{BUSINESS_SPECIFICATION_STATUS}}`
+- **Chapter 6 (draft)**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md`
+- **Logic extraction notes**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
+- **Progress tracking**: `{{BUSINESS_TRACEABILITY_STATUS}}`
 
 ### Template Locations
 - **Business specification template**: `{{BUSINESS_SPECIFICATION_TEMPLATE}}` (use Chapter 6 section only)
@@ -70,6 +69,27 @@ Extract business logic patterns from legacy code and create Chapter 6 (Legacy Im
 3. **Allowed patterns only** - Apply only the 6 allowed abstraction patterns
 4. **Avoid drift** - Do not add functionality, invent entities, or assume patterns
 5. **Full traceability** - Include file names, line numbers, and code snippets
+
+---
+
+## CRITICAL RULES - Artifact Creation
+
+**YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
+
+**Allowed Outputs** (from Output Locations section above):
+- Chapter 6 (draft): `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md`
+- Logic extraction notes: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
+- Progress tracking: `{{BUSINESS_TRACEABILITY_STATUS}}`
+- Error logs (if errors occur): `{{BUSINESS_TRACEABILITY_ERRORS}}`
+
+**FORBIDDEN**:
+- ❌ Summary documents (e.g., "phase_3.1_summary.md", "logic_extraction_summary.md")
+- ❌ Completion reports (e.g., "phase_X.X_completion.md")
+- ❌ Additional review documents beyond those specified
+- ❌ Extra markdown files for "documentation purposes"
+- ❌ Any file not explicitly listed in "Output Locations" above
+
+**Rationale**: We have defined deliverables, review reports, status tracking, and error logs. Additional summary documents create clutter and redundancy. All necessary information should be captured in the defined outputs.
 
 ---
 
@@ -692,8 +712,9 @@ VALIDATE-CREDIT.
 
 ## Output Format
 
-### Chapter 6 Document
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md`
+### Chapter 6 Document (Draft)
+**File**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md`
+**Note**: This is a draft version that will be reviewed in Phase 3.1.1
 
 **Structure**:
 ```markdown
@@ -725,7 +746,7 @@ VALIDATE-CREDIT.
 ```
 
 ### Logic Extraction Notes
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
+**File**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
 
 ---
 

@@ -10,6 +10,7 @@ The framework provides several scripts for managing installations:
 |--------|---------|-------------|
 | `install_all.sh` | Complete installation in one command | First-time setup, quick demos |
 | `install_acm_tools.py` | Download and install ACM tools | Standalone or during project creation |
+| `update_prompts.py` | Update prompts in existing projects | After modifying prompts in structure/prompts |
 | `uninstall_all.sh` | Remove CAO and all agents | Cleanup, troubleshooting |
 
 ## install_all.sh
@@ -310,6 +311,166 @@ This will:
 - Remove the old `tools/acm-tools` directory
 - Download the latest version
 - Install updated dependencies
+
+## update_prompts.py
+
+### Description
+
+Updates the prompts folder in an existing project with the latest versions from the structure directory. This script copies all prompt files and automatically resolves all path parameters to match the project's configuration.
+
+### Usage
+
+```bash
+python3 update_prompts.py <path_to_project>
+```
+
+### Arguments
+
+- `path_to_project` (required): Path to the existing migration project
+
+### Examples
+
+**Update prompts in a project:**
+```bash
+python3 update_prompts.py /Users/username/my-migration-project
+```
+
+**Update prompts in current directory:**
+```bash
+python3 update_prompts.py .
+```
+
+**Update prompts in relative path:**
+```bash
+python3 update_prompts.py ../my-project
+```
+
+### What It Does
+
+#### Step 1: Copy Prompt Files
+- Copies all files from `./structure/prompts` to `{project_path}/prompts`
+- Overwrites existing prompt files with latest versions
+- Preserves directory structure
+
+#### Step 2: Resolve Path Parameters
+- Reads `config/paths.cfg` from the project
+- Replaces all `{{PARAMETER}}` placeholders with actual paths
+- Resolves nested parameters (e.g., `{{OUTPUT_BASE_PATH}}` → `{{PROJECT_BASE_PATH}}/output`)
+- Handles up to 10 levels of parameter nesting
+
+#### Step 3: Update All Prompts
+- Processes all `.md` files in the prompts directory
+- Ensures all paths are absolute and project-specific
+- Maintains prompt structure and formatting
+
+### Example Transformation
+
+**Before (in structure/prompts):**
+```markdown
+cd {{PROJECT_BASE_PATH}}/tools/acm-tools
+Input: {{LEGACY_SOURCE_CODE}}
+Output: {{COBOL_SOURCE_ANALYSIS_REPORT}}
+```
+
+**After (in project/prompts):**
+```markdown
+cd /Users/username/my-migration-project/tools/acm-tools
+Input: /Users/username/my-migration-project/input/legacy/source
+Output: /Users/username/my-migration-project/output/analysis/source_code/reports/cobol_analysis.md
+```
+
+### When to Use
+
+**After modifying prompts in structure/prompts:**
+- You've updated prompt instructions
+- You've added new prompts
+- You've fixed issues in existing prompts
+- You want to distribute updates to existing projects
+
+**For existing projects:**
+- Update prompts to latest version
+- Fix path resolution issues
+- Sync with framework updates
+
+### Output
+
+The script provides:
+- Confirmation of source and destination paths
+- Progress indicator during copy
+- Count of files updated
+- Success message with project location
+
+### Exit Codes
+
+- `0`: Success
+- `1`: Error (invalid path, missing config, etc.)
+
+### Requirements
+
+- **Python 3**: Required to run the script
+- **Valid project**: Project must have `config/paths.cfg`
+- **Write permissions**: Required for project's prompts directory
+
+### Workflow for Updating Prompts
+
+When you modify prompts in the framework:
+
+1. **Edit prompts** in `structure/prompts/`
+2. **Test changes** (optional but recommended)
+3. **Update existing projects**:
+   ```bash
+   python3 update_prompts.py /path/to/project1
+   python3 update_prompts.py /path/to/project2
+   ```
+
+### Troubleshooting
+
+**Project path not found:**
+```bash
+# Verify the path exists
+ls -la /path/to/project
+
+# Use absolute path
+python3 update_prompts.py /full/path/to/project
+```
+
+**Missing config/paths.cfg:**
+```bash
+# Verify project structure
+ls -la /path/to/project/config/
+
+# Project may be corrupted, recreate if needed
+```
+
+**Permission denied:**
+```bash
+# Check write permissions
+ls -la /path/to/project/prompts/
+
+# Fix permissions if needed
+chmod -R u+w /path/to/project/prompts/
+```
+
+**Parameters not resolved:**
+```bash
+# Check paths.cfg has all required parameters
+cat /path/to/project/config/paths.cfg
+
+# Verify PROJECT_BASE_PATH is set correctly
+```
+
+### Integration with Framework Updates
+
+When the framework is updated with new prompts:
+
+1. Pull latest changes: `git pull`
+2. Update all your projects:
+   ```bash
+   python3 update_prompts.py ~/projects/migration1
+   python3 update_prompts.py ~/projects/migration2
+   ```
+
+This ensures all projects use the latest prompt versions with correct paths.
 
 **Agent installation fails:**
 - Check CAO is working: `cao --help`

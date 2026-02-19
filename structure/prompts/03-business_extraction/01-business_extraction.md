@@ -66,11 +66,9 @@ When creating the task file for this step:
   - Source code files: {{SOURCE_CODE}}
   - Database source code: {{DATABASE_SOURCE_CODE}}
   - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
-  - Module dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
 - **All output locations** (resolved paths):
   - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}
   - Review files: {{BUSINESS_SPECIFICATION_REVIEW}}
-  - Reporting: {{BUSINESS_SPECIFICATION_REPORTING}}
   - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
   - Error reports: {{BUSINESS_SPECIFICATION_ERRORS}}
   - Task files location: {{TASKS_BASE_PATH}}
@@ -115,17 +113,13 @@ This step requires outputs from Phase 1 (Analysis) and Phase 2 (Workpackage Plan
   -- Database table definitions (if available)
   -- Legacy framework documentation: `{{PROJECT_BASE_PATH}}/input/legacy_specifications/` 
 
-
 - Output Location:
   -- IEEE-formatted business specifications: `{{BUSINESS_SPECIFICATION_BASE_PATH}}`
     --- English versions: `WP-XXX-FLOW_XXX-specification-EN.md`
   -- Review: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md``
      --- (IMPORTANT: **Reviewer must create review files, NOT output to STDOUT**)
-  -- Reporting: `{{BUSINESS_SPECIFICATION_REPORTING}}`
-  -- Module Dependency Table: `{{DEPENDENCY_ANALYSIS_TABLE}}`
   -- Progress Tracking: `{{BUSINESS_SPECIFICATION_STATUS}}`
   -- Location of task-related files: `{{TASKS_BASE_PATH}}` 
-
 
 - Previous Phase Artifacts:
   - Workpackage definitions with prioritized flows
@@ -177,7 +171,6 @@ Extract business rules, entities, and functions from legacy code in a technology
  
 ### 5. IEEE-Compliant Documentation Creation
 1. **MANDATORY**: For each workpackage, create a business specification documents:
-
 
  
 2. Both documents must include identical content structure:

@@ -13,24 +13,29 @@
 
 ### Expected Deliverables
 
-1. **Reviewed Business Specification Documents**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md
-   - Description: Validated and refined business specifications ready for code generation
+1. **Approved Business Specification Documents**
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md
+   - Description: Validated and refined business specifications ready for code generation (final deliverables)
 
-2. **Review Reports**
+2. **Archived Drafts** (moved to review folder)
+   - File: {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
+   - File: {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
+   - Description: Original drafts moved to review folder for audit trail
+
+3. **Review Reports**
    - File: {{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md
    - Description: Detailed review findings, changes made, and approval status
 
-3. **Business Context Updates** (if needed)
+4. **Business Context Updates** (if needed)
    - File: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md
    - Description: Updated business context based on review findings
 
-4. **Business Glossary Updates** (if needed)
-   - File: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary-updated.md
-   - Description: Updated business glossary with clarifications
+5. **Business Glossary Updates** (if needed)
+   - File: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
+   - Description: Updated business glossary with clarifications (living document)
 
-5. **Progress Tracking**
+6. **Progress Tracking**
    - File: {{BUSINESS_SPECIFICATION_STATUS}}
    - Description: Updated progress tracking with review completion status
 
@@ -52,19 +57,21 @@
 ## Context
 
 ### Input Locations
-- **Business specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md`
-- **Business specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
-- **Business context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md`
+- **Business specifications (EN) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
+- **Business specifications (other) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+- **Business context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Source code**: `{{SOURCE_CODE}}` (for verification)
 - **Legacy specifications**: `{{PROJECT_BASE_PATH}}/input/legacy_specifications/`
 
 ### Output Locations
-- **Reviewed specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-- **Reviewed specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
+- **Approved specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md` (main folder - final deliverable)
+- **Approved specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md` (main folder - final deliverable)
+- **Archived drafts (EN)**: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md` (moved from main folder)
+- **Archived drafts (other)**: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md` (moved from main folder)
 - **Review reports**: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md`
-- **Updated context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md`
-- **Updated glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary-updated.md`
+- **Updated context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md` (if needed)
+- **Updated glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md` (living document)
 - **Progress tracking**: `{{BUSINESS_SPECIFICATION_STATUS}}`
 
 ### Template Locations
@@ -87,6 +94,30 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 3. **Verify business accuracy** - Do business requirements match actual business policies?
 4. **Ensure modernization readiness** - Are requirements clear enough for code generation?
 5. **Technology-agnostic verification** - Confirm Chapters 1-5 have no technical jargon
+
+---
+
+## CRITICAL RULES - Artifact Creation
+
+**YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
+
+**Allowed Outputs** (from Output Locations section above):
+- Approved specifications (EN): `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md`
+- Approved specifications (other): `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANG}-approved.md`
+- Archived drafts: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-*-draft.md`
+- Review report: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md`
+- Updated context (if needed): `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md`
+- Updated glossary (if needed): `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
+- Progress tracking: `{{BUSINESS_SPECIFICATION_STATUS}}`
+
+**FORBIDDEN**:
+- ❌ Summary documents (e.g., "phase_3.2.1_summary.md", "specification_review_summary.md")
+- ❌ Completion reports (e.g., "phase_X.X_completion.md")
+- ❌ Additional review documents beyond those specified
+- ❌ Extra markdown files for "documentation purposes"
+- ❌ Any file not explicitly listed in "Output Locations" above
+
+**Rationale**: We have defined deliverables, review reports, status tracking, and error logs. Additional summary documents create clutter and redundancy. All necessary information should be captured in the defined outputs.
 
 ---
 
@@ -347,6 +378,9 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
    - Update business glossary if new terms identified
 
 ### 7. Chapter 6 Review: Legacy Implementation References
+
+**Note**: Chapter 6 was already validated in Phase 3.1.1. This review focuses on verifying that Chapter 6 references in Chapters 1-5 are correct and that traceability is complete.
+
 1. **Verify technical completeness**:
    - Are all source files documented?
    - Are code references complete (file names, line numbers)?
@@ -522,7 +556,7 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
      - Approved with Changes: Drift < 5%, minor changes required
      - Rejected: Drift ≥ 5%, return to Phase 3.2 with specific corrections
 
-### 12. Specification Updates
+### 12. Specification Updates and File Management
 1. **Apply approved changes to specifications**:
    - Update both EN and other versions
    - Maintain structural consistency
@@ -541,10 +575,11 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
    - Resolve terminology conflicts
    - Ensure consistency across workpackages
 
-4. **Create reviewed versions**:
-   - Save as: `WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-   - Save as: `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
-   - Preserve original versions for audit trail
+4. **Create approved versions and archive drafts**:
+   - Create: `WP-XXX-FLOW_XXX-specification-EN-approved.md` (main folder)
+   - Create: `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md` (main folder)
+   - Move: `WP-XXX-FLOW_XXX-specification-EN-draft.md` → `/review/` (archive)
+   - Move: `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md` → `/review/` (archive)
 
 ### 13. Progress Tracking and Approval
 1. **Update progress tracking**:
@@ -553,10 +588,19 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
    - Note any changes made
    - Flag any issues requiring escalation
 
-2. **Approval workflow**:
-   - **Approved**: Specification ready for code generation
-   - **Approved with Changes**: Minor changes applied, ready for code generation
-   - **Rejected**: Major revision required, return to Phase 3.1 or 3.0
+2. **Approval workflow and file management**:
+   - **Approved**: 
+     - Create approved versions in main folder
+     - Move drafts to review folder for audit trail
+     - Specification ready for code generation
+   - **Approved with Changes**: 
+     - Apply changes
+     - Create approved versions in main folder
+     - Move drafts to review folder for audit trail
+     - Ready for code generation
+   - **Rejected**: 
+     - Keep drafts in main folder
+     - Major revision required, return to Phase 3.2 or earlier
 
 3. **Escalation criteria**:
    - Major business requirement gaps
@@ -674,16 +718,18 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 ### Chapter 6: Legacy Implementation
 **Status**: [Approved / Changes Required / Rejected]
 
+**Note**: Chapter 6 was already validated in Phase 3.1.1. This review focuses on verifying references and traceability.
+
 **Findings**:
-- [Finding 1]
-- [Finding 2]
+- [Finding 1: Traceability issue]
+- [Finding 2: Reference accuracy]
 
 **Changes Made**:
-- [Change 1]
-- [Change 2]
+- [Change 1: Updated references]
+- [Change 2: Fixed traceability links]
 
 **Missing Technical Details**:
-- [Detail 1]
+- [Detail 1: If any gaps found]
 - [Detail 2]
 
 ## 3. Cross-Cutting Issues
@@ -817,12 +863,16 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 **Date**: YYYY-MM-DD
 ```
 
-### Reviewed Specification Documents
+### Approved Specification Documents
 **Files**:
-- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
+- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md` (main folder - final deliverable)
+- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md` (main folder - final deliverable)
 
-**Changes from original**:
+**Archived Drafts** (moved to review folder):
+- `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
+- `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+
+**Changes from draft**:
 - Document version updated
 - Review date added
 - Approved changes incorporated

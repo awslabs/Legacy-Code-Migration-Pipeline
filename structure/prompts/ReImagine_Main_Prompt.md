@@ -138,8 +138,6 @@ The following is a sequential list that should be followed by you and your agent
 **Expected Deliverables:**
 1. Source Code Analysis Report: {{COBOL_SOURCE_ANALYSIS_REPORT}}
    - Template: {{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}
-2. Dependency Analysis Table: {{DEPENDENCY_ANALYSIS_TABLE}}
-   - Template: {{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}
 3. Business Flows: {{BUSINESS_FLOWS}}
    - Template: {{BUSINESS_FLOWS_TEMPLATE}}
 4. Module Classifications: {{MODULE_CLASSIFICATIONS}}
@@ -184,7 +182,6 @@ The following is a sequential list that should be followed by you and your agent
 **Input Dependencies:**
 - Business Flows: {{BUSINESS_FLOWS}}
 - Module Classifications: {{MODULE_CLASSIFICATIONS}}
-- Dependency Analysis: {{DEPENDENCY_ANALYSIS_TABLE}}
 
 **Expected Deliverables:**
 1. Workpackage Definition Report: {{WORKPACKAGE_DEFINITION_REPORT}}

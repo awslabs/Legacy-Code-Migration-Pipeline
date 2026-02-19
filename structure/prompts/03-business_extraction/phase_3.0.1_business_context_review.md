@@ -13,14 +13,18 @@
 ### Expected Deliverables
 
 1. **Business Context Review Report**
-   - File: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-review.md
+   - File: {{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md
    - Description: Review findings and approval decision for business context
 
-2. **Approved Business Context Document** (if changes needed)
+2. **Approved Business Context Document**
    - File: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
-   - Description: Validated and approved business context document
+   - Description: Validated and approved business context document (final deliverable)
 
-3. **Progress Tracking**
+3. **Archived Draft** (moved to review folder)
+   - File: {{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-draft.md
+   - Description: Original draft moved to review folder for audit trail
+
+4. **Progress Tracking**
    - File: {{BUSINESS_CONTEXT_STATUS}}
    - Description: Updated progress tracking with review completion status
 
@@ -38,15 +42,16 @@
 ## Context
 
 ### Input Locations
-- **Business context documents**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md`
+- **Business context (draft)**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-draft.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Source code files**: `{{SOURCE_CODE}}` (for verification if needed)
 - **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/`
 
 ### Output Locations
-- **Review reports**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-review.md`
-- **Approved context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md`
-- **Progress tracking**: `{{BUSINESS_CONTEXT_STATUS}}``
+- **Review report**: `{{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md`
+- **Approved context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md` (main folder - final deliverable)
+- **Archived draft**: `{{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-draft.md` (moved from main folder)
+- **Progress tracking**: `{{BUSINESS_CONTEXT_STATUS}}`
 
 ### Previous Phase Artifacts
 - **From Phase 3.0**: Business context documents, business glossary
@@ -56,6 +61,27 @@
 ## Objective
 
 Validate business context accuracy before proceeding to logic extraction. Ensure business domain identification is correct, stakeholders are complete, business vocabulary is consistent, and confidence levels are acceptable. Approve context for Phase 3.1 or return for revision.
+
+---
+
+## CRITICAL RULES - Artifact Creation
+
+**YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
+
+**Allowed Outputs** (from Output Locations section above):
+- Review report: `{{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md`
+- Approved context: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md`
+- Archived draft: `{{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-draft.md`
+- Progress tracking: `{{BUSINESS_CONTEXT_STATUS}}`
+
+**FORBIDDEN**:
+- ❌ Summary documents (e.g., "phase_3.0.1_summary.md", "context_review_summary.md")
+- ❌ Completion reports (e.g., "phase_X.X_completion.md")
+- ❌ Additional review documents beyond those specified
+- ❌ Extra markdown files for "documentation purposes"
+- ❌ Any file not explicitly listed in "Output Locations" above
+
+**Rationale**: We have defined deliverables, review reports, status tracking, and error logs. Additional summary documents create clutter and redundancy. All necessary information should be captured in the defined outputs.
 
 ---
 
@@ -91,17 +117,26 @@ Validate business context accuracy before proceeding to logic extraction. Ensure
 - Identify areas requiring clarification
 - Flag low-confidence areas for attention
 
-### 6. Approval Decision
-- **Approved**: Ready for Phase 3.1
-- **Approved with Changes**: Minor fixes applied, ready for Phase 3.1
-- **Rejected**: Return to Phase 3.0 with specific corrections
+### 6. Approval Decision and File Management
+- **Approved**: 
+  - Create approved version in main folder
+  - Move draft to review folder for audit trail
+  - Ready for Phase 3.1
+- **Approved with Changes**: 
+  - Apply changes to draft
+  - Create approved version in main folder
+  - Move draft to review folder for audit trail
+  - Ready for Phase 3.1
+- **Rejected**: 
+  - Keep draft in main folder
+  - Return to Phase 3.0 with specific corrections
 
 ---
 
 ## Output Format
 
 ### Business Context Review Report
-**File**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-review.md`
+**File**: `{{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md`
 
 **Structure**:
 ```markdown

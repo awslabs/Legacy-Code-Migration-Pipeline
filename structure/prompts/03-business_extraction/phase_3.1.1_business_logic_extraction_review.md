@@ -13,19 +13,23 @@
 ### Expected Deliverables
 
 1. **Logic Extraction Review Report**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-extraction-review.md
+   - File: {{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-logic-extraction-review.md
    - Description: Review findings, drift detection results, and approval decision
 
-2. **Approved Chapter 6 Document** (if changes needed)
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
-   - Description: Validated and approved Chapter 6 with complete technical evidence
+2. **Approved Chapter 6 Document**
+   - File: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
+   - Description: Validated and approved Chapter 6 with complete technical evidence (final deliverable)
 
-3. **Drift Detection Report** (if issues found)
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-drift-report.md
+3. **Archived Draft** (moved to review folder)
+   - File: {{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-chapter6-draft.md
+   - Description: Original draft moved to review folder for audit trail
+
+4. **Drift Detection Report** (if issues found)
+   - File: {{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-drift-report.md
    - Description: Detailed analysis of any drift indicators found
 
-4. **Progress Tracking**
-   - File: {{BUSINESS_SPECIFICATION_STATUS}}
+5. **Progress Tracking**
+   - File: {{BUSINESS_TRACEABILITY_STATUS}}
    - Description: Updated progress tracking with review completion status
 
 ### Success Criteria
@@ -42,17 +46,18 @@
 ## Context
 
 ### Input Locations
-- **Chapter 6 documents**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md`
-- **Logic extraction notes**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
+- **Chapter 6 (draft)**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md`
+- **Logic extraction notes**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
 - **Business context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md`
 - **Source code files**: `{{SOURCE_CODE}}` (for verification)
 - **Database definitions**: `{{DATABASE_SOURCE_CODE}}`
 
 ### Output Locations
-- **Review reports**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-extraction-review.md`
-- **Approved Chapter 6**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md`
-- **Drift reports**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-drift-report.md`
-- **Progress tracking**: `{{BUSINESS_SPECIFICATION_STATUS}}`
+- **Review report**: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-logic-extraction-review.md`
+- **Approved Chapter 6**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md` (main folder - final deliverable)
+- **Archived draft**: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-chapter6-draft.md` (moved from main folder)
+- **Drift report**: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-drift-report.md` (if needed)
+- **Progress tracking**: `{{BUSINESS_TRACEABILITY_STATUS}}`
 
 ### Previous Phase Artifacts
 - **From Phase 3.1**: Chapter 6 documents, logic extraction notes
@@ -70,6 +75,28 @@ Validate logic extraction accuracy and abstraction appropriateness. Ensure all a
 3. **Ensure evidence completeness** - Is Chapter 6 complete with all technical details?
 4. **Confirm traceability** - Can every abstraction be traced to code evidence?
 5. **Assess quality** - Is the evidence base sufficient for Chapters 1-5 generation?
+
+---
+
+## CRITICAL RULES - Artifact Creation
+
+**YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
+
+**Allowed Outputs** (from Output Locations section above):
+- Review report: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-logic-extraction-review.md`
+- Approved Chapter 6: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md`
+- Archived draft: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-chapter6-draft.md`
+- Drift report (if needed): `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-drift-report.md`
+- Progress tracking: `{{BUSINESS_TRACEABILITY_STATUS}}`
+
+**FORBIDDEN**:
+- ❌ Summary documents (e.g., "phase_3.1.1_summary.md", "logic_review_summary.md")
+- ❌ Completion reports (e.g., "phase_X.X_completion.md")
+- ❌ Additional review documents beyond those specified
+- ❌ Extra markdown files for "documentation purposes"
+- ❌ Any file not explicitly listed in "Output Locations" above
+
+**Rationale**: We have defined deliverables, review reports, status tracking, and error logs. Additional summary documents create clutter and redundancy. All necessary information should be captured in the defined outputs.
 
 ---
 
@@ -363,28 +390,37 @@ For each business function abstraction:
 - **Next Steps**: [What happens next]
 ```
 
-### 9. Approval Decision
+### 9. Approval Decision and File Management
 
 **Approved:**
 - Drift < 5%
 - Completeness ≥ 90%
 - Traceability ≥ 95%
 - Quality score ≥ 75%
-- Ready for Phase 3.2
+- **Actions**:
+  - Create approved version in main folder: `chapter6-approved.md`
+  - Move draft to review folder: `/review/chapter6-draft.md`
+  - Ready for Phase 3.2
 
 **Approved with Changes:**
 - Drift 5-10% with specific corrections identified
 - Completeness 75-89% with minor gaps
 - Traceability 85-94% with minor issues
 - Quality score 60-74%
-- Can proceed to Phase 3.2 after corrections
+- **Actions**:
+  - Apply corrections to draft
+  - Create approved version in main folder: `chapter6-approved.md`
+  - Move original draft to review folder: `/review/chapter6-draft.md`
+  - Can proceed to Phase 3.2 after corrections
 
 **Rejected:**
 - Drift > 10%
 - Completeness < 75%
 - Traceability < 85%
 - Quality score < 60%
-- Return to Phase 3.1 with detailed feedback
+- **Actions**:
+  - Keep draft in main folder
+  - Return to Phase 3.1 with detailed feedback
 
 ### 10. Progress Tracking
 - Update progress tracking with review completion
@@ -397,10 +433,10 @@ For each business function abstraction:
 ## Output Format
 
 ### Logic Extraction Review Report
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-extraction-review.md`
+**File**: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-logic-extraction-review.md`
 
 ### Drift Detection Report (if drift found)
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-drift-report.md`
+**File**: `{{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-drift-report.md`
 
 **Structure**:
 ```markdown
@@ -438,7 +474,7 @@ For each business function abstraction:
 ```
 
 ### Approved Chapter 6 (if changes made)
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md`
+**File**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md`
 
 ---
 

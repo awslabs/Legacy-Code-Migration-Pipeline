@@ -59,18 +59,15 @@ When creating the task file for this step:
 - **Project name**: {{PROJECT_NAME}}
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (resolved paths):
-  - Business flows: {{SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}
   - Module classifications: {{MODULE_CLASSIFICATIONS}}
   - Phase 1 analysis outputs: {{ANALYSIS_OUTPUT}}
 - **All output locations** (resolved paths):
-  - Workpackage dependencies: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}
   - Migration roadmap: {{WORKPACKAGE_ROADMAP}}
   - Workpackage analyzer tool: {{WORKPACKAGE_ANALYZER_TOOL}}
   - Progress tracking: {{WORKPACKAGE_STATUS}}
   - Error reporting: {{ANALYSIS_ERRORS}}
   - Task files location: {{TASKS_BASE_PATH}}
 - **All template locations** (resolved paths):
-  - Workpackage dependencies template: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES_TEMPLATE}}
   - Migration roadmap template: {{WORKPACKAGE_ROADMAP_TEMPLATE}}
   - Analysis status template: {{ANALYSIS_STATUS_TEMPLATE}}
   - Analysis errors template: {{ANALYSIS_ERRORS_TEMPLATE}}
@@ -99,7 +96,6 @@ Ensure all {{PARAMETERS}} are replaced with actual absolute paths before creatin
 Before creating the task file, verify that all Phase 1 outputs are available:
 
 **Required Phase 1 Deliverables:**
-- [ ] Business_Flows.json exists at {{SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}
 - [ ] Module_Classifications.json exists at {{MODULE_CLASSIFICATIONS}}
 - [ ] Phase 1 analysis completed and approved
 
@@ -114,7 +110,6 @@ If any dependencies are missing, coordinate with analysis_team_supervisor before
 **Project Base Path**: {{PROJECT_BASE_PATH}}
 
 ### Input Locations
-- Business flows with complexity analysis: {{SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}
   - Description: Business flows identified in Phase 1 with complexity metrics
   - Format: JSON (Business_Flows.json)
 - Module classifications: {{MODULE_CLASSIFICATIONS}}
@@ -122,8 +117,6 @@ If any dependencies are missing, coordinate with analysis_team_supervisor before
   - Format: JSON (Module_Classifications.json)
 
 ### Output Locations
-- Prioritized workpackage dependencies: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}
-  - Template: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES_TEMPLATE}}
   - Description: All flow data plus workpackage fields
   - Format: JSON (Workpackage_Dependencies.json)
 - Migration roadmap: {{WORKPACKAGE_ROADMAP}}
@@ -139,7 +132,6 @@ If any dependencies are missing, coordinate with analysis_team_supervisor before
   - Format: JSON
 
 ### Dependencies from Phase 1
-- Business flows analysis: {{SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}
 - Module classifications: {{MODULE_CLASSIFICATIONS}}
 - Source code analysis reports: {{ANALYSIS_OUTPUT}} 
 
@@ -234,7 +226,6 @@ Create a comprehensive migration roadmap document that includes:
 **File**: `{{WORKPACKAGE_STATUS}}`
 **Template**: `{{ANALYSIS_STATUS_TEMPLATE}}`
 
-
 ## Quality Criteria
 
 ### Completeness
@@ -286,7 +277,6 @@ Create a comprehensive migration roadmap document that includes:
 **File**: `{{ANALYSIS_ERRORS}}`
 **Template for the file**: `{{ANALYSIS_ERRORS_TEMPLATE}}`
 
-
 ### Fallback Strategies
 - **Simplified Prioritization**: If complex formula fails, use simpler module count-based prioritization
 - **Partial Processing**: Continue with successfully analyzed flows
@@ -298,7 +288,6 @@ Create a comprehensive migration roadmap document that includes:
 ### Deliverable Verification
 - [ ] Verify all output files are created with valid content
 - [ ] Validate JSON outputs against specified schemas
-- [ ] Ensure CSV files have proper headers and data formatting
 - [ ] Confirm all flows are assigned to workpackages
 - [ ] Verify workpackage dependencies form a valid directed acyclic graph
 - [ ] Check that the migration roadmap includes all workpackages in a valid sequence

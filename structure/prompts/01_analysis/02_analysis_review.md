@@ -56,7 +56,6 @@ When creating the task files for this step:
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (deliverables to review - resolved paths):
   - Source code analysis report: {{COBOL_SOURCE_ANALYSIS_REPORT}}
-  - Dependency analysis table: {{DEPENDENCY_ANALYSIS_TABLE}}
   - Business flows: {{BUSINESS_FLOWS}}
   - Module classifications: {{MODULE_CLASSIFICATIONS}}
   - Source code analyzer tool: {{COBOL_SOURCE_CODE_ANALYSIS_ANALYZER_TOOL}}
@@ -116,8 +115,6 @@ Ensure all {{PARAMETERS}} are replaced with actual absolute paths before creatin
   - Template: {{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}
   - Description: Comprehensive analysis methodology, findings, and recommendations
   
-- **Dependency Analysis Table**: {{DEPENDENCY_ANALYSIS_TABLE}}
-  - Template: {{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}
   - Description: Complete module dependency relationships
   
 - **Business Flow Specifications**: {{BUSINESS_FLOWS}}
@@ -205,7 +202,6 @@ Perform comprehensive review and validation of all analysis phase deliverables f
 **Actions:**
 1. Validate all outputs against their specified templates
 2. Check JSON files validate against schemas
-3. Verify CSV files have correct column headers
 4. Confirm Markdown files include all required sections
 5. Ensure file naming conventions are followed
 
@@ -218,7 +214,6 @@ Perform comprehensive review and validation of all analysis phase deliverables f
 - [ ] No empty required fields (unless specified)
 - [ ] Consistent structure across all entries
 
-**For CSV Files** (Dependency Analysis Table):
 - [ ] Correct column headers match template exactly
 - [ ] All required columns present
 - [ ] Data types appropriate for each column

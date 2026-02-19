@@ -12,14 +12,14 @@
 
 ### Expected Deliverables
 
-1. **Business Specification Documents (Chapters 1-5)**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
+1. **Business Specification Documents (Chapters 1-5) - Draft**
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
    - Template: {{BUSINESS_SPECIFICATION_TEMPLATE}}
-   - Description: IEEE 830-1998 formatted business specifications (Chapters 1-5 only, Chapter 6 already exists from Phase 3.1)
+   - Description: IEEE 830-1998 formatted business specifications (Chapters 1-5 only, Chapter 6 already approved from Phase 3.1.1) - draft for review
 
 2. **Traceability Matrix**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
+   - File: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
    - Description: Mapping of business elements (Chapters 1-5) to Chapter 6 evidence
 
 3. **Progress Tracking**
@@ -43,15 +43,15 @@
 ## Context
 
 ### Input Locations
-- **Approved Chapter 6**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md`
+- **Approved Chapter 6**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md`
 - **Approved business context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
-- **Logic extraction notes**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
+- **Logic extraction notes**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
 
 ### Output Locations
-- **Business specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md`
-- **Business specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
-- **Traceability matrix**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
+- **Business specifications (EN) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
+- **Business specifications (other) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+- **Traceability matrix**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
 - **Progress tracking**: `{{BUSINESS_SPECIFICATION_STATUS}}`
 
 ### Template Locations
@@ -73,6 +73,28 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 3. **Business vocabulary** - Use terms from approved business glossary
 4. **Technology-agnostic** - No technical jargon in Chapters 1-5
 5. **Complete traceability** - Maintain explicit links to Chapter 6
+
+---
+
+## CRITICAL RULES - Artifact Creation
+
+**YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
+
+**Allowed Outputs** (from Output Locations section above):
+- Business specification (EN) - draft: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
+- Business specification (other) - draft: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANG}-draft.md`
+- Traceability matrix: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
+- Progress tracking: `{{BUSINESS_SPECIFICATION_STATUS}}`
+- Error logs (if errors occur): `{{BUSINESS_SPECIFICATION_ERRORS}}`
+
+**FORBIDDEN**:
+- ❌ Summary documents (e.g., "phase_3.2_summary.md", "specification_generation_summary.md")
+- ❌ Completion reports (e.g., "phase_X.X_completion.md")
+- ❌ Additional review documents beyond those specified
+- ❌ Extra markdown files for "documentation purposes"
+- ❌ Any file not explicitly listed in "Output Locations" above
+
+**Rationale**: We have defined deliverables, review reports, status tracking, and error logs. Additional summary documents create clutter and redundancy. All necessary information should be captured in the defined outputs.
 
 ---
 
@@ -166,7 +188,7 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 
 **Database Alignment**: [Reference to Chapter 6 Section 6.4 table]
 
-**Chapter 6 Reference**: [Section 6.2 or 6.3]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62) [specific reference with markdown link]
+**Chapter 6 Reference**: [Section 6.2 or 6.3]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62) [specific reference with markdown link]
 ```
 
 **Traceability:**
@@ -221,7 +243,7 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 
 **BUSINESS CONSTANTS**: [Credit limits, thresholds - not technical constants]
 
-**Chapter 6 Reference**: [Section 6.2 BR-XXX-001]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62-br-xxx-001) [specific reference with markdown link]
+**Chapter 6 Reference**: [Section 6.2 BR-XXX-001]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62-br-xxx-001) [specific reference with markdown link]
 ```
 
 **Important:**
@@ -278,7 +300,7 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 
 **BUSINESS EXCEPTIONS**: [Business error conditions in business terms]
 
-**Chapter 6 Reference**: [Section 6.3 F-XXX-001]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-63-f-xxx-001) [specific reference with markdown link]
+**Chapter 6 Reference**: [Section 6.3 F-XXX-001]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-63-f-xxx-001) [specific reference with markdown link]
 ```
 
 **Traceability:**
@@ -337,7 +359,7 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 
 **Business Value**: [What business value this process delivers]
 
-**Chapter 6 Reference**: [Section 6.7]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-67) [specific reference with markdown link]
+**Chapter 6 Reference**: [Section 6.7]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-67) [specific reference with markdown link]
 ```
 
 **Traceability:**
@@ -358,7 +380,7 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 
 **Create comprehensive traceability matrix:**
 
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
+**File**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
 
 **Purpose**: Provide complete mapping between business elements (Chapters 1-5) and technical evidence (Chapter 6)
 
@@ -378,25 +400,25 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 ## Business Entities → Chapter 6
 | Entity ID | Entity Name | Chapter 6 Reference | Database Table | Code Reference |
 |-----------|-------------|---------------------|----------------|----------------|
-| BE-XXX-001 | Customer | [Section 6.4, Table CUSTOMER]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-64) | CUSTOMER | CUST-REC |
-| BE-XXX-002 | Order | [Section 6.4, Table ORDER]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-64) | ORDER | ORD-REC |
+| BE-XXX-001 | Customer | [Section 6.4, Table CUSTOMER]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-64) | CUSTOMER | CUST-REC |
+| BE-XXX-002 | Order | [Section 6.4, Table ORDER]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-64) | ORDER | ORD-REC |
 
 ## Business Rules → Chapter 6
 | Rule ID | Rule Name | Chapter 6 Reference | Code File | Line Numbers |
 |---------|-----------|---------------------|-----------|--------------|
-| BR-XXX-001 | Credit Limit Validation | [Section 6.2 BR-XXX-001]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62-br-xxx-001) | ORDVAL.cbl | 150-175 |
-| BR-XXX-002 | Date Validation | [Section 6.2 BR-XXX-002]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62-br-xxx-002) | DATEUTIL.cbl | 200-250 |
+| BR-XXX-001 | Credit Limit Validation | [Section 6.2 BR-XXX-001]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62-br-xxx-001) | ORDVAL.cbl | 150-175 |
+| BR-XXX-002 | Date Validation | [Section 6.2 BR-XXX-002]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-62-br-xxx-002) | DATEUTIL.cbl | 200-250 |
 
 ## Business Functions → Chapter 6
 | Function ID | Function Name | Chapter 6 Reference | Code File | Paragraph/Section |
 |-------------|---------------|---------------------|-----------|-------------------|
-| F-XXX-001 | Validate Credit | [Section 6.3 F-XXX-001]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-63-f-xxx-001) | ORDVAL.cbl | VALIDATE-CREDIT |
-| F-XXX-002 | Process Payment | [Section 6.3 F-XXX-002]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-63-f-xxx-002) | PAYMENT.cbl | PROCESS-PMT |
+| F-XXX-001 | Validate Credit | [Section 6.3 F-XXX-001]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-63-f-xxx-001) | ORDVAL.cbl | VALIDATE-CREDIT |
+| F-XXX-002 | Process Payment | [Section 6.3 F-XXX-002]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-63-f-xxx-002) | PAYMENT.cbl | PROCESS-PMT |
 
 ## Business Processes → Chapter 6
 | Process Name | Chapter 6 Reference | Functions Used | Entities Used |
 |--------------|---------------------|----------------|---------------|
-| Order Validation | [Section 6.7]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-67) | F-XXX-001, F-XXX-002 | BE-XXX-001, BE-XXX-002 |
+| Order Validation | [Section 6.7]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-67) | F-XXX-001, F-XXX-002 | BE-XXX-001, BE-XXX-002 |
 
 ## Traceability Statistics
 - Total Business Entities: [count]
@@ -474,7 +496,7 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 6. **Chapter 5**: Process Flows (from Chapter 6 data flows)
 7. **Chapter 6**: Legacy Implementation References
    - **Note**: Chapter 6 already exists from Phase 3.1 and is referenced via markdown link
-   - **Reference**: See [Chapter 6: Legacy Implementation References]({{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md) for complete technical implementation details
+   - **Reference**: See [Chapter 6: Legacy Implementation References]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md) for complete technical implementation details
    - **Do not duplicate**: Chapter 6 content should NOT be copied into this document
    - **Link format**: Use markdown links for all Chapter 6 references throughout the document
 
@@ -496,9 +518,10 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 
 ## Output Format
 
-### Business Specification Document (English)
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md`
+### Business Specification Document (English) - Draft
+**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
 **Template**: `{{BUSINESS_SPECIFICATION_TEMPLATE}}`
+**Note**: This is a draft version that will be reviewed in Phase 3.2.1
 
 **Structure**:
 - Document Control
@@ -510,15 +533,16 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 - Chapter 6: Legacy Implementation References (markdown link to separate file from Phase 3.1)
 
 **Markdown Link Format**:
-- Chapter 6 references: `[Section 6.X](path/to/chapter6-approved.md#section-6x)`
-- Business glossary: `[Business Glossary](path/to/business-glossary.md)`
-- Traceability matrix: `[Traceability Matrix](path/to/traceability-matrix.md)`
+- Chapter 6 references: `[Section 6.X]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-6x)` (note: Chapter 6 is in traceability folder)
+- Business glossary: `[Business Glossary]({{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md)`
+- Traceability matrix: `[Traceability Matrix]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md)`
 
-### Business Specification Document (Other Language)
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
+### Business Specification Document (Other Language) - Draft
+**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+**Note**: This is a draft version that will be reviewed in Phase 3.2.1
 
 ### Traceability Matrix
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
+**File**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
 
 ---
 

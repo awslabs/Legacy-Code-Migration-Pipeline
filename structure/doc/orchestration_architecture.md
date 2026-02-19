@@ -49,7 +49,6 @@ The orchestration architecture enables a hierarchical, supervisor-based approach
 - **Quality**: Built-in review loops ensure deliverable quality
 - **Flexibility**: Supervisors can adapt workflows based on feedback
 
-
 ---
 
 ## 2. Architecture Layers
@@ -113,7 +112,6 @@ The orchestration architecture enables a hierarchical, supervisor-based approach
 - Phase delegation to team supervisors
 - Progress monitoring
 - Phase completion verification
-
 
 ### 2.3 Layer 2: Team Supervisors
 
@@ -214,7 +212,6 @@ The orchestration architecture enables a hierarchical, supervisor-based approach
 - `analysis_reviewer_database` - Reviews database analysis
 - `business_reviewer_logic_extraction` - Reviews business specifications
 
-
 ---
 
 ## 3. Information Flow
@@ -284,7 +281,6 @@ The orchestration architecture enables a hierarchical, supervisor-based approach
 ┌──────────────────────────────────────────────────────────────┐
 │  Deliverables                                                 │
 │  - Source Code Analysis Report                               │
-│  - Dependency Analysis Table                                 │
 │  - Business Flows                                             │
 │  - Module Classifications                                     │
 └──────────────────────────────────────────────────────────────┘
@@ -347,7 +343,6 @@ The orchestration architecture enables a hierarchical, supervisor-based approach
 - Fully resolved paths for this task
 - Expected deliverables for this task
 - Quality and success criteria for this task
-
 
 ---
 
@@ -417,7 +412,7 @@ TO: analysis_specialist_legacy_code
 TASK: Source Code Analysis
 TASK_FILE: /project/tasks/analysis_sourcecode_specialist_task.md
 CONTEXT: Legacy COBOL code in /project/input/legacy/source
-EXPECTED: Analysis report, dependency table, business flows
+EXPECTED: Analysis report, business flows, module classifications
 ```
 
 **Example Delegation to Reviewer:**
@@ -427,7 +422,6 @@ TASK: Review Source Code Analysis
 TASK_FILE: /project/tasks/analysis_sourcecode_review_task.md
 DELIVERABLES: 
   - /project/output/analysis/source_code/reports/cobol_analysis.md
-  - /project/output/analysis/source_code/reports/dependency_table.csv
 EXPECTED: Approval or detailed feedback on issues
 ```
 
@@ -470,7 +464,6 @@ EXPECTED: Approval or detailed feedback on issues
 - Don't skip verification steps
 - Don't proceed with errors unresolved
 - Don't duplicate information across levels
-
 
 ---
 
@@ -748,7 +741,6 @@ DELIVERABLES: [Current state of deliverables]
 5. **Clear Accountability**: Team supervisor responsible for phase quality
 6. **Audit Trail**: All iterations documented for traceability
 
-
 ---
 
 ## 6. Task File Creation
@@ -991,7 +983,6 @@ If you encounter issues:
 - Specify all deliverables with paths
 - Include quality and success criteria
 
-
 ---
 
 ## 7. End-to-End Example
@@ -1023,7 +1014,6 @@ This example demonstrates the complete flow from main prompt to deliverable prod
 **Expected Deliverables:**
 - Database Analysis Report: /project/output/analysis/database/reports/db_analysis.md
 - Source Code Analysis Report: /project/output/analysis/source_code/reports/cobol_analysis.md
-- Dependency Table: /project/output/analysis/source_code/reports/dependency_table.csv
 ```
 
 **Migration Supervisor Actions:**
@@ -1066,8 +1056,6 @@ CONTEXT: Legacy code in /project/input/legacy/source
 ### Output Locations
 - Analysis Report: /project/output/analysis/source_code/reports/cobol_analysis.md
   - Template: /project/templates/Cobol_Source_Analysis_Report.md
-- Dependency Table: /project/output/analysis/source_code/reports/dependency_table.csv
-  - Template: /project/templates/Dependency_Analysis_Table.csv
 
 ## Instructions
 [Detailed step-by-step instructions for source code analysis...]
@@ -1119,8 +1107,6 @@ CONTEXT: Legacy code in /project/input/legacy/source
   - Description: Comprehensive analysis findings
   - Format: Markdown
 
-- Dependency Table: /project/output/analysis/source_code/reports/dependency_table.csv
-  - Template: /project/templates/Dependency_Analysis_Table.csv
   - Description: Module dependency relationships
   - Format: CSV
 
@@ -1159,32 +1145,41 @@ Identify all dependencies between modules
 **Content Requirements:**
 - Analysis methodology section
 - Findings summary
-- Dependency analysis results
+- Dependency analysis results (within report)
 - Module classification results
+- Business flows
 
 **Validation:**
 - [ ] File exists at specified path
 - [ ] File format matches template
 - [ ] All required sections present
 
-### 2. Dependency Analysis Table
-**File**: /project/output/analysis/source_code/reports/dependency_table.csv
-**Template**: /project/templates/Dependency_Analysis_Table.csv
-**Description**: Complete module dependency relationships
+### 2. Business Flows JSON
+**Description**: Identified business flows with entry points and steps
 
 **Content Requirements:**
-- All modules listed
-- All dependencies captured
+- All business flows identified
+- Entry points documented
+- Flow steps detailed
+
+### 3. Module Classifications JSON
+**Description**: Module categorization and metadata
+
+**Content Requirements:**
+- All modules classified
+- Module types specified
+- Business domains assigned
 
 ## Quality Criteria
 
 ### Completeness
 - [ ] All COBOL source files analyzed
-- [ ] All dependency relationships captured
+- [ ] All dependency relationships captured (in report)
+- [ ] All business flows identified
 
 ### Accuracy
 - [ ] Module classifications consistent
-- [ ] Dependency relationships verified
+- [ ] Dependency relationships verified (in report)
 
 ## Success Criteria
 - [ ] All deliverables produced at specified paths
@@ -1214,12 +1209,12 @@ TASK_FILE: /project/tasks/analysis_sourcecode_specialist_task.md
 4. Identifies dependencies
 5. Classifies modules
 6. Generates analysis report at /project/output/analysis/source_code/reports/cobol_analysis.md
-7. Generates dependency table at /project/output/analysis/source_code/reports/dependency_table.csv
 8. Reports completion to analysis_team_supervisor
 
 **Deliverables Produced:**
 - `/project/output/analysis/source_code/reports/cobol_analysis.md` ✓
-- `/project/output/analysis/source_code/reports/dependency_table.csv` ✓
+- `/project/output/analysis/source_code/progress/business_flows.json` ✓
+- `/project/output/analysis/source_code/progress/module_classifications.json` ✓
 
 #### Step 7: Analysis Team Supervisor Creates Review Task
 
@@ -1241,10 +1236,13 @@ TASK_FILE: /project/tasks/analysis_sourcecode_specialist_task.md
    - Template: /project/templates/Cobol_Source_Analysis_Report.md
    - Expected: Comprehensive analysis findings
 
-2. **Dependency Analysis Table**
-   - Path: /project/output/analysis/source_code/reports/dependency_table.csv
-   - Template: /project/templates/Dependency_Analysis_Table.csv
-   - Expected: Complete module dependencies
+2. **Business Flows JSON**
+   - Path: /project/output/analysis/source_code/progress/business_flows.json
+   - Expected: Identified business flows
+
+3. **Module Classifications JSON**
+   - Path: /project/output/analysis/source_code/progress/module_classifications.json
+   - Expected: Module categorization
 
 ## Quality Criteria
 
@@ -1312,11 +1310,11 @@ Issue 1: Missing Business Flows
 - Criterion: Completeness
 - Guidance: Section 4 "Business Flows" is empty. Analyze PERFORM statements to identify business flows.
 
-Issue 2: Incomplete Dependency Table
-- Affected: dependency_table.csv
+Issue 2: Incomplete Module Classifications
+- Affected: module_classifications.json
 - Severity: Major
 - Criterion: Completeness
-- Guidance: 15 modules have TargetFound=False. Investigate missing dependencies.
+- Guidance: 15 modules missing business domain classification. Review and classify.
 ```
 
 **Analysis Team Supervisor Actions:**
@@ -1344,10 +1342,10 @@ Issue 2: Incomplete Dependency Table
 - **Severity**: Blocking
 - **Guidance**: Analyze PERFORM statements to identify business flows. Add to Section 4.
 
-### Issue 2: Incomplete Dependency Table
-- **Affected**: /project/output/analysis/source_code/reports/dependency_table.csv
+### Issue 2: Incomplete Module Classifications
+- **Affected**: /project/output/analysis/source_code/progress/module_classifications.json
 - **Severity**: Major
-- **Guidance**: 15 modules have TargetFound=False. Investigate and resolve.
+- **Guidance**: 15 modules missing business domain classification. Review and classify.
 
 ## Instructions
 1. Review feedback from reviewer
@@ -1365,7 +1363,7 @@ Issue 2: Incomplete Dependency Table
 **Specialist Actions:**
 1. Reads remediation task
 2. Addresses Issue 1: Analyzes PERFORM statements, adds business flows
-3. Addresses Issue 2: Investigates missing dependencies
+3. Addresses Issue 2: Reviews modules, completes classifications
 4. Updates deliverables
 5. Reports completion
 
@@ -1388,7 +1386,6 @@ ITERATIONS: 2 (1 remediation cycle)
 
 DELIVERABLES:
 - Source Code Analysis Report: /project/output/analysis/source_code/reports/cobol_analysis.md ✓
-- Dependency Table: /project/output/analysis/source_code/reports/dependency_table.csv ✓
 
 QUALITY: All criteria met, approved by reviewer
 ```
@@ -1406,7 +1403,6 @@ QUALITY: All criteria met, approved by reviewer
 4. **Iterative Review**: Review happens within phase, orchestrated by team supervisor
 5. **Quality Assurance**: No phase proceeds without reviewer approval
 6. **Complete Context**: Each agent receives all information needed
-
 
 ---
 
@@ -1699,7 +1695,6 @@ QUALITY: All criteria met, approved by reviewer
    - Share solutions with team
    - Improve prompts and templates based on learnings
 
-
 ---
 
 ## 9. Best Practices
@@ -1936,7 +1931,6 @@ QUALITY: All criteria met, approved by reviewer
 - Update capabilities as needed
 - Ensure consistency across teams
 - Document changes
-
 
 ---
 

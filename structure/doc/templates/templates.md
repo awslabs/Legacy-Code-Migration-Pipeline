@@ -33,7 +33,6 @@ For more information on how templates flow through the orchestration architectur
 #### Source Code Analysis
 - **Source_Analysis_Report.md** - Comprehensive source code analysis report template (language-specific: Cobol, Natural, ASM)
 - **Analysis_Status.json** - Unified progress tracking for all analysis phases (source code, database, workpackage)
-- **Dependency_Analysis_Table.csv** - Unified dependencies between source code modules across all languages
 - **Business_Flows.json** - Unified business flow documentation template for all languages
 - **Module_Classifications.json** - Unified module categorization template for all languages
 - **Analysis_Errors.json** - Unified error tracking for all analysis activities

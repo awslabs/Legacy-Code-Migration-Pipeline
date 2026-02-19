@@ -53,7 +53,6 @@ When creating the task file for this step:
 - **Project name**: {{PROJECT_NAME}}
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (deliverables to review - resolved paths):
-  - Workpackage dependencies: {{WORKPACKAGE_ANALYSIS_DEPENDENCIES}}
   - Migration roadmap: {{WORKPACKAGE_ROADMAP}}
   - Workpackage analyzer tool: {{WORKPACKAGE_ANALYZER_TOOL}}
   - Progress tracking: {{WORKPACKAGE_STATUS}}
@@ -134,7 +133,6 @@ If any dependencies are missing, coordinate with planning_specialist_workpackage
   - Description: Issue tracking and remediation progress (if issues found)
 
 ### Dependencies from Phase 1
-- **Business Flows**: {{SOURCE_CODE_ANALYSIS_BUSINESS_FLOW}}
   - Description: Input data for workpackage prioritization
 - **Module Classifications**: {{MODULE_CLASSIFICATIONS}}
   - Description: Used for calculating common module dependencies

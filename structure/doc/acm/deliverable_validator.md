@@ -44,7 +44,6 @@ python3 acm/deliverable_validator.py --quiet
 3. **Content Validation** for supported file types:
    - **JSON files**: Validates that the JSON structure (keys, types, nesting) matches the template
    - **Markdown files**: Validates that headers (levels and text) match the template structure
-   - **CSV files**: Validates that column headers match the template headers
 4. Reports deliverables that don't have matching templates as errors
 5. Reports deliverables with content validation issues as warnings
 6. Provides a comprehensive summary of validation results
@@ -84,12 +83,6 @@ Deliverables are matched by filename only (not path). For example:
 - Validates that header levels match exactly
 - Validates that header text matches exactly
 - Reports missing headers, extra headers, level mismatches, and text differences
-
-### CSV Validation
-- Reads the first row as headers from both files
-- Validates that all template headers are present
-- Reports missing headers, extra headers, and header count mismatches
-- Case-sensitive header matching
 
 ## Example Output
 

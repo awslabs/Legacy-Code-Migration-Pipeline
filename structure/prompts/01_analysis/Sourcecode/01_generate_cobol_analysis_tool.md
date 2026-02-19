@@ -18,8 +18,6 @@
    - Description: Comprehensive analysis methodology, findings, and recommendations
 
 2. **Dependency Analysis Table**
-   - File: {{DEPENDENCY_ANALYSIS_TABLE}}
-   - Template: {{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}
    - Description: Complete module dependency relationships
 
 3. **Business Flow Specifications**
@@ -76,14 +74,12 @@ When creating the task file for this step:
 - **All output locations** (resolved paths):
   - Database analysis: {{DATABASE_ANALYSIS_OUTPUT}}
   - Analysis report: {{COBOL_SOURCE_ANALYSIS_REPORT}}
-  - Dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
   - Progress tracking: {{ANALYSIS_STATUS}}
   - Business flows: {{BUSINESS_FLOWS}}
   - Module classifications: {{MODULE_CLASSIFICATIONS}}
   - Task files location: {{TASKS_BASE_PATH}}
 - **All template locations** (resolved paths):
   - Report template: {{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}
-  - Dependency table template: {{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}
   - Business flows template: {{BUSINESS_FLOWS_TEMPLATE}}
   - Module classifications template: {{MODULE_CLASSIFICATIONS_TEMPLATE}}
   - Analysis status template: {{ANALYSIS_STATUS_TEMPLATE}}
@@ -142,7 +138,6 @@ Input Locations:
 
 Output Locations:
 - Analysis report: /absolute/path/to/MyMigration/output/analysis/source_code/reports/cobol_analysis.md
-- Dependency table: /absolute/path/to/MyMigration/output/analysis/source_code/reports/dependency_table.csv
 - Business flows: /absolute/path/to/MyMigration/output/analysis/source_code/progress/business_flows.json
 [... continue with all paths ...]
 ```
@@ -187,10 +182,7 @@ The resulting task file should look like this:
   - Template: /absolute/path/to/MyMigration/templates/Cobol_Source_Analysis_Report.md
   - Description: Comprehensive analysis findings
   - Format: Markdown
-- **Dependency Table**: /absolute/path/to/MyMigration/output/analysis/source_code/reports/dependency_table.csv
-  - Template: /absolute/path/to/MyMigration/templates/Dependency_Analysis_Table.csv
   - Description: Module dependency relationships
-  - Format: CSV
 - **Business Flows**: /absolute/path/to/MyMigration/output/analysis/source_code/progress/business_flows.json
   - Template: /absolute/path/to/MyMigration/templates/Business_Flows.json
   - Description: End-to-end flow identification
@@ -333,7 +325,6 @@ If you encounter issues beyond your capability:
 - Output Location:
   -- Database analysis related files: `{{DATABASE_ANALYSIS_OUTPUT}}` 
   -- Reporting: `{{COBOL_SOURCE_ANALYSIS_REPORT}}`
-  -- Module Dependency Table: `{{DEPENDENCY_ANALYSIS_TABLE}}`
   -- Progress Tracking: `{{ANALYSIS_STATUS}}`
   -- Business Flow: `{{BUSINESS_FLOWS}}`
   -- Module Classification: `{{MODULE_CLASSIFICATIONS}}`
@@ -427,7 +418,6 @@ Determine usage context for each module:
 - **Online**: Only used in online processing (CICS transactions)
 - **Both**: Used in both batch and online contexts
 
-
 ### Step 5: End-to-End Flow Identification
 1. Identify entry points 
 2. Trace execution paths from entry points through all called modules:
@@ -460,8 +450,6 @@ Analyze module functionality and assign business domains:
 **Template for the file**: `{{COBOL_SOURCE_ANALYSIS_REPORT_TEMPLATE}}`
  
 #### 2. Dependency Analysis Table
-**File**: `{{DEPENDENCY_ANALYSIS_TABLE}}`
-**Template for the file**: `{{DEPENDENCY_ANALYSIS_TABLE_TEMPLATE}}`
  
 Where the fields of the template shall be filled like this:
 - **Name**: Name of the calling module
@@ -523,7 +511,6 @@ Where the fields of the template shall be filled like this:
 - All required fields must be populated
 - Cross-references between outputs must be accurate
 
-
  
 ## Error Handling
  
@@ -562,13 +549,11 @@ Where the fields of the template shall be filled like this:
 ## Success Validation
 - Verify all output files are created with valid content
 - Validate JSON outputs against specified schemas
-- Ensure CSV files have proper headers and data formatting
 - Confirm all modules are accounted for in classification report
 - Verify dependency relationships are bidirectional where appropriate
 - Check that all entry points have corresponding flows identified
 - Validate strict adherence to specified output formats:
   - JSON files must match exact schema structure and field names
-  - CSV files must have exact column headers as specified
   - Markdown files must include all required sections in correct order
   - File paths and names must match specifications exactly
   - All required fields must be populated (no empty values unless specified)

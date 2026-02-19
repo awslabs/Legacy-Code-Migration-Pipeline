@@ -203,13 +203,13 @@ The primary tool for ensuring migration quality and completeness. See [Deliverab
 
 **Key Features:**
 - **Template Matching**: Ensures every output has a corresponding template
-- **Content Validation**: Validates structure and format of JSON, Markdown, and CSV files
+- **Content Validation**: Validates structure and format of JSON and Markdown files
 - **Comprehensive Reporting**: Detailed validation results with specific error messages
 - **Integration Ready**: Designed for CI/CD pipeline integration
 
 #### Validation Framework
 The underlying framework that supports:
-- **Multi-format Support**: JSON, Markdown, CSV validation with extensible architecture
+- **Multi-format Support**: JSON and Markdown validation with extensible architecture
 - **Recursive Validation**: Deep validation of nested structures and hierarchies
 - **Error Classification**: Distinguishes between missing templates and content issues
 - **Batch Processing**: Validates entire project outputs efficiently
@@ -226,7 +226,6 @@ The underlying framework that supports:
 #### Level 2: Structure Validation
 - **JSON**: Validates key structure, data types, and nesting
 - **Markdown**: Validates header structure and hierarchy
-- **CSV**: Validates column headers and structure
 
 #### Level 3: Content Validation
 - Ensures content follows expected patterns and formats

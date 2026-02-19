@@ -718,35 +718,35 @@ When resuming after interruption:
 
 ### Project Paths
 ```
-{{PROJECT_NAME}} = [Project name]
-{{PROJECT_BASE_PATH}} = [Absolute path to project root]
-{{PROMPTS_BASE_PATH}} = {{PROJECT_BASE_PATH}}/prompts
+Project Name = {{PROJECT_NAME}}
+Project = {{PROJECT_BASE_PATH}}
+Prompts = {{PROMPTS_BASE_PATH}}
 ```
 
 ### Input Paths
 ```
-{{WORKPACKAGE_PLANNING}} = {{OUTPUT_BASE_PATH}}/analysis/workpackages/Workpackage_Planning.json
-{{BUSINESS_SPECIFICATION_BASE_PATH}} = {{OUTPUT_BASE_PATH}}/specifications
-{{TEST_GENERATION_DOMAIN_BASE_PATH}} = {{OUTPUT_BASE_PATH}}/specifications/tests
-{{TARGET_SPECIFICATION}} = {{INPUT_BASE_PATH}}/target/specifications
-{{TARGET_SAMPLE_CODE}} = {{INPUT_BASE_PATH}}/target/sample_code
+Workpackage Planning = {{WORKPACKAGE_PLANNING}}
+Business Specification = {{BUSINESS_SPECIFICATION_BASE_PATH}}
+Test Generation Domain = {{TEST_GENERATION_DOMAIN_BASE_PATH}}
+Target Specification = {{TARGET_SPECIFICATION}}
+Target Sample Code = {{TARGET_SAMPLE_CODE}}
 ```
 
 ### Output Paths
 ```
-{{CODE_GENERATION_BASE_PATH}} = {{OUTPUT_BASE_PATH}}/gen_src
-{{CODE_GENERATION_BACKEND_OUTPUT}} = {{CODE_GENERATION_BASE_PATH}}/backend
-{{CODE_GENERATION_FRONTEND_OUTPUT}} = {{CODE_GENERATION_BASE_PATH}}/frontend
-{{CODE_GENERATION_BATCH_OUTPUT}} = {{CODE_GENERATION_BASE_PATH}}/batch
-{{CODE_GENERATION_STATUS}} = {{CODE_GENERATION_BASE_PATH}}/progress/code_generation_status.json
-{{CODE_GENERATION_ERRORS}} = {{CODE_GENERATION_BASE_PATH}}/logs/code_generation_errors.json
-{{CODE_GENERATION_MASTER_PROGRESS}} = {{CODE_GENERATION_BASE_PATH}}/progress/code_generation_master_progress.md
+Code Generation = {{CODE_GENERATION_BASE_PATH}}
+Code Generation Backend Output = {{CODE_GENERATION_BACKEND_OUTPUT}}
+Code Generation Frontend Output = {{CODE_GENERATION_FRONTEND_OUTPUT}}
+Code Generation Batch Output = {{CODE_GENERATION_BATCH_OUTPUT}}
+Code Generation Status = {{CODE_GENERATION_STATUS}}
+Code Generation Errors = {{CODE_GENERATION_ERRORS}}
+Code Generation Master Progress = {{CODE_GENERATION_MASTER_PROGRESS}}
 ```
 
 ### Template Paths
 ```
-{{CODE_GENERATION_STATUS_TEMPLATE}} = {{TEMPLATE_BASE_PATH}}/code_generation_status.json
-{{CODE_GENERATION_MASTER_PROGRESS_TEMPLATE}} = {{TEMPLATE_BASE_PATH}}/code_generation_master_progress.md
+Code Generation Status Template = {{CODE_GENERATION_STATUS_TEMPLATE}}
+Code Generation Master Progress Template = {{CODE_GENERATION_MASTER_PROGRESS_TEMPLATE}}
 ```
 
 ---

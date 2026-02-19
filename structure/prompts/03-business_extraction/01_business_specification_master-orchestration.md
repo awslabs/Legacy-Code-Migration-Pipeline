@@ -73,7 +73,6 @@ Phase 1 (Analysis) → Phase 2 (Workpackage Planning) → Phase 3 (Business Spec
 ```
 
 **Prerequisites**:
-- Phase 1 outputs: Source code analysis, dependency analysis table, module classifications
 - Phase 2 outputs: Workpackage definitions with prioritized flows
 
 ---
@@ -102,7 +101,6 @@ WORKPACKAGE_LOOP:
             - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
             - Legacy documentation: {{PROJECT_BASE_PATH}}/input/legacy_documentation/
             - Business documentation: {{PROJECT_BASE_PATH}}/input/business_documentation/
-            - Module dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
         
         EXPECTED_OUTPUTS:
             - Business context document: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
@@ -142,8 +140,9 @@ WORKPACKAGE_LOOP:
             - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
         
         EXPECTED_OUTPUTS:
-            - Business context review report: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-review.md
-            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
+            - Business context review report: {{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md
+            - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md (main folder)
+            - Archived draft: {{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-draft.md (moved to review folder)
             - Progress tracking: {{BUSINESS_CONTEXT_STATUS}}
         
         VERIFICATION:
@@ -182,13 +181,12 @@ WORKPACKAGE_LOOP:
             - Source code files: {{SOURCE_CODE}}
             - Database source code: {{DATABASE_SOURCE_CODE}}
             - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
-            - Module dependency table: {{DEPENDENCY_ANALYSIS_TABLE}}
         
         EXPECTED_OUTPUTS:
-            - Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md
-            - Logic extraction notes: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
-            - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
-            - Error reports (if any): {{BUSINESS_SPECIFICATION_ERRORS}}
+            - Chapter 6 (draft): {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md
+            - Logic extraction notes: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
+            - Progress tracking: {{BUSINESS_TRACEABILITY_STATUS}}
+            - Error reports (if any): {{BUSINESS_TRACEABILITY_ERRORS}}
         
         VERIFICATION:
             CHECK chapter6_exists(WP-XXX)
@@ -221,17 +219,18 @@ WORKPACKAGE_LOOP:
         PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1.1_business_logic_extraction_review.md
         
         INPUTS:
-            - Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6.md
-            - Logic extraction notes: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
+            - Chapter 6 (draft): {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md
+            - Logic extraction notes: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
             - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
             - Source code files: {{SOURCE_CODE}} (for verification)
             - Database definitions: {{DATABASE_SOURCE_CODE}}
         
         EXPECTED_OUTPUTS:
-            - Logic extraction review report: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-extraction-review.md
-            - Drift detection report (if issues): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-drift-report.md
-            - Approved Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
-            - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
+            - Logic extraction review report: {{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-logic-extraction-review.md
+            - Drift detection report (if issues): {{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-drift-report.md
+            - Approved Chapter 6: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md (main folder)
+            - Archived draft: {{BUSINESS_TRACEABILITY_REVIEW}}/WP-XXX-FLOW_XXX-chapter6-draft.md (moved to review folder)
+            - Progress tracking: {{BUSINESS_TRACEABILITY_STATUS}}
         
         VERIFICATION:
             CHECK logic_review_report_exists(WP-XXX)
@@ -264,15 +263,15 @@ WORKPACKAGE_LOOP:
         PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_generation.md
 
         INPUTS:
-            - Approved Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
+            - Approved Chapter 6: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
             - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
-            - Logic extraction notes: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
+            - Logic extraction notes: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
         
         EXPECTED_OUTPUTS:
-            - Business specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
-            - Business specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
-            - Traceability matrix: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
+            - Business specification (EN) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
+            - Business specification (other) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
+            - Traceability matrix: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
             - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
         
         VERIFICATION:
@@ -306,18 +305,22 @@ WORKPACKAGE_LOOP:
         PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2.1_business_specification_review.md
         
         INPUTS:
-            - Business specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
-            - Business specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md
-            - Approved Chapter 6: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
-            - Traceability matrix: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
+            - Business specification (EN) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
+            - Business specification (other) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
+            - Approved Chapter 6: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
+            - Traceability matrix: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
             - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
         
         EXPECTED_OUTPUTS:
-            - Reviewed specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-reviewed.md
-            - Reviewed specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md
+            - Approved specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md (main folder)
+            - Approved specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md (main folder)
+            - Archived draft (EN): {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md (moved to review folder)
+            - Archived draft (other): {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md (moved to review folder)
             - Review report: {{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md
             - Updated context (if needed): {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md
+            - Updated glossary (if needed): {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md (living document)
+            - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
             - Updated glossary (if needed): {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary-updated.md
             - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
         
@@ -795,43 +798,41 @@ Rework History:
 
 ### Project Paths
 ```
-{{PROJECT_NAME}} = [Project name]
-{{PROJECT_BASE_PATH}} = [Absolute path to project root]
-{{PROMPTS_BASE_PATH}} = {{PROJECT_BASE_PATH}}/prompts
-{{TASKS_BASE_PATH}} = {{PROJECT_BASE_PATH}}/tasks  # Not used for Phase 3 (task documents in prompts/)
+Project Name = {{PROJECT_NAME}}
+Project = {{PROJECT_BASE_PATH}}
+Prompts = {{PROMPTS_BASE_PATH}}
+Tasks = {{TASKS_BASE_PATH}}
 ```
 
 ### Input Paths
 ```
-{{SOURCE_CODE}} = {{PROJECT_BASE_PATH}}/input/source_code
-{{DATABASE_SOURCE_CODE}} = {{PROJECT_BASE_PATH}}/input/database_source_code
-{{DEPENDENCY_ANALYSIS_TABLE}} = {{PROJECT_BASE_PATH}}/output/analysis/dependency_analysis_table.csv
+Source Code = {{SOURCE_CODE}}
+Database Source Code = {{DATABASE_SOURCE_CODE}}
 ```
 
 ### Output Paths
 ```
-{{BUSINESS_CONTEXT_BASE_PATH}} = {{PROJECT_BASE_PATH}}/output/business_specification/context
-{{BUSINESS_SPECIFICATION_BASE_PATH}} = {{PROJECT_BASE_PATH}}/output/business_specification/specifications
-{{BUSINESS_SPECIFICATION_REVIEW}} = {{PROJECT_BASE_PATH}}/output/business_specification/review
-{{BUSINESS_SPECIFICATION_REPORTING}} = {{PROJECT_BASE_PATH}}/output/business_specification/reporting
+Business Context = {{BUSINESS_CONTEXT_BASE_PATH}}
+Business Specification = {{BUSINESS_SPECIFICATION_BASE_PATH}}
+Business Specification Review = {{BUSINESS_SPECIFICATION_REVIEW}}
 ```
 
 ### Status and Error Tracking
 ```
-{{BUSINESS_CONTEXT_STATUS}} = {{PROJECT_BASE_PATH}}/output/business_specification/context/status.md
-{{BUSINESS_CONTEXT_ERRORS}} = {{PROJECT_BASE_PATH}}/output/business_specification/context/errors.md
-{{BUSINESS_SPECIFICATION_STATUS}} = {{PROJECT_BASE_PATH}}/output/business_specification/specifications/status.md
-{{BUSINESS_SPECIFICATION_ERRORS}} = {{PROJECT_BASE_PATH}}/output/business_specification/specifications/errors.md
+Business Context Status = {{BUSINESS_CONTEXT_STATUS}}
+Business Context Errors = {{BUSINESS_CONTEXT_ERRORS}}
+Business Specification Status = {{BUSINESS_SPECIFICATION_STATUS}}
+Business Specification Errors = {{BUSINESS_SPECIFICATION_ERRORS}}
 ```
 
 ### Template Paths
 ```
-{{BUSINESS_CONTEXT_TEMPLATE}} = {{PROJECT_BASE_PATH}}/templates/business_context_template.md
-{{BUSINESS_SPECIFICATION_TEMPLATE}} = {{PROJECT_BASE_PATH}}/templates/business_specification_template.md
-{{BUSINESS_CONTEXT_STATUS_TEMPLATE}} = {{PROJECT_BASE_PATH}}/templates/business_context_status_template.md
-{{BUSINESS_CONTEXT_ERRORS_TEMPLATE}} = {{PROJECT_BASE_PATH}}/templates/business_context_errors_template.json
-{{BUSINESS_SPECIFICATION_STATUS_TEMPLATE}} = {{PROJECT_BASE_PATH}}/templates/business_specification_status_template.md
-{{BUSINESS_SPECIFICATION_ERRORS_TEMPLATE}} = {{PROJECT_BASE_PATH}}/templates/business_specification_errors_template.json
+Business Context Template = {{BUSINESS_CONTEXT_TEMPLATE}}
+Business Specification Template = {{BUSINESS_SPECIFICATION_TEMPLATE}}
+Business Context Status Template = {{BUSINESS_CONTEXT_STATUS_TEMPLATE}}
+Business Context Errors Template = {{BUSINESS_CONTEXT_ERRORS_TEMPLATE}}
+Business Specification Status Template = {{BUSINESS_SPECIFICATION_STATUS_TEMPLATE}}
+Business Specification Errors Template = {{BUSINESS_SPECIFICATION_ERRORS_TEMPLATE}}
 ```
 
 ---
@@ -858,9 +859,14 @@ Rework History:
 
 ### Post-Execution
 1. Verify all workpackages completed successfully
-2. Generate final summary report
-3. Archive all artifacts
-4. Prepare handoff to Phase 4 (Code Generation)
+2. Archive all artifacts
+3. Prepare handoff to Phase 4 (Code Generation)
+
+**Note**: Do NOT create additional summary reports. All necessary information is captured in:
+- Approved deliverables (specifications, Chapter 6, context)
+- Review reports (in `/review` folders)
+- Progress tracking (status JSON files)
+- Error logs (if any issues occurred)
 
 ---
 
