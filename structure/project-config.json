@@ -1,0 +1,21 @@
+{
+  "projectName": "CardDemo Migration",
+  "projectDescription": "Migration of a legacy system from z/OS mainframe to a modern cloud-native Java application. The CardDemo application handles customer account management, transaction processing, billing, and reporting for credit card operations. This migration aims to modernize the technology stack while preserving critical business logic and ensuring data integrity throughout the transformation process.",
+  "legacySystem": {
+    "language": "COBOL",
+    "framework": "CICS",
+    "platform": "z/OS Mainframe",
+    "database": "DB2"
+  },
+  "targetSystem": {
+    "language": "Java",
+    "framework": "Spring Boot",
+    "platform": "Cloud Native",
+    "database": "PostgreSQL"
+  },
+  "metadata": {
+    "createdDate": "2026-02-19",
+    "lastModified": "2026-02-19",
+    "version": "1.0"
+  }
+}

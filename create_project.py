@@ -208,6 +208,31 @@ def main():
             print(f"   Or use a local ZIP file:")
             print(f"   python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir {tools_dir}")
         
+        # Install web-dashboard requirements
+        print(f"\n📦 Installing Web Dashboard Requirements")
+        web_dashboard_requirements = final_path / "web-dashboard" / "requirements.txt"
+        if web_dashboard_requirements.exists():
+            try:
+                import subprocess
+                print("Installing web-dashboard dependencies...")
+                result = subprocess.run(
+                    ["pip", "install", "-r", str(web_dashboard_requirements)],
+                    cwd=str(final_path / "web-dashboard")
+                )
+                
+                if result.returncode == 0:
+                    print("✅ Web dashboard requirements installed successfully!")
+                else:
+                    print("⚠️  Web dashboard requirements installation had issues")
+                    print(f"   You can install manually later using:")
+                    print(f"   pip install -r {web_dashboard_requirements}")
+            except Exception as e:
+                print(f"⚠️  Error installing web dashboard requirements: {e}")
+                print(f"   You can install manually later using:")
+                print(f"   pip install -r {web_dashboard_requirements}")
+        else:
+            print("⚠️  Web dashboard requirements.txt not found")
+        
         # Ask if user wants to install agents
         print(f"\n🤖 Agent Installation")
         print("Would you like to install agents now?")

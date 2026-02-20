@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Code Migrator - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/health-tile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://unpkg.com/force-graph"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-exchange-alt"></i> Agentic Code Migrator - Dashboard</h1>
+                <div class="header-actions">
+                    <div class="header-info">
+                        <span id="project-name">Loading...</span>
+                        <span class="separator">|</span>
+                        <span id="last-updated">Last updated: Loading...</span>
+                    </div>
+                    <button id="admin-btn" class="admin-btn" onclick="window.location.href='/admin'"
+                        title="Admin Panel">
+                        <i class="fas fa-cog"></i>
+                        <span>Admin</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Navigation -->
+            <nav class="tab-navigation" role="tablist">
+                <button class="tab-button active" data-tab="overview" role="tab" aria-selected="true" aria-controls="overview-content">
+                    <i class="fas fa-th-large"></i>
+                    <span>Overview</span>
+                </button>
+                <button class="tab-button" data-tab="phase-details" role="tab" aria-selected="false" aria-controls="phase-details-content">
+                    <i class="fas fa-tasks"></i>
+                    <span>Phase Details</span>
+                </button>
+            </nav>
+
+            <!-- Overview Tab Content -->
+            <div class="tab-content active" data-tab-content="overview" id="overview-content" role="tabpanel">
+                <!-- Overview Cards -->
+                <section class="overview-section">
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-project-diagram"></i> Migration Overview</h3>
+                        </div>
+                        <div class="card-content">
+                            <!-- Tech Stack Section (Compact) -->
+                            <div class="migration-flow">
+                                <div class="migration-source">
+                                    <div class="migration-label">Legacy System</div>
+                                    <div class="migration-tech-compact">
+                                        <span class="tech-item" id="legacy-language">-</span>
+                                        <span class="tech-separator">+</span>
+                                        <span class="tech-item" id="legacy-framework">-</span>
+                                    </div>
+                                </div>
+                                <div class="migration-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="migration-target">
+                                    <div class="migration-label">Target System</div>
+                                    <div class="migration-tech-compact">
+                                        <span class="tech-item" id="target-language">-</span>
+                                        <span class="tech-separator">+</span>
+                                        <span class="tech-item" id="target-framework">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Project Description Section -->
+                            <div class="project-description">
+                                <div class="description-label">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Project Description</span>
+                                </div>
+                                <p class="description-text" id="project-description">
+                                    No description available. Configure in project-config.json.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                <i class="fas fa-file-code"></i> Legacy Analysis
+                                <span id="legacy-source-badge" class="source-badge" style="display: none;" title="Data source information"></span>
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <!-- Summary Section -->
+                            <div class="stat-item">
+                                <span class="stat-label">Total Files:</span>
+                                <span class="stat-value" id="legacy-total-files">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Total Lines:</span>
+                                <span class="stat-value" id="legacy-total-lines">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Missing Files:</span>
+                                <span class="stat-value" id="legacy-missing-files">0</span>
+                            </div>
+                            
+                            <!-- Divider -->
+                            <div class="stat-divider"></div>
+                            
+                            <!-- File Types (Alphabetical, Language-Agnostic) -->
+                            <div class="stat-item">
+                                <span class="stat-label">Libraries/Includes:</span>
+                                <span class="stat-value" id="legacy-libraries">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Other Files:</span>
+                                <span class="stat-value" id="legacy-other-files">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Programs:</span>
+                                <span class="stat-value" id="legacy-programs">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Scripts:</span>
+                                <span class="stat-value" id="legacy-scripts">0</span>
+                            </div>
+                            
+                            <!-- Divider -->
+                            <div class="stat-divider"></div>
+                            
+                            <!-- Additional Metrics (Alphabetical) -->
+                            <div class="stat-item">
+                                <span class="stat-label">CICS Resources:</span>
+                                <span class="stat-value" id="legacy-cics-resources">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Database Files:</span>
+                                <span class="stat-value" id="legacy-database-files">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Entry Points:</span>
+                                <span class="stat-value" id="legacy-entry-points">0</span>
+                            </div>
+                            
+                            <!-- Complexity Distribution -->
+                            <div class="stat-divider"></div>
+                            <div class="complexity-section">
+                                <div class="complexity-header">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Complexity Distribution</span>
+                                </div>
+                                <div class="complexity-bars">
+                                    <div class="complexity-bar-item">
+                                        <div class="complexity-bar-label">
+                                            <span class="complexity-tier high">High</span>
+                                            <span class="complexity-count" id="complexity-high-count">0</span>
+                                        </div>
+                                        <div class="complexity-bar-track">
+                                            <div class="complexity-bar-fill high" id="complexity-high-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="complexity-bar-item">
+                                        <div class="complexity-bar-label">
+                                            <span class="complexity-tier medium">Medium</span>
+                                            <span class="complexity-count" id="complexity-medium-count">0</span>
+                                        </div>
+                                        <div class="complexity-bar-track">
+                                            <div class="complexity-bar-fill medium" id="complexity-medium-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="complexity-bar-item">
+                                        <div class="complexity-bar-label">
+                                            <span class="complexity-tier low">Low</span>
+                                            <span class="complexity-count" id="complexity-low-count">0</span>
+                                        </div>
+                                        <div class="complexity-bar-track">
+                                            <div class="complexity-bar-fill low" id="complexity-low-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="complexity-bar-item">
+                                        <div class="complexity-bar-label">
+                                            <span class="complexity-tier unknown">Unknown</span>
+                                            <span class="complexity-count" id="complexity-unknown-count">0</span>
+                                        </div>
+                                        <div class="complexity-bar-track">
+                                            <div class="complexity-bar-fill unknown" id="complexity-unknown-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> Migration Progress</h3>
+                        </div>
+                        <div class="card-content">
+                            <!-- Overall Progress -->
+                            <div class="overall-progress-section">
+                                <div class="overall-progress-header">
+                                    <span class="overall-progress-label">Overall Completion</span>
+                                    <span class="overall-progress-percent" id="overall-completion-percent">0%</span>
+                                </div>
+                                <div class="overall-progress-bar">
+                                    <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Current Phase Indicator -->
+                            <div class="current-phase-indicator">
+                                <i class="fas fa-arrow-right"></i>
+                                <span class="current-phase-label">Current Phase:</span>
+                                <span class="current-phase-name" id="current-phase-name">-</span>
+                            </div>
+                            
+                            <div class="stat-divider"></div>
+                            
+                            <!-- Phase Progress Bars -->
+                            <div class="stat-item">
+                                <span class="stat-label">Total Workpackages:</span>
+                                <span class="stat-value" id="migration-total-workpackages">0</span>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">Phase 1: Source Analysis</span>
+                                    <span class="progress-value" id="migration-phase1-status">-</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill phase-status" id="progress-phase1" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">Phase 2: Workpackage Definition</span>
+                                    <span class="progress-value" id="migration-phase2-status">-</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill phase-status" id="progress-phase2" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">Phase 3: Business Extraction</span>
+                                    <span class="progress-value" id="migration-phase3-completed">0/0</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-phase3" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">Phase 4: Test Case Generation</span>
+                                    <span class="progress-value" id="migration-phase4-completed">0/0</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-phase4" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">Phase 5: Code Generation</span>
+                                    <span class="progress-value" id="migration-phase5-completed">0/0</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-phase5" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Migration Health Tile -->
+                    <div class="card health-tile">
+                        <div class="card-header">
+                            <h3><i class="fas fa-heartbeat"></i> Migration Health</h3>
+                        </div>
+                        <div class="card-content">
+                            <!-- Code Quality Score -->
+                            <div class="metric-item">
+                                <div class="metric-label">
+                                    <i class="fas fa-code"></i>
+                                    <span>Code Quality Score</span>
+                                </div>
+                                <div class="metric-value not-implemented">Not Implemented</div>
+                            </div>
+
+                            <!-- Documentation Coverage -->
+                            <div class="metric-item">
+                                <div class="metric-label">
+                                    <i class="fas fa-book"></i>
+                                    <span>Documentation Coverage</span>
+                                </div>
+                                <div class="metric-value not-implemented">Not Implemented</div>
+                            </div>
+
+                            <!-- Test Coverage -->
+                            <div class="metric-item">
+                                <div class="metric-label">
+                                    <i class="fas fa-vial"></i>
+                                    <span>Test Coverage</span>
+                                </div>
+                                <div class="metric-value not-implemented">Not Implemented</div>
+                            </div>
+
+                            <!-- Dependency Completeness -->
+                            <div class="metric-item">
+                                <div class="metric-label">
+                                    <i class="fas fa-project-diagram"></i>
+                                    <span>Dependency Completeness</span>
+                                </div>
+                                <div class="metric-value not-implemented">Not Implemented</div>
+                            </div>
+
+                            <!-- Risk Indicators -->
+                            <div class="metric-item">
+                                <div class="metric-label">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>Risk Indicators</span>
+                                </div>
+                                <div class="metric-value not-implemented">Not Implemented</div>
+                            </div>
+
+                            <!-- Implementation Note -->
+                            <div class="implementation-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Metrics will be provided by external tools (e.g., SonarQube)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Tile -->
+                    <div class="card quick-actions-tile">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        </div>
+                        <div class="card-content">
+                            <!-- Reports Section -->
+                            <div class="action-group">
+                                <h4><i class="fas fa-file-alt"></i> Reports</h4>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Analysis Summary</span>
+                                </button>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-map"></i>
+                                    <span>Migration Roadmap</span>
+                                </button>
+                            </div>
+
+                            <!-- Tools Section -->
+                            <div class="action-group">
+                                <h4><i class="fas fa-tools"></i> Tools</h4>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-database"></i>
+                                    <span>Query Database</span>
+                                </button>
+                            </div>
+
+                            <!-- Export Section -->
+                            <div class="action-group">
+                                <h4><i class="fas fa-download"></i> Export</h4>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-stream"></i>
+                                    <span>Export Flows</span>
+                                </button>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-boxes"></i>
+                                    <span>Export Workpackages</span>
+                                </button>
+                            </div>
+
+                            <!-- Actions Section -->
+                            <div class="action-group">
+                                <h4><i class="fas fa-cogs"></i> Actions</h4>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Refresh Dashboard</span>
+                                </button>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-redo"></i>
+                                    <span>Re-analyze Project</span>
+                                </button>
+                            </div>
+
+                            <!-- Implementation Note -->
+                            <div class="implementation-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Actions will be implemented in future iterations</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            </div>
+            <!-- End Overview Tab Content -->
+
+            <!-- Phase Details Tab Content -->
+            <div class="tab-content" data-tab-content="phase-details" id="phase-details-content" role="tabpanel">
+                <!-- Migration Phases -->
+                <section class="phases-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-tasks"></i> Migration Phases</h2>
+                </div>
+                <div class="phases-container">
+                    <div id="phases-list" class="phases-list">
+                        <!-- Phases will be loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase Details Section -->
+            <section class="phase-details-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-info-circle"></i> Phase Details</h2>
+                    <p>Click on a phase above to view detailed information</p>
+                </div>
+
+                <div id="phase-details-container" class="phase-details-container">
+                    <div class="phase-details-placeholder">
+                        <i class="fas fa-mouse-pointer"></i>
+                        <h3>Select a Phase</h3>
+                        <p>Click on any phase card above to view detailed progress, artifacts, and reports for that
+                            phase.</p>
+                    </div>
+                </div>
+            </section>
+            </div>
+            <!-- End Phase Details Tab Content -->
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading dashboard data...</p>
+        </div>
+    </div>
+
+    <!-- Syntax highlighting for code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+
+    <!-- Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Network graph visualization -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+    <!-- Mermaid for flowcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        // Configure Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/file-modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tab-navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/workpackage-analysis.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/source-analysis-handler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/business-flows-graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/workpackage-summary-handler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/phase1-details.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/phase3-details.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/phase4-details.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/phase5-details.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/phase-details.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+
+</html>
