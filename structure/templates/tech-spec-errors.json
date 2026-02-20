@@ -1,0 +1,14 @@
+{
+  "phaseId": "05.0-technical-specification-extraction",
+  "phaseName": "Technical Specification Extraction",
+  "errors": [],
+  "warnings": [],
+  "errorSummary": {
+    "totalErrors": 0,
+    "totalWarnings": 0,
+    "criticalErrors": 0,
+    "resolvedErrors": 0,
+    "openErrors": 0
+  },
+  "lastUpdated": null
+}

@@ -369,16 +369,16 @@ The following is a sequential list that should be followed by you and your agent
 
 # Phase 4: Code Generation
 
-**Team Supervisor**: code_generation_team_supervisor
+**Team Supervisor**: development_team_supervisor
 **Dependencies**: Phase 3 outputs (Business Specifications, Test Cases), Phase 2 (Workpackage Planning)
 **Objective**: Generate modern code from business specifications through workpackage-based processing
 
-**Review Approach**: The code_generation_team_supervisor orchestrates workpackage-by-workpackage code generation with tier-specific specialists. Each workpackage is processed completely (all required tiers) before moving to the next. Quality verification occurs after each tier through compilation checks and business rule validation.
+**Review Approach**: The development_team_supervisor orchestrates workpackage-by-workpackage code generation with a single code generation specialist. Each workpackage is processed completely (all required tiers) before moving to the next. Quality verification occurs after each tier through compilation checks and business rule validation.
 
 ## Master Orchestration
 
 **Prompt File**: {{PROMPTS_BASE_PATH}}/05_code_generation/00_code_generation_master_orchestration.md
-**Assigned Agent**: code_generation_team_supervisor
+**Assigned Agent**: development_team_supervisor
 
 **Input Dependencies:**
 - Business Specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-*-specification.md
@@ -414,14 +414,11 @@ The following is a sequential list that should be followed by you and your agent
 
 **Delegation Instructions:**
 1. Verify Phase 3 deliverables are available
-2. Provide code_generation_team_supervisor with the master orchestration prompt file path
+2. Provide development_team_supervisor with the master orchestration prompt file path
 3. Supervisor coordinates Phase 4.0 (project structure) first
 4. Supervisor then processes workpackages one at a time through required tiers
-5. Supervisor delegates to tier-specific specialists:
-   - code_generation_specialist_infrastructure (Phase 4.0)
-   - code_generation_specialist_backend (Phase 4.1)
-   - code_generation_specialist_frontend (Phase 4.2)
-   - code_generation_specialist_batch (Phase 4.3)
+5. Supervisor delegates to code generation specialist:
+   - development_specialist_code_generation (all phases: 5.1, 5.2, 5.3, 5.4)
 6. Wait for all workpackages to complete
 7. Verify all deliverables exist at specified paths
 8. Verify all code compiles successfully

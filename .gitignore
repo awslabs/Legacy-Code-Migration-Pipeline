@@ -14,3 +14,5 @@ TEST_PROTOCOL_E2E.md
 carddemo/
 structure/tools/acm-tools/
 proposals/
+structure/input/legacy/atx/*
+structure/output/specifications/technical/*

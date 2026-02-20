@@ -1,0 +1,122 @@
+{
+  "phaseId": "05.0-technical-specification-extraction",
+  "phaseName": "Technical Specification Extraction",
+  "status": "not_started",
+  "startDate": null,
+  "completionDate": null,
+  "specifications": {
+    "backend": {
+      "status": "not_started",
+      "outputFile": "{{TECH_SPEC_BACKEND}}",
+      "startDate": null,
+      "completionDate": null,
+      "extractedSections": {
+        "buildSystem": false,
+        "framework": false,
+        "languageVersion": false,
+        "projectStructure": false,
+        "dependencies": false,
+        "codeOrganization": false,
+        "namingConventions": false,
+        "persistenceApproach": false,
+        "apiPatterns": false,
+        "securityApproach": false,
+        "testingApproach": false,
+        "errorHandling": false,
+        "logging": false,
+        "configuration": false
+      },
+      "reviewStatus": "not_started",
+      "reviewDate": null,
+      "approved": false
+    },
+    "frontend": {
+      "status": "not_started",
+      "outputFile": "{{TECH_SPEC_FRONTEND}}",
+      "startDate": null,
+      "completionDate": null,
+      "extractedSections": {
+        "framework": false,
+        "buildTool": false,
+        "languageVersion": false,
+        "projectStructure": false,
+        "dependencies": false,
+        "componentOrganization": false,
+        "namingConventions": false,
+        "stateManagement": false,
+        "routing": false,
+        "apiIntegration": false,
+        "styling": false,
+        "accessibility": false,
+        "testingApproach": false,
+        "errorHandling": false,
+        "configuration": false
+      },
+      "reviewStatus": "not_started",
+      "reviewDate": null,
+      "approved": false
+    },
+    "batch": {
+      "status": "not_started",
+      "outputFile": "{{TECH_SPEC_BATCH}}",
+      "startDate": null,
+      "completionDate": null,
+      "extractedSections": {
+        "framework": false,
+        "buildSystem": false,
+        "languageVersion": false,
+        "projectStructure": false,
+        "dependencies": false,
+        "jobOrganization": false,
+        "namingConventions": false,
+        "chunkProcessing": false,
+        "errorHandling": false,
+        "restartRecovery": false,
+        "scheduling": false,
+        "testingApproach": false,
+        "configuration": false
+      },
+      "reviewStatus": "not_started",
+      "reviewDate": null,
+      "approved": false
+    },
+    "infrastructure": {
+      "status": "not_started",
+      "outputFile": "{{TECH_SPEC_INFRASTRUCTURE}}",
+      "startDate": null,
+      "completionDate": null,
+      "extractedSections": {
+        "deploymentApproach": false,
+        "containerization": false,
+        "orchestration": false,
+        "cicdPipeline": false,
+        "monitoring": false,
+        "logging": false,
+        "securityPolicies": false,
+        "networking": false,
+        "dataManagement": false
+      },
+      "reviewStatus": "not_started",
+      "reviewDate": null,
+      "approved": false
+    }
+  },
+  "overallProgress": {
+    "totalSpecifications": 4,
+    "completedSpecifications": 0,
+    "inProgressSpecifications": 0,
+    "notStartedSpecifications": 4,
+    "percentComplete": 0
+  },
+  "sourceSpecifications": {
+    "backendSpec": "{{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md",
+    "frontendSpec": "{{TARGET_SPECIFICATION}}/01-FRONTEND-SPECIFICATION.md",
+    "batchSpec": "{{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md",
+    "sampleCodeBackend": "{{TARGET_SAMPLE_CODE}}/backend/",
+    "sampleCodeFrontend": "{{TARGET_SAMPLE_CODE}}/frontend/",
+    "sampleCodeBatch": "{{TARGET_SAMPLE_CODE}}/batch/"
+  },
+  "errors": [],
+  "warnings": [],
+  "lastUpdated": null
+}

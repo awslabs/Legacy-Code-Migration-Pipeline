@@ -62,8 +62,8 @@ When creating the task file for this step:
 - **Project name**: {{PROJECT_NAME}}
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (resolved paths):
-  - Database source files: {{PROJECT_BASE_PATH}}/input/legacy/database/
-  - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
+  - Database source files: {{DATABASE_SOURCE_CODE}}
+  - Legacy specifications: {{LEGACY_SPECIFICATION}}
 - **All output locations** (resolved paths):
   - Database analysis output: {{DATABASE_ANALYSIS_OUTPUT}}
   - Database generation source: {{DATABASE_GEN_SRC}}
@@ -161,6 +161,10 @@ The resulting task file should look like this:
   - Description: DDL, SQL, VSAM definition files
   - Format: SQL DDL, database scripts
 - **Legacy Specifications**: /absolute/path/to/MyMigration/input/legacy_specifications
+  - Description: Legacy framework documentation
+  - Format: Documentation files
+
+- **Legacy Specifications**: `{{LEGACY_SPECIFICATION}}`
   - Description: Legacy framework documentation
   - Format: Documentation files
 
@@ -441,9 +445,13 @@ If you encounter issues beyond your capability:
 **Project Base Path**: {{PROJECT_BASE_PATH}}
 
 ### Input Locations
-- **Database Source Files**: `{{PROJECT_BASE_PATH}}/input/legacy/database/`
+- **Database Source Files**: `{{DATABASE_SOURCE_CODE}}`
   - Description: DDL, SQL, VSAM definition files
   - Format: SQL DDL, database scripts
+
+- **Legacy Specifications**: `{{LEGACY_SPECIFICATION}}`
+  - Description: Legacy framework documentation
+  - Format: Documentation files
 
 ### Output Locations
 - **Database Analysis Output**: `{{DATABASE_ANALYSIS_OUTPUT}}`

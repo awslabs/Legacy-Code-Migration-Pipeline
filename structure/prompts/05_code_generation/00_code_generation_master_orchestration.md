@@ -1,14 +1,14 @@
-# Phase 4: Code Generation - Master Orchestration
+# Phase 5: Code Generation - Master Orchestration
 
 ---
 
 ## Document Control
 
 **Document Type**: Master Orchestration (Supervisor Level)
-**Phase**: Phase 4 - Code Generation
+**Phase**: Phase 5 - Code Generation
 **Version**: 1.0
 **Date**: 2026-02-16
-**Owner**: code_generation_team_supervisor
+**Owner**: development_team_supervisor
 
 ---
 
@@ -16,10 +16,11 @@
 
 This document provides orchestration instructions for the Code Generation phase, which implements modern code from business specifications through a workpackage-based process:
 
-1. **Phase 4.0**: Project Structure Establishment - Set up project scaffolding
-2. **Phase 4.1**: Backend Code Generation - Implement backend tier
-3. **Phase 4.2**: Frontend Code Generation - Implement frontend tier
-4. **Phase 4.3**: Batch Code Generation - Implement batch tier
+1. **Phase 5.0**: Technical Specification Extraction - Extract and document technical implementation details
+2. **Phase 5.1**: Project Structure Establishment - Set up project scaffolding
+3. **Phase 5.2**: Backend Code Generation - Implement backend tier
+4. **Phase 5.3**: Frontend Code Generation - Implement frontend tier
+5. **Phase 5.4**: Batch Code Generation - Implement batch tier
 
 **Critical Principle**: Process **one workpackage at a time** in dependency order, implementing all required tiers for each workpackage before moving to the next.
 
@@ -28,10 +29,11 @@ This document provides orchestration instructions for the Code Generation phase,
 ## Phase Task Documents
 
 The complete task documents for each phase are located in the prompts directory:
-- **Phase 4.0**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.0_project_structure.md
-- **Phase 4.1**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.1_backend_generation.md
-- **Phase 4.2**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.2_frontend_generation.md
-- **Phase 4.3**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.3_batch_generation.md
+- **Phase 5.0**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0_tech_spec_extraction_master_orchestration.md
+- **Phase 5.1**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1_project_structure.md
+- **Phase 5.2**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.2_backend_generation.md
+- **Phase 5.3**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.3_frontend_generation.md
+- **Phase 5.4**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.4_batch_generation.md
 
 **The supervisor provides these task documents directly to agents** (no task file creation required). Each phase document is self-contained with:
 - Orchestration Information (phase, agent, deliverables, success criteria)
@@ -48,23 +50,26 @@ Agents will resolve {{PATH_VARIABLES}} at runtime using the project configuratio
 ## Phase Dependencies
 
 ```
-Phase 3 (Business Specification) → Phase 4 (Code Generation)
+Phase 4 (Test Case Generation) → Phase 5 (Code Generation)
                                         ↓
-                                Phase 4.0 (Project Structure)
+                                Phase 5.0 (Technical Specification Extraction)
+                                        ↓
+                                Phase 5.1 (Project Structure)
                                         ↓
                                 WORKPACKAGE_LOOP:
                                     ↓
-                                Phase 4.1 (Backend - if needed)
+                                Phase 5.2 (Backend - if needed)
                                     ↓
-                                Phase 4.2 (Frontend - if needed)
+                                Phase 5.3 (Frontend - if needed)
                                     ↓
-                                Phase 4.3 (Batch - if needed)
+                                Phase 5.4 (Batch - if needed)
                                     ↓
                                 Next Workpackage
 ```
 
 **Prerequisites**:
-- Phase 3 outputs: Business specifications, test case definitions
+- Phase 3 outputs: Business specifications
+- Phase 4 outputs: Test case definitions
 - Workpackage planning with dependencies
 - Target framework specifications
 
@@ -72,14 +77,51 @@ Phase 3 (Business Specification) → Phase 4 (Code Generation)
 
 ## Orchestration Workflow
 
-### Phase 4.0: Project Structure Establishment
+### Phase 5.0: Technical Specification Extraction
 
 ```
-EXECUTE Phase_4.0:
-    ASSIGN: code_generation_specialist_infrastructure
-    PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.0_project_structure.md
+EXECUTE Phase_5.0:
+    # Phase 5.0 has its own master orchestration document
+    # It delegates to Phase 5.0.0 (Creation) and Phase 5.0.1 (Review)
+    PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0_tech_spec_extraction_master_orchestration.md
     
     INPUTS:
+        - Target specifications: {{TARGET_SPECIFICATION}}/
+        - Sample code: {{TARGET_SAMPLE_CODE}}/
+        - Workpackage planning: {{WORKPACKAGE_PLANNING}}
+    
+    EXPECTED_OUTPUTS:
+        - Backend tech spec: {{TECH_SPEC_BASE_PATH}}/specs/backend-tech-spec.md
+        - Frontend tech spec: {{TECH_SPEC_BASE_PATH}}/specs/frontend-tech-spec.md
+        - Batch tech spec: {{TECH_SPEC_BASE_PATH}}/specs/batch-tech-spec.md
+        - Infrastructure tech spec: {{TECH_SPEC_BASE_PATH}}/specs/infrastructure-tech-spec.md
+        - Progress tracking: {{TECH_SPEC_BASE_PATH}}/specs/progress/Tech_Spec_Status.json
+        - Review artifacts: {{TECH_SPEC_BASE_PATH}}/specs/review/
+    
+    VERIFICATION:
+        CHECK tech_specs_exist()
+        CHECK tech_specs_reviewed_and_approved()
+        CHECK progress_tracking_complete()
+        
+        IF verification_failed:
+            LOG error to {{TECH_SPEC_BASE_PATH}}/specs/logs/tech-spec-errors.json
+            ESCALATE to human supervisor
+            HALT processing
+        
+        IF verification_passed:
+            UPDATE {{CODE_GENERATION_STATUS}} with Phase 5.0 completion
+            PROCEED to Phase_5.1
+```
+
+### Phase 5.1: Project Structure Establishment
+
+```
+EXECUTE Phase_5.1:
+    ASSIGN: development_specialist_code_generation
+    PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1_project_structure.md
+    
+    INPUTS:
+        - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/
         - Target specifications: {{TARGET_SPECIFICATION}}/
         - Sample code: {{TARGET_SAMPLE_CODE}}/
         - Workpackage planning: {{WORKPACKAGE_PLANNING}}
@@ -102,7 +144,7 @@ EXECUTE Phase_4.0:
             HALT processing
         
         IF verification_passed:
-            UPDATE {{CODE_GENERATION_STATUS}} with completion
+            UPDATE {{CODE_GENERATION_STATUS}} with Phase 5.1 completion
             PROCEED to WORKPACKAGE_LOOP
 ```
 
@@ -128,18 +170,19 @@ WORKPACKAGE_LOOP:
     tiers_needed = DETERMINE_TIERS(current_workpackage)
     
     # ========================================
-    # PHASE 4.1: BACKEND CODE GENERATION
+    # PHASE 5.2: BACKEND CODE GENERATION
     # ========================================
     
     IF "backend" IN tiers_needed:
-        EXECUTE Phase_4.1:
-            ASSIGN: code_generation_specialist_backend
-            PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.1_backend_generation.md
+        EXECUTE Phase_5.2:
+            ASSIGN: development_specialist_code_generation
+            PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.2_backend_generation.md
             PROVIDE_CONTEXT:
                 - workpackage_id: current_workpackage.id
                 - workpackage_name: current_workpackage.name
             
             INPUTS:
+                - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/backend-tech-spec.md
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
                 - Test cases: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/WP-{ID}-tests.md
                 - Target specification: {{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md
@@ -162,21 +205,22 @@ WORKPACKAGE_LOOP:
                 
                 IF verification_passed:
                     UPDATE {{CODE_GENERATION_STATUS}} with backend completion
-                    PROCEED to Phase_4.2
+                    PROCEED to Phase_5.3
     
     # ========================================
-    # PHASE 4.2: FRONTEND CODE GENERATION
+    # PHASE 5.3: FRONTEND CODE GENERATION
     # ========================================
     
     IF "frontend" IN tiers_needed:
-        EXECUTE Phase_4.2:
-            ASSIGN: code_generation_specialist_frontend
-            PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.2_frontend_generation.md
+        EXECUTE Phase_5.3:
+            ASSIGN: development_specialist_code_generation
+            PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.3_frontend_generation.md
             PROVIDE_CONTEXT:
                 - workpackage_id: current_workpackage.id
                 - workpackage_name: current_workpackage.name
             
             INPUTS:
+                - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/frontend-tech-spec.md
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
                 - Backend API: {{CODE_GENERATION_BACKEND_OUTPUT}}/wp-{ID}/
                 - Target specification: {{TARGET_SPECIFICATION}}/01-FRONTEND-SPECIFICATION.md
@@ -200,21 +244,22 @@ WORKPACKAGE_LOOP:
                 
                 IF verification_passed:
                     UPDATE {{CODE_GENERATION_STATUS}} with frontend completion
-                    PROCEED to Phase_4.3
+                    PROCEED to Phase_5.4
     
     # ========================================
-    # PHASE 4.3: BATCH CODE GENERATION
+    # PHASE 5.4: BATCH CODE GENERATION
     # ========================================
     
     IF "batch" IN tiers_needed:
-        EXECUTE Phase_4.3:
-            ASSIGN: code_generation_specialist_batch
-            PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.3_batch_generation.md
+        EXECUTE Phase_5.4:
+            ASSIGN: development_specialist_code_generation
+            PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.4_batch_generation.md
             PROVIDE_CONTEXT:
                 - workpackage_id: current_workpackage.id
                 - workpackage_name: current_workpackage.name
             
             INPUTS:
+                - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/batch-tech-spec.md
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
                 - Test cases: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/WP-{ID}-tests.md
                 - Target specification: {{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md
@@ -257,10 +302,23 @@ END WORKPACKAGE_LOOP
 
 ## Agent Assignments
 
-### Phase 4.0: Project Structure Establishment
-**Agent**: code_generation_specialist_infrastructure
-**Agent Definition**: structure/agents/code_generation_team/code_generation_specialist_infrastructure.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.0_project_structure.md
+### Phase 5.0: Technical Specification Extraction
+**Orchestration**: Phase 5.0 has its own master orchestration document
+**Sub-phases**: 
+- Phase 5.0.0 (Creation) - Assigned to tech_spec_extraction_specialist
+- Phase 5.0.1 (Review) - Assigned to tech_spec_review_specialist
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0_tech_spec_extraction_master_orchestration.md
+**Capabilities**:
+- Discovery-based specification extraction
+- Keyword-based search across specifications
+- Technical pattern identification
+- Assumption documentation
+- Traceability management
+
+### Phase 5.1: Project Structure Establishment
+**Agent**: development_specialist_code_generation
+**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1_project_structure.md
 **Capabilities**:
 - Project scaffolding setup
 - Build configuration management
@@ -268,10 +326,10 @@ END WORKPACKAGE_LOOP
 - Configuration template setup
 - Multi-tier project initialization
 
-### Phase 4.1: Backend Code Generation
-**Agent**: code_generation_specialist_backend
-**Agent Definition**: structure/agents/code_generation_team/code_generation_specialist_backend.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.1_backend_generation.md
+### Phase 5.2: Backend Code Generation
+**Agent**: development_specialist_code_generation
+**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.2_backend_generation.md
 **Capabilities**:
 - Domain model implementation
 - Repository layer development
@@ -281,10 +339,10 @@ END WORKPACKAGE_LOOP
 - Validation and error handling
 - Backend framework expertise
 
-### Phase 4.2: Frontend Code Generation
-**Agent**: code_generation_specialist_frontend
-**Agent Definition**: structure/agents/code_generation_team/code_generation_specialist_frontend.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.2_frontend_generation.md
+### Phase 5.3: Frontend Code Generation
+**Agent**: development_specialist_code_generation
+**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.3_frontend_generation.md
 **Capabilities**:
 - UI component development
 - State management implementation
@@ -294,10 +352,10 @@ END WORKPACKAGE_LOOP
 - Frontend framework expertise
 - Responsive design implementation
 
-### Phase 4.3: Batch Code Generation
-**Agent**: code_generation_specialist_batch
-**Agent Definition**: structure/agents/code_generation_team/code_generation_specialist_batch.md
-**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_4.3_batch_generation.md
+### Phase 5.4: Batch Code Generation
+**Agent**: development_specialist_code_generation
+**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.4_batch_generation.md
 **Capabilities**:
 - Batch job configuration
 - Reader/processor/writer implementation
@@ -310,8 +368,23 @@ END WORKPACKAGE_LOOP
 
 ## Input/Output Contracts
 
-### Phase 4.0 → Phase 4.1/4.2/4.3
-**Phase 4.0 Outputs** (Phase 4.1/4.2/4.3 Inputs):
+### Phase 5.0 → Phase 5.1
+**Phase 5.0 Outputs** (Phase 5.1 Inputs):
+- Backend technical specification with all implementation details
+- Frontend technical specification with all implementation details
+- Batch technical specification with all implementation details
+- Infrastructure technical specification with all implementation details
+- Progress tracking and review approval
+
+**Contract**:
+- All technical specifications extracted and documented
+- All specifications reviewed and approved
+- Discovery-based approach used (no hardcoded assumptions)
+- Traceability to source specifications maintained
+- Assumptions documented where specifications unclear
+
+### Phase 5.1 → Phase 5.2/5.3/5.4
+**Phase 5.1 Outputs** (Phase 5.2/5.3/5.4 Inputs):
 - Backend project structure with build files
 - Frontend project structure with build files
 - Batch project structure with build files
@@ -324,8 +397,8 @@ END WORKPACKAGE_LOOP
 - Configuration templates in place
 - Progress tracking file initialized with project structure status
 
-### Phase 3 → Phase 4.1
-**Phase 3 Outputs** (Phase 4.1 Inputs):
+### Phase 3 → Phase 5.2
+**Phase 3 Outputs** (Phase 5.2 Inputs):
 - Business specification: `WP-XXX-specification.md`
 - Test case definitions: `WP-XXX-tests.md`
 
@@ -336,8 +409,8 @@ END WORKPACKAGE_LOOP
 - Process flows documented
 - Test cases defined for all business rules
 
-### Phase 4.1 → Phase 4.2
-**Phase 4.1 Outputs** (Phase 4.2 Inputs):
+### Phase 5.2 → Phase 5.3
+**Phase 5.2 Outputs** (Phase 5.3 Inputs):
 - Backend code: Domain model, repositories, services, API controllers
 - API endpoints documented
 - DTOs defined
@@ -348,8 +421,8 @@ END WORKPACKAGE_LOOP
 - Business rules implemented in backend
 - DTOs available for frontend integration
 
-### Phase 4.1/4.2/4.3 → Phase 5
-**Phase 4 Outputs** (Phase 5 Inputs):
+### Phase 5.2/5.3/5.4 → Phase 6
+**Phase 5 Outputs** (Phase 6 Inputs):
 - Complete backend implementation
 - Complete frontend implementation
 - Complete batch implementation
@@ -367,7 +440,31 @@ END WORKPACKAGE_LOOP
 
 ## Verification Criteria
 
-### Phase 4.0 Verification
+### Phase 5.0 Verification
+```
+CHECK tech_specs_exist():
+    backend_spec = file_exists({{TECH_SPEC_BASE_PATH}}/specs/backend-tech-spec.md)
+    frontend_spec = file_exists({{TECH_SPEC_BASE_PATH}}/specs/frontend-tech-spec.md)
+    batch_spec = file_exists({{TECH_SPEC_BASE_PATH}}/specs/batch-tech-spec.md)
+    infra_spec = file_exists({{TECH_SPEC_BASE_PATH}}/specs/infrastructure-tech-spec.md)
+    RETURN backend_spec AND frontend_spec AND batch_spec AND infra_spec
+
+CHECK tech_specs_reviewed_and_approved():
+    review_file = file_exists({{TECH_SPEC_BASE_PATH}}/specs/review/Tech_Spec_Review_Approval.json)
+    IF NOT review_file:
+        RETURN FALSE
+    approval_data = load_json({{TECH_SPEC_BASE_PATH}}/specs/review/Tech_Spec_Review_Approval.json)
+    RETURN approval_data.overallApproval == "approved"
+
+CHECK progress_tracking_complete():
+    status_file = file_exists({{TECH_SPEC_BASE_PATH}}/specs/progress/Tech_Spec_Status.json)
+    IF NOT status_file:
+        RETURN FALSE
+    status_data = load_json({{TECH_SPEC_BASE_PATH}}/specs/progress/Tech_Spec_Status.json)
+    RETURN status_data.status == "completed"
+```
+
+### Phase 5.1 Verification
 ```
 CHECK project_structure_exists():
     backend_exists = directory_exists({{CODE_GENERATION_BACKEND_OUTPUT}})
@@ -387,7 +484,7 @@ CHECK progress_tracking_initialized():
     RETURN status_file AND status_data.projectStructureEstablished == true
 ```
 
-### Phase 4.1 Verification
+### Phase 5.2 Verification
 ```
 CHECK backend_code_exists(workpackage_id):
     code_path = {{CODE_GENERATION_BACKEND_OUTPUT}}/wp-{workpackage_id}
@@ -418,7 +515,7 @@ CHECK business_rules_implemented(workpackage_id):
     RETURN TRUE
 ```
 
-### Phase 4.2 Verification
+### Phase 5.3 Verification
 ```
 CHECK frontend_code_exists(workpackage_id):
     code_path = {{CODE_GENERATION_FRONTEND_OUTPUT}}/wp-{workpackage_id}
@@ -449,7 +546,7 @@ CHECK accessibility_compliance(workpackage_id):
     RETURN has_aria_labels OR has_semantic_html OR has_alt_text
 ```
 
-### Phase 4.3 Verification
+### Phase 5.4 Verification
 ```
 CHECK batch_code_exists(workpackage_id):
     code_path = {{CODE_GENERATION_BATCH_OUTPUT}}/wp-{workpackage_id}
@@ -485,7 +582,20 @@ CHECK restart_capability_implemented(workpackage_id):
 
 ### Rework Scenarios
 
-#### Scenario 1: Project Structure Issues (Return to Phase 4.0)
+#### Scenario 0: Technical Specification Issues (Return to Phase 5.0)
+**Triggers**:
+- Incomplete technical specifications
+- Missing critical implementation details
+- Specification ambiguities preventing code generation
+- Inconsistencies between specifications
+
+**Actions**:
+1. Update Phase 5.0 task with specific corrections needed
+2. Re-execute Phase 5.0 with focus on identified issues
+3. Re-review specifications
+4. Verify all code generation phases can proceed with corrected specifications
+
+#### Scenario 1: Project Structure Issues (Return to Phase 5.1)
 **Triggers**:
 - Build configuration invalid
 - Missing directories
@@ -493,12 +603,12 @@ CHECK restart_capability_implemented(workpackage_id):
 - Incompatible framework versions
 
 **Actions**:
-1. Update Phase 4.0 task with specific corrections needed
-2. Re-assign code_generation_specialist_infrastructure
-3. Re-execute Phase 4.0 with focus on identified issues
+1. Update Phase 5.1 task with specific corrections needed
+2. Re-assign development_specialist_code_generation
+3. Re-execute Phase 5.1 with focus on identified issues
 4. Verify all workpackages can proceed with corrected structure
 
-#### Scenario 2: Backend Implementation Issues (Rework Phase 4.1)
+#### Scenario 2: Backend Implementation Issues (Rework Phase 5.2)
 **Triggers**:
 - Code compilation errors
 - Business rules not implemented
@@ -507,12 +617,12 @@ CHECK restart_capability_implemented(workpackage_id):
 - Test failures
 
 **Actions**:
-1. Update Phase 4.1 task with specific corrections needed
-2. Re-assign code_generation_specialist_backend
-3. Re-execute Phase 4.1 for the affected workpackage
+1. Update Phase 5.2 task with specific corrections needed
+2. Re-assign development_specialist_code_generation
+3. Re-execute Phase 5.2 for the affected workpackage
 4. Re-verify compilation and business rule implementation
 
-#### Scenario 3: Frontend Implementation Issues (Rework Phase 4.2)
+#### Scenario 3: Frontend Implementation Issues (Rework Phase 5.3)
 **Triggers**:
 - Code compilation errors
 - UI components missing
@@ -521,12 +631,12 @@ CHECK restart_capability_implemented(workpackage_id):
 - Routing errors
 
 **Actions**:
-1. Update Phase 4.2 task with specific corrections needed
-2. Re-assign code_generation_specialist_frontend
-3. Re-execute Phase 4.2 for the affected workpackage
+1. Update Phase 5.3 task with specific corrections needed
+2. Re-assign development_specialist_code_generation
+3. Re-execute Phase 5.3 for the affected workpackage
 4. Re-verify compilation and UI implementation
 
-#### Scenario 4: Batch Implementation Issues (Rework Phase 4.3)
+#### Scenario 4: Batch Implementation Issues (Rework Phase 5.4)
 **Triggers**:
 - Code compilation errors
 - Batch job configuration errors
@@ -534,9 +644,9 @@ CHECK restart_capability_implemented(workpackage_id):
 - Reader/processor/writer errors
 
 **Actions**:
-1. Update Phase 4.3 task with specific corrections needed
-2. Re-assign code_generation_specialist_batch
-3. Re-execute Phase 4.3 for the affected workpackage
+1. Update Phase 5.4 task with specific corrections needed
+2. Re-assign development_specialist_code_generation
+3. Re-execute Phase 5.4 for the affected workpackage
 4. Re-verify compilation and batch job implementation
 
 #### Scenario 5: Critical Issues (Escalate to Human)
@@ -653,7 +763,22 @@ When resuming after interruption:
 
 ## Quality Gates
 
-### Phase 4.0 Quality Gate
+### Phase 5.0 Quality Gate
+**Criteria**:
+- [ ] Backend technical specification created
+- [ ] Frontend technical specification created
+- [ ] Batch technical specification created
+- [ ] Infrastructure technical specification created
+- [ ] All specifications reviewed and approved
+- [ ] Progress tracking shows completion
+- [ ] All discoveries documented with traceability
+- [ ] All assumptions documented
+
+**Gate Decision**:
+- **PASS**: Proceed to Phase 5.1
+- **FAIL**: Rework Phase 5.0 or escalate
+
+### Phase 5.1 Quality Gate
 **Criteria**:
 - [ ] Backend project structure created
 - [ ] Frontend project structure created
@@ -665,9 +790,9 @@ When resuming after interruption:
 
 **Gate Decision**:
 - **PASS**: Proceed to WORKPACKAGE_LOOP
-- **FAIL**: Rework Phase 4.0 or escalate
+- **FAIL**: Rework Phase 5.1 or escalate
 
-### Phase 4.1 Quality Gate
+### Phase 5.2 Quality Gate
 **Criteria**:
 - [ ] Backend code exists for workpackage
 - [ ] Code compiles without errors
@@ -680,10 +805,10 @@ When resuming after interruption:
 - [ ] Error handling implemented
 
 **Gate Decision**:
-- **PASS**: Proceed to Phase 4.2 (if needed) or Phase 4.3 (if needed) or WORKPACKAGE_COMPLETE
-- **FAIL**: Rework Phase 4.1 or escalate
+- **PASS**: Proceed to Phase 5.3 (if needed) or Phase 5.4 (if needed) or WORKPACKAGE_COMPLETE
+- **FAIL**: Rework Phase 5.2 or escalate
 
-### Phase 4.2 Quality Gate
+### Phase 5.3 Quality Gate
 **Criteria**:
 - [ ] Frontend code exists for workpackage
 - [ ] Code compiles without errors
@@ -695,10 +820,10 @@ When resuming after interruption:
 - [ ] Responsive design implemented
 
 **Gate Decision**:
-- **PASS**: Proceed to Phase 4.3 (if needed) or WORKPACKAGE_COMPLETE
-- **FAIL**: Rework Phase 4.2 or escalate
+- **PASS**: Proceed to Phase 5.4 (if needed) or WORKPACKAGE_COMPLETE
+- **FAIL**: Rework Phase 5.3 or escalate
 
-### Phase 4.3 Quality Gate
+### Phase 5.4 Quality Gate
 **Criteria**:
 - [ ] Batch code exists for workpackage
 - [ ] Code compiles without errors
@@ -710,7 +835,7 @@ When resuming after interruption:
 
 **Gate Decision**:
 - **PASS**: Proceed to WORKPACKAGE_COMPLETE
-- **FAIL**: Rework Phase 4.3 or escalate
+- **FAIL**: Rework Phase 5.4 or escalate
 
 ---
 
@@ -785,40 +910,44 @@ Code Generation Master Progress Template = {{CODE_GENERATION_MASTER_PROGRESS_TEM
 
 ## Success Criteria
 
-Phase 4 is considered complete when:
-- [ ] Project structure established successfully
+Phase 5 is considered complete when:
+- [ ] Technical specifications extracted successfully (Phase 5.0)
+- [ ] Project structure established successfully (Phase 5.1)
 - [ ] All workpackages processed
 - [ ] All required tiers implemented for each workpackage
 - [ ] All code compiles successfully
 - [ ] All business rules implemented and traceable
 - [ ] Progress tracking shows 100% completion
 - [ ] No critical blockers remain
-- [ ] All artifacts ready for Phase 5 (Integration Testing)
+- [ ] All artifacts ready for Phase 6 (Integration Testing)
 
 ---
 
 ## Notes for Supervisor
 
 **Critical Success Factors**:
-1. **Project structure first**: Phase 4.0 must complete before any code generation
-2. **Workpackage-by-workpackage**: Complete all tiers for one workpackage before moving to next
-3. **Specification references**: Always reference target specifications, never embed details
-4. **Business rule traceability**: All business rules from specifications must be implemented
-5. **Compilation verification**: Code must compile before marking tier complete
+1. **Technical specifications first**: Phase 5.0 must complete before project structure
+2. **Project structure second**: Phase 5.1 must complete before any code generation
+3. **Workpackage-by-workpackage**: Complete all tiers for one workpackage before moving to next
+4. **Specification references**: Always reference technical specifications from Phase 5.0
+5. **Business rule traceability**: All business rules from specifications must be implemented
+6. **Compilation verification**: Code must compile before marking tier complete
 
 **Common Pitfalls to Avoid**:
-1. Skipping Phase 4.0 and jumping to code generation (results in build failures)
-2. Processing multiple workpackages in parallel (breaks dependency order)
-3. Embedding implementation details in prompts (violates specification reference principle)
-4. Marking tier complete without compilation verification (breaks quality gate)
-5. Ignoring accessibility requirements in frontend (violates compliance)
+1. Skipping Phase 5.0 and jumping to project structure (results in repeated discovery work)
+2. Skipping Phase 5.1 and jumping to code generation (results in build failures)
+3. Processing multiple workpackages in parallel (breaks dependency order)
+4. Embedding implementation details in prompts (violates specification reference principle)
+5. Marking tier complete without compilation verification (breaks quality gate)
+6. Ignoring accessibility requirements in frontend (violates compliance)
 
 **When to Escalate**:
-1. Specification ambiguities preventing implementation
-2. Framework compatibility issues requiring architectural decisions
-3. Missing business requirements not documented in specifications
-4. Technical blockers requiring infrastructure changes
-5. Repeated rework cycles (more than 2 iterations per workpackage/tier)
+1. Specification ambiguities preventing technical specification extraction
+2. Specification ambiguities preventing implementation
+3. Framework compatibility issues requiring architectural decisions
+4. Missing business requirements not documented in specifications
+5. Technical blockers requiring infrastructure changes
+6. Repeated rework cycles (more than 2 iterations per workpackage/tier)
 
 ---
 
