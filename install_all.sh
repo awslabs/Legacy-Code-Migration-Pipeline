@@ -254,7 +254,7 @@ fi
 
 # Step 4: Install ACM Tools (Optional)
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 4/4: Installing ACM Tools (Optional)                 ║${NC}"
+echo -e "${BLUE}║  Step 4/5: Installing ACM Tools (Optional)                 ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -330,6 +330,55 @@ else
     echo "  1. Download acm-tools-main.zip and place it in the installation directory"
     echo "  2. Run: cd $PROJECT_NAME"
     echo "  3. Run: python3 ../install_acm_tools.py --tools-dir ./tools"
+fi
+
+echo ""
+
+# Step 5: Install Python Dependencies from Subprojects
+echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║  Step 5/5: Installing Python Dependencies                  ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+
+echo "Searching for requirements.txt files in project subfolders..."
+echo ""
+
+# Find all requirements.txt files in the project directory
+REQUIREMENTS_FILES=$(find "$PROJECT_NAME" -type f -name "requirements.txt" 2>/dev/null)
+
+if [ -z "$REQUIREMENTS_FILES" ]; then
+    echo -e "${YELLOW}⊘ No requirements.txt files found in project${NC}"
+    echo ""
+else
+    # Count the number of requirements files
+    REQUIREMENTS_COUNT=$(echo "$REQUIREMENTS_FILES" | wc -l | tr -d ' ')
+    echo "Found $REQUIREMENTS_COUNT requirements.txt file(s):"
+    echo ""
+    
+    # Display all found requirements files
+    echo "$REQUIREMENTS_FILES" | while read -r req_file; do
+        echo "  📄 $req_file"
+    done
+    echo ""
+    
+    echo "Installing dependencies from all requirements.txt files..."
+    echo ""
+    
+    # Install each requirements file
+    echo "$REQUIREMENTS_FILES" | while read -r req_file; do
+        echo -e "${BLUE}Installing from: $req_file${NC}"
+        
+        if pip install -r "$req_file"; then
+            echo -e "${GREEN}✓ Successfully installed dependencies from $req_file${NC}"
+            echo ""
+        else
+            echo -e "${YELLOW}⚠️  Some dependencies from $req_file may have failed${NC}"
+            echo ""
+        fi
+    done
+    
+    echo -e "${GREEN}✓ Python dependencies installation complete${NC}"
+    echo ""
 fi
 
 echo ""
