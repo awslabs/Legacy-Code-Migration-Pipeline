@@ -60,7 +60,7 @@ When creating the task file for this step:
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (resolved paths):
   - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/business/
-  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/analysis/workpackages/
   - Source code analysis: {{PROJECT_BASE_PATH}}/output/analysis/
 - **All output locations** (resolved paths):
   - Domain specifications: {{DOMAIN_CONSOLIDATION_BASE_PATH}}
@@ -106,7 +106,7 @@ This step requires outputs from Phase 3.1 (Business Logic Extraction):
 - **Business Specifications**: {{BUSINESS_SPECIFICATION_BASE_PATH}}/business/
   - Description: Business specifications from Phase 3.1
   - Format: IEEE-formatted markdown documents with entities, rules, and functions
-- **Workpackage Definitions**: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+- **Workpackage Definitions**: {{PROJECT_BASE_PATH}}/output/analysis/workpackages/
   - Description: Workpackage definitions with domain assignments
   - Format: Markdown documents with workpackage metadata
 

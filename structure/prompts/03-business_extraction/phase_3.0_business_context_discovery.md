@@ -47,7 +47,7 @@
 ## Context
 
 ### Input Locations
-- **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/`
+- **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/analysis/workpackages/`
 - **Source code files**: `{{SOURCE_CODE}}`
 - **Database source code**: `{{DATABASE_SOURCE_CODE}}`
 - **Legacy specifications**: `{{PROJECT_BASE_PATH}}/input/legacy_specifications/`

@@ -44,7 +44,7 @@
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Source code files**: `{{SOURCE_CODE}}`
 - **Database source code**: `{{DATABASE_SOURCE_CODE}}`
-- **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/`
+- **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/analysis/workpackages/`
 
 ### Output Locations
 - **Chapter 6 (draft)**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-draft.md`

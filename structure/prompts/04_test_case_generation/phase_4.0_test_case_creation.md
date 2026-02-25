@@ -7,7 +7,7 @@
 **Phase**: Phase 4 - Test Case Generation
 **Step**: Step 4.0 - Test Case Specification Creation
 **Team Supervisor**: business_analyst_team_lead
-**Assigned Agent**: test_case_specialist
+**Assigned Agent**: business_specialist_test_designalist
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_4.0_test_case_creation.md
 
 ### Expected Deliverables
@@ -68,7 +68,7 @@ When creating the task file for this step:
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (resolved paths):
   - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/business/
-  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/analysis/workpackages/
   - Domain consolidation specs: {{DOMAIN_CONSOLIDATION_BASE_PATH}}
 - **All output locations** (resolved paths):
   - Test case definitions: {{TEST_CASE_GENERATION_BASE_PATH}}

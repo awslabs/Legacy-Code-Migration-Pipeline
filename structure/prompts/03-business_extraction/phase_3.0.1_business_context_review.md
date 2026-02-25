@@ -45,7 +45,7 @@
 - **Business context (draft)**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-draft.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Source code files**: `{{SOURCE_CODE}}` (for verification if needed)
-- **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/`
+- **Workpackage definitions**: `{{PROJECT_BASE_PATH}}/output/analysis/workpackages/`
 
 ### Output Locations
 - **Review report**: `{{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md`

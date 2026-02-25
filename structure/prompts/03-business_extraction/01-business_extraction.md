@@ -62,7 +62,7 @@ When creating the task file for this step:
 - **Project name**: {{PROJECT_NAME}}
 - **Project base path**: {{PROJECT_BASE_PATH}}
 - **All input locations** (resolved paths):
-  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+  - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/analysis/workpackages/
   - Source code files: {{SOURCE_CODE}}
   - Database source code: {{DATABASE_SOURCE_CODE}}
   - Legacy specifications: {{PROJECT_BASE_PATH}}/input/legacy_specifications/
@@ -107,7 +107,7 @@ This step requires outputs from Phase 1 (Analysis) and Phase 2 (Workpackage Plan
 
 ## Context
 - Input Location:
-  -- Prioritized migration roadmap: `{{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/` 
+  -- Prioritized migration roadmap: `{{PROJECT_BASE_PATH}}/output/analysis/workpackages/` 
   -- Directories with source code files: `{{SOURCE_CODE}}` 
   -- Directory with database related source code: `{{DATABASE_SOURCE_CODE}}`
   -- Database table definitions (if available)

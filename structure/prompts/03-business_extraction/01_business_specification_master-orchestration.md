@@ -137,7 +137,7 @@ WORKPACKAGE_LOOP:
             - Business context document: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
             - Source code files: {{SOURCE_CODE}} (for verification if needed)
-            - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/migration/workpackage_definition/
+            - Workpackage definitions: {{PROJECT_BASE_PATH}}/output/analysis/workpackages/
         
         EXPECTED_OUTPUTS:
             - Business context review report: {{BUSINESS_CONTEXT_REVIEW}}/WP-XXX-business-context-review.md

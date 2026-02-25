@@ -75,7 +75,7 @@ WORKPACKAGE_LOOP:
     # ========================================
     
     EXECUTE Phase_4.0:
-        ASSIGN: test_case_specialist
+        ASSIGN: business_specialist_test_designalist
         PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/04_test_case_generation/phase_4.0_test_case_creation.md
         PROVIDE_CONTEXT:
             - workpackage_id: current_workpackage.id
@@ -176,8 +176,8 @@ END WORKPACKAGE_LOOP
 ## Agent Assignments
 
 ### Phase 4.0: Test Case Specification Creation
-**Agent**: test_case_specialist
-**Agent Definition**: structure/agents/business_analyst_team/test_case_specialist.md
+**Agent**: business_specialist_test_designalist
+**Agent Definition**: structure/agents/business_analyst_team/business_specialist_test_designalist.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/04_test_case_generation/phase_4.0_test_case_creation.md
 **Capabilities**:
 - IEEE 829 test case specification
@@ -378,7 +378,7 @@ CHECK draft_archived_to_review_folder(workpackage_id, phase_type):
 **Actions**:
 1. Document coverage gaps in review report
 2. Update Phase 4.0 task with specific coverage requirements
-3. Re-assign test_case_specialist
+3. Re-assign business_specialist_test_designalist
 4. Re-execute Phase 4.0 with focus on coverage gaps
 5. Re-verify coverage completeness
 
@@ -393,7 +393,7 @@ CHECK draft_archived_to_review_folder(workpackage_id, phase_type):
 **Actions**:
 1. Document quality issues in review report
 2. Update Phase 4.0 task with specific quality improvements needed
-3. Re-assign test_case_specialist
+3. Re-assign business_specialist_test_designalist
 4. Re-execute Phase 4.0 with focus on quality issues
 5. Re-verify quality criteria
 
@@ -407,7 +407,7 @@ CHECK draft_archived_to_review_folder(workpackage_id, phase_type):
 **Actions**:
 1. Document traceability gaps in review report
 2. Update Phase 4.0 task with specific traceability requirements
-3. Re-assign test_case_specialist
+3. Re-assign business_specialist_test_designalist
 4. Re-execute Phase 4.0 with focus on traceability
 5. Re-verify traceability completeness
 
