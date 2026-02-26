@@ -8,9 +8,9 @@ Analyze legacy database files (VSAM, Sequential, DDL) to generate equivalent rel
 
 ## Prerequisites
 
-**Tool**: `carddemo/tools/acm-tools/tools/database_analyzer` (Python module)
-**Input**: Legacy code in `carddemo/input/legacy/legacy_code/carddemoV2`
-**Output**: `carddemo/output/analysis/database/gen_src_db`
+**Tool**: Database Analyzer (part of ACM Tools at `tools/acm-tools/tools/database_analyzer`)
+**Input**: Legacy code in `{{SOURCE_CODE}}`
+**Output**: `{{DATABASE_GEN_SRC}}`
 
 ---
 
@@ -22,11 +22,13 @@ Execute the database analyzer tool:
 
 ```bash
 python3 -m tools.acm-tools.tools.database_analyzer analyze \
-  --base-path {{PROJECT_BASE_PATH}} \
+  --base-path . \
   --legacy-root {{SOURCE_CODE}} \
   --output-dir {{DATABASE_GEN_SRC}} \
   --verbose
 ```
+
+**Note**: Run this command from the project root directory (where the `tools/` folder is located).
 
 **Note**: Run this command from the `{{PROJECT_BASE_PATH}}` directory.
 
