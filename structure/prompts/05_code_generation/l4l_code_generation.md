@@ -1,7 +1,8 @@
 ## NOTE THIS IS JUST A STUB FOR A 1:1 REWRITE of Assembler to Cobol
 
 # Objective: 
-You are tasked with converting the assembler program in file /User/kerimman/demoproject/input/legacy_code/app/asm/MVSWAIT.asm to a functionally equivalent COBOL program. Please perform the following tasks in sequence:
+You are tasked with converting the assembler program in file ./input/legacy_code/...MVSWAIT.asm to a functionally equivalent COBOL program. All created artefacts should be put in ./output/fe_demo (and subfolders)
+Please perform the following tasks in sequence:
 
 ## A. ASSEMBLER ANALYSIS
 1. Identify program purpose and main functionality
@@ -10,6 +11,7 @@ You are tasked with converting the assembler program in file /User/kerimman/demo
 4. Identify any system-specific calls or macros
 5. Note any special handling or edge cases
 6. Document register usage and data areas
+7. Document outbound calls
 
 ## B. TEST CASE CREATION (ASSEMBLER)
 1. Create a set of test cases covering:
@@ -28,10 +30,12 @@ You are tasked with converting the assembler program in file /User/kerimman/demo
    - Data Division entries for all parameters
    - Working-Storage items needed
    - Procedure Division logic
+   - Treat outbound calls as if a call to a cobol module with the same name was made
 2. Ensure matching functionality for:
    - All business logic paths
    - Error handling
    - Data transformations
+   - Outbound calls 
 3. Save as {FILENAME}.cbl
 
 ## D. COBOL TEST CASE CREATION
