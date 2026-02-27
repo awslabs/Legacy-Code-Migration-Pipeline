@@ -7,6 +7,11 @@ from pathlib import Path
 from datetime import datetime
 import json
 import csv
+import logging
+import traceback
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 api_bp = Blueprint('api', __name__)
 
@@ -42,7 +47,8 @@ def phase_detail(phase_id):
         phase_details = current_app.data_loader.get_phase_details(phase_id)
         return jsonify(phase_details)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in phase_detail: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500
 
 @api_bp.route('/file/content')
 def file_content():
@@ -60,14 +66,18 @@ def file_content():
             full_path = current_app.data_loader.project_root / file_path
         
         try:
-            # Resolve to absolute path and check if it's within project directory
-            resolved_path = full_path.resolve()
+            # Normalize and resolve to absolute path
             project_root_resolved = current_app.data_loader.project_root.resolve()
+            resolved_path = full_path.resolve()
             
+            # Security: Check if resolved path is within project directory
+            # This prevents path traversal attacks using ../ or symlinks
             if not str(resolved_path).startswith(str(project_root_resolved)):
+                logger.error(f"Path traversal attempt detected: {file_path}")
                 return jsonify({"error": "Access denied: File outside project directory"}), 403
                 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Invalid file path: {file_path}, error: {e}")
             return jsonify({"error": "Invalid file path"}), 400
         
         if not resolved_path.exists():
@@ -76,7 +86,7 @@ def file_content():
         if not resolved_path.is_file():
             return jsonify({"error": "Path is not a file"}), 400
         
-        # Read file content
+        # Read file content - path is now validated
         try:
             with open(resolved_path, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -96,7 +106,8 @@ def file_content():
         })
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in file_content: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500
 
 @api_bp.route('/dependency-graph')
 def dependency_graph():
@@ -114,13 +125,26 @@ def dependency_graph():
         exclude_nodes = request.args.get('excludeNodes', '').split(',') if request.args.get('excludeNodes') else []
         exclude_nodes = [node.strip() for node in exclude_nodes if node.strip()]
         
-        # Connect to SQLite database
+        # Connect to SQLite database - validate path
         db_path = current_app.data_loader.output_dir / "analysis" / "source_code" / "analysis.db"
         
-        if not db_path.exists():
+        # Security: Resolve and validate database path
+        try:
+            output_dir_resolved = current_app.data_loader.output_dir.resolve()
+            db_path_resolved = db_path.resolve()
+            
+            # Ensure database is within output directory
+            if not str(db_path_resolved).startswith(str(output_dir_resolved)):
+                logger.error(f"Database path traversal attempt: {db_path}")
+                return jsonify({"error": "Access denied"}), 403
+        except Exception as e:
+            logger.error(f"Invalid database path: {e}")
+            return jsonify({"error": "Invalid database path"}), 400
+        
+        if not db_path_resolved.exists():
             return jsonify({"error": "Analysis database not found"}), 404
         
-        conn = sqlite3.connect(str(db_path))
+        conn = sqlite3.connect(str(db_path_resolved))
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -360,7 +384,8 @@ def dependency_graph():
         })
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in dependency_graph: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500
 
 @api_bp.route('/business-flows')
 def business_flows():
@@ -416,7 +441,8 @@ def business_flows():
         })
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in business_flows: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500
 
 @api_bp.route('/progress')
 def progress():
@@ -433,7 +459,8 @@ def progress():
         return jsonify(progress_info)
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in progress: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500
 
 @api_bp.route('/workpackage-progress')
 def workpackage_progress():
@@ -441,7 +468,8 @@ def workpackage_progress():
     try:
         return jsonify(current_app.data_loader.get_workpackage_progress())
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in workpackage_progress: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500
 
 @api_bp.route('/workpackage/<workpackage_id>/cobol-files')
 def workpackage_cobol_files(workpackage_id):
@@ -451,10 +479,24 @@ def workpackage_cobol_files(workpackage_id):
         # Get original entry module from progress data
         original_entry_module = None
         
-        # Try to get from code generation progress
+        # Try to get from code generation progress - validate path
         code_progress_file = current_app.data_loader.migration_dir / "progress" / "04-code-generation-status.json"
-        if code_progress_file.exists():
-            with open(code_progress_file, 'r', encoding='utf-8') as f:
+        
+        # Security: Resolve and validate file path
+        try:
+            migration_dir_resolved = current_app.data_loader.migration_dir.resolve()
+            code_progress_resolved = code_progress_file.resolve()
+            
+            # Ensure file is within migration directory
+            if not str(code_progress_resolved).startswith(str(migration_dir_resolved)):
+                logger.error(f"Path traversal attempt in workpackage_cobol_files")
+                return jsonify({"error": "Access denied"}), 403
+        except Exception as e:
+            logger.error(f"Invalid file path in workpackage_cobol_files: {e}")
+            return jsonify({"error": "Invalid file path"}), 400
+        
+        if code_progress_resolved.exists():
+            with open(code_progress_resolved, 'r', encoding='utf-8') as f:
                 code_data = json.load(f)
                 
             for wp in code_data.get("workpackages", []):
@@ -474,4 +516,5 @@ def workpackage_cobol_files(workpackage_id):
         })
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error in workpackage_cobol_files: {traceback.format_exc()}")
+        return jsonify({"error": "An internal error has occurred"}), 500

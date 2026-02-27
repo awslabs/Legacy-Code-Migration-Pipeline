@@ -4,9 +4,14 @@ Admin routes for file management
 
 import os
 import json
+import logging
+import traceback
 from datetime import datetime
 from pathlib import Path
 from flask import Blueprint, render_template, request, jsonify
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -82,7 +87,8 @@ def get_directory_files(directory):
             return jsonify({'success': True, 'files': files, 'view_type': 'list'})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Error in get_directory_files: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': 'An internal error has occurred'}), 500
 
 def build_directory_tree(root_path, max_depth=10):
     """Build a tree structure of directories and files"""
@@ -152,7 +158,8 @@ def get_directory_counts():
         return jsonify({'success': True, 'counts': counts})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Error in get_directory_counts: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': 'An internal error has occurred'}), 500
 
 @admin_bp.route('/api/admin/file/<directory>/<path:filename>', methods=['GET'])
 def get_file_content(directory, filename):
@@ -176,7 +183,8 @@ def get_file_content(directory, filename):
         return jsonify({'success': True, 'content': content})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Error in get_file_content: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': 'An internal error has occurred'}), 500
 
 @admin_bp.route('/api/admin/file/<directory>/<path:filename>', methods=['PUT'])
 def save_file_content(directory, filename):
@@ -204,7 +212,8 @@ def save_file_content(directory, filename):
         return jsonify({'success': True})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Error in save_file_content: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': 'An internal error has occurred'}), 500
 
 @admin_bp.route('/api/admin/file/<directory>/<path:filename>', methods=['POST'])
 def create_file(directory, filename):
@@ -235,7 +244,8 @@ def create_file(directory, filename):
         return jsonify({'success': True})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Error in create_file: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': 'An internal error has occurred'}), 500
 
 @admin_bp.route('/api/admin/file/<directory>/<path:filename>', methods=['DELETE'])
 def delete_file(directory, filename):
@@ -258,4 +268,5 @@ def delete_file(directory, filename):
         return jsonify({'success': True})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Error in delete_file: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': 'An internal error has occurred'}), 500

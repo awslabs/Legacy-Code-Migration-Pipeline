@@ -265,7 +265,7 @@ class MigrationDataLoader:
             if migration_planner_dir.exists() and migration_planner_dir.is_dir():
                 try:
                     for f in migration_planner_dir.iterdir():
-                        if f.is_file() and f.name.lower() != 'readme.md':
+                        if f.is_file():
                             tool_info = self._create_tool_info(f, phase_id)
                             if tool_info:
                                 tools.append(tool_info)
@@ -273,7 +273,7 @@ class MigrationDataLoader:
                     logger.warning(f"Error scanning migration-planner tools: {e}")
             else:
                 logger.info(f"Migration planner tools directory not found: {migration_planner_dir}")
-            return tools
+            # Don't return early - continue to check output/tools as well
         
         # Check if tools_dir exists (Requirement 12.3)
         if not self.tools_dir.exists():
@@ -287,7 +287,7 @@ class MigrationDataLoader:
                 # Scan phase-specific subdirectory
                 try:
                     for f in phase_subdir.iterdir():
-                        if f.is_file() and f.name.lower() != 'readme.md':
+                        if f.is_file():
                             tool_info = self._create_tool_info(f, phase_id)
                             if tool_info:
                                 tools.append(tool_info)
@@ -297,7 +297,7 @@ class MigrationDataLoader:
             # Also check the main tools directory for tools without phase subdirectories
             try:
                 for f in self.tools_dir.iterdir():
-                    if f.is_file() and f.name.lower() != 'readme.md':
+                    if f.is_file():
                         tool_info = self._create_tool_info(f, phase_id)
                         if tool_info:
                             tools.append(tool_info)
@@ -518,7 +518,8 @@ class MigrationDataLoader:
             4: self.migration_dir / "progress",
             5: self.migration_dir / "progress",
             6: self.migration_dir / "progress",
-            7: self.migration_dir / "progress"
+            7: self.migration_dir / "progress",
+            8: self.migration_dir / "progress"
         }
 
         # Get the phase-specific directory
@@ -692,8 +693,8 @@ class MigrationDataLoader:
             else:
                 logger.info(f"Workpackage planning file not found: {workpackage_planning}")
 
-        # Phase 3: Business Extraction - check output/specifications/business/specs/progress/Business_Specification_Status.json
-        phase3_progress_file = self.specifications_dir / "business" / "specs" / "progress" / "Business_Specification_Status.json"
+        # Phase 3: Business Extraction - check output/specifications/progress/Business_Specification_Status.json
+        phase3_progress_file = self.specifications_dir / "progress" / "Business_Specification_Status.json"
         
         # Get total workpackages from Workpackage_Planning.json
         total_workpackages_phase3 = 0
@@ -711,12 +712,23 @@ class MigrationDataLoader:
                 with open(phase3_progress_file, 'r', encoding='utf-8') as f:
                     progress_data = json.load(f)
 
-                # Extract summary data - this only tracks started/completed workpackages
+                # Extract summary data
                 summary = progress_data.get("summary", {})
-                completed_workpackages = summary.get("completed_workpackages", 0)
-                approved_workpackages = summary.get("approved_workpackages", 0)
+                
+                # Calculate completed workpackages from approved + approved_with_changes
+                approved = summary.get("approved", 0)
+                approved_with_changes = summary.get("approved_with_changes", 0)
+                completed_workpackages = approved + approved_with_changes
+                
+                # Also check for direct completed_workpackages field (backward compatibility)
+                if completed_workpackages == 0:
+                    completed_workpackages = summary.get("completed_workpackages", 0)
+                
+                # Get total from status file if not from planning
+                if total_workpackages_phase3 == 0:
+                    total_workpackages_phase3 = summary.get("total_workpackages", 0)
 
-                # Use total from planning, not from status file
+                # Determine status based on completion
                 if total_workpackages_phase3 > 0:
                     if completed_workpackages >= total_workpackages_phase3:
                         phases[3]["status"] = "completed"
@@ -741,68 +753,15 @@ class MigrationDataLoader:
         else:
             logger.info(f"Phase 3 progress file not found: {phase3_progress_file}")
 
-        # Phase 4: Test Case Generation - check output/specifications/test_cases/specs/progress/Test_Case_Status.json
-        phase4_progress_file = self.specifications_dir / "test_cases" / "specs" / "progress" / "Test_Case_Status.json"
-        
-        # Get total workpackages from Workpackage_Planning.json
-        total_workpackages_phase4 = 0
-        workpackage_planning = self.workpackages_dir / "Workpackage_Planning.json"
-        if workpackage_planning.exists():
-            try:
-                with open(workpackage_planning, 'r', encoding='utf-8') as f:
-                    planning_data = json.load(f)
-                    total_workpackages_phase4 = planning_data.get("statistics", {}).get("totalFlows", 0)
-            except Exception as e:
-                logger.warning(f"Error reading workpackage planning for Phase 4 total: {e}")
-        
-        if phase4_progress_file.exists():
-            try:
-                with open(phase4_progress_file, 'r', encoding='utf-8') as f:
-                    progress_data = json.load(f)
-
-                # Extract summary data - handle both old and new formats
-                summary = progress_data.get("summary", {})
-                
-                # Try new format first (approvedWorkpackages, totalWorkpackages)
-                approved_workpackages = summary.get("approvedWorkpackages", summary.get("approved_workpackages", 0))
-                total_in_summary = summary.get("totalWorkpackages", summary.get("total_workpackages", 0))
-                
-                # Use completed count as approved count
-                completed_workpackages = approved_workpackages
-
-                # Use total from planning, not from status file
-                if total_workpackages_phase4 > 0:
-                    if completed_workpackages >= total_workpackages_phase4:
-                        phases[4]["status"] = "completed"
-                        phases[4]["progress"] = 100
-                    elif completed_workpackages > 0:
-                        phases[4]["status"] = "in_progress"
-                        phases[4]["progress"] = round((completed_workpackages / total_workpackages_phase4) * 100)
-                        phases[4]["completedWorkpackages"] = completed_workpackages
-                        phases[4]["totalWorkpackages"] = total_workpackages_phase4
-
-                # Extract timestamp
-                timestamp = self._extract_timestamp(progress_data, phase4_progress_file)
-                if timestamp:
-                    phases[4]["lastUpdated"] = timestamp
-                    if phases[4]["status"] == "completed":
-                        phases[4]["completedAt"] = self._format_timestamp(timestamp)
-
-            except json.JSONDecodeError as e:
-                logger.warning(f"Malformed JSON in Phase 4 progress file {phase4_progress_file}: {e}")
-            except Exception as e:
-                logger.warning(f"Error reading Phase 4 progress file {phase4_progress_file}: {e}")
-        else:
-            logger.info(f"Phase 4 progress file not found: {phase4_progress_file}")
-
-        # Phase 5-8: Check output/migration/progress/ for respective phase files
+        # Phase 4-8: Check output/migration/progress/ for respective phase files
         migration_progress_dir = self.migration_dir / "progress"
         if migration_progress_dir.exists():
             phase_mappings = {
-                5: ["*code*generation*.json", "*phase*5*.json"],
-                6: ["*test*generation*.json", "*phase*6*.json"],
-                7: ["*quality*validation*.json", "*phase*7*.json"],
-                8: ["*developer*review*.json", "*phase*8*.json", "*deliverable*.json"]
+                4: ["*code*generation*.json", "*phase*4*.json"],
+                5: ["*test*generation*.json", "*phase*5*.json"],
+                6: ["*quality*validation*.json", "*phase*6*.json"],
+                7: ["*developer*review*.json", "*phase*7*.json"],
+                8: ["*deliverable*.json", "*phase*8*.json"]
             }
 
             for phase_id, patterns in phase_mappings.items():
@@ -1411,17 +1370,20 @@ class MigrationDataLoader:
             dict: Progress statistics including:
                 - total: Total number of workpackages
                 - phase3_completed: Number of workpackages with business specifications
-                - phase4_completed: Number of workpackages with test cases (placeholder)
-                - phase5_completed: Number of workpackages with generated code (placeholder)
+                - phase4_ready: Number of workpackages ready for code generation
+                - phase4_completed: Number of workpackages with test cases
+                - phase5_completed: Number of workpackages with generated code
                 - workpackages: List of workpackage metadata
         """
         progress = {
             "total": 0,
             "phase3_completed": 0,  # Business Extraction
-            "phase4_completed": 0,  # Test Case Generation (placeholder)
-            "phase5_completed": 0,  # Code Generation (placeholder)
-            "phase6_completed": 0,  # Test Generation (placeholder)
+            "phase4_ready": 0,  # Ready for code generation
+            "phase4_completed": 0,  # Test Case Generation
+            "phase5_completed": 0,  # Code Generation
+            "phase6_completed": 0,  # Test Generation
             "fully_completed": 0,
+            "completion_percentage": 0.0,
             "workpackages": []
         }
         
@@ -1447,21 +1409,63 @@ class MigrationDataLoader:
             else:
                 logger.info(f"Workpackage_Planning.json not found at {planning_file}")
             
-            # Count completed business specifications by scanning directory
-            specs_dir = self.output_dir / "specifications" / "business" / "specs"
+            # Read Business_Specification_Status.json for phase4_ready count
+            spec_status_file = self.output_dir / "specifications" / "progress" / "Business_Specification_Status.json"
             
-            if specs_dir.exists():
+            if spec_status_file.exists():
                 try:
-                    # Count WP-XXX-*-specification-EN-approved.md files (only approved specs)
-                    spec_files = list(specs_dir.glob("WP-*-specification-EN-approved.md"))
-                    progress["phase3_completed"] = len(spec_files)
+                    with open(spec_status_file, 'r', encoding='utf-8') as f:
+                        spec_status_data = json.load(f)
                     
-                    logger.info(f"Found {progress['phase3_completed']} approved business specifications")
+                    # Get summary data
+                    summary = spec_status_data.get("summary", {})
+                    progress["total"] = summary.get("total_workpackages", progress["total"])
                     
+                    # phase3_completed = approved + approved_with_changes
+                    approved = summary.get("approved", 0)
+                    approved_with_changes = summary.get("approved_with_changes", 0)
+                    progress["phase3_completed"] = approved + approved_with_changes
+                    
+                    # phase4_ready should come from ready_for_phase_4 field, default to 0 if missing
+                    progress["phase4_ready"] = summary.get("ready_for_phase_4", 0)
+                    
+                    # Get workpackage details
+                    workpackages = spec_status_data.get("workpackages", [])
+                    for wp in workpackages:
+                        wp_info = {
+                            "workpackage_id": wp.get("workpackage_id", ""),
+                            "flow_id": wp.get("flow_id", ""),
+                            "name": wp.get("name", ""),
+                            "priority": wp.get("priority", 0),
+                            "status": wp.get("status", "UNKNOWN"),
+                            "ready_for_code_generation": wp.get("ready_for_code_generation", False)
+                        }
+                        progress["workpackages"].append(wp_info)
+                    
+                    logger.info(f"Phase 4 ready workpackages: {progress['phase4_ready']}")
+                    
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Malformed JSON in Business_Specification_Status.json: {e}")
                 except Exception as e:
-                    logger.warning(f"Error scanning business specifications: {e}")
+                    logger.warning(f"Error reading business specification status: {e}")
             else:
-                logger.info(f"Business specs directory not found at {specs_dir}")
+                logger.info(f"Business_Specification_Status.json not found at {spec_status_file}")
+                
+                # Fallback: Count completed business specifications by scanning directory
+                specs_dir = self.output_dir / "specifications" / "business" / "specs"
+                
+                if specs_dir.exists():
+                    try:
+                        # Count WP-XXX-*-specification-EN-approved.md files (only approved specs)
+                        spec_files = list(specs_dir.glob("WP-*-specification-EN-approved.md"))
+                        progress["phase3_completed"] = len(spec_files)
+                        
+                        logger.info(f"Found {progress['phase3_completed']} approved business specifications")
+                        
+                    except Exception as e:
+                        logger.warning(f"Error scanning business specifications: {e}")
+                else:
+                    logger.info(f"Business specs directory not found at {specs_dir}")
             
             # Count completed test case specifications
             test_specs_dir = self.output_dir / "specifications" / "test_cases" / "specs"
@@ -1744,7 +1748,7 @@ class MigrationDataLoader:
             elif phase_id == 3:
                 # Business extraction - get detailed info from progress file
                 print(f"Loading Phase 3 data...")
-                business_progress_file = self.specifications_dir / "business" / "specs" / "progress" / "Business_Specification_Status.json"
+                business_progress_file = self.specifications_dir / "progress" / "Business_Specification_Status.json"
                 print(f"Progress file path: {business_progress_file}")
                 print(f"File exists: {business_progress_file.exists()}")
                 
@@ -2135,6 +2139,44 @@ class MigrationDataLoader:
                         
                         phase_info["reports"] = reports
                         
+                        # Add generated files summary by scanning gen_src and gen_src_db directories
+                        app_src_count = 0
+                        db_src_count = 0
+                        
+                        # Count files in output/gen_src/ and add to artifacts
+                        if self.gen_src_dir.exists():
+                            try:
+                                for f in self.gen_src_dir.rglob("*.*"):
+                                    if f.is_file():
+                                        artifacts.append({
+                                            "name": f.name,
+                                            "type": "Generated Application Source",
+                                            "path": self._get_relative_path(f)
+                                        })
+                                        app_src_count += 1
+                            except Exception as e:
+                                logger.warning(f"Error counting application source files: {e}")
+                        
+                        # Count files in output/gen_src_db/ and add to artifacts
+                        if self.gen_src_db_dir.exists():
+                            try:
+                                for f in self.gen_src_db_dir.rglob("*.*"):
+                                    if f.is_file():
+                                        artifacts.append({
+                                            "name": f.name,
+                                            "type": "Generated Database Source",
+                                            "path": self._get_relative_path(f)
+                                        })
+                                        db_src_count += 1
+                            except Exception as e:
+                                logger.warning(f"Error counting database source files: {e}")
+                        
+                        phase_info["generatedFilesSummary"] = {
+                            "applicationSource": app_src_count,
+                            "databaseSource": db_src_count,
+                            "totalFiles": app_src_count + db_src_count
+                        }
+                        
                     except json.JSONDecodeError as e:
                         logger.warning(f"Malformed JSON in test case generation progress file: {e}")
                         # Fallback to file-based detection
@@ -2147,6 +2189,44 @@ class MigrationDataLoader:
                                 phase_info["workpackages"] = []
                         else:
                             logger.info(f"Test specifications directory not found: {specs_dir}")
+                        
+                        # Add generated files summary even in error case
+                        app_src_count = 0
+                        db_src_count = 0
+                        
+                        if self.gen_src_dir.exists():
+                            try:
+                                for f in self.gen_src_dir.rglob("*.*"):
+                                    if f.is_file():
+                                        artifacts.append({
+                                            "name": f.name,
+                                            "type": "Generated Application Source",
+                                            "path": self._get_relative_path(f)
+                                        })
+                                        app_src_count += 1
+                            except Exception as e3:
+                                logger.warning(f"Error counting application source files: {e3}")
+                        
+                        if self.gen_src_db_dir.exists():
+                            try:
+                                for f in self.gen_src_db_dir.rglob("*.*"):
+                                    if f.is_file():
+                                        artifacts.append({
+                                            "name": f.name,
+                                            "type": "Generated Database Source",
+                                            "path": self._get_relative_path(f)
+                                        })
+                                        db_src_count += 1
+                            except Exception as e3:
+                                logger.warning(f"Error counting database source files: {e3}")
+                        
+                        phase_info["generatedFilesSummary"] = {
+                            "applicationSource": app_src_count,
+                            "databaseSource": db_src_count,
+                            "totalFiles": app_src_count + db_src_count
+                        }
+                        
+                        phase_info["artifacts"] = artifacts
                     except Exception as e:
                         logger.error(f"Error reading test case generation details: {e}")
                         # Fallback to file-based detection
@@ -2159,6 +2239,44 @@ class MigrationDataLoader:
                                 phase_info["workpackages"] = []
                         else:
                             logger.info(f"Test specifications directory not found: {specs_dir}")
+                        
+                        # Add generated files summary even in error case
+                        app_src_count = 0
+                        db_src_count = 0
+                        
+                        if self.gen_src_dir.exists():
+                            try:
+                                for f in self.gen_src_dir.rglob("*.*"):
+                                    if f.is_file():
+                                        artifacts.append({
+                                            "name": f.name,
+                                            "type": "Generated Application Source",
+                                            "path": self._get_relative_path(f)
+                                        })
+                                        app_src_count += 1
+                            except Exception as e3:
+                                logger.warning(f"Error counting application source files: {e3}")
+                        
+                        if self.gen_src_db_dir.exists():
+                            try:
+                                for f in self.gen_src_db_dir.rglob("*.*"):
+                                    if f.is_file():
+                                        artifacts.append({
+                                            "name": f.name,
+                                            "type": "Generated Database Source",
+                                            "path": self._get_relative_path(f)
+                                        })
+                                        db_src_count += 1
+                            except Exception as e3:
+                                logger.warning(f"Error counting database source files: {e3}")
+                        
+                        phase_info["generatedFilesSummary"] = {
+                            "applicationSource": app_src_count,
+                            "databaseSource": db_src_count,
+                            "totalFiles": app_src_count + db_src_count
+                        }
+                        
+                        phase_info["artifacts"] = artifacts
                 else:
                     # Fallback to file-based detection
                     logger.info(f"Test case generation progress file not found: {test_case_progress_file}")
@@ -2172,96 +2290,76 @@ class MigrationDataLoader:
                     else:
                         logger.info(f"Test specifications directory not found: {specs_dir}")
                     
+                    # Add generated files summary even in fallback case
+                    app_src_count = 0
+                    db_src_count = 0
+                    
+                    # Count files in output/gen_src/
+                    if self.gen_src_dir.exists():
+                        try:
+                            for f in self.gen_src_dir.rglob("*.*"):
+                                if f.is_file():
+                                    artifacts.append({
+                                        "name": f.name,
+                                        "type": "Generated Application Source",
+                                        "path": self._get_relative_path(f)
+                                    })
+                                    app_src_count += 1
+                        except Exception as e:
+                            logger.warning(f"Error counting application source files: {e}")
+                    
+                    # Count files in output/gen_src_db/
+                    if self.gen_src_db_dir.exists():
+                        try:
+                            for f in self.gen_src_db_dir.rglob("*.*"):
+                                if f.is_file():
+                                    artifacts.append({
+                                        "name": f.name,
+                                        "type": "Generated Database Source",
+                                        "path": self._get_relative_path(f)
+                                    })
+                                    db_src_count += 1
+                        except Exception as e:
+                            logger.warning(f"Error counting database source files: {e}")
+                    
+                    phase_info["generatedFilesSummary"] = {
+                        "applicationSource": app_src_count,
+                        "databaseSource": db_src_count,
+                        "totalFiles": app_src_count + db_src_count
+                    }
+                    
+                    phase_info["artifacts"] = artifacts
+                    
             elif phase_id == 5:
-                # Code generation - scan output/gen_src/ and output/gen_src_db/ (Subtask 6.1: Requirements 5.1, 5.2, 5.3)
+                # Test Case Specifications - scan output/specifications/test_cases/
                 artifacts = []
+                reports = []
                 
-                # Scan output/gen_src/ for generated application source
-                app_src_count = 0
-                if self.gen_src_dir.exists():
+                # Scan output/specifications/test_cases/ for test case specifications
+                test_cases_dir = self.specifications_dir / "test_cases"
+                if test_cases_dir.exists():
                     try:
-                        for f in self.gen_src_dir.rglob("*.*"):
+                        for f in test_cases_dir.rglob("*.*"):
                             if f.is_file():
-                                artifacts.append({
-                                    "name": f.name,
-                                    "type": "Generated Application Source",
-                                    "path": self._get_relative_path(f)
-                                })
-                                app_src_count += 1
+                                if f.suffix == ".md":
+                                    reports.append({
+                                        "name": f.name,
+                                        "type": "Test Case Specification",
+                                        "path": self._get_relative_path(f)
+                                    })
+                                else:
+                                    artifacts.append({
+                                        "name": f.name,
+                                        "type": "Test Case Artifact",
+                                        "path": self._get_relative_path(f)
+                                    })
                     except Exception as e:
-                        logger.warning(f"Error scanning generated application source: {e}")
+                        logger.warning(f"Error scanning test cases: {e}")
                 else:
-                    logger.info(f"Generated source directory not found: {self.gen_src_dir}")
-                
-                # Scan output/gen_src_db/ for generated database source
-                db_src_count = 0
-                if self.gen_src_db_dir.exists():
-                    try:
-                        for f in self.gen_src_db_dir.rglob("*.*"):
-                            if f.is_file():
-                                artifacts.append({
-                                    "name": f.name,
-                                    "type": "Generated Database Source",
-                                    "path": self._get_relative_path(f)
-                                })
-                                db_src_count += 1
-                    except Exception as e:
-                        logger.warning(f"Error scanning generated database source: {e}")
-                else:
-                    logger.info(f"Generated database source directory not found: {self.gen_src_db_dir}")
+                    logger.info(f"Test cases directory not found: {test_cases_dir}")
                 
                 phase_info["artifacts"] = artifacts
-                phase_info["generatedFilesSummary"] = {
-                    "applicationSource": app_src_count,
-                    "databaseSource": db_src_count,
-                    "totalFiles": app_src_count + db_src_count
-                }
-                
-                # Try to read progress file for additional details
-                code_gen_progress_file = self.migration_dir / "progress" / "code_generation_status.json"
-                if code_gen_progress_file.exists():
-                    try:
-                        with open(code_gen_progress_file, 'r', encoding='utf-8') as f:
-                            code_gen_data = json.load(f)
-                            
-                        completed_workpackages = []
-                        for wp in code_gen_data.get("workpackages", []):
-                            if wp.get("status") == "completed":
-                                wp_info = {
-                                    "id": wp.get("workpackageId"),
-                                    "flowId": wp.get("originalEntryModule"),
-                                    "completedDate": wp.get("completedDate"),
-                                    "businessDomain": wp.get("businessDomain", ""),
-                                    "programType": wp.get("programType", ""),
-                                    "components": wp.get("components", {}),
-                                    "businessRuleImplementation": wp.get("businessRuleImplementation", ""),
-                                    "qualityMetrics": wp.get("qualityMetrics", {}),
-                                    "generatedFiles": wp.get("generatedFiles", [])
-                                }
-                                completed_workpackages.append(wp_info)
-                        
-                        phase_info["completedWorkpackages"] = completed_workpackages
-                        phase_info["totalWorkpackages"] = code_gen_data.get("totalCount", 0)
-                        phase_info["completedCount"] = code_gen_data.get("completedCount", 0)
-                        phase_info["lastUpdated"] = code_gen_data.get("lastUpdated")
-                        
-                        # Add code statistics
-                        phase_info["codeStats"] = {
-                            "totalFiles": app_src_count + db_src_count,
-                            "totalLines": self._calculate_generated_lines(),
-                            "todoCount": self._count_todos(),
-                            "qualityScore": self._calculate_quality_score(code_gen_data)
-                        }
-                        
-                        # Add aggregated quality metrics
-                        phase_info["qualityMetrics"] = self._aggregate_quality_metrics(code_gen_data)
-                        
-                    except json.JSONDecodeError as e:
-                        logger.warning(f"Malformed JSON in code generation progress file: {e}")
-                    except Exception as e:
-                        logger.warning(f"Error reading code generation details: {e}")
-                else:
-                    logger.info(f"Code generation progress file not found: {code_gen_progress_file}")
+                phase_info["reports"] = reports
                     
             elif phase_id == 6:
                 # Test generation - scan output/specifications/test_cases/ (Subtask 6.2: Requirement 3.3)
@@ -2324,7 +2422,41 @@ class MigrationDataLoader:
                     logger.info(f"Test generation progress file not found: {test_gen_progress_file}")
                     
             elif phase_id == 7:
-                # Quality Validation - scan output/specifications/review/ (Subtask 6.3: Requirement 3.4)
+                # Migration Deliverables - scan output/migration/deliverables/
+                artifacts = []
+                reports = []
+                
+                # Scan output/migration/deliverables/ for migration deliverables
+                deliverables_dir = self.migration_dir / "deliverables"
+                if deliverables_dir.exists():
+                    try:
+                        for f in deliverables_dir.rglob("*.*"):
+                            if f.is_file():
+                                # Distinguish between code, documentation, and configuration
+                                artifact_type = self._categorize_deliverable(f)
+                                
+                                if f.suffix == ".md":
+                                    reports.append({
+                                        "name": f.name,
+                                        "type": artifact_type,
+                                        "path": self._get_relative_path(f)
+                                    })
+                                else:
+                                    artifacts.append({
+                                        "name": f.name,
+                                        "type": artifact_type,
+                                        "path": self._get_relative_path(f)
+                                    })
+                    except Exception as e:
+                        logger.warning(f"Error scanning deliverables: {e}")
+                else:
+                    logger.info(f"Deliverables directory not found: {deliverables_dir}")
+                
+                phase_info["artifacts"] = artifacts
+                phase_info["reports"] = reports
+                
+            elif phase_id == 8:
+                # Quality Validation - scan output/specifications/review/
                 artifacts = []
                 reports = []
                 
@@ -2350,40 +2482,6 @@ class MigrationDataLoader:
                         logger.warning(f"Error scanning review artifacts: {e}")
                 else:
                     logger.info(f"Review directory not found: {review_dir}")
-                
-                phase_info["artifacts"] = artifacts
-                phase_info["reports"] = reports
-                
-            elif phase_id == 8:
-                # Developer Review - scan output/migration/deliverables/ (Subtask 6.4: Requirements 4.1, 4.4)
-                artifacts = []
-                reports = []
-                
-                # Scan output/migration/deliverables/ for final deliverables
-                deliverables_dir = self.migration_dir / "deliverables"
-                if deliverables_dir.exists():
-                    try:
-                        for f in deliverables_dir.rglob("*.*"):
-                            if f.is_file():
-                                # Distinguish between code, documentation, and configuration (Requirement 4.4)
-                                artifact_type = self._categorize_deliverable(f)
-                                
-                                if f.suffix == ".md":
-                                    reports.append({
-                                        "name": f.name,
-                                        "type": artifact_type,
-                                        "path": self._get_relative_path(f)
-                                    })
-                                else:
-                                    artifacts.append({
-                                        "name": f.name,
-                                        "type": artifact_type,
-                                        "path": self._get_relative_path(f)
-                                    })
-                    except Exception as e:
-                        logger.warning(f"Error scanning deliverables: {e}")
-                else:
-                    logger.info(f"Deliverables directory not found: {deliverables_dir}")
                 
                 phase_info["artifacts"] = artifacts
                 phase_info["reports"] = reports

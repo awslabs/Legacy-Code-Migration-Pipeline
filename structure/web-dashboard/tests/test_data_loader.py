@@ -155,7 +155,7 @@ class TestPhaseStatusCalculation:
     """
     Property 12: Phase Status Calculation
     
-    For any phase (0-7), when calculating status, the Data_Loader should check
+    For any phase (0-8), when calculating status, the Data_Loader should check
     the phase-specific progress files in the new locations and return "completed",
     "in_progress", or "unknown" based on the file contents.
     
@@ -163,7 +163,7 @@ class TestPhaseStatusCalculation:
     """
     
     @given(
-        phase_id=st.integers(min_value=0, max_value=7),
+        phase_id=st.integers(min_value=0, max_value=8),
         status=st.sampled_from(["completed", "in_progress", "unknown"]),
         has_progress_file=st.booleans()
     )
@@ -171,14 +171,14 @@ class TestPhaseStatusCalculation:
         """
         **Feature: dashboard-file-structure-adaptation, Property 12: Phase Status Calculation**
         
-        Property: For any phase (0-7), the Data_Loader should check phase-specific
+        Property: For any phase (0-8), the Data_Loader should check phase-specific
         progress files in new locations and return appropriate status.
         
         This test verifies that:
         1. Phase 0-1 check output/analysis/source_code/progress/
         2. Phase 2 checks output/analysis/workpackages/progress/
         3. Phase 3 checks output/specifications/progress/
-        4. Phase 4-7 check output/migration/progress/
+        4. Phase 4-8 check output/migration/progress/
         5. Status is correctly determined from progress files
         6. Missing files result in "unknown" status
         """
@@ -196,7 +196,7 @@ class TestPhaseStatusCalculation:
             progress_dir = project_root / "output" / "analysis" / "workpackages" / "progress"
         elif phase_id == 3:
             progress_dir = project_root / "output" / "specifications" / "progress"
-        else:  # 4-7
+        else:  # 4-8
             progress_dir = project_root / "output" / "migration" / "progress"
         
         progress_dir.mkdir(parents=True, exist_ok=True)
@@ -212,7 +212,7 @@ class TestPhaseStatusCalculation:
         phases = loader.get_phase_status()
         
         # Verify we got 8 phases
-        assert len(phases) == 8
+        assert len(phases) == 9
         
         # Verify phase structure
         phase = phases[phase_id]
@@ -291,14 +291,15 @@ class TestPhaseStatusCalculation:
                         "pending": 10
                     }
                 }
-        else:  # 4-7
+        else:  # 4-8
             phase_names = {
                 4: "code_generation_status.json",
                 5: "test_generation_status.json",
                 6: "quality_validation_status.json",
-                7: "developer_review_status.json"
+                7: "developer_review_status.json",
+                8: "deliverable_status.json"
             }
-            filename = phase_names[phase_id]
+            filename = phase_names.get(phase_id, f"phase_{phase_id}_status.json")
             data = {
                 "status": status,
                 "lastUpdated": "2024-01-20T09:15:00"
@@ -344,7 +345,7 @@ class TestPhaseStatusCalculation:
         phases = loader.get_phase_status()
         
         # Should return valid structure
-        assert len(phases) == 8
+        assert len(phases) == 9
         assert all("status" in phase for phase in phases)
     
     def test_phase3_workpackage_counting(self, tmp_path):
@@ -409,7 +410,7 @@ class TestPhaseStatusCalculation:
         
         # Get phase status (should not crash)
         phases = loader.get_phase_status()
-        assert len(phases) == 8
+        assert len(phases) == 9
 
 
 
@@ -3079,7 +3080,7 @@ class TestToolCategorization:
     """
     
     @given(
-        phase_id=st.integers(min_value=0, max_value=7),
+        phase_id=st.integers(min_value=0, max_value=8),
         tool_count=st.integers(min_value=1, max_value=5)
     )
     @settings(max_examples=100)
@@ -3955,7 +3956,7 @@ class TestErrorHandlingWithoutCrashes:
     """
     
     @given(
-        phase_id=st.integers(min_value=0, max_value=7),
+        phase_id=st.integers(min_value=0, max_value=8),
         has_directory=st.booleans(),
         has_progress_file=st.booleans(),
         json_is_malformed=st.booleans()
@@ -3993,7 +3994,7 @@ class TestErrorHandlingWithoutCrashes:
                     progress_dir = project_root / "output" / "analysis" / "workpackages" / "progress"
                 elif phase_id == 3:
                     progress_dir = project_root / "output" / "specifications" / "progress"
-                else:  # 4-7
+                else:  # 4-8
                     progress_dir = project_root / "output" / "migration" / "progress"
                 
                 progress_dir.mkdir(parents=True, exist_ok=True)
@@ -4038,7 +4039,7 @@ class TestErrorHandlingWithoutCrashes:
             try:
                 phases = loader.get_phase_status()
                 assert isinstance(phases, list), "get_phase_status should return a list"
-                assert len(phases) == 8, "get_phase_status should return 8 phases"
+                assert len(phases) == 9, "get_phase_status should return 9 phases"
                 
                 # Verify each phase has required fields
                 for phase in phases:
@@ -4112,7 +4113,7 @@ class TestErrorHandlingWithoutCrashes:
         
         # Should not crash (Requirement 12.1)
         phases = loader.get_phase_status()
-        assert len(phases) == 8
+        assert len(phases) == 9
         
         progress = loader.get_workpackage_progress()
         assert progress["total"] == 0
@@ -4144,7 +4145,7 @@ class TestErrorHandlingWithoutCrashes:
         assert progress["workpackages"] == []
         
         phases = loader.get_phase_status()
-        assert len(phases) == 8
+        assert len(phases) == 9
     
     def test_error_handling_with_missing_directories(self, tmp_path):
         """Test that missing directories return empty lists without crashing"""
@@ -4182,7 +4183,7 @@ class TestErrorHandlingWithoutCrashes:
         # Should not crash and should display available data (Requirement 12.4)
         overview = loader.get_project_overview()
         assert "phases" in overview
-        assert len(overview["phases"]) == 8
+        assert len(overview["phases"]) == 9
         
         # Phase 0 should have some data
         phase0_details = loader.get_phase_details(0)
@@ -4461,7 +4462,7 @@ class TestProgressDirectorySearchOrder:
     """
     
     @given(
-        phase_id=st.integers(min_value=0, max_value=7),
+        phase_id=st.integers(min_value=0, max_value=8),
         has_progress_file=st.booleans(),
         file_pattern_index=st.integers(min_value=0, max_value=2)
     )
@@ -4479,7 +4480,7 @@ class TestProgressDirectorySearchOrder:
         1. Phase 0-1 check output/analysis/source_code/progress/ first
         2. Phase 2 checks output/analysis/workpackages/progress/ first
         3. Phase 3 checks output/specifications/progress/ first
-        4. Phase 4-7 check output/migration/progress/ first
+        4. Phase 4-8 check output/migration/progress/ first
         5. Returns None when no matching files found (defaults)
         6. Returns the first matching file when multiple patterns match
         """
@@ -4500,7 +4501,8 @@ class TestProgressDirectorySearchOrder:
                 4: project_root / "output" / "migration" / "progress",
                 5: project_root / "output" / "migration" / "progress",
                 6: project_root / "output" / "migration" / "progress",
-                7: project_root / "output" / "migration" / "progress"
+                7: project_root / "output" / "migration" / "progress",
+                8: project_root / "output" / "migration" / "progress"
             }
             
             # Get the correct progress directory for this phase
@@ -4516,7 +4518,8 @@ class TestProgressDirectorySearchOrder:
                 4: ["*code*generation*.json", "*phase*4*.json"],
                 5: ["*test*generation*.json", "*phase*5*.json"],
                 6: ["*quality*validation*.json", "*phase*6*.json"],
-                7: ["*developer*review*.json", "*phase*7*.json", "*deliverable*.json"]
+                7: ["*developer*review*.json", "*phase*7*.json", "*deliverable*.json"],
+                8: ["*developer*review*.json", "*phase*8*.json", "*deliverable*.json"]
             }
             
             patterns = default_patterns.get(phase_id, ["*.json"])
