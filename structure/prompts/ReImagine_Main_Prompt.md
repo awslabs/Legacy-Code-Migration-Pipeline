@@ -322,9 +322,9 @@ The following is a sequential list that should be followed by you and your agent
 - Domain Specifications: {{DOMAIN_CONSOLIDATION_BASE_PATH}}/D-*-domain-spec.md
 
 **Expected Deliverables:**
-1. Test Case Definitions: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/domain/D-XXX-test-cases.md
-   - Template: {{TEST_CASE_DEFINITION_DOMAIN_TEMPLATE}}
-   - One file per domain
+1. Test Case Definitions: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-XXX-FLOW_XXX-tests-{LANG}.md
+   - Template: {{TEST_CASE_DEFINITION_TEMPLATE}}
+   - One file per workpackage
 2. Test Generation Status: {{TEST_GENERATION_DOMAIN_STATUS}}
    - Template: {{TEST_GENERATION_DOMAIN_STATUS_TEMPLATE}}
 3. Error Log: {{TEST_GENERATION_DOMAIN_ERRORS}}
@@ -382,7 +382,7 @@ The following is a sequential list that should be followed by you and your agent
 
 **Input Dependencies:**
 - Business Specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-*-specification.md
-- Test Cases: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/
+- Test Cases: {{TEST_CASE_GENERATION_BASE_PATH}}/
 - Workpackage Planning: {{WORKPACKAGE_PLANNING}}
 - Target Specifications: {{TARGET_SPECIFICATION}}/
 - Sample Code: {{TARGET_SAMPLE_CODE}}/

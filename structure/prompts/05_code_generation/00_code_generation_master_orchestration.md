@@ -184,7 +184,7 @@ WORKPACKAGE_LOOP:
             INPUTS:
                 - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/backend-tech-spec.md
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
-                - Test cases: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/WP-{ID}-tests.md
+                - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
                 - Target specification: {{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md
                 - Sample code: {{TARGET_SAMPLE_CODE}}/backend/
             
@@ -261,7 +261,7 @@ WORKPACKAGE_LOOP:
             INPUTS:
                 - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/batch-tech-spec.md
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
-                - Test cases: {{TEST_GENERATION_DOMAIN_BASE_PATH}}/WP-{ID}-tests.md
+                - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
                 - Target specification: {{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md
                 - Sample code: {{TARGET_SAMPLE_CODE}}/batch/
             
@@ -848,7 +848,7 @@ Prompts = {{PROMPTS_BASE_PATH}}
 ```
 Workpackage Planning = {{WORKPACKAGE_PLANNING}}
 Business Specification = {{BUSINESS_SPECIFICATION_BASE_PATH}}
-Test Generation Domain = {{TEST_GENERATION_DOMAIN_BASE_PATH}}
+Test Case Generation = {{TEST_CASE_GENERATION_BASE_PATH}}
 Target Specification = {{TARGET_SPECIFICATION}}
 Target Sample Code = {{TARGET_SAMPLE_CODE}}
 ```

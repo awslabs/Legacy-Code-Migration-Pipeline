@@ -110,6 +110,7 @@ If any dependencies are missing, coordinate with analysis_team_supervisor before
 **Project Base Path**: {{PROJECT_BASE_PATH}}
 
 ### Input Locations
+- Business flows: {{BUSINESS_FLOWS}}
   - Description: Business flows identified in Phase 1 with complexity metrics
   - Format: JSON (Business_Flows.json)
 - Module classifications: {{MODULE_CLASSIFICATIONS}}

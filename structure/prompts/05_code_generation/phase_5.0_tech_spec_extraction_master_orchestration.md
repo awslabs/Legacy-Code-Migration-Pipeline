@@ -1,11 +1,11 @@
-# Phase 5.0: Technical Specification Extraction - Master Orchestration
+# Phase 5.0: Technical Implementation Guide Creation - Master Orchestration
 
 ---
 
 ## Document Control
 
 **Document Type**: Master Orchestration (Supervisor Level)
-**Phase**: Phase 5.0 - Technical Specification Extraction
+**Phase**: Phase 5.0 - Technical Implementation Guide Creation
 **Version**: 1.0
 **Date**: 2026-02-19
 **Owner**: tech_spec_team_supervisor
@@ -14,13 +14,18 @@
 
 ## Overview
 
-This document provides orchestration instructions for the Technical Specification Extraction phase, which discovers and documents all technical implementation details from customer specifications before code generation begins.
+This document provides orchestration instructions for the Technical Implementation Guide Creation phase, which creates workpackage-specific technical implementation guides that enable code generation agents to implement each workpackage.
 
-**Purpose**: Extract technical implementation details ONCE and create structured, implementation-ready documents that will be used by all code generation phases.
+**Purpose**: For each workpackage, create a technical implementation guide that:
+- Extracts patterns from target specifications
+- Defines implementation tasks for business functions
+- Specifies data model and API design
+- Documents integration points with other workpackages
+- Provides clear guidance for code generation
 
 **Sub-Phases**:
-1. **Phase 5.0.0**: Technical Specification Creation (draft)
-2. **Phase 5.0.1**: Technical Specification Review
+1. **Phase 5.0.0**: Technical Implementation Guide Creation (per workpackage)
+2. **Phase 5.0.1**: Technical Implementation Guide Review (per workpackage)
 
 ---
 
@@ -39,148 +44,192 @@ Phase 4 (Test Case Generation) → Phase 5.0 (Technical Specification Extraction
 ```
 
 **Prerequisites**:
-- Phase 3 outputs: Business specifications
-- Phase 4 outputs: Test case definitions
+- Phase 3 outputs: Business specifications (approved)
+- Phase 4 outputs: Test case specifications (approved)
+- Phase 2 outputs: Workpackage planning
 - Input specifications: `{{TARGET_SPECIFICATION}}/`
 - Sample code: `{{TARGET_SAMPLE_CODE}}/`
+- Database schemas: `{{DATABASE_GEN_SRC}}/`
 
 **Outputs**:
-- Backend technical specification
-- Frontend technical specification
-- Batch technical specification
-- Infrastructure technical specification
+- Technical implementation guide per workpackage: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+- Progress tracking: `{{TECH_SPEC_STATUS}}`
+- Error logs: `{{TECH_SPEC_ERRORS}}`
 
 ---
 
 ## Orchestration Workflow
 
-### Phase 5.0.0: Technical Specification Creation
+### For Each Workpackage (in priority order):
 
 ```
-EXECUTE Phase_5.0.0:
-    ASSIGN: tech_spec_extraction_specialist
-    PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.0_tech_spec_creation.md
-    
-    INPUTS:
-        - Target specifications: {{TARGET_SPECIFICATION}}/
-        - Sample code: {{TARGET_SAMPLE_CODE}}/
-        - Templates: {{TEMPLATE_BASE_PATH}}/
-    
-    EXPECTED_OUTPUTS:
-        - Backend tech spec: {{TECH_SPEC_BACKEND}}
-        - Frontend tech spec: {{TECH_SPEC_FRONTEND}}
-        - Batch tech spec: {{TECH_SPEC_BATCH}}
-        - Infrastructure tech spec: {{TECH_SPEC_INFRASTRUCTURE}}
-        - Progress tracking: {{TECH_SPEC_STATUS}}
-        - Progress report: {{TECH_SPEC_PROGRESS}}
-    
-    VERIFICATION:
-        CHECK all_specs_created()
-        CHECK all_sections_populated()
-        CHECK no_critical_errors()
-        
-        IF verification_failed:
-            LOG error to {{TECH_SPEC_ERRORS}}
-            ESCALATE to human supervisor
-            HALT processing
-        
-        IF verification_passed:
-            UPDATE {{TECH_SPEC_STATUS}} with completion
-            PROCEED to Phase_5.0.1
-```
+WORKPACKAGE_LOOP:
+    SELECT next_workpackage FROM workpackage_planning ORDER BY priority
 
-### Phase 5.0.1: Technical Specification Review
-
-```
-EXECUTE Phase_5.0.1:
-    ASSIGN: tech_spec_review_specialist
-    PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.1_tech_spec_review.md
+    # ========================================
+    # PHASE 5.0.0: TECHNICAL IMPLEMENTATION GUIDE CREATION
+    # ========================================
     
-    INPUTS:
-        - Backend tech spec: {{TECH_SPEC_BACKEND}}
-        - Frontend tech spec: {{TECH_SPEC_FRONTEND}}
-        - Batch tech spec: {{TECH_SPEC_BATCH}}
-        - Infrastructure tech spec: {{TECH_SPEC_INFRASTRUCTURE}}
-        - Source specifications: {{TARGET_SPECIFICATION}}/
-        - Sample code: {{TARGET_SAMPLE_CODE}}/
-    
-    EXPECTED_OUTPUTS:
-        - Review feedback: {{TECH_SPEC_REVIEW_FEEDBACK}}
-        - Review approval: {{TECH_SPEC_REVIEW_APPROVAL}}
-        - Updated specs (if corrections needed)
-        - Updated progress: {{TECH_SPEC_STATUS}}
-    
-    VERIFICATION:
-        CHECK review_complete()
-        CHECK all_specs_approved()
-        CHECK no_blocking_issues()
+    EXECUTE Phase_5.0.0:
+        ASSIGN: tech_spec_extraction_specialist
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.0_tech_spec_creation.md
+        PROVIDE_CONTEXT:
+            - workpackage_id: current_workpackage.id
+            - workpackage_name: current_workpackage.name
         
-        IF verification_failed:
-            IF corrections_needed:
-                RETURN to Phase_5.0.0 with feedback
-            ELSE:
+        INPUTS:
+            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
+            - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
+            - Target specifications: {{TARGET_SPECIFICATION}}/
+            - Database schemas: {{DATABASE_GEN_SRC}}/
+            - Sample code: {{TARGET_SAMPLE_CODE}}/
+            - Workpackage planning: {{WORKPACKAGE_PLANNING}}
+            - Previously created guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
+        
+        EXPECTED_OUTPUTS:
+            - Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+            - Progress tracking: {{TECH_SPEC_STATUS}}
+            - Error reports (if any): {{TECH_SPEC_ERRORS}}
+        
+        VERIFICATION:
+            CHECK guide_exists(WP-{ID})
+            CHECK all_sections_complete(WP-{ID})
+            CHECK patterns_from_target_specs(WP-{ID})
+            CHECK business_functions_covered(WP-{ID})
+            CHECK integration_points_documented(WP-{ID})
+            
+            IF verification_failed:
+                LOG error to {{TECH_SPEC_ERRORS}}
                 ESCALATE to human supervisor
-                HALT processing
+                HALT workpackage processing
+            
+            IF verification_passed:
+                UPDATE {{TECH_SPEC_STATUS}} with completion
+                PROCEED to Phase_5.0.1
+
+    # ========================================
+    # PHASE 5.0.1: TECHNICAL IMPLEMENTATION GUIDE REVIEW
+    # ========================================
+    
+    EXECUTE Phase_5.0.1:
+        ASSIGN: tech_spec_review_specialist
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.1_tech_spec_review.md
+        PROVIDE_CONTEXT:
+            - workpackage_id: current_workpackage.id
+            - workpackage_name: current_workpackage.name
         
-        IF verification_passed:
-            UPDATE {{TECH_SPEC_STATUS}} with approval
-            PROCEED to Phase_5.1 (Project Structure)
+        INPUTS:
+            - Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
+            - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
+            - Target specifications: {{TARGET_SPECIFICATION}}/
+            - Previously approved guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
+        
+        EXPECTED_OUTPUTS:
+            - Review report: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md
+            - Approved guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md (if approved)
+            - Progress tracking: {{TECH_SPEC_STATUS}}
+        
+        VERIFICATION:
+            CHECK review_report_exists(WP-{ID})
+            CHECK approval_decision_documented(WP-{ID})
+            
+            IF decision == "APPROVED":
+                CHECK approved_guide_exists(WP-{ID})
+                UPDATE {{TECH_SPEC_STATUS}} with approval
+                PROCEED to WORKPACKAGE_COMPLETE
+            
+            ELSE IF decision == "REVISE":
+                CHECK revision_feedback_documented(WP-{ID})
+                UPDATE {{TECH_SPEC_STATUS}} with revision request
+                RETURN to Phase_5.0.0 with feedback
+            
+            ELSE IF decision == "REJECT":
+                CHECK rejection_rationale_documented(WP-{ID})
+                UPDATE {{TECH_SPEC_STATUS}} with rejection
+                ESCALATE to human supervisor
+                HALT workpackage processing
+
+    # ========================================
+    # WORKPACKAGE COMPLETION
+    # ========================================
+    
+    WORKPACKAGE_COMPLETE:
+        LOG "Technical implementation guide for WP-{ID} completed successfully"
+        UPDATE {{TECH_SPEC_STATUS}} with workpackage completion
+        PROCEED to next workpackage in WORKPACKAGE_LOOP
+
+END WORKPACKAGE_LOOP
 ```
 
 ---
 
 ## Agent Assignments
 
-### Phase 5.0.0: Technical Specification Creation
+### Phase 5.0.0: Technical Implementation Guide Creation
 **Agent**: tech_spec_extraction_specialist
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.0_tech_spec_creation.md
 **Capabilities**:
-- Specification analysis and discovery
-- Keyword-based information extraction
-- Technical pattern recognition
-- Documentation creation
-- Sample code analysis
+- Pattern extraction from target specifications
+- Business requirement analysis
+- Implementation task definition
+- Data model and API design
+- Integration point documentation
+- Technical decision documentation
 
-### Phase 5.0.1: Technical Specification Review
+### Phase 5.0.1: Technical Implementation Guide Review
 **Agent**: tech_spec_review_specialist
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.1_tech_spec_review.md
 **Capabilities**:
 - Completeness verification
-- Consistency checking
+- Consistency checking (with target specs and other workpackages)
 - Clarity assessment
 - Traceability validation
+- Integration point validation
 - Quality assurance
 
 ---
 
 ## Input/Output Contracts
 
-### Phase 5.0.0 Outputs (Phase 5.0.1 Inputs)
-- Backend technical specification (draft)
-- Frontend technical specification (draft)
-- Batch technical specification (draft)
-- Infrastructure technical specification (draft)
-- Progress tracking initialized
+### Phase 3/4 → Phase 5.0.0
+**Phase 3/4 Outputs** (Phase 5.0.0 Inputs):
+- Business specifications: `WP-{ID}-specification-approved.md`
+- Test cases: `WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md`
+- Workpackage planning with dependencies
+- Target specifications (provided by customer)
+- Database schemas
 
 **Contract**:
-- All specifications created from templates
-- All discoverable sections populated
-- Assumptions documented
-- Source references included
-- No critical errors
+- All business functions documented
+- All test cases defined
+- Workpackage dependencies identified
+- Target specifications available
 
-### Phase 5.0.1 Outputs (Phase 5.1 Inputs)
-- Backend technical specification (reviewed and approved)
-- Frontend technical specification (reviewed and approved)
-- Batch technical specification (reviewed and approved)
-- Infrastructure technical specification (reviewed and approved)
-- Review approval confirmation
+### Phase 5.0.0 → Phase 5.0.1
+**Phase 5.0.0 Outputs** (Phase 5.0.1 Inputs):
+- Technical implementation guide (draft): `WP-{ID}-tech-implementation-guide.md`
+- Progress tracking updated
 
 **Contract**:
-- All specifications reviewed
-- All specifications approved
-- Completeness verified
-- Consistency verified
+- Guide follows 9-section structure
+- Patterns extracted from target specifications
+- All business functions have implementation tasks
+- Integration points documented
+- Technical decisions documented with rationale
+
+### Phase 5.0.1 → Phase 5.1
+**Phase 5.0.1 Outputs** (Phase 5.1 Inputs):
+- Approved technical implementation guide: `WP-{ID}-tech-implementation-guide-approved.md`
+- Review report
+- Progress tracking updated
+
+**Contract**:
+- Guide approved for code generation
+- Patterns consistent with target specifications
+- Consistent with other approved workpackage guides
+- All business requirements covered
+- Integration points validated
 - Ready for code generation
 
 ---
@@ -189,45 +238,74 @@ EXECUTE Phase_5.0.1:
 
 ### Phase 5.0.0 Verification
 ```
-CHECK all_specs_created():
-    backend_exists = file_exists({{TECH_SPEC_BACKEND}})
-    frontend_exists = file_exists({{TECH_SPEC_FRONTEND}})
-    batch_exists = file_exists({{TECH_SPEC_BATCH}})
-    infrastructure_exists = file_exists({{TECH_SPEC_INFRASTRUCTURE}})
-    RETURN backend_exists AND frontend_exists AND batch_exists AND infrastructure_exists
+CHECK guide_exists(workpackage_id):
+    guide_path = {{TECH_SPEC_BASE_PATH}}/WP-{workpackage_id}-tech-implementation-guide.md
+    RETURN file_exists(guide_path)
 
-CHECK all_sections_populated():
-    status = load_json({{TECH_SPEC_STATUS}})
-    FOR EACH spec IN status.specifications:
-        FOR EACH section IN spec.extractedSections:
-            IF section == false AND section_is_required:
-                RETURN FALSE
+CHECK all_sections_complete(workpackage_id):
+    guide = load_guide(workpackage_id)
+    required_sections = [
+        "Workpackage Overview",
+        "Architecture and Structure",
+        "Implementation Tasks",
+        "Data Model Implementation",
+        "API Design",
+        "Integration Points",
+        "Testing Guidance",
+        "Technical Decisions",
+        "Implementation Checklist"
+    ]
+    FOR EACH section IN required_sections:
+        IF NOT guide.has_section(section) OR guide.section_is_empty(section):
+            LOG "Missing or empty section: {section}"
+            RETURN FALSE
     RETURN TRUE
 
-CHECK no_critical_errors():
-    errors = load_json({{TECH_SPEC_ERRORS}})
-    RETURN errors.errorSummary.criticalErrors == 0
+CHECK patterns_from_target_specs(workpackage_id):
+    guide = load_guide(workpackage_id)
+    # Verify patterns reference target specifications
+    IF NOT guide.has_target_spec_references():
+        LOG "Missing target specification references"
+        RETURN FALSE
+    RETURN TRUE
+
+CHECK business_functions_covered(workpackage_id):
+    business_spec = load_business_specification(workpackage_id)
+    guide = load_guide(workpackage_id)
+    
+    functions = business_spec.get_business_functions()
+    FOR EACH function IN functions:
+        IF NOT guide.has_implementation_task_for(function.id):
+            LOG "Business function {function.id} not covered in implementation tasks"
+            RETURN FALSE
+    RETURN TRUE
+
+CHECK integration_points_documented(workpackage_id):
+    guide = load_guide(workpackage_id)
+    workpackage = load_workpackage_metadata(workpackage_id)
+    
+    dependencies = workpackage.get_dependencies()
+    FOR EACH dependency IN dependencies:
+        IF NOT guide.documents_integration_with(dependency):
+            LOG "Integration with {dependency} not documented"
+            RETURN FALSE
+    RETURN TRUE
 ```
 
 ### Phase 5.0.1 Verification
 ```
-CHECK review_complete():
-    status = load_json({{TECH_SPEC_STATUS}})
-    FOR EACH spec IN status.specifications:
-        IF spec.reviewStatus != "completed":
-            RETURN FALSE
-    RETURN TRUE
+CHECK review_report_exists(workpackage_id):
+    report_path = {{TECH_SPEC_BASE_PATH}}/WP-{workpackage_id}-review-report.md
+    RETURN file_exists(report_path)
 
-CHECK all_specs_approved():
-    status = load_json({{TECH_SPEC_STATUS}})
-    FOR EACH spec IN status.specifications:
-        IF spec.approved != true:
-            RETURN FALSE
-    RETURN TRUE
+CHECK approval_decision_documented(workpackage_id):
+    report = load_review_report(workpackage_id)
+    RETURN report.has_field("decision") AND 
+           report.decision IN ["APPROVED", "REVISE", "REJECT"]
 
-CHECK no_blocking_issues():
-    approval = load_json({{TECH_SPEC_REVIEW_APPROVAL}})
-    RETURN approval.blockingIssues.count == 0
+CHECK approved_guide_exists(workpackage_id):
+    approved_path = {{TECH_SPEC_BASE_PATH}}/WP-{workpackage_id}-tech-implementation-guide-approved.md
+    RETURN file_exists(approved_path)
 ```
 
 ---
@@ -236,43 +314,56 @@ CHECK no_blocking_issues():
 
 ### Rework Scenarios
 
-#### Scenario 1: Incomplete Extraction (Return to Phase 5.0.0)
+#### Scenario 1: Incomplete Guide (Return to Phase 5.0.0)
 **Triggers**:
 - Missing required sections
-- Insufficient detail in specifications
-- Ambiguous or unclear documentation
-- Missing source references
+- Insufficient implementation detail
+- Missing business function coverage
+- Incomplete integration point documentation
 
 **Actions**:
-1. Update Phase 5.0.0 task with specific sections to complete
-2. Re-assign tech_spec_extraction_specialist
-3. Re-execute Phase 5.0.0 with focus on identified gaps
-4. Re-verify completeness
+1. Document gaps in review report
+2. Update Phase 5.0.0 task with specific sections to complete
+3. Re-assign tech_spec_extraction_specialist
+4. Re-execute Phase 5.0.0 with focus on identified gaps
+5. Re-verify completeness
 
 #### Scenario 2: Inconsistencies Found (Return to Phase 5.0.0)
 **Triggers**:
-- Conflicting information between specs
-- Inconsistent naming conventions
-- Mismatched versions or dependencies
-- Contradictory patterns
+- Patterns don't match target specifications
+- Inconsistent with other approved workpackage guides
+- Conflicting integration approaches
+- Naming convention mismatches
 
 **Actions**:
-1. Document inconsistencies in review feedback
+1. Document inconsistencies in review report
 2. Re-assign tech_spec_extraction_specialist
 3. Re-execute Phase 5.0.0 to resolve inconsistencies
 4. Re-verify consistency
 
-#### Scenario 3: Critical Issues (Escalate to Human)
+#### Scenario 3: Missing Traceability (Return to Phase 5.0.0)
 **Triggers**:
-- Source specifications missing or incomplete
-- Irreconcilable conflicts in source specifications
-- Insufficient information to proceed with code generation
+- Technical decisions without rationale
+- Patterns without target spec references
+- Implementation tasks not linked to business functions
+
+**Actions**:
+1. Document traceability gaps in review report
+2. Re-assign tech_spec_extraction_specialist
+3. Re-execute Phase 5.0.0 to add traceability
+4. Re-verify traceability
+
+#### Scenario 4: Critical Issues (Escalate to Human)
+**Triggers**:
+- Target specifications missing or incomplete
+- Business specification ambiguities preventing implementation design
+- Irreconcilable conflicts between workpackages
 - Technical decisions requiring architectural input
 
 **Actions**:
 1. Document critical issues in error log
 2. Escalate to human supervisor with detailed explanation
-3. Halt phase processing
+3. Halt workpackage processing
 4. Await human guidance before proceeding
 
 ---
@@ -342,27 +433,16 @@ Target Sample Code = {{TARGET_SAMPLE_CODE}}
 
 ### Output Paths
 ```
-Tech Spec Root = {{TECH_SPEC_ROOT}}
 Tech Spec Base Path = {{TECH_SPEC_BASE_PATH}}
-Tech Spec Backend = {{TECH_SPEC_BACKEND}}
-Tech Spec Frontend = {{TECH_SPEC_FRONTEND}}
-Tech Spec Batch = {{TECH_SPEC_BATCH}}
-Tech Spec Infrastructure = {{TECH_SPEC_INFRASTRUCTURE}}
 Tech Spec Status = {{TECH_SPEC_STATUS}}
-Tech Spec Progress = {{TECH_SPEC_PROGRESS}}
 Tech Spec Errors = {{TECH_SPEC_ERRORS}}
-Tech Spec Review = {{TECH_SPEC_REVIEW}}
 ```
 
 ### Template Paths
 ```
+Tech Implementation Guide Template = {{TECH_IMPLEMENTATION_GUIDE_TEMPLATE}}
 Tech Spec Status Template = {{TECH_SPEC_STATUS_TEMPLATE}}
-Tech Spec Progress Template = {{TECH_SPEC_PROGRESS_TEMPLATE}}
 Tech Spec Errors Template = {{TECH_SPEC_ERRORS_TEMPLATE}}
-Backend Tech Spec Template = {{TECH_SPEC_BACKEND_TEMPLATE}}
-Frontend Tech Spec Template = {{TECH_SPEC_FRONTEND_TEMPLATE}}
-Batch Tech Spec Template = {{TECH_SPEC_BATCH_TEMPLATE}}
-Infrastructure Tech Spec Template = {{TECH_SPEC_INFRASTRUCTURE_TEMPLATE}}
 ```
 
 ---
@@ -399,37 +479,40 @@ Infrastructure Tech Spec Template = {{TECH_SPEC_INFRASTRUCTURE_TEMPLATE}}
 ## Success Criteria
 
 Phase 5.0 is considered complete when:
-- [ ] All four technical specifications created
-- [ ] All specifications reviewed and approved
-- [ ] All required sections populated
-- [ ] Consistency verified across specifications
+- [ ] All workpackages have technical implementation guides
+- [ ] All guides reviewed and approved
+- [ ] All guides follow patterns from target specifications
+- [ ] All guides consistent with each other
+- [ ] All business functions covered in implementation tasks
+- [ ] All integration points documented
 - [ ] No blocking issues remain
 - [ ] Progress tracking shows 100% completion
-- [ ] Ready for Phase 5.1 (Project Structure)
+- [ ] Ready for Phase 5.1 (Code Generation)
 
 ---
 
 ## Notes for Supervisor
 
 **Critical Success Factors**:
-1. **Completeness**: All sections must be populated with sufficient detail
-2. **Consistency**: Specifications must be consistent with each other
-3. **Traceability**: All information must be traceable to source specifications
-4. **Clarity**: Specifications must be clear and unambiguous
-5. **Usability**: Specifications must be directly usable by code generation phases
+1. **Pattern Extraction**: All patterns must come from target specifications, not assumptions
+2. **Consistency**: Guides must be consistent across workpackages for integration
+3. **Completeness**: All business functions must have implementation tasks
+4. **Traceability**: All decisions must be traceable to requirements and specifications
+5. **Integration**: Integration points must be carefully documented
 
 **Common Pitfalls to Avoid**:
-1. Skipping sections because source specification is unclear
-2. Making assumptions without documenting them
-3. Inconsistent naming conventions across specifications
-4. Missing version information for dependencies
-5. Incomplete project structure documentation
+1. Hardcoding patterns instead of extracting from target specifications
+2. Inconsistent naming conventions across workpackages
+3. Missing integration point documentation
+4. Insufficient detail for code generation
+5. Technical decisions without rationale
 
 **When to Escalate**:
-1. Source specifications are missing or severely incomplete
-2. Irreconcilable conflicts in source specifications
-3. Technical decisions requiring architectural expertise
-4. Repeated rework cycles (more than 2 iterations)
+1. Target specifications are missing or severely incomplete
+2. Business specification ambiguities preventing implementation design
+3. Irreconcilable conflicts between workpackages
+4. Technical decisions requiring architectural expertise
+5. Repeated rework cycles (more than 2 iterations per workpackage)
 
 ---
 

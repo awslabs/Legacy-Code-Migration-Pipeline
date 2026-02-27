@@ -219,14 +219,24 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
     
     print("Configuration:")
     print(f"  • Target directory: {tools_dir}")
-    if zip_file:
-        print(f"  • Using ZIP file: {zip_file}")
-    else:
-        print(f"  • Source URL: {ACM_TOOLS_URL}")
-    print()
     
     # Create tools directory if it doesn't exist
     tools_dir.mkdir(parents=True, exist_ok=True)
+    
+    # If no ZIP file specified, check for default local ZIP first
+    if not zip_file:
+        script_dir = Path(__file__).parent if '__file__' in globals() else Path.cwd()
+        default_zip = script_dir / ACM_TOOLS_DEFAULT_ZIP
+        
+        if default_zip.exists():
+            print(f"  • Using default ZIP file: {default_zip}")
+            zip_file = default_zip
+        else:
+            print(f"  • Source URL: {ACM_TOOLS_URL}")
+    else:
+        print(f"  • Using ZIP file: {zip_file}")
+    
+    print()
     
     # Determine installation method
     if zip_file:
