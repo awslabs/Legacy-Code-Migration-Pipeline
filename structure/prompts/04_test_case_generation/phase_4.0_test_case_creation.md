@@ -6,8 +6,8 @@
 
 **Phase**: Phase 4 - Test Case Generation
 **Step**: Step 4.0 - Test Case Specification Creation
-**Team Supervisor**: business_analyst_team_lead
-**Assigned Agent**: business_specialist_test_designalist
+**Team Supervisor**: business_team_supervisor
+**Assigned Agent**: business_specialist_test_design
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_4.0_test_case_creation.md
 
 ### Expected Deliverables
@@ -337,7 +337,7 @@ The template tracks:
           "path": "output/specifications/test_cases/specs/review/test-case-generation-WP-001-review.md",
           "status": "Complete",
           "review_date": "2026-02-19",
-          "reviewer": "test_case_reviewer",
+          "reviewer": "business_reviewer_test_design",
           "decision": "Approved"
         }
       },

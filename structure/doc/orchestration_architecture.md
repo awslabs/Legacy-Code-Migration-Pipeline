@@ -814,7 +814,6 @@ When creating a task file, the Team Supervisor MUST:
 
 ## Agent Assignment
 **Agent**: [agent_name]
-**Agent Definition**: [path to agent definition file]
 **Task ID**: [unique_id]
 **Created By**: [supervisor_agent_name]
 **Created At**: [timestamp]
@@ -1083,7 +1082,6 @@ CONTEXT: Legacy code in /project/input/legacy/source
 
 ## Agent Assignment
 **Agent**: analysis_specialist_legacy_code
-**Agent Definition**: /system/agents/analysis_team/analysis_specialist_legacy_code.md
 **Task ID**: analysis-sourcecode-001
 **Created By**: analysis_team_supervisor
 **Created At**: 2024-01-15T10:00:00Z

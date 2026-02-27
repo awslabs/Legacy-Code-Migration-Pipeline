@@ -78,7 +78,6 @@ Agent reads task file and executes work
 
 ## Agent Assignment
 **Agent**: [agent_name]
-**Agent Definition**: [path to agent definition file or reference]
 **Task ID**: [unique_id]
 **Created By**: [supervisor_agent_name]
 **Created At**: [timestamp]
@@ -634,7 +633,6 @@ Before creating task file, verify:
 
 ## Agent Assignment
 **Agent**: analysis_specialist_legacy_code
-**Agent Definition**: /system/agents/analysis_team/analysis_specialist_legacy_code.md
 **Task ID**: analysis-sourcecode-001
 **Created By**: analysis_team_supervisor
 **Created At**: 2024-01-15T10:30:00Z
@@ -935,7 +933,6 @@ If you encounter issues beyond your capability:
 
 ## Agent Assignment
 **Agent**: analysis_reviewer_legacy_code
-**Agent Definition**: /system/agents/analysis_team/analysis_reviewer_legacy_code.md
 **Task ID**: analysis-sourcecode-review-001
 **Created By**: analysis_team_supervisor
 **Created At**: 2024-01-15T14:30:00Z
@@ -1191,7 +1188,6 @@ Apply consistent standards based on:
 
 ## Agent Assignment
 **Agent**: analysis_specialist_legacy_code
-**Agent Definition**: /system/agents/analysis_team/analysis_specialist_legacy_code.md
 **Task ID**: analysis-sourcecode-remediation-001
 **Created By**: analysis_team_supervisor
 **Created At**: 2024-01-15T16:00:00Z
@@ -1783,7 +1779,6 @@ Task is complete when work is done.
 ```markdown
 ## Agent Assignment
 **Agent**: analysis_specialist_legacy_code
-**Agent Definition**: /system/agents/analysis_team/analysis_specialist_legacy_code.md
 
 ## Notes
 ### Agent Definition Reference

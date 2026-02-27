@@ -8,7 +8,7 @@
 **Phase**: Phase 5.0 - Technical Specification Extraction
 **Version**: 1.0
 **Date**: 2026-02-19
-**Owner**: tech_spec_extraction_supervisor
+**Owner**: tech_spec_team_supervisor
 
 ---
 
@@ -133,7 +133,6 @@ EXECUTE Phase_5.0.1:
 
 ### Phase 5.0.0: Technical Specification Creation
 **Agent**: tech_spec_extraction_specialist
-**Agent Definition**: structure/agents/tech_spec_team/tech_spec_extraction_specialist.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.0_tech_spec_creation.md
 **Capabilities**:
 - Specification analysis and discovery
@@ -144,7 +143,6 @@ EXECUTE Phase_5.0.1:
 
 ### Phase 5.0.1: Technical Specification Review
 **Agent**: tech_spec_review_specialist
-**Agent Definition**: structure/agents/tech_spec_team/tech_spec_review_specialist.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.1_tech_spec_review.md
 **Capabilities**:
 - Completeness verification

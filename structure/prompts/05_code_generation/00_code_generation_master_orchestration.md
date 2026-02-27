@@ -317,7 +317,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 5.1: Project Structure Establishment
 **Agent**: development_specialist_code_generation
-**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1_project_structure.md
 **Capabilities**:
 - Project scaffolding setup
@@ -328,7 +327,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 5.2: Backend Code Generation
 **Agent**: development_specialist_code_generation
-**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.2_backend_generation.md
 **Capabilities**:
 - Domain model implementation
@@ -341,7 +339,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 5.3: Frontend Code Generation
 **Agent**: development_specialist_code_generation
-**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.3_frontend_generation.md
 **Capabilities**:
 - UI component development
@@ -354,7 +351,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 5.4: Batch Code Generation
 **Agent**: development_specialist_code_generation
-**Agent Definition**: structure/agents/development_team/development_specialist_code_generation.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.4_batch_generation.md
 **Capabilities**:
 - Batch job configuration

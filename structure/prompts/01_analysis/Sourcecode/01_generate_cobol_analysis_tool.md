@@ -151,7 +151,6 @@ The resulting task file should look like this:
 
 ## Agent Assignment
 **Agent**: analysis_specialist_legacy_code
-**Agent Definition**: structure/agents/analysis_team/analysis_specialist_legacy_code.md
 **Task ID**: analysis-sourcecode-001
 **Created By**: analysis_team_supervisor
 **Created At**: 2024-01-15T10:00:00Z

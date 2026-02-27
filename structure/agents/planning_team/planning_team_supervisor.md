@@ -119,7 +119,6 @@ When creating a task file, use this structure:
 
 ## Agent Assignment
 **Agent**: [agent_name]
-**Agent Definition**: [reference to agent definition file]
 **Task ID**: [unique_id]
 **Created By**: planning_team_supervisor
 **Created At**: [timestamp]
@@ -369,7 +368,6 @@ When creating a review task file, use this structure:
 
 ## Agent Assignment
 **Agent**: planning_reviewer_workpackage
-**Agent Definition**: [reference to reviewer agent definition]
 **Task ID**: planning_workpackage_review_[iteration]
 **Created By**: planning_team_supervisor
 **Created At**: [timestamp]
@@ -536,7 +534,6 @@ Report review outcome to: planning_team_supervisor
 
 ## Agent Assignment
 **Agent**: planning_specialist_workpackage
-**Agent Definition**: [reference to specialist agent definition]
 **Task ID**: planning_workpackage_remediation_[iteration]
 **Created By**: planning_team_supervisor
 **Created At**: [timestamp]

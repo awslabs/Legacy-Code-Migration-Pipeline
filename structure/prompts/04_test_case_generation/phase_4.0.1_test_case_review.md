@@ -6,8 +6,8 @@
 
 **Phase**: Phase 4 - Test Case Generation
 **Step**: Step 4.0.1 - Test Case Specification Review
-**Team Supervisor**: business_analyst_team_lead
-**Assigned Agent**: test_case_reviewer
+**Team Supervisor**: business_team_supervisor
+**Assigned Agent**: business_reviewer_test_design
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_4.0.1_test_case_review.md
 
 ### Expected Deliverables
@@ -502,7 +502,7 @@ Create comprehensive review report: `{{TEST_CASE_GENERATION_REVIEW}}/test-case-g
 - **Flow ID**: FLOW_XXX
 - **Flow Name**: [Name]
 - **Review Date**: [Date]
-- **Reviewer**: test_case_reviewer
+- **Reviewer**: business_reviewer_test_design
 - **Review Decision**: [APPROVED/REVISE/REJECT]
 
 ## Review Summary
@@ -612,7 +612,7 @@ Create comprehensive review report: `{{TEST_CASE_GENERATION_REVIEW}}/test-case-g
 
 ## Approval Confirmation (if decision = APPROVED)
 - Approved Date: [Date]
-- Approved By: test_case_reviewer
+- Approved By: business_reviewer_test_design
 - Ready for Code Generation: Yes
 
 ## Next Steps

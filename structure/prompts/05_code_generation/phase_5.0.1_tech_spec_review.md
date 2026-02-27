@@ -5,7 +5,7 @@
 ## Orchestration Information
 
 **Phase**: Phase 5.0.1 - Technical Specification Review  
-**Team Supervisor**: tech_spec_extraction_supervisor  
+**Team Supervisor**: tech_spec_team_supervisor  
 **Assigned Agent**: tech_spec_review_specialist  
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_5.0.1_tech_spec_review.md
 

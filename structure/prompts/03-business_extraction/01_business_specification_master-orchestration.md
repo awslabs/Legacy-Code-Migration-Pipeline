@@ -390,7 +390,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.0: Business Context Discovery
 **Agent**: business_specialist_requirements
-**Agent Definition**: structure/agents/business_team/business_specialist_requirements.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0_business_context_discovery.md
 **Capabilities**:
 - Business domain identification
@@ -401,7 +400,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.0.1: Business Context Review
 **Agent**: business_reviewer_requirements
-**Agent Definition**: structure/agents/business_team/business_reviewer_requirements.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.0.1_business_context_review.md
 **Capabilities**:
 - Business domain verification
@@ -411,7 +409,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.1: Business Logic Extraction (Chapter 6)
 **Agent**: business_specialist_logic_extraction
-**Agent Definition**: structure/agents/business_team/business_specialist_logic_extraction.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1_business_logic_extraction.md
 **Capabilities**:
 - Code analysis and interpretation
@@ -422,7 +419,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.1.1: Business Logic Extraction Review
 **Agent**: business_reviewer_logic_extraction
-**Agent Definition**: structure/agents/business_team/business_reviewer_logic_extraction.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.1.1_business_logic_extraction_review.md
 **Capabilities**:
 - Abstraction pattern validation
@@ -433,7 +429,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.2: Business Specification Generation (Chapters 1-5)
 **Agent**: business_specialist_requirements
-**Agent Definition**: structure/agents/business_team/business_specialist_requirements.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2_business_specification_generation.md
 **Capabilities**:
 - Business entity extraction from Chapter 6
@@ -446,7 +441,6 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.2.1: Business Specification Review
 **Agent**: business_reviewer_requirements
-**Agent Definition**: structure/agents/business_team/business_reviewer_requirements.md
 **Task Document**: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2.1_business_specification_review.md
 **Capabilities**:
 - Backward validation against Chapter 6

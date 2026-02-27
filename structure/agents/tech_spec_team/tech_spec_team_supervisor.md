@@ -210,7 +210,6 @@ When creating a task file, use this structure:
 
 ## Agent Assignment
 **Agent**: [agent_name]
-**Agent Definition**: [reference to agent definition file]
 **Task ID**: [unique_id]
 **Created By**: tech_spec_team_supervisor
 **Created At**: [timestamp]
@@ -456,7 +455,6 @@ When creating a review task file, use this structure:
 
 ## Agent Assignment
 **Agent**: tech_spec_review_specialist
-**Agent Definition**: structure/agents/tech_spec_team/tech_spec_review_specialist.md
 **Task ID**: tech_spec_review_[iteration]
 **Created By**: tech_spec_team_supervisor
 **Created At**: [timestamp]
@@ -648,7 +646,6 @@ Report review outcome to: tech_spec_team_supervisor
 
 ## Agent Assignment
 **Agent**: tech_spec_extraction_specialist
-**Agent Definition**: structure/agents/tech_spec_team/tech_spec_extraction_specialist.md
 **Task ID**: tech_spec_remediation_[iteration]
 **Created By**: tech_spec_team_supervisor
 **Created At**: [timestamp]

@@ -5,7 +5,7 @@
 ## Orchestration Information
 
 **Phase**: Phase 5.0.0 - Technical Specification Creation  
-**Team Supervisor**: tech_spec_extraction_supervisor  
+**Team Supervisor**: tech_spec_team_supervisor  
 **Assigned Agent**: tech_spec_extraction_specialist  
 **Task File Name**: {{TASKS_BASE_PATH}}/phase_5.0.0_tech_spec_creation.md
 

@@ -141,7 +141,6 @@ The resulting task file should look like this:
 
 ## Agent Assignment
 **Agent**: analysis_specialist_database
-**Agent Definition**: structure/agents/analysis_team/analysis_specialist_database.md
 **Task ID**: analysis-database-001
 **Created By**: analysis_team_supervisor
 **Created At**: 2024-01-15T09:00:00Z
