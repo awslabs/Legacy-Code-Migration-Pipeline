@@ -456,6 +456,168 @@ Update `{{CODE_GENERATION_STATUS}}`:
 
 ---
 
+## Documentation and Traceability
+
+**CRITICAL: Follow comprehensive documentation style - detailed, production-ready comments**
+
+### Component/Class Documentation
+```typescript
+/**
+ * [One-line description]
+ * 
+ * Business Context: [Detailed explanation of business purpose]
+ * 
+ * Business Functions:
+ * - F-XXX-YYY: [Function description]
+ * - F-XXX-ZZZ: [Function description]
+ * 
+ * Business Rules Applied:
+ * - BR-XXX-YYY: [Rule description]
+ * - BR-XXX-ZZZ: [Rule description]
+ * 
+ * Legacy Mapping:
+ * - Legacy Screen: [SCREEN-NAME]
+ * - Legacy Function: [Description]
+ * 
+ * @workpackage WP-XXX: [Workpackage name]
+ * @specref [Spec file]#[Section]
+ * @legacyref [SCREEN]:[section]
+ */
+```
+
+### Function/Method Documentation
+```typescript
+/**
+ * [Function description]
+ * 
+ * Business Function: F-XXX-YYY - [Function name]
+ * 
+ * Business Rules Applied:
+ * - BR-XXX-YYY: [Rule description]
+ * 
+ * Process Flow:
+ * 1. [Step 1]
+ * 2. [Step 2]
+ * 3. [Step 3]
+ * 
+ * Legacy Equivalent: [SCREEN] [section]
+ * 
+ * @param [parameter] [description]
+ * @returns [description]
+ * 
+ * @specref WP-XXX#F-XXX-YYY
+ * @specref WP-XXX#BR-XXX-YYY
+ */
+```
+
+### Inline Code Comments
+- Add inline comments referencing business rules: `// BR-XXX-YYY: [Rule description]`
+- Explain complex logic with business context
+- Reference legacy screens for equivalent operations
+
+---
+
+## Strict No-Hallucination Policy
+
+**CRITICAL: Do not invent anything not in specifications**
+
+1. **NEVER invent business rules** not in specifications
+2. **NEVER create UI components** not defined in specifications
+3. **NEVER add functionality** beyond specifications
+4. **NEVER create hard-coded mock data** in production code
+5. **NEVER invent external system integrations** not specified
+6. **NEVER add fields to forms** not in specifications
+7. **NEVER create pages** not required by business specifications
+8. If uncertain about implementation, mark with TODO (see next section)
+
+**Verification checklist** for each component:
+- [ ] All functionality comes from specifications
+- [ ] No invented business rules
+- [ ] No hard-coded test data
+- [ ] All UI components match specifications exactly
+- [ ] All integrations are specified
+- [ ] All form fields are from specifications
+- [ ] All pages serve specified business functions
+
+---
+
+## Code Preservation Rules
+
+**CRITICAL: When implementing a workpackage, preserve all existing code from previous workpackages.**
+
+1. **NEVER delete existing code** from other workpackages
+2. **NEVER delete existing files** created by previous workpackages
+3. **NEVER modify code in other feature modules** unless the current workpackage explicitly requires changes to that feature
+4. **Exception - Shared module**: The shared module may be modified by any workpackage as it contains shared utilities
+
+**Modification Rules by Feature:**
+- **Same feature as current workpackage**: ✅ Can modify/extend existing code
+- **Different feature**: ❌ Do not modify (unless explicitly required by business spec)
+- **Shared module**: ✅ Can modify/extend (shared across all workpackages)
+
+**Examples:**
+- ✅ WP-002 working on `users` feature → Can modify existing `users` feature code
+- ✅ WP-002 working on `users` feature → Can add utilities to `shared` module
+- ❌ WP-002 working on `users` feature → Cannot modify `authentication` feature (created by WP-001)
+- ❌ WP-003 → Cannot delete components created by WP-001 or WP-002
+
+**Implementation Strategy:**
+1. Before generating code, check which features already exist
+2. Only add new files or extend existing files in the current workpackage's feature
+3. If cross-feature integration is needed, use feature APIs (public interfaces)
+4. Document any necessary cross-feature changes with clear justification
+
+**Verification Checklist:**
+- [ ] No files deleted from previous workpackages
+- [ ] No code removed from other feature modules
+- [ ] Modifications to other features are justified in business spec
+- [ ] Shared module changes are additive (not destructive)
+- [ ] Cross-feature integration uses public APIs
+
+---
+
+## TODO Comments for Incomplete Implementations
+
+**Use TODO when implementation details are missing or uncertain**
+
+### When to Use TODO
+- External system integration details are missing
+- Business rule details are unclear or ambiguous
+- Validation rules are not fully specified
+- UI/UX requirements are uncertain
+- Security implementation details are missing
+- Configuration requirements are not specified
+- Legacy screen logic cannot be mapped to modern patterns
+- Business rules require clarification
+
+### TODO Format
+```typescript
+// TODO: [CATEGORY] - [Description] - Refer to: [Source]
+```
+
+### TODO Categories
+- `EXTERNAL_INTEGRATION` - Missing external system details
+- `BUSINESS_RULE` - Unclear or missing business rule
+- `VALIDATION` - Unspecified validation logic
+- `UI_UX` - UI/UX requirements uncertainties
+- `SECURITY` - Security implementation details
+- `CONFIG` - Configuration requirements
+- `UNMAPPABLE` - Legacy logic requiring manual review
+- `CLARIFICATION` - Business rules requiring clarification
+
+### TODO Examples
+```typescript
+// TODO: EXTERNAL_INTEGRATION - OAuth2 provider configuration not specified - Refer to: Business Spec WP-001 Section 3.2
+
+// TODO: BUSINESS_RULE - Interest calculation formula unclear for edge case - Refer to: Legacy Screen CALC01
+
+// TODO: UNMAPPABLE - Complex screen navigation logic - Refer to: LEGACY-SCREEN:456-523 - Requires manual review
+
+// TODO: CLARIFICATION - Validation rule for account status transition needs business confirmation - Refer to: Business Spec WP-002-BR-015
+```
+
+---
+
 ## Verification
 
 Before marking complete:

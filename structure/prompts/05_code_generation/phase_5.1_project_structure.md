@@ -304,3 +304,74 @@ Example error entry:
 ## End of Phase 5.1
 
 Once complete, the skeleton is ready for workpackage-by-workpackage code generation in phases 5.2, 5.3, and 5.4.
+
+---
+
+## Documentation Standards
+
+**All generated code must follow comprehensive documentation standards**
+
+### Code Documentation Requirements
+- Use framework-appropriate documentation style (Javadoc for Java, JSDoc for TypeScript, etc.)
+- Include business context in class/component documentation
+- Reference business specifications and workpackages
+- Document business rules applied
+- Include legacy system mappings where applicable
+- Add traceability tags: @workpackage, @specref, @legacyref
+
+### Example Documentation Tags
+```
+@workpackage WP-XXX: [Workpackage name]
+@specref [Spec file]#[Section]
+@legacyref [PROGRAM/SCREEN]:[lines]
+```
+
+---
+
+## Strict No-Hallucination Policy
+
+**CRITICAL: Do not invent anything not in specifications**
+
+1. **NEVER invent configuration values** not in specifications
+2. **NEVER create project structure** beyond what's specified in target specifications
+3. **NEVER add dependencies** not required by target specifications
+4. **NEVER create hard-coded values** without specification
+5. If uncertain about configuration, mark with TODO (see next section)
+
+**Verification checklist**:
+- [ ] All configuration comes from target specifications
+- [ ] No invented dependencies
+- [ ] No hard-coded environment-specific values
+- [ ] Project structure matches target specifications exactly
+
+---
+
+## TODO Comments for Incomplete Implementations
+
+**Use TODO when implementation details are missing or uncertain**
+
+### When to Use TODO
+- Configuration values are not specified
+- Framework version details are unclear
+- Dependency versions are not specified
+- Environment-specific settings are missing
+- Security configuration details are uncertain
+
+### TODO Format
+```
+// TODO: [CATEGORY] - [Description] - Refer to: [Source]
+```
+
+### TODO Categories
+- `CONFIG` - Configuration requirements
+- `DEPENDENCY` - Dependency version uncertainties
+- `SECURITY` - Security configuration details
+- `ENVIRONMENT` - Environment-specific settings
+- `CLARIFICATION` - Requirements requiring clarification
+
+### TODO Examples
+```
+// TODO: CONFIG - Database connection pool size not specified - Refer to: Target Spec Section 3.2
+// TODO: DEPENDENCY - Spring Boot version not specified - Using latest stable
+// TODO: SECURITY - OAuth2 provider details missing - Refer to: Business Spec WP-001
+```

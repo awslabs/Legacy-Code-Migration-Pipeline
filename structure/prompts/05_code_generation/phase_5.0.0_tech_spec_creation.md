@@ -70,10 +70,26 @@ For each workpackage, create a comprehensive technical implementation guide that
 
 ### Step 1: Initialize Progress Tracking
 
-1. Load workpackage list from {{WORKPACKAGE_PLANNING}}
-2. Create progress tracking file at {{TECH_SPEC_STATUS}} using template
-3. Set all workpackages to "not_started" status
-4. Create error log at {{TECH_SPEC_ERRORS}}
+1. **Load workpackage list** from {{WORKPACKAGE_PLANNING}}
+2. **Create progress tracking file** at {{TECH_SPEC_STATUS}}:
+   - Copy template from {{TECH_SPEC_STATUS_TEMPLATE}}
+   - Set `totalWorkpackages` to count from workpackage planning
+   - Create entry for each workpackage with:
+     ```json
+     {
+       "workpackageId": "WP-XXX",
+       "workpackageName": "[Name from planning]",
+       "status": "not_started",
+       "startedAt": null,
+       "completedAt": null,
+       "reviewStatus": null,
+       "approvedAt": null
+     }
+     ```
+   - Set `notStarted` count to total workpackages
+   - Set `lastUpdated` to current timestamp
+3. **Create error log** at {{TECH_SPEC_ERRORS}} (empty array initially)
+4. **Create progress directory** if it doesn't exist: {{TECH_SPEC_PROGRESS_PATH}}
 
 ### Step 2: For Each Workpackage (in priority order)
 
@@ -198,8 +214,19 @@ Ensure the guide:
 #### 2.7 Update Progress Tracking
 
 Update {{TECH_SPEC_STATUS}}:
-- Set workpackage status to "completed"
-- Record completion timestamp
+- Set workpackage status to "draft_complete"
+- Record completion timestamp in `completedAt`
+- Update summary counts (decrement `inProgress`, increment `draftComplete`)
+- Set `lastUpdated` to current timestamp
+
+**Status Values**:
+- `not_started` - Workpackage not yet started
+- `in_progress` - Currently being worked on
+- `draft_complete` - Draft guide completed, ready for review
+- `in_review` - Under review in Phase 5.0.1
+- `corrections_needed` - Review requested corrections
+- `approved` - Review approved, ready for code generation
+- `rejected` - Review rejected, escalated
 - Note any issues or warnings
 
 ### Step 3: Handle Errors and Issues

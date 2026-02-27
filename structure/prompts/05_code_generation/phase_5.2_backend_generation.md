@@ -455,6 +455,202 @@ Update `{{CODE_GENERATION_STATUS}}`:
 
 ---
 
+## Documentation and Traceability
+
+**CRITICAL: Follow comprehensive Javadoc style - detailed, production-ready documentation**
+
+### Class-Level Javadoc Structure
+```java
+/**
+ * [One-line description]
+ * 
+ * <p><b>Business Context:</b> [Detailed explanation of business purpose]</p>
+ * 
+ * <p><b>Business Functions:</b></p>
+ * <ul>
+ *   <li>F-XXX-YYY: [Function description]</li>
+ *   <li>F-XXX-ZZZ: [Function description]</li>
+ * </ul>
+ * 
+ * <p><b>Business Rules Applied:</b></p>
+ * <ul>
+ *   <li>BR-XXX-YYY: [Rule description]</li>
+ *   <li>BR-XXX-ZZZ: [Rule description]</li>
+ * </ul>
+ * 
+ * <p><b>Legacy Mapping:</b></p>
+ * <ul>
+ *   <li>Legacy Program: [PROGRAM.cbl] lines [X-Y]</li>
+ *   <li>Legacy Function: [Description]</li>
+ * </ul>
+ * 
+ * <p><b>Migration Notes:</b></p>
+ * <ul>
+ *   <li>[Important migration considerations]</li>
+ *   <li>[External dependencies]</li>
+ * </ul>
+ * 
+ * @see [Related classes]
+ * @since [Version]
+ * @version [Version]
+ * @author CardDemo Migration Team
+ * 
+ * @workpackage WP-XXX: [Workpackage name]
+ * @specref [Spec file]#[Section]
+ * @legacyref [PROGRAM.cbl]:[lines]
+ * @docref Chapter6-[Module].md#[section]
+ */
+```
+
+### Method-Level Javadoc Structure
+```java
+/**
+ * [Method description]
+ * 
+ * <p><b>Business Function:</b> F-XXX-YYY - [Function name]</p>
+ * 
+ * <p><b>Business Rules Applied:</b></p>
+ * <ul>
+ *   <li>BR-XXX-YYY: [Rule description]</li>
+ * </ul>
+ * 
+ * <p><b>Process Flow:</b></p>
+ * <ol>
+ *   <li>[Step 1]</li>
+ *   <li>[Step 2]</li>
+ *   <li>[Step 3]</li>
+ * </ol>
+ * 
+ * <p><b>Legacy Equivalent:</b> [PROGRAM.cbl] lines [X-Y] ([paragraph name])</p>
+ * 
+ * @param [parameter] [description]
+ * @return [description]
+ * @throws [exception] [condition]
+ * 
+ * @specref WP-XXX#F-XXX-YYY
+ * @specref WP-XXX#BR-XXX-YYY
+ */
+```
+
+### Entity Field Documentation
+```java
+/**
+ * [Field description]
+ * 
+ * <p><b>Business Rule:</b> BR-XXX-YYY ([Rule description])</p>
+ * <p><b>Validation:</b> [Validation rules]</p>
+ * <p><b>Legacy Field:</b> [FIELD-NAME] (PIC [format])</p>
+ */
+```
+
+### Inline Code Comments
+- Add inline comments referencing business rules: `// BR-XXX-YYY: [Rule description]`
+- Explain complex logic with business context
+- Reference legacy code for equivalent operations
+
+---
+
+## Strict No-Hallucination Policy
+
+**CRITICAL: Do not invent anything not in specifications**
+
+1. **NEVER invent business rules** not in specifications
+2. **NEVER create entities** not defined in domain model
+3. **NEVER add functionality** beyond specifications
+4. **NEVER create hard-coded mock data** in production code
+5. **NEVER invent external system integrations** not specified
+6. **NEVER add fields to entities** not in specifications
+7. **NEVER create methods** not required by business specifications
+8. If uncertain about implementation, mark with TODO (see next section)
+
+**Verification checklist** for each component:
+- [ ] All functionality comes from specifications
+- [ ] No invented business rules
+- [ ] No hard-coded test data
+- [ ] All entities match domain model exactly
+- [ ] All integrations are specified
+- [ ] All fields are from specifications
+- [ ] All methods serve specified business functions
+
+---
+
+## Code Preservation Rules
+
+**CRITICAL: When implementing a workpackage, preserve all existing code from previous workpackages.**
+
+1. **NEVER delete existing code** from other workpackages
+2. **NEVER delete existing files** created by previous workpackages
+3. **NEVER modify code in other domain modules** unless the current workpackage explicitly requires changes to that domain
+4. **Exception - Common/Shared module**: The shared module may be modified by any workpackage as it contains shared utilities
+
+**Modification Rules by Domain:**
+- **Same domain as current workpackage**: ✅ Can modify/extend existing code
+- **Different domain**: ❌ Do not modify (unless explicitly required by business spec)
+- **Common/Shared module**: ✅ Can modify/extend (shared across all workpackages)
+
+**Examples:**
+- ✅ WP-002 working on `user` module → Can modify existing `user` module code
+- ✅ WP-002 working on `user` module → Can add utilities to `shared-common` module
+- ❌ WP-002 working on `user` module → Cannot modify `auth` module (created by WP-001)
+- ❌ WP-003 → Cannot delete classes created by WP-001 or WP-002
+
+**Implementation Strategy:**
+1. Before generating code, check which modules already exist
+2. Only add new files or extend existing files in the current workpackage's domain
+3. If cross-module integration is needed, use module APIs (public interfaces)
+4. Document any necessary cross-module changes with clear justification
+
+**Verification Checklist:**
+- [ ] No files deleted from previous workpackages
+- [ ] No code removed from other domain modules
+- [ ] Modifications to other domains are justified in business spec
+- [ ] Common/shared module changes are additive (not destructive)
+- [ ] Cross-module integration uses public APIs
+
+---
+
+## TODO Comments for Incomplete Implementations
+
+**Use TODO when implementation details are missing or uncertain**
+
+### When to Use TODO
+- External system integration details are missing
+- Business rule details are unclear or ambiguous
+- Validation rules are not fully specified
+- Database schema details are uncertain
+- Security implementation details are missing
+- Configuration requirements are not specified
+- Legacy logic cannot be mapped to modern patterns
+- Business rules require clarification
+
+### TODO Format
+```java
+// TODO: [CATEGORY] - [Description] - Refer to: [Source]
+```
+
+### TODO Categories
+- `EXTERNAL_INTEGRATION` - Missing external system details
+- `BUSINESS_RULE` - Unclear or missing business rule
+- `VALIDATION` - Unspecified validation logic
+- `DATABASE` - Database schema uncertainties
+- `SECURITY` - Security implementation details
+- `CONFIG` - Configuration requirements
+- `UNMAPPABLE` - Legacy logic requiring manual review
+- `CLARIFICATION` - Business rules requiring clarification
+
+### TODO Examples
+```java
+// TODO: EXTERNAL_INTEGRATION - OAuth2 provider configuration not specified - Refer to: Business Spec WP-001 Section 3.2
+
+// TODO: BUSINESS_RULE - Interest calculation formula unclear for edge case - Refer to: COBOL CALCINT.cbl:234-267
+
+// TODO: UNMAPPABLE - Complex COBOL PERFORM logic with multiple exits - Refer to: LEGACY.cbl:456-523 - Requires manual review
+
+// TODO: CLARIFICATION - Validation rule for account status transition needs business confirmation - Refer to: Business Spec WP-002-BR-015
+```
+
+---
+
 ## Verification
 
 Before marking complete:
