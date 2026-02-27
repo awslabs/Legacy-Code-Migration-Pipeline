@@ -1,0 +1,18 @@
+{
+  "phase": "Technical Design",
+  "status": "not_started",
+  "started_at": null,
+  "completed_at": null,
+  "last_updated": null,
+  "total_workpackages": 0,
+  "completed_workpackages": 0,
+  "in_progress_workpackages": 0,
+  "not_started_workpackages": 0,
+  "workpackages": [],
+  "summary": {
+    "completion_percentage": 0,
+    "estimated_remaining_time": null,
+    "blockers": [],
+    "notes": []
+  }
+}

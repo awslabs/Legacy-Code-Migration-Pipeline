@@ -36,7 +36,7 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 ## Analysis Methodology
 
 ### Database Discovery and Inventory
-**Scope**: All database files in `[provided in task file]/input/legacy/database/`
+**Scope**: All database files in `Specified in task file`
 **File Types**: DDL files, SQL scripts, VSAM definitions, database documentation
 **Process**:
 1. Scan all database source files systematically
@@ -95,8 +95,8 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 ## Required Deliverables
 
 ### 1. Database Analysis Report
-**File**: [provided in task file]
-**Template**: [provided in task file]
+**File**: Specified in task file
+**Template**: Specified in task file
 **Content**:
 - Database inventory and architecture overview
 - Compatibility assessment for each target system
@@ -105,10 +105,10 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 - Performance considerations and optimization opportunities
 
 ### 2. Target System DDL Scripts
-**Location**: `[provided in task file]/`
+**Location**: `Specified in task file/`
 **Structure**:
 ```
-[provided in task file]/
+Specified in task file/
 ├── db2_luw/
 │   ├── schema_creation.sql
 │   ├── constraints.sql
@@ -122,10 +122,10 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 ```
 
 ### 3. Migration Scripts
-**Location**: `[provided in task file]/migration/`
+**Location**: `Specified in task file`
 **Structure**:
 ```
-[provided in task file]/migration/
+Specified in task file/migration/
 ├── db2_luw/
 │   ├── data_migration.sql
 │   ├── type_conversion.sql
@@ -139,7 +139,7 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 ```
 
 ### 4. Compatibility Assessment
-**Location**: `[provided in task file]/compatibility/`
+**Location**: `Specified in task file`
 **Files**:
 - `db2_luw_compatibility.json`: Detailed compatibility analysis for DB2 LUW
 - `postgresql_compatibility.json`: Detailed compatibility analysis for PostgreSQL
@@ -147,7 +147,7 @@ You are the Database Analyst Agent in a multi-agent legacy migration system. You
 - `migration_effort_assessment.md`: Effort estimation for each target
 
 ### 5. Database Analyzer Tool
-**File**: [provided in task file]
+**File**: Specified in task file
 **Requirements**:
 - Python tool performing complete database analysis
 - Reusable for similar database migration projects

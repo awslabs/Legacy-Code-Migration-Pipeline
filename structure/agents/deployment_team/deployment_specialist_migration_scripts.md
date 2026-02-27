@@ -41,16 +41,16 @@ All input file paths and requirements are provided through task files created by
 Refer to your assigned task file for specific input locations and requirements.
 
 ### Required Analysis Inputs
-- **Database Analysis Report**: [provided in task file]
-- **Database Migration Scripts**: `[provided in task file]/migration/`
-- **Target System DDL Scripts**: `[provided in task file]/`
-- **Database Analyzer Tool**: [provided in task file]
+- **Database Analysis Report**: Specified in task file
+- **Database Migration Scripts**: Specified in task file
+- **Target System DDL Scripts**: Specified in task file
+- **Database Analyzer Tool**: Specified in task file
 
 ### Required Development Inputs
-- **Generated Application Code**: `[provided in task file]/output/development/code/`
-- **Data Model Specifications**: [provided in task file]
-- **API Specifications**: [provided in task file]
-- **Test Data Requirements**: [provided in task file]
+- **Generated Application Code**: Specified in task file
+- **Data Model Specifications**: Specified in task file
+- **API Specifications**: Specified in task file
+- **Test Data Requirements**: Specified in task file
 
 ## Expected Deliverables
 
@@ -65,7 +65,7 @@ Typical deliverables for this agent role are described in the task file provided
 Refer to your assigned task file for specific deliverable locations and detailed requirements.
 
 ### 1. Enhanced Database Migration Scripts
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Production-ready database migration scripts with comprehensive error handling
 **Format**: SQL scripts with detailed documentation and execution procedures
 **Requirements**:
@@ -75,7 +75,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Migration progress tracking and checkpoint procedures
 
 ### 2. Data Validation Scripts
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Comprehensive data validation and integrity checking scripts
 **Format**: SQL and procedural scripts with validation reporting
 **Requirements**:
@@ -85,7 +85,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Data reconciliation and comparison scripts
 
 ### 3. Migration Rollback Scripts
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Complete rollback procedures for safe migration recovery
 **Format**: SQL scripts with detailed rollback procedures and documentation
 **Requirements**:
@@ -95,7 +95,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Rollback validation and verification scripts
 
 ### 4. Migration Monitoring Tools
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Tools for monitoring migration progress and detecting issues
 **Format**: Scripts and utilities with comprehensive monitoring capabilities
 **Requirements**:
@@ -105,7 +105,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Migration metrics collection and analysis tools
 
 ### 5. Migration Execution Guide
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Detailed execution procedures and operational guidance
 **Format**: Comprehensive documentation with step-by-step procedures
 **Requirements**:

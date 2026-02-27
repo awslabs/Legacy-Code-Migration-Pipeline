@@ -311,28 +311,28 @@ Create comprehensive task files for each assignment:
 
 **Business Logic Extraction Task**:
 ```
-File: [provided in phase prompt]/tasks/business_logic_extraction_specialist_task.md
+File: Task file location specified in phase prompt
 Content: Detailed requirements for extracting business rules from legacy analysis
 Focus: Business domain identification, rule extraction, process mapping
 ```
 
 **Requirements Specification Task**:
 ```
-File: [provided in phase prompt]/tasks/requirements_specification_specialist_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for converting business logic into modern specifications
 Focus: Functional requirements, API design, data modeling, traceability
 ```
 
 **Test Case Design Task**:
 ```
-File: [provided in phase prompt]/tasks/test_case_design_specialist_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for comprehensive test case definition and coverage
 Focus: Test scenarios, acceptance criteria, data requirements, coverage analysis
 ```
 
 **Review Task Files** (created after specialist completion):
 ```
-File: [provided in phase prompt]/tasks/business_[step]_review_[iteration].md
+File: Task file location specified in phase prompt
 Content: Comprehensive review requirements for step deliverables
 Quality Criteria: Completeness, accuracy, testability, traceability
 ```
@@ -365,7 +365,7 @@ You are responsible for creating task files that combine:
 - `business_logic_extraction_review_task.md` - For Business Logic Reviewer (iteration 1)
 - `business_logic_extraction_remediation_task.md` - For remediation after review feedback
 
-**Location**: All task files MUST be created in the task files directory specified in the phase prompt (typically `[provided in phase prompt]/tasks/`)
+**Location**: All task files MUST be created in the task files directory specified in the phase prompt
 
 ### Task File Structure Template
 
@@ -516,7 +516,7 @@ If you encounter issues, report to: business_team_supervisor
 **From Project Context, Include:**
 1. **Project Name**: From phase prompt
 2. **Project Base Path**: From phase prompt
-3. **All Resolved Paths**: Convert [provided in phase prompt] to absolute paths
+3. **All Resolved Paths**: All paths from phase prompt
 4. **Templates Locations**: Full paths to templates
 5. **Reference Data**: Any additional context needed
 
@@ -526,11 +526,11 @@ If you encounter issues, report to: business_team_supervisor
 - **Absolute paths** (full path from root, not relative)
 - **Verified to exist** (for inputs) or creatable (for outputs)
 - **Consistent** with paths provided in phase prompt
-- **Resolved** from [provided in phase prompt] format to actual paths
+- **Resolved** to actual paths
 
 **Example Path Resolution:**
-- Phase Prompt: [Path provided in phase prompt]
-- Task File: `/absolute/path/to/project/output/business/specifications/WP-001-business-spec.md`
+- Phase Prompt: Provides all necessary paths
+- Task File: Uses paths from phase prompt
 
 ### Pre-Assignment Verification
 Before creating task files and assigning tasks, verify:
@@ -557,7 +557,7 @@ Before creating task files and assigning tasks, verify:
    - Extract success criteria
 
 3. **Resolve All Paths**
-   - Convert [provided in phase prompt] to absolute paths
+   - Use absolute paths from phase prompt
    - Verify input paths exist
    - Verify output directories are creatable
    - Verify template paths exist
@@ -1112,7 +1112,7 @@ Before delegating to reviewer, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `[provided in phase prompt]/output/business/progress/business_team_status.json`
+**File**: Progress tracking file location specified in phase prompt
 **Update Frequency**: After each major milestone (specialist completion, review outcome, remediation completion)
 **Content**: 
 - Individual agent progress (specialists and reviewers)

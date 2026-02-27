@@ -1,0 +1,13 @@
+{
+  "errors": [
+    {
+      "timestamp": "ISO8601",
+      "type": "string (MISSING_BUSINESS_SPEC|MISSING_TEST_CASES|MISSING_DB_SCHEMA|INCOMPLETE_TARGET_SPEC|AMBIGUOUS_REQUIREMENT|MISSING_DEPENDENCY|LAYERING_CONFLICT|API_DESIGN_ERROR|VALIDATION_ERROR)",
+      "workpackage_id": "string (e.g., WP-001)",
+      "section": "string (optional - which section of the technical design)",
+      "message": "string",
+      "resolution": "string",
+      "severity": "string (CRITICAL|WARNING|INFO)"
+    }
+  ]
+}

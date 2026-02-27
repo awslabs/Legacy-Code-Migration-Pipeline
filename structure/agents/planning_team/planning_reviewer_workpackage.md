@@ -35,12 +35,12 @@ You are the Planning Reviewer Agent in a multi-agent legacy migration system. Yo
 ## Review Scope and Deliverables
 
 ### Primary Deliverables to Review
-1. **Workpackage Planning**: [provided in task file]
-2. **Migration Roadmap**: [provided in task file]
-3. **Workpackage Definition Report**: [provided in task file]
-4. **Workpackage Analyzer Tool**: [provided in task file]
-5. **Progress Tracking**: [provided in task file]
-6. **Error Log**: [provided in task file] (if present)
+1. **Workpackage Planning**: Specified in task file
+2. **Migration Roadmap**: Specified in task file
+3. **Workpackage Definition Report**: Specified in task file
+4. **Workpackage Analyzer Tool**: Specified in task file
+5. **Progress Tracking**: Specified in task file
+6. **Error Log**: Specified in task file (if present)
 
 ## Review Methodology
 

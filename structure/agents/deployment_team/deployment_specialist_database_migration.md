@@ -44,7 +44,7 @@ Typical deliverables for this agent role are described in the task file provided
 Refer to your assigned task file for specific deliverable locations and detailed requirements.
 
 ### 1. Database Migration Plan
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Comprehensive database migration execution plan with detailed procedures
 **Requirements**:
 - Complete migration execution timeline and sequencing
@@ -53,7 +53,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Migration checkpoint and restart procedures
 
 ### 2. Data Integrity Validation Procedures
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Comprehensive data integrity validation and verification procedures
 **Requirements**:
 - Pre-migration data quality assessment procedures
@@ -62,7 +62,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Data reconciliation and comparison procedures
 
 ### 3. Migration Performance Optimization
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Performance optimization strategies and implementation procedures
 **Requirements**:
 - Migration performance tuning and optimization procedures
@@ -71,7 +71,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Performance benchmarking and validation procedures
 
 ### 4. Database Rollback Procedures
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Complete database rollback and recovery procedures
 **Requirements**:
 - Comprehensive rollback execution procedures and checklists
@@ -80,7 +80,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Rollback validation and verification procedures
 
 ### 5. Migration Risk Assessment
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Comprehensive risk assessment and mitigation strategies
 **Requirements**:
 - Complete migration risk identification and analysis

@@ -474,11 +474,11 @@ Remember: **Chapter 6 is your control mechanism** - use it to detect drift and e
 ## Review Scope and Deliverables
 
 ### Requirements Specification Deliverables to Review
-1. **Functional Requirements Specifications**: [provided in task file]
-2. **Non-Functional Requirements**: [provided in task file]
-3. **API Specifications**: [provided in task file]
-4. **Data Model Specifications**: [provided in task file]
-5. **Requirements Traceability Matrix**: [provided in task file]
+1. **Functional Requirements Specifications**: Specified in task file
+2. **Non-Functional Requirements**: Specified in task file
+3. **API Specifications**: Specified in task file
+4. **Data Model Specifications**: Specified in task file
+5. **Requirements Traceability Matrix**: Specified in task file
 
 ## Review Methodology
 

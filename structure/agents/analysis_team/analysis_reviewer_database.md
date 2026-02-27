@@ -35,11 +35,11 @@ You are the Database Analysis Reviewer Agent in a multi-agent legacy migration s
 ## Review Scope and Deliverables
 
 ### Database Analysis Deliverables to Review
-1. **Database Analysis Report**: [provided in task file]
-2. **Target System DDL Scripts**: `[provided in task file]/`
-3. **Migration Scripts**: `[provided in task file]/migration/`
-4. **Compatibility Assessment**: `[provided in task file]/compatibility/`
-5. **Database Analyzer Tool**: [provided in task file]
+1. **Database Analysis Report**: Specified in task file
+2. **Target System DDL Scripts**: `Specified in task file/`
+3. **Migration Scripts**: `Specified in task file`
+4. **Compatibility Assessment**: `Specified in task file`
+5. **Database Analyzer Tool**: Specified in task file
 6. **Progress Tracking** - Database analysis progress and status
 
 ## Review Methodology

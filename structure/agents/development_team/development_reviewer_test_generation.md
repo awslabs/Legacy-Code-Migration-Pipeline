@@ -35,11 +35,11 @@ You are the Test Generation Reviewer Agent in a multi-agent legacy migration sys
 ## Review Scope and Deliverables
 
 ### Test Implementation Deliverables to Review
-1. **Unit Test Suites**: `[provided in task file]/output/development/tests/unit/`
-2. **Integration Test Suites**: `[provided in task file]/output/development/tests/integration/`
-3. **End-to-End Test Suites**: `[provided in task file]/output/development/tests/e2e/`
-4. **Test Data Generators**: `[provided in task file]/output/development/tests/data/`
-5. **Test Automation Scripts**: `[provided in task file]/output/development/tests/automation/`
+1. **Unit Test Suites**: `Specified in task file`
+2. **Integration Test Suites**: `Specified in task file`
+3. **End-to-End Test Suites**: `Specified in task file`
+4. **Test Data Generators**: `Specified in task file`
+5. **Test Automation Scripts**: `Specified in task file`
 
 ## Review Methodology
 

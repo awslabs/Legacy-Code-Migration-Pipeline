@@ -421,7 +421,7 @@ Typical deliverables for this agent role are described in the task file provided
 Refer to your assigned task file for specific deliverable locations and detailed requirements.
 
 ### 1. Business Logic Inventory
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Comprehensive catalog of all identified business rules and logic patterns
 **Format**: JSON with structured business rule definitions
 **Requirements**:
@@ -431,7 +431,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Traceability links to source code modules and database entities
 
 ### 2. Business Rules Extraction
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Detailed extraction of business rules with implementation context
 **Format**: Structured markdown with rule definitions and examples
 **Requirements**:
@@ -441,7 +441,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Dependencies between related business rules
 
 ### 3. Domain Model Specifications
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Comprehensive domain models derived from legacy system analysis
 **Format**: UML-style domain models with detailed entity definitions
 **Requirements**:
@@ -451,7 +451,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Data flow and interaction patterns
 
 ### 4. Business Process Mappings
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: End-to-end business process flows extracted from legacy implementations
 **Format**: Process flow diagrams with detailed step descriptions
 **Requirements**:
@@ -461,7 +461,7 @@ Refer to your assigned task file for specific deliverable locations and detailed
 - Error handling and exception processes
 
 ### 5. Business Logic Extractor Tool
-**File**: [provided in task file]
+**File**: Specified in task file
 **Content**: Reusable tool for business logic extraction from similar legacy systems
 **Format**: Python script with comprehensive documentation
 **Requirements**:

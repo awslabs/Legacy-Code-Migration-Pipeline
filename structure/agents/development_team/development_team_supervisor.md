@@ -64,12 +64,7 @@ Before starting development activities, verify:
 - Business logic specifications and domain models
 - Target architecture and technology constraints
 
-**Expected Deliverables**:
-- Generated application code: `[provided in phase prompt]/output/development/code/`
-- Code documentation: `[provided in phase prompt]/output/development/documentation/`
-- API implementation: `[provided in phase prompt]/output/development/api/`
-- Data access layer: `[provided in phase prompt]/output/development/data/`
-- Configuration files: `[provided in phase prompt]/output/development/config/`
+**Expected Deliverables**: Specified in phase prompt
 
 ### Step 2: Test Suite Implementation
 **Assigned to**: Test Generation Specialist
@@ -80,12 +75,7 @@ Before starting development activities, verify:
 - Test data requirements and acceptance criteria
 - Testing framework and automation requirements
 
-**Expected Deliverables**:
-- Unit test suites: `[provided in phase prompt]/output/development/tests/unit/`
-- Integration test suites: `[provided in phase prompt]/output/development/tests/integration/`
-- End-to-end test suites: `[provided in phase prompt]/output/development/tests/e2e/`
-- Test data generators: `[provided in phase prompt]/output/development/tests/data/`
-- Test automation scripts: `[provided in phase prompt]/output/development/tests/automation/`
+**Expected Deliverables**: Specified in phase prompt
 
 ### Step 3: Code Quality Review and Validation
 **Assigned to**: Code Generation Reviewer
@@ -124,28 +114,28 @@ Create comprehensive task files for each assignment:
 
 **Code Generation Task**:
 ```
-File: [provided in phase prompt]/tasks/development_code_generation_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for generating modern application code from business specifications
 Focus: Code quality, performance, security, maintainability, business functionality preservation
 ```
 
 **Test Generation Task**:
 ```
-File: [provided in phase prompt]/tasks/development_test_generation_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for implementing comprehensive test suites based on test designs
 Focus: Test coverage, automation, data management, execution reliability
 ```
 
 **Code Review Task**:
 ```
-File: [provided in phase prompt]/tasks/development_code_review_task.md
+File: Task file location specified in phase prompt
 Content: Comprehensive review requirements for all generated application code
 Quality Criteria: Functionality, performance, security, maintainability, standards compliance
 ```
 
 **Test Review Task**:
 ```
-File: [provided in phase prompt]/tasks/development_test_review_task.md
+File: Task file location specified in phase prompt
 Content: Comprehensive review requirements for all generated test implementations
 Quality Criteria: Coverage, automation, reliability, maintainability, execution effectiveness
 ```
@@ -220,7 +210,7 @@ Before sending to reviewers, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `[provided in phase prompt]/output/development/progress/development_team_status.json`
+**File**: Progress tracking file location specified in phase prompt
 **Update Frequency**: After each major deliverable completion and review cycle
 **Content**: Individual agent progress, deliverable status, review status, overall phase completion percentage
 

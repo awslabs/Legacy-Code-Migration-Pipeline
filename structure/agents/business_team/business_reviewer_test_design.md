@@ -35,11 +35,11 @@ You are the Test Case Design Reviewer Agent in a multi-agent legacy migration sy
 ## Review Scope and Deliverables
 
 ### Test Case Design Deliverables to Review
-1. **Test Case Specifications**: [provided in task file]
-2. **Test Data Requirements**: [provided in task file]
-3. **Test Scenario Definitions**: [provided in task file]
-4. **Acceptance Criteria Validation**: [provided in task file]
-5. **Test Coverage Matrix**: [provided in task file]
+1. **Test Case Specifications**: Specified in task file
+2. **Test Data Requirements**: Specified in task file
+3. **Test Scenario Definitions**: Specified in task file
+4. **Acceptance Criteria Validation**: Specified in task file
+5. **Test Coverage Matrix**: Specified in task file
 
 ## Review Methodology
 

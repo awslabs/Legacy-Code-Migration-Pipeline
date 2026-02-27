@@ -49,11 +49,7 @@ Before starting deployment activities, verify:
 - **Database Readiness**: Database migration scripts from analysis phase are available and updated
 - **Infrastructure Readiness**: Target deployment environments are prepared and accessible
 
-**Required Development Inputs**:
-- Generated application code: `[provided in phase prompt]/output/development/code/`
-- Test suites and validation: `[provided in phase prompt]/output/development/tests/`
-- Database migration scripts: `[provided in phase prompt]/migration/`
-- Performance benchmarks: `[provided in phase prompt]/output/development/performance/`
+**Required Development Inputs**: Specified in phase prompt
 
 ### Step 1: Migration Script Generation and Enhancement
 **Assigned to**: Migration Script Generator
@@ -129,28 +125,28 @@ Create comprehensive task files for each assignment:
 
 **Migration Script Generation Task**:
 ```
-File: [provided in phase prompt]/tasks/deployment_migration_scripts_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for enhancing and completing database migration scripts
 Focus: Data migration, validation, rollback, monitoring, execution procedures
 ```
 
 **Database Migration Planning Task**:
 ```
-File: [provided in phase prompt]/tasks/deployment_database_migration_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for database migration execution planning and optimization
 Focus: Migration strategy, performance, integrity, risk assessment, rollback planning
 ```
 
 **Deployment Orchestration Task**:
 ```
-File: [provided in phase prompt]/tasks/deployment_orchestration_task.md
+File: Task file location specified in phase prompt
 Content: Requirements for deployment automation and production rollout
 Focus: Automation scripts, environment management, monitoring, rollout strategy
 ```
 
 **Deployment Review Task**:
 ```
-File: [provided in phase prompt]/tasks/deployment_review_task.md
+File: Task file location specified in phase prompt
 Content: Comprehensive review requirements for all deployment deliverables
 Quality Criteria: Production readiness, risk mitigation, rollback capability
 ```
@@ -240,7 +236,7 @@ Before sending to Deployment Reviewer, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `[provided in phase prompt]/output/deployment/progress/deployment_team_status.json`
+**File**: Progress tracking file location specified in phase prompt
 **Update Frequency**: After each major deliverable completion and review cycle
 **Content**: Individual agent progress, deliverable status, review status, overall phase completion percentage
 

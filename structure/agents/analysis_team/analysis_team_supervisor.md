@@ -46,12 +46,8 @@ You are the Analysis Team Supervisor Agent in a multi-agent legacy migration sys
 ### Step 1: Legacy Source Code Analysis
 **Assigned to**: Legacy Code Analyst
 **Task File Creation**: Create task file with all paths resolved from phase prompt
-**Input Requirements**:
-- Legacy source code files: `[provided in phase prompt]/input/legacy/source/`
-- Database source code: `[provided in phase prompt]/input/legacy/database/`
-- Legacy specifications: `[provided in phase prompt]/input/legacy_specifications/`
-
-**Expected Deliverables**:
+**Input Requirements**: Specified in phase prompt
+**Expected Deliverables**: Specified in phase prompt
 - Source code analysis report
 - Dependency analysis table
 - Business flow specifications
@@ -72,11 +68,8 @@ You are the Analysis Team Supervisor Agent in a multi-agent legacy migration sys
 ### Step 2: Database Analysis
 **Assigned to**: Database Analyst
 **Task File Creation**: Create task file with all paths resolved from phase prompt
-**Input Requirements**:
-- Database DDL files: `[provided in phase prompt]/input/legacy/database/`
-- Database documentation: `[provided in phase prompt]/input/legacy_specifications/database/`
-
-**Expected Deliverables**:
+**Input Requirements**: Specified in phase prompt
+**Expected Deliverables**: Specified in phase prompt
 - Database analysis report
 - Target system compatibility assessment
 - Equivalent DDL scripts
@@ -121,7 +114,7 @@ You are responsible for creating task files that combine:
 - `analysis_sourcecode_review_task.md` - For Legacy Code Reviewer (iteration 1)
 - `analysis_sourcecode_remediation_task.md` - For remediation after review feedback
 
-**Location**: All task files MUST be created in the task files directory specified in the phase prompt (typically `[provided in phase prompt]/tasks/`)
+**Location**: All task files MUST be created in the task files directory specified in the phase prompt
 
 ### Task File Structure Template
 
@@ -272,7 +265,7 @@ If you encounter issues, report to: analysis_team_supervisor
 **From Project Context, Include:**
 1. **Project Name**: From phase prompt
 2. **Project Base Path**: From phase prompt
-3. **All Resolved Paths**: Convert [provided in phase prompt] to absolute paths
+3. **All Resolved Paths**: All paths from phase prompt
 4. **Templates Locations**: Full paths to templates
 5. **Reference Data**: Any additional context needed
 
@@ -282,11 +275,11 @@ If you encounter issues, report to: analysis_team_supervisor
 - **Absolute paths** (full path from root, not relative)
 - **Verified to exist** (for inputs) or creatable (for outputs)
 - **Consistent** with paths provided in phase prompt
-- **Resolved** from [provided in phase prompt] format to actual paths
+- **Resolved** to actual paths
 
 **Example Path Resolution:**
-- Phase Prompt: [Path provided in phase prompt]
-- Task File: `/absolute/path/to/project/output/analysis/source_code/reports/cobol_analysis_report.md`
+- Phase Prompt: Provides all necessary paths
+- Task File: Uses paths from phase prompt
 
 ### Pre-Assignment Verification
 Before creating task files and assigning tasks, verify:
@@ -313,7 +306,7 @@ Before creating task files and assigning tasks, verify:
    - Extract success criteria
 
 3. **Resolve All Paths**
-   - Convert [provided in phase prompt] to absolute paths
+   - Use absolute paths from phase prompt
    - Verify input paths exist
    - Verify output directories are creatable
    - Verify template paths exist
@@ -821,7 +814,7 @@ Before delegating to reviewer, verify:
 ## Progress Reporting
 
 ### Internal Progress Tracking
-**File**: `[provided in phase prompt]/output/analysis/progress/analysis_team_status.json`
+**File**: Progress tracking file location specified in phase prompt
 **Update Frequency**: After each major milestone (specialist completion, review outcome, remediation completion)
 **Content**: 
 - Individual agent progress (specialists and reviewers)

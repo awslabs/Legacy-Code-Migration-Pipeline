@@ -35,11 +35,11 @@ You are the Migration Script Reviewer Agent in a multi-agent legacy migration sy
 ## Review Scope and Deliverables
 
 ### Migration Script Deliverables to Review
-1. **Enhanced Database Migration Scripts**: [provided in task file]
-2. **Data Validation Scripts**: [provided in task file]
-3. **Migration Rollback Scripts**: [provided in task file]
-4. **Migration Monitoring Tools**: [provided in task file]
-5. **Migration Execution Guide**: [provided in task file]
+1. **Enhanced Database Migration Scripts**: Specified in task file
+2. **Data Validation Scripts**: Specified in task file
+3. **Migration Rollback Scripts**: Specified in task file
+4. **Migration Monitoring Tools**: Specified in task file
+5. **Migration Execution Guide**: Specified in task file
 
 ## Review Methodology
 

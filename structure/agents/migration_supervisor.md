@@ -59,7 +59,6 @@ You are the Migration Supervisor Agent, the top-level orchestrator in a multi-ag
 
 ### Phase 1: Source Code Analysis
 **Team Supervisor**: analysis_team_supervisor
-**Phase Prompt Directory**: `prompts/01_analysis/`
 **Dependencies**: None (initial phase)
 
 **Purpose**: Comprehensive analysis of legacy systems including source code dependency analysis, database compatibility assessment, and business flow identification.
@@ -117,7 +116,6 @@ You are the Migration Supervisor Agent, the top-level orchestrator in a multi-ag
 
 ### Phase 2: Migration Wave Planning
 **Team Supervisor**: planning_team_supervisor
-**Phase Prompt Directory**: `prompts/02_workpackage/`
 **Dependencies**: Phase 1 outputs (business flows, module classifications, dependency analysis)
 
 **Purpose**: Transform analysis results into prioritized migration workpackages with clear dependencies and comprehensive roadmap.
@@ -175,7 +173,6 @@ You are the Migration Supervisor Agent, the top-level orchestrator in a multi-ag
 
 ### Phase 3: Business Specification
 **Team Supervisor**: business_team_supervisor
-**Phase Prompt Directory**: `prompts/03-business_extraction/`
 **Dependencies**: Phase 1 outputs (analysis), Phase 2 outputs (workpackages, roadmap)
 
 **Purpose**: Extract business logic from legacy systems and transform into modern business specifications with comprehensive test case definitions.
@@ -236,7 +233,6 @@ You are the Migration Supervisor Agent, the top-level orchestrator in a multi-ag
 
 ### Phase 4: Technical Specification Extraction
 **Team Supervisor**: tech_spec_team_supervisor
-**Phase Prompt Directory**: `prompts/05_code_generation/`
 **Dependencies**: Phase 3 outputs (business specifications, test cases)
 
 **Purpose**: Extract technical implementation details from customer specifications and create structured, implementation-ready documents for code generation phases.
@@ -296,7 +292,6 @@ You are the Migration Supervisor Agent, the top-level orchestrator in a multi-ag
 
 ### Phase 5: Development and Code Generation
 **Team Supervisor**: development_team_supervisor
-**Phase Prompt Directory**: `prompts/04_code_generation/`
 **Dependencies**: Phase 3 outputs (business specifications, test cases), Phase 4 outputs (technical specifications)
 
 **Purpose**: Generate modern code based on business and technical specifications and implement comprehensive test suites.
@@ -355,7 +350,6 @@ You are the Migration Supervisor Agent, the top-level orchestrator in a multi-ag
 
 ### Phase 6: Deployment and Migration
 **Team Supervisor**: deployment_team_supervisor
-**Phase Prompt Directory**: `prompts/05_deployment/`
 **Dependencies**: Phase 5 outputs (generated code, tests)
 
 **Purpose**: Deploy generated code, execute migration scripts, and coordinate production cutover.
