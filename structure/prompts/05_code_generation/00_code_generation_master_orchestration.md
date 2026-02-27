@@ -182,10 +182,11 @@ WORKPACKAGE_LOOP:
                 - workpackage_name: current_workpackage.name
             
             INPUTS:
-                - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/backend-tech-spec.md
-                - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
+                - Technical implementation guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+                - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
                 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
                 - Target specification: {{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md
+                - Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
                 - Sample code: {{TARGET_SAMPLE_CODE}}/backend/
             
             EXPECTED_OUTPUTS:
@@ -220,8 +221,8 @@ WORKPACKAGE_LOOP:
                 - workpackage_name: current_workpackage.name
             
             INPUTS:
-                - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/frontend-tech-spec.md
-                - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
+                - Technical implementation guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+                - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
                 - Backend API: {{CODE_GENERATION_BACKEND_OUTPUT}}/wp-{ID}/
                 - Target specification: {{TARGET_SPECIFICATION}}/01-FRONTEND-SPECIFICATION.md
                 - Sample code: {{TARGET_SAMPLE_CODE}}/frontend/
@@ -259,10 +260,11 @@ WORKPACKAGE_LOOP:
                 - workpackage_name: current_workpackage.name
             
             INPUTS:
-                - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/batch-tech-spec.md
-                - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md
+                - Technical implementation guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+                - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
                 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
                 - Target specification: {{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md
+                - Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
                 - Sample code: {{TARGET_SAMPLE_CODE}}/batch/
             
             EXPECTED_OUTPUTS:
@@ -849,8 +851,10 @@ Prompts = {{PROMPTS_BASE_PATH}}
 Workpackage Planning = {{WORKPACKAGE_PLANNING}}
 Business Specification = {{BUSINESS_SPECIFICATION_BASE_PATH}}
 Test Case Generation = {{TEST_CASE_GENERATION_BASE_PATH}}
+Technical Implementation Guides = {{TECH_SPEC_BASE_PATH}}
 Target Specification = {{TARGET_SPECIFICATION}}
 Target Sample Code = {{TARGET_SAMPLE_CODE}}
+Database Schemas = {{DATABASE_GEN_SRC}} (check for `new_sqlite_ddl.sql` and `new_sqlite_migration.sql`)
 ```
 
 ### Output Paths

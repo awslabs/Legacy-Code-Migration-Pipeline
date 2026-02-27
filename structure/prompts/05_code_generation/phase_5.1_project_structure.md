@@ -42,10 +42,12 @@
 ## Context
 
 ### Input Locations
-- **Backend Tech Spec**: `{{TECH_SPEC_BACKEND}}`
-- **Frontend Tech Spec**: `{{TECH_SPEC_FRONTEND}}`
-- **Batch Tech Spec**: `{{TECH_SPEC_BATCH}}`
-- **Infrastructure Tech Spec**: `{{TECH_SPEC_INFRASTRUCTURE}}`
+- **Technical Implementation Guides**: `{{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md`
+- **Target Backend Spec**: `{{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md`
+- **Target Frontend Spec**: `{{TARGET_SPECIFICATION}}/01-FRONTEND-SPECIFICATION.md`
+- **Target Batch Spec**: `{{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md`
+- **Target Common Spec**: `{{TARGET_SPECIFICATION}}/00-COMMON-SPECIFICATION.md`
+- **Sample Code**: `{{TARGET_SAMPLE_CODE}}/`
 
 ### Output Locations
 - **Backend project**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/`
@@ -73,12 +75,13 @@ Create ONLY the bare skeleton project structure for backend, frontend, and batch
 
 ### 1. Backend Project Skeleton
 
-1. **Read the Backend Tech Spec** at `{{TECH_SPEC_BACKEND}}`
+1. **Read the Target Backend Specification** at `{{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md`
 
 2. **Extract key information**:
-   - Section 1: Technology Stack (framework, language, build tool, database)
-   - Section 3: Dependencies (what to include in build file)
-   - Section 4: Configuration (application.yml structure)
+   - Technology Stack (framework, language, build tool, database)
+   - Dependencies (what to include in build file)
+   - Configuration (application.yml structure)
+   - Project structure pattern
 
 3. **Create the skeleton**:
    - Create ROOT directory structure only:
@@ -95,9 +98,9 @@ Create ONLY the bare skeleton project structure for backend, frontend, and batch
      │   └── test/
      │       └── java/
      ```
-   - Create build file with ALL dependencies from Section 3
+   - Create build file with ALL dependencies from target spec
    - Create Application.java with @SpringBootApplication (or equivalent main class)
-   - Create application.yml with base configuration from Section 4
+   - Create application.yml with base configuration from target spec
    - **DO NOT create**: Business module directories, domain packages, entities, repositories, services, controllers
 
 4. **Verify**:
@@ -107,7 +110,7 @@ Create ONLY the bare skeleton project structure for backend, frontend, and batch
 
 ### 2. Frontend Project Skeleton
 
-1. **Read the Frontend Tech Spec** at `{{TECH_SPEC_FRONTEND}}`
+1. **Read the Target Frontend Specification** at `{{TARGET_SPECIFICATION}}/01-FRONTEND-SPECIFICATION.md`
 
 2. **Extract key information**:
    - Section 1: Technology Stack (framework, language, build tool)
@@ -139,7 +142,7 @@ Create ONLY the bare skeleton project structure for backend, frontend, and batch
 
 ### 3. Batch Project Skeleton
 
-1. **Read the Batch Tech Spec** at `{{TECH_SPEC_BATCH}}`
+1. **Read the Target Batch Specification** at `{{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md`
 
 2. **Extract key information**:
    - Section 1: Technology Stack (framework, language, build tool)

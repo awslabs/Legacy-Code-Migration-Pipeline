@@ -43,8 +43,9 @@
 - **Workpackage Name**: [Name from workpackage planning]
 
 ### Input Locations
-- **Migration Mapping Spec**: `{{TECH_SPEC_MIGRATION_MAPPING}}`
-- **Batch Tech Spec**: `{{TECH_SPEC_BATCH}}`
+- **Technical Implementation Guide**: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+- **Target Specifications**: `{{TARGET_SPECIFICATION}}/` (batch specs)
+- **Database Schemas**: `{{DATABASE_GEN_SRC}}/` (generated database schemas)
 - **Business Specification**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
 - **Existing Project**: `{{CODE_GENERATION_BATCH_OUTPUT}}/` (skeleton from Phase 5.1)
 
@@ -77,24 +78,34 @@ Implement ONE workpackage as a batch module in the existing batch project struct
 
 ### 1. Read Specifications
 
-1. **Read Migration Mapping** at `{{TECH_SPEC_MIGRATION_MAPPING}}`
-   - Section 1.2: Data Persistence (how to read/write data)
-   - Section 2.{WP-ID}.4: Data Model (what entities to process)
-   - Section 2.{WP-ID}.2: Business Logic (what transformations to apply)
+1. **Read Technical Implementation Guide** at `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+   - Section 1: Overview (workpackage context and scope)
+   - Section 2: Backend Implementation (may include batch-related entities)
+   - Section 3: Data Model (database schema, relationships)
+   - Section 5: Business Logic (rules, validations, transformations for batch)
+   - Section 6: Integration Points (dependencies on other workpackages)
+   - Section 8: Batch Processing (if applicable - job definitions, scheduling)
+   - Section 9: Implementation Tasks (step-by-step guidance)
 
-2. **Read Batch Tech Spec** at `{{TECH_SPEC_BATCH}}`
-   - Section 2: Project Structure (module layout, package structure)
-   - Section 4: Naming Conventions (how to name jobs, steps, classes)
-   - Section 5: Code Organization (where jobs, readers, writers go)
+2. **Read Target Batch Specification** at `{{TARGET_SPECIFICATION}}/batch/`
+   - Project structure patterns
+   - Batch framework and patterns
+   - Job configuration standards
+   - Scheduling approach
 
-3. **Read Business Specification** at `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
+3. **Read Database Schemas** at `{{DATABASE_GEN_SRC}}/`
+   - Entity definitions and relationships (from `new_sqlite_ddl.sql` if available)
+   - Table structures for batch processing
+   - Indexes and performance considerations
+
+4. **Read Business Specification** at `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
    - Chapter 2: Business Entities (what data to process)
    - Chapter 3: Business Rules (what transformations to apply)
    - Chapter 4: Business Operations (what batch processes to create)
 
 ### 2. Determine Module Structure
 
-Based on Batch Tech Spec Section 2, determine the module structure:
+Based on Technical Implementation Guide Section 8 and Target Batch Specification, determine the module structure:
 
 **CRITICAL - Module Naming Decision**:
 
@@ -170,9 +181,9 @@ batch/
 
 2. **Create module build file**: `pom.xml` or `build.gradle` in module directory
    - Add module dependencies (shared-common, spring-boot-starter-batch, etc.)
-   - Follow dependency patterns from Batch Tech Spec Section 3
+   - Follow dependency patterns from Technical Implementation Guide Section 8
 
-3. **Create package structure** according to Batch Tech Spec Section 2:
+3. **Create package structure** according to Technical Implementation Guide Section 8:
    - `config/` - Job and step configurations
    - `job/[wp-feature]/` - Job definitions for this WP
    - `reader/[wp-feature]/` - ItemReader implementations for this WP
@@ -225,9 +236,9 @@ user-batch/
 
 ### 4. Implement Job Configuration
 
-From Business Specification Chapter 4 (Batch Operations):
+From Technical Implementation Guide Section 8 and Business Specification:
 
-1. **Read job configuration patterns from Batch Tech Spec**:
+1. **Read job configuration patterns from Technical Implementation Guide and Target Batch Specification**:
    - How to define job configurations
    - How to define step configurations
    - How to wire readers, processors, writers
@@ -254,9 +265,9 @@ From Business Specification Chapter 4 (Batch Operations):
 
 ### 5. Implement ItemReader
 
-From Migration Mapping Section 1.2 (Data Persistence) and Section 2.{WP-ID}.4:
+From Technical Implementation Guide Section 8 and Database Schemas:
 
-1. **Read reader patterns from Batch Tech Spec**:
+1. **Read reader patterns from Technical Implementation Guide and Target Batch Specification**:
    - How to create reader classes
    - How to read from file, database, or API
    - How to parse/map input data
@@ -264,10 +275,11 @@ From Migration Mapping Section 1.2 (Data Persistence) and Section 2.{WP-ID}.4:
    - Where to place reader classes (package structure)
 
 2. **Read data source information**:
-   - Migration Mapping Section 2.{WP-ID}.4: Data model and sources
+   - Technical Implementation Guide Section 3: Data model and sources
+   - Database Schemas at `{{DATABASE_GEN_SRC}}/`: Entity definitions (check for `new_sqlite_ddl.sql`)
    - Business Specification: Input data format and location
 
-3. **Create reader class** following the tech spec patterns:
+3. **Create reader class** following the implementation guide patterns:
    - Place in the location specified by tech spec
    - Read from source as specified
    - Parse/map input data as specified
@@ -286,9 +298,9 @@ From Migration Mapping Section 1.2 (Data Persistence) and Section 2.{WP-ID}.4:
 
 ### 6. Implement ItemProcessor
 
-From Business Specification Chapter 3 (Business Rules):
+From Technical Implementation Guide Section 5 and Business Specification:
 
-1. **Read processor patterns from Batch Tech Spec**:
+1. **Read processor patterns from Technical Implementation Guide and Target Batch Specification**:
    - How to create processor classes
    - How to apply business logic
    - How to transform data
@@ -297,10 +309,10 @@ From Business Specification Chapter 3 (Business Rules):
    - Where to place processor classes (package structure)
 
 2. **Read business rules**:
+   - Technical Implementation Guide Section 5: Business logic implementation guidance
    - Business Specification Chapter 3: Business rules to apply
-   - Migration Mapping Section 2.{WP-ID}.2: Business logic preservation
 
-3. **Create processor class** following the tech spec patterns:
+3. **Create processor class** following the implementation guide patterns:
    - Place in the location specified by tech spec
    - Apply business logic as specified
    - Transform data as specified
@@ -321,9 +333,9 @@ From Business Specification Chapter 3 (Business Rules):
 
 ### 7. Implement ItemWriter
 
-From Migration Mapping Section 1.2 (Data Persistence):
+From Technical Implementation Guide Section 8 and Database Schemas:
 
-1. **Read writer patterns from Batch Tech Spec**:
+1. **Read writer patterns from Technical Implementation Guide and Target Batch Specification**:
    - How to create writer classes
    - How to write to database, file, or API
    - How to handle batch inserts
@@ -352,7 +364,7 @@ From Migration Mapping Section 1.2 (Data Persistence):
 
 For monitoring and logging:
 
-1. **Read listener patterns from Batch Tech Spec**:
+1. **Read listener patterns from Technical Implementation Guide and Target Batch Specification**:
    - How to create listener classes
    - What listener interfaces to implement
    - Where to place listener classes (package structure)
@@ -374,9 +386,9 @@ For monitoring and logging:
 
 ### 9. Handle Scheduling
 
-From Batch Tech Spec Section 6 (Scheduling):
+From Technical Implementation Guide Section 8 and Target Batch Specification:
 
-1. **Read scheduling patterns from Batch Tech Spec**:
+1. **Read scheduling patterns from Technical Implementation Guide and Target Batch Specification**:
    - How to configure job scheduling
    - What scheduling mechanism to use
    - Where to place scheduler configuration
@@ -404,7 +416,7 @@ If code is needed by multiple batch workpackages:
    - Common listeners
    - Common utilities
 
-2. **Read shared code patterns from Batch Tech Spec**:
+2. **Read shared code patterns from Technical Implementation Guide and Target Batch Specification**:
    - Where to place shared code (shared-common module, base package, etc.)
    - How to organize shared code
 

@@ -43,8 +43,9 @@
 - **Workpackage Name**: [Name from workpackage planning]
 
 ### Input Locations
-- **Migration Mapping Spec**: `{{TECH_SPEC_MIGRATION_MAPPING}}`
-- **Backend Tech Spec**: `{{TECH_SPEC_BACKEND}}`
+- **Technical Implementation Guide**: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+- **Target Specifications**: `{{TARGET_SPECIFICATION}}/` (backend, frontend, batch specs)
+- **Database Schemas**: `{{DATABASE_GEN_SRC}}/` (generated database schemas)
 - **Business Specification**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
 - **Existing Project**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/` (skeleton from Phase 5.1)
 
@@ -77,23 +78,34 @@ Implement ONE workpackage as a module in the existing backend project structure.
 
 ### 1. Read Specifications
 
-1. **Read Migration Mapping** at `{{TECH_SPEC_MIGRATION_MAPPING}}`
-   - Section 1: Cross-Cutting Patterns (authentication, persistence, API design, etc.)
-   - Section 2.{WP-ID}: Workpackage-Specific Mapping (entities, APIs, business logic)
+1. **Read Technical Implementation Guide** at `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+   - Section 1: Overview (workpackage context and scope)
+   - Section 2: Backend Implementation (entities, services, controllers, patterns)
+   - Section 3: Data Model (database schema, relationships)
+   - Section 4: API Design (endpoints, DTOs, security)
+   - Section 5: Business Logic (rules, validations, transformations)
+   - Section 6: Integration Points (dependencies on other workpackages)
+   - Section 9: Implementation Tasks (step-by-step guidance)
 
-2. **Read Backend Tech Spec** at `{{TECH_SPEC_BACKEND}}`
-   - Section 2: Project Structure (module layout, package structure)
-   - Section 4: Naming Conventions (how to name classes, packages, methods)
-   - Section 5: Code Organization (where entities, services, controllers go)
+2. **Read Target Backend Specification** at `{{TARGET_SPECIFICATION}}/backend/`
+   - Project structure patterns
+   - Technology stack and frameworks
+   - Coding standards and conventions
+   - Architecture patterns
 
-3. **Read Business Specification** at `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
+3. **Read Database Schemas** at `{{DATABASE_GEN_SRC}}/`
+   - Entity definitions and relationships (from `new_sqlite_ddl.sql` if available)
+   - Table structures and constraints
+   - Indexes and performance considerations
+
+4. **Read Business Specification** at `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
    - Chapter 2: Business Entities (what domain objects to create)
    - Chapter 3: Business Rules (what logic to implement)
    - Chapter 4: Business Operations (what endpoints/services to create)
 
 ### 2. Determine Module Structure
 
-Based on Backend Tech Spec Section 2, determine the module structure:
+Based on Technical Implementation Guide Section 2 and Target Backend Specification, determine the module structure:
 
 **CRITICAL - Module Naming Decision**:
 
@@ -123,9 +135,9 @@ Based on Backend Tech Spec Section 2, determine the module structure:
 
 2. **Create module build file**: `pom.xml` or `build.gradle` in module directory
    - Add module dependencies (shared-common, spring-boot-starter-web, etc.)
-   - Follow dependency patterns from Backend Tech Spec Section 3
+   - Follow dependency patterns from Technical Implementation Guide Section 2
 
-3. **Create package structure** according to Backend Tech Spec Section 2:
+3. **Create package structure** according to Technical Implementation Guide Section 2:
    - `api/` - Public interfaces and DTOs
    - `domain/[wp-feature]/` - Entities and domain logic for this WP
    - `data/` - Repositories
@@ -193,9 +205,9 @@ user-module/
 
 2. **Create module build file**: `pom.xml` or `build.gradle` in module directory
    - Add module dependencies (shared-common, spring-boot-starter-web, etc.)
-   - Follow dependency patterns from Backend Tech Spec Section 3
+   - Follow dependency patterns from Technical Implementation Guide Section 2
 
-3. **Create package structure** according to Backend Tech Spec Section 2:
+3. **Create package structure** according to Technical Implementation Guide Section 2:
    - `api/` - Public interfaces and DTOs
    - `domain/` - Entities and domain logic
    - `data/` - Repositories
@@ -206,21 +218,22 @@ user-module/
 
 ### 4. Implement Business Entities
 
-From Business Specification Chapter 2 and Migration Mapping Section 2.{WP-ID}.4:
+From Technical Implementation Guide Section 2 and Section 3:
 
 1. **Read entity definitions**:
+   - Technical Implementation Guide Section 2: Backend entity implementation guidance
+   - Technical Implementation Guide Section 3: Data model and relationships
+   - Database Schemas at `{{DATABASE_GEN_SRC}}/`: Generated entity definitions (check for `new_sqlite_ddl.sql`)
    - Business Specification Chapter 2: Business entities and their attributes
-   - Migration Mapping Section 2.{WP-ID}.4: Data model mapping (legacy → modern)
-   - Migration Mapping Section 1.2: Data persistence patterns
 
-2. **Read implementation guidance from Backend Tech Spec**:
+2. **Read implementation guidance from Target Backend Specification**:
    - How to define entities (annotations, base classes, etc.)
    - How to map attributes (types, constraints, etc.)
    - How to define relationships (one-to-many, many-to-one, etc.)
    - How to add validation (validation framework, rules, etc.)
    - Where to place entity classes (package structure)
 
-3. **Create entity classes** following the tech spec patterns:
+3. **Create entity classes** following the implementation guide patterns:
    - Place in the package specified by tech spec
    - Use the entity definition approach from tech spec
    - Map all attributes from business specification
@@ -236,9 +249,9 @@ From Business Specification Chapter 2 and Migration Mapping Section 2.{WP-ID}.4:
 
 ### 5. Implement Repositories
 
-From Migration Mapping Section 1.2 (Data Persistence):
+From Technical Implementation Guide Section 2 and Section 3:
 
-1. **Read repository patterns from Backend Tech Spec**:
+1. **Read repository patterns from Technical Implementation Guide and Target Backend Specification**:
    - How to create repository classes/interfaces
    - What base classes or interfaces to extend
    - How to define query methods
@@ -260,9 +273,9 @@ From Migration Mapping Section 1.2 (Data Persistence):
 
 ### 6. Implement Services
 
-From Business Specification Chapter 3 (Business Rules) and Chapter 4 (Operations):
+From Technical Implementation Guide Section 5 and Business Specification:
 
-1. **Read service patterns from Backend Tech Spec**:
+1. **Read service patterns from Technical Implementation Guide and Target Backend Specification**:
    - How to create service classes
    - How to implement business logic
    - How to enforce business rules
@@ -271,12 +284,11 @@ From Business Specification Chapter 3 (Business Rules) and Chapter 4 (Operations
    - Where to place service classes (package structure)
 
 2. **Read business logic from specifications**:
+   - Technical Implementation Guide Section 5: Business logic implementation guidance
    - Business Specification Chapter 3: Business rules to enforce
    - Business Specification Chapter 4: Operations to implement
-   - Migration Mapping Section 2.{WP-ID}.2: Business logic preservation
-   - Migration Mapping Section 2.{WP-ID}.5: Service layer design
 
-3. **Create service classes** following the tech spec patterns:
+3. **Create service classes** following the implementation guide patterns:
    - Place in the package specified by tech spec
    - Implement business logic as specified
    - Enforce business rules as specified
@@ -295,9 +307,9 @@ From Business Specification Chapter 3 (Business Rules) and Chapter 4 (Operations
 
 ### 7. Implement Controllers
 
-From Migration Mapping Section 2.{WP-ID}.3 (API Design):
+From Technical Implementation Guide Section 4:
 
-1. **Read controller patterns from Backend Tech Spec**:
+1. **Read controller patterns from Technical Implementation Guide and Target Backend Specification**:
    - How to create controller classes
    - How to define API endpoints
    - How to add security/authorization
@@ -305,11 +317,12 @@ From Migration Mapping Section 2.{WP-ID}.3 (API Design):
    - How to handle request/response mapping
    - Where to place controller classes (package structure)
 
-2. **Read API design from Migration Mapping**:
-   - Section 2.{WP-ID}.3: Exact endpoints, DTOs, security requirements
-   - Section 1.4: API design patterns (URL structure, HTTP methods, status codes)
+2. **Read API design from Technical Implementation Guide**:
+   - Section 4: API Design (exact endpoints, DTOs, security requirements)
+   - URL structure, HTTP methods, status codes
+   - Request/response formats
 
-3. **Create controller classes** following the tech spec patterns:
+3. **Create controller classes** following the implementation guide patterns:
    - Place in the package specified by tech spec
    - Define REST endpoints as specified in migration mapping
    - Add security as specified in tech spec
@@ -327,17 +340,17 @@ From Migration Mapping Section 2.{WP-ID}.3 (API Design):
 
 ### 8. Implement DTOs and Mappers
 
-1. **Read DTO patterns from Backend Tech Spec**:
+1. **Read DTO patterns from Technical Implementation Guide and Target Backend Specification**:
    - How to create DTOs (request/response objects)
    - Where to place DTOs (package structure)
    - How to add validation to DTOs
    - How to create mappers (entity ↔ DTO conversion)
 
-2. **Read data structures from Migration Mapping**:
-   - Section 2.{WP-ID}.3: API Design (request/response structures)
-   - Section 2.{WP-ID}.4: Data Model (entity structures)
+2. **Read data structures from Technical Implementation Guide**:
+   - Section 4: API Design (request/response structures)
+   - Section 3: Data Model (entity structures)
 
-3. **Create DTOs** following the tech spec patterns:
+3. **Create DTOs** following the implementation guide patterns:
    - Request DTOs (for incoming data)
    - Response DTOs (for outgoing data)
    - Add validation as specified in tech spec
@@ -348,14 +361,13 @@ From Migration Mapping Section 2.{WP-ID}.3 (API Design):
 
 ### 9. Handle External Service Integration
 
-From Migration Mapping Section 1.1 (Authentication) and other external services:
+From Technical Implementation Guide Section 6 and Section 7:
 
-1. **Identify external services** from Migration Mapping Section 1:
-   - Section 1.1: Authentication & Authorization (OAuth2, LDAP, etc.)
-   - Section 1.7: Logging & Monitoring (external logging services)
-   - Other sections mentioning external services
+1. **Identify external services** from Technical Implementation Guide:
+   - Section 6: Integration Points (dependencies on other workpackages)
+   - Section 7: External Dependencies (OAuth2, logging, messaging, etc.)
 
-2. **Read integration patterns from Backend Tech Spec**:
+2. **Read integration patterns from Target Backend Specification**:
    - How to configure external service clients
    - How to add security configuration
    - Where to place configuration classes
@@ -381,7 +393,7 @@ If code is needed by multiple workpackages:
    - Utility classes
    - Common DTOs
 
-2. **Read shared code patterns from Backend Tech Spec**:
+2. **Read shared code patterns from Technical Implementation Guide and Target Backend Specification**:
    - Where to place shared code (shared-common module, base package, etc.)
    - How to organize shared code
 

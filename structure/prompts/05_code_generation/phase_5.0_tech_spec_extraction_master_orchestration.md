@@ -49,7 +49,7 @@ Phase 4 (Test Case Generation) → Phase 5.0 (Technical Specification Extraction
 - Phase 2 outputs: Workpackage planning
 - Input specifications: `{{TARGET_SPECIFICATION}}/`
 - Sample code: `{{TARGET_SAMPLE_CODE}}/`
-- Database schemas: `{{DATABASE_GEN_SRC}}/`
+- Database schemas: `{{DATABASE_GEN_SRC}}/` (check for `new_sqlite_ddl.sql` and `new_sqlite_migration.sql`)
 
 **Outputs**:
 - Technical implementation guide per workpackage: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
@@ -81,7 +81,7 @@ WORKPACKAGE_LOOP:
             - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
             - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
             - Target specifications: {{TARGET_SPECIFICATION}}/
-            - Database schemas: {{DATABASE_GEN_SRC}}/
+            - Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
             - Sample code: {{TARGET_SAMPLE_CODE}}/
             - Workpackage planning: {{WORKPACKAGE_PLANNING}}
             - Previously created guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md

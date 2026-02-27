@@ -43,8 +43,8 @@
 - **Workpackage Name**: [Name from workpackage planning]
 
 ### Input Locations
-- **Migration Mapping Spec**: `{{TECH_SPEC_MIGRATION_MAPPING}}`
-- **Frontend Tech Spec**: `{{TECH_SPEC_FRONTEND}}`
+- **Technical Implementation Guide**: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+- **Target Specifications**: `{{TARGET_SPECIFICATION}}/` (frontend specs)
 - **Business Specification**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
 - **Backend API**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/` (for API integration)
 - **Existing Project**: `{{CODE_GENERATION_FRONTEND_OUTPUT}}/` (skeleton from Phase 5.1)
@@ -78,15 +78,18 @@ Implement ONE workpackage as a feature module in the existing frontend project s
 
 ### 1. Read Specifications
 
-1. **Read Migration Mapping** at `{{TECH_SPEC_MIGRATION_MAPPING}}`
-   - Section 1.4: API Design (endpoints to call)
-   - Section 2.{WP-ID}.3: API Design (specific endpoints for this WP)
-   - Section 3.2: Frontend Code Generation Guidance
+1. **Read Technical Implementation Guide** at `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
+   - Section 1: Overview (workpackage context and scope)
+   - Section 3: Frontend Implementation (components, pages, state management)
+   - Section 4: API Design (endpoints to call, request/response formats)
+   - Section 6: Integration Points (dependencies on other workpackages)
+   - Section 9: Implementation Tasks (step-by-step guidance)
 
-2. **Read Frontend Tech Spec** at `{{TECH_SPEC_FRONTEND}}`
-   - Section 2: Project Structure (feature module layout)
-   - Section 4: Naming Conventions (how to name components, files)
-   - Section 5: Code Organization (where components, pages, services go)
+2. **Read Target Frontend Specification** at `{{TARGET_SPECIFICATION}}/frontend/`
+   - Project structure patterns
+   - Technology stack and frameworks
+   - Component patterns and conventions
+   - State management approach
 
 3. **Read Business Specification** at `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification.md`
    - Chapter 2: Business Entities (what data to display/manage)
@@ -95,7 +98,7 @@ Implement ONE workpackage as a feature module in the existing frontend project s
 
 ### 2. Determine Feature Module Structure
 
-Based on Frontend Tech Spec Section 2, determine the feature structure:
+Based on Technical Implementation Guide Section 3 and Target Frontend Specification, determine the feature structure:
 
 **CRITICAL - Feature Naming Decision**:
 
@@ -214,19 +217,19 @@ features/users/
 
 ### 4. Implement TypeScript Types
 
-From Business Specification Chapter 2 and Migration Mapping Section 2.{WP-ID}.3:
+From Technical Implementation Guide Section 3 and Section 4:
 
-1. **Read type definition patterns from Frontend Tech Spec**:
+1. **Read type definition patterns from Technical Implementation Guide and Target Frontend Specification**:
    - How to define types/interfaces
    - Where to place type definitions (package/folder structure)
    - Naming conventions for types
 
 2. **Read data structures**:
+   - Technical Implementation Guide Section 4: API Design (request/response structures)
    - Business Specification Chapter 2: Business entities and attributes
-   - Migration Mapping Section 2.{WP-ID}.3: API Design (request/response structures)
    - Backend DTOs (to match backend API)
 
-3. **Create type definitions** following the tech spec patterns:
+3. **Create type definitions** following the implementation guide patterns:
    - Place in the location specified by tech spec
    - Match backend DTOs
    - Define request/response types
@@ -241,20 +244,20 @@ From Business Specification Chapter 2 and Migration Mapping Section 2.{WP-ID}.3:
 
 ### 5. Implement API Services
 
-From Migration Mapping Section 2.{WP-ID}.3 (API endpoints):
+From Technical Implementation Guide Section 4:
 
-1. **Read API service patterns from Frontend Tech Spec**:
+1. **Read API service patterns from Technical Implementation Guide and Target Frontend Specification**:
    - How to create service classes
    - What HTTP client to use
    - How to handle request/response mapping
    - How to handle errors
    - Where to place service classes (folder structure)
 
-2. **Read API endpoints from Migration Mapping**:
-   - Section 2.{WP-ID}.3: Exact endpoints, methods, request/response formats
-   - Section 1.4: API design patterns
+2. **Read API endpoints from Technical Implementation Guide**:
+   - Section 4: Exact endpoints, methods, request/response formats
+   - URL structure, HTTP methods, headers
 
-3. **Create service classes** following the tech spec patterns:
+3. **Create service classes** following the implementation guide patterns:
    - Place in the location specified by tech spec
    - One service per entity or domain area
    - Use HTTP client from tech spec
@@ -271,9 +274,9 @@ From Migration Mapping Section 2.{WP-ID}.3 (API endpoints):
 
 ### 6. Implement State Management
 
-From Frontend Tech Spec Section 6 (State Management):
+From Technical Implementation Guide Section 3 and Target Frontend Specification:
 
-1. **Read state management patterns from Frontend Tech Spec**:
+1. **Read state management patterns from Technical Implementation Guide and Target Frontend Specification**:
    - What state management library to use (if any)
    - How to define state shape
    - How to define actions/mutations
@@ -296,9 +299,9 @@ From Frontend Tech Spec Section 6 (State Management):
 
 ### 7. Implement Components
 
-From Business Specification Chapter 4 (Operations) and Chapter 5 (Processes):
+From Technical Implementation Guide Section 3 and Business Specification:
 
-1. **Read component patterns from Frontend Tech Spec**:
+1. **Read component patterns from Technical Implementation Guide and Target Frontend Specification**:
    - How to create components
    - Component structure and organization
    - How to handle props/inputs
@@ -327,9 +330,9 @@ From Business Specification Chapter 4 (Operations) and Chapter 5 (Processes):
 
 ### 8. Implement Pages
 
-From Business Specification Chapter 5 (Business Processes):
+From Technical Implementation Guide Section 3 and Business Specification:
 
-1. **Read page patterns from Frontend Tech Spec**:
+1. **Read page patterns from Technical Implementation Guide and Target Frontend Specification**:
    - How to create page components
    - How to connect to state management
    - How to handle routing
@@ -355,7 +358,7 @@ From Business Specification Chapter 5 (Business Processes):
 
 ### 9. Handle Routing
 
-1. **Read routing patterns from Frontend Tech Spec**:
+1. **Read routing patterns from Technical Implementation Guide and Target Frontend Specification**:
    - How routing is configured
    - Where routing configuration is located
    - How to add authentication guards
@@ -383,7 +386,7 @@ If code is needed by multiple workpackages:
    - Common utilities
    - Common types
 
-2. **Read shared code patterns from Frontend Tech Spec**:
+2. **Read shared code patterns from Technical Implementation Guide and Target Frontend Specification**:
    - Where to place shared code (shared folder, base folder, etc.)
    - How to organize shared code
 

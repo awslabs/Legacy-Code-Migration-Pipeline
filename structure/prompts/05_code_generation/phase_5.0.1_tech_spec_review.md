@@ -38,7 +38,7 @@
 - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
 - Target specifications: {{TARGET_SPECIFICATION}}/
-- Database schemas: {{DATABASE_GEN_SRC}}/
+- Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
 - Workpackage planning: {{WORKPACKAGE_PLANNING}}
 - Previously approved guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
 

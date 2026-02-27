@@ -38,7 +38,7 @@
   - 01-FRONTEND-SPECIFICATION.md
   - 02-BACKEND-SPECIFICATION.md
   - 03-BATCH-SPECIFICATION.md
-- Database schemas: {{DATABASE_GEN_SRC}}/
+- Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql` and `new_sqlite_migration.sql`)
 - Sample code: {{TARGET_SAMPLE_CODE}}/
 - Workpackage planning: {{WORKPACKAGE_PLANNING}}
 - Database analysis: {{DATABASE_ANALYSIS_OUTPUT}}/
