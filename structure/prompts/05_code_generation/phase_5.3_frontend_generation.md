@@ -229,18 +229,83 @@ From Technical Implementation Guide Section 3 and Section 4:
    - Business Specification Chapter 2: Business entities and attributes
    - Backend DTOs (to match backend API)
 
-3. **Create type definitions** following the implementation guide patterns:
+3. **CRITICAL - Verify API Contract Alignment**:
+   
+   **Before creating frontend types, verify they match the backend API response**:
+   
+   a. **Check Backend DTO Field Names**:
+      - Read the backend DTO classes in `/Users/kerimman/carddemo_migration/output/gen_src/backend/src/main/java/com/carddemo/[domain]/web/dto/`
+      - Note the exact field names (e.g., `transactionAmount` vs `amount`)
+      - Note the exact nested object field names (e.g., `merchant.merchantId` vs `merchant.id`)
+   
+   b. **Test API Response Structure** (if backend is running):
+      - Make a sample API call to verify actual response structure
+      - Compare response field names with backend DTO
+      - Document any discrepancies
+   
+   c. **Ensure Exact Field Name Match**:
+      ```typescript
+      // ✅ CORRECT - Matches backend DTO field names exactly
+      export interface TransactionDetailResponse {
+        transactionId: string;              // Backend: getTransactionId()
+        transactionAmount: number;          // Backend: getTransactionAmount()
+        transactionTypeCode: string;        // Backend: getTransactionTypeCode()
+        merchant: {
+          merchantId: string;               // Backend: getMerchantId()
+          merchantName: string;             // Backend: getMerchantName()
+        };
+      }
+      
+      // ❌ WRONG - Field names don't match backend
+      export interface TransactionDetailResponse {
+        transactionId: string;
+        amount: number;                     // Backend has transactionAmount
+        typeCode: string;                   // Backend has transactionTypeCode
+        merchant: {
+          id: string;                       // Backend has merchantId
+          name: string;                     // Backend has merchantName
+        };
+      }
+      ```
+   
+   d. **Add Verification Comment**:
+      ```typescript
+      /**
+       * Transaction Detail Response
+       * 
+       * VERIFIED: Field names match backend DTO
+       * Backend: com.carddemo.transaction.web.dto.TransactionDetailResponse
+       * Last verified: [Date]
+       * 
+       * @workpackage WP-003: Transaction Display
+       */
+      export interface TransactionDetailResponse {
+        // ...
+      }
+      ```
+
+4. **Create type definitions** following the implementation guide patterns:
    - Place in the location specified by tech spec
-   - Match backend DTOs
+   - Match backend DTOs EXACTLY (field names, nesting structure, types)
    - Define request/response types
    - Define component prop types
 
-4. **Add TODOs for relationships with other workpackages**:
+5. **Add TODOs for relationships with other workpackages**:
    ```
    // Example (syntax will vary by language):
    // TODO: [WP-002] Add accounts relationship when accounts feature is implemented
    // accounts?: Account[];
    ```
+
+**API Contract Verification Checklist**:
+- [ ] Backend DTO classes reviewed for exact field names
+- [ ] Frontend types match backend field names exactly
+- [ ] Nested object field names match (e.g., merchant.merchantId)
+- [ ] Array field names match
+- [ ] Optional fields marked correctly (? in TypeScript)
+- [ ] Date/timestamp field names match
+- [ ] Enum field names match
+- [ ] Verification comment added to type definition
 
 ### 5. Implement API Services
 

@@ -8,42 +8,38 @@
 **Step**: Step 5.6 - Integration Testing & Deployment Validation
 **Team Supervisor**: development_team_supervisor
 **Assigned Agent**: development_specialist_test_generation
-**Task File Name**: {{TASKS_BASE_PATH}}/phase_5.6_integration_testing_and_fixes.md
+**Task File Name**: {{TASKS_BASE_PATH}}/phase_5.6_integration_validation.md
 
 ### Expected Deliverables
 
-1. **Database Seed Data**
-   - Location: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/resources/data/`
-   - Description: Test users, sample transactions, reference data with correct formats
-   - Includes: SQL scripts, data fixtures, enum mappings
+1. **Database Seed Data Script**
+   - Location: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/resources/data/seed-data.sql`
+   - Description: SQL script to create test users and sample data
+   - Includes: Test users with correct password hashes, sample transactions, reference data
 
-2. **Integration Test Suite**
-   - Location: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/`
-   - Description: End-to-end tests validating full stack integration
-   - Includes: Login flows, workpackage flows, API tests, database tests
+2. **Integration Test Report**
+   - Location: `{{CODE_GENERATION_BASE_PATH}}/INTEGRATION-TEST-REPORT.md`
+   - Description: Results of integration testing for all workpackages
+   - Includes: Test results, issues found, fixes applied
 
-3. **Deployment Validation**
-   - Location: `{{CODE_GENERATION_BASE_PATH}}/deployment/`
-   - Description: Startup scripts, migration scripts, configuration validation
-   - Includes: Database migrations, environment configs, startup verification
+3. **Deployment Guide**
+   - Location: `{{CODE_GENERATION_BASE_PATH}}/DEPLOYMENT.md`
+   - Description: Step-by-step deployment instructions
+   - Includes: Prerequisites, startup commands, test credentials, troubleshooting
 
-4. **Integration Fixes**
-   - Location: Throughout codebase
-   - Description: Fixes for enum converters, SQL keywords, CORS/CSRF, validation rules
-   - Includes: Code corrections, configuration updates
-
-5. **Documentation**
-   - Location: `{{CODE_GENERATION_BASE_PATH}}/docs/`
-   - Description: Deployment guide, test credentials, troubleshooting guide
-   - Includes: Setup instructions, common issues, test user list
+4. **Issue Fixes**
+   - Location: Various files in `{{CODE_GENERATION_BACKEND_OUTPUT}}/`
+   - Description: Code fixes for integration issues discovered during testing
+   - Includes: Enum converters, security config, SQL fixes, validation adjustments
 
 ### Success Criteria
-- [ ] Database seed data created with valid formats
-- [ ] All user flows tested end-to-end
-- [ ] Integration issues identified and fixed
-- [ ] Deployment scripts validated
-- [ ] Documentation complete
-- [ ] System ready for deployment
+- [ ] Database seed data created and tested
+- [ ] All workpackages tested end-to-end with real database
+- [ ] Login works with test users
+- [ ] All CRUD operations work
+- [ ] Frontend can call backend APIs
+- [ ] Integration issues documented and fixed
+- [ ] Deployment guide complete with test credentials
 
 ---
 
@@ -52,685 +48,538 @@
 ### Input Locations
 - **Generated Backend Code**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/`
 - **Generated Frontend Code**: `{{CODE_GENERATION_FRONTEND_OUTPUT}}/`
-- **Database Schemas**: `{{DATABASE_GEN_SRC}}/` (check for `new_sqlite_ddl.sql`)
-- **Technical Specifications**: `{{TECH_SPEC_BASE_PATH}}/specs/`
-- **Business Specifications**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/`
-- **Target Specifications**: `{{TARGET_SPECIFICATION}}/`
+- **Database Schema**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/resources/db/migration/`
+- **Technical Specs**: `{{TECH_SPEC_BASE_PATH}}/`
+- **Business Specs**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/`
+- **Test Specs**: `{{TEST_CASE_GENERATION_BASE_PATH}}/`
 
 ### Output Locations
-- **Seed data**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/resources/data/`
-- **Integration tests**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/`
-- **Deployment scripts**: `{{CODE_GENERATION_BASE_PATH}}/deployment/`
-- **Documentation**: `{{CODE_GENERATION_BASE_PATH}}/docs/`
-- **Progress tracking**: `{{CODE_GENERATION_STATUS}}`
+- **Seed Data**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/resources/data/seed-data.sql`
+- **Test Report**: `{{CODE_GENERATION_BASE_PATH}}/INTEGRATION-TEST-REPORT.md`
+- **Deployment Guide**: `{{CODE_GENERATION_BASE_PATH}}/DEPLOYMENT.md`
+- **Fixed Code**: Various locations in backend/frontend
 
 ---
 
 ## Objective
 
-Validate full stack integration (Database → Backend → Frontend), create comprehensive seed data for testing, test all user flows end-to-end, fix integration issues, and prepare the system for deployment.
+Validate that all generated code works together as an integrated system. Test with real database, real HTTP requests, and real user flows. Fix any integration issues discovered. Create deployment documentation and seed data for testing.
 
-**CRITICAL**: This phase focuses on integration, not unit tests. Test real database connections, actual API calls, and complete user workflows.
+**This phase bridges the gap between unit tests (which pass) and production deployment (which may fail due to integration issues).**
 
 ---
 
 ## Instructions
 
-### 1. Create Database Seed Data
+### 1. Analyze Generated Code
 
-#### 1.1 Analyze Database Schema
+1. **Review all workpackages implemented**:
+   - Check `{{CODE_GENERATION_STATUS}}`
+   - List all workpackages with status "completed"
+   - Note which have backend, frontend, and tests
 
-1. **Read database schema** at `{{DATABASE_GEN_SRC}}/new_sqlite_ddl.sql`:
-   - Table structures and constraints
-   - Enum/code tables and valid values
-   - Foreign key relationships
-   - Required vs optional fields
+2. **Identify potential integration issues**:
+   - **Enum mappings**: Check if entities use `@Enumerated(EnumType.STRING)` with code-based enums
+   - **SQL keywords**: Check for table names like `transaction`, `user`, `order`, `group`
+   - **Security config**: Check if CSRF is disabled for REST APIs
+   - **Password handling**: Check if passwords are case-normalized before hashing
+   - **Validation rules**: Check if `@Size` constraints match actual data needs
 
-2. **Identify reference data needs**:
-   - User types and roles
-   - Status codes
-   - Transaction types
-   - Configuration values
+3. **Review database schema**:
+   - Check `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/resources/db/migration/`
+   - Note table names, column types, enum values
+   - Identify reserved keywords
 
-#### 1.2 Create Test Users
+### 2. Create Database Seed Data
 
-Create SQL script: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/resources/data/test-users.sql`
+**Create file**: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/resources/data/seed-data.sql`
 
+**Include**:
+
+1. **Test Users** (for WP-001 or authentication workpackage):
+   ```sql
+   -- Admin user: ADMIN001 / password
+   INSERT INTO user_table (user_id, first_name, last_name, password_hash, user_type, created_at, updated_at)
+   VALUES ('ADMIN001', 'Admin', 'User', '$2a$10$...', 'A', datetime('now'), datetime('now'));
+   
+   -- Regular user: USER001 / password
+   INSERT INTO user_table (user_id, first_name, last_name, password_hash, user_type, created_at, updated_at)
+   VALUES ('USER001', 'Test', 'User', '$2a$10$...', 'U', datetime('now'), datetime('now'));
+   ```
+   
+   **CRITICAL - Password Hashing**:
+   - Check authentication service to see if passwords are uppercased before hashing
+   - If yes, hash "PASSWORD" not "password"
+   - Use BCrypt with strength 10: `htpasswd -bnBC 10 '' PASSWORD`
+   - Document the password in comments
+
+2. **Sample Data** (for each entity):
+   - Create 2-3 sample records per entity
+   - Use enum values that match entity definitions
+   - Ensure foreign keys reference existing records
+   - Use realistic test data
+
+3. **Reference Data** (if applicable):
+   - Lookup tables
+   - Configuration data
+   - Static reference data
+
+**Example**:
 ```sql
--- Test Users with Correct Password Hashes
--- Password hashing must match the authentication mechanism (BCrypt, PBKDF2, etc.)
+-- ============================================
+-- Seed Data for CardDemo Application
+-- ============================================
+-- Purpose: Test data for development and integration testing
+-- Password for all users: "password" (hashed as "PASSWORD" if uppercased)
+-- ============================================
 
--- Admin User
-INSERT INTO users (user_id, username, password_hash, first_name, last_name, user_type, status, created_date)
-VALUES ('USR001', 'admin', '$2a$10$...', 'Admin', 'User', 'ADMIN', 'ACTIVE', CURRENT_TIMESTAMP);
+-- Test Users (WP-001)
+INSERT INTO aws_m2_carddemo_usrsec_vsam_ksds (sec_usr_id, sec_usr_fname, sec_usr_lname, sec_usr_pwd, sec_usr_type, created_at, updated_at)
+VALUES 
+('ADMIN001', 'Admin', 'User', '$2y$10$irACuuejTyaROdgcm80SWu21OjxI8BHNaR.7gXZ8rO/8PXJ6bnsa.', 'A', datetime('now'), datetime('now')),
+('USER001', 'Test', 'User', '$2y$10$irACuuejTyaROdgcm80SWu21OjxI8BHNaR.7gXZ8rO/8PXJ6bnsa.', 'U', datetime('now'), datetime('now'));
 
--- Regular User
-INSERT INTO users (user_id, username, password_hash, first_name, last_name, user_type, status, created_date)
-VALUES ('USR002', 'testuser', '$2a$10$...', 'Test', 'User', 'REGULAR', 'ACTIVE', CURRENT_TIMESTAMP);
-
--- TODO: Generate actual password hashes using the application's password encoder
--- Example: Use BCryptPasswordEncoder to hash "Test@123" → $2a$10$...
+-- Sample Transactions (WP-003)
+INSERT INTO "transaction" (transaction_id, card_number, type_code, category_code, source, amount, description, original_timestamp, processing_timestamp, merchant_id, merchant_name, merchant_city, merchant_zip, created_at, updated_at)
+VALUES 
+('TX0000000001', '4111111111111111', 'PU', 'FOOD', 'POS', 125.50, 'Coffee Shop', datetime('now', '-2 days'), datetime('now', '-2 days'), 'M00001', 'Starbucks', 'New York', '10001', datetime('now'), datetime('now')),
+('TX0000000002', '4111111111111111', 'PU', 'FOOD', 'POS', 89.99, 'Grocery Store', datetime('now', '-1 day'), datetime('now', '-1 day'), 'M00002', 'Whole Foods', 'Boston', '02101', datetime('now'), datetime('now'));
 ```
 
-**CRITICAL - Password Hashes**:
-- DO NOT use plain text passwords
-- Generate hashes using the same algorithm as production code
-- Document the plain text password for testing (e.g., "Test@123")
-- Include script or utility to generate hashes
+### 3. Test Database Integration
 
-#### 1.3 Create Sample Transactions
+1. **Start application with seed data**:
+   ```bash
+   cd {{CODE_GENERATION_BACKEND_OUTPUT}}
+   mvn spring-boot:run
+   ```
 
-Create SQL script: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/resources/data/sample-transactions.sql`
+2. **Check for startup errors**:
+   - SQL syntax errors (reserved keywords?)
+   - Enum mapping errors (code vs name mismatch?)
+   - Schema validation errors (constraint violations?)
+   - Bean creation errors (missing converters?)
 
-```sql
--- Sample Transactions for Testing
--- Ensure all foreign keys reference existing records
--- Ensure all enum values match database codes
+3. **If errors found, fix them**:
+   - **SQL reserved keywords**: Quote table names `@Table(name = "\"transaction\"")`
+   - **Enum mapping**: Create `@Converter` classes for code-based enums
+   - **Security**: Add SecurityFilterChain to disable CSRF for REST APIs
+   - **Validation**: Adjust `@Size` constraints to match actual data
 
-INSERT INTO accounts (account_id, user_id, account_type, balance, status, created_date)
-VALUES ('ACC001', 'USR002', 'CHECKING', 1000.00, 'ACTIVE', CURRENT_TIMESTAMP);
+### 4. Test API Endpoints
 
-INSERT INTO transactions (transaction_id, account_id, transaction_type, amount, status, transaction_date)
-VALUES ('TXN001', 'ACC001', 'DEPOSIT', 500.00, 'COMPLETED', CURRENT_TIMESTAMP);
+For each workpackage, test the main API endpoints with curl:
 
--- TODO: Add more sample data covering all workpackages
-```
-
-#### 1.4 Validate Enum Values
-
-**CRITICAL - Enum Mapping**:
-- Database may use codes (e.g., 'A' for ACTIVE, 'R' for REGULAR)
-- Application may use full names (e.g., 'ACTIVE', 'REGULAR')
-- Create enum converters to map between database codes and application enums
-
-Create enum mapping documentation: `{{CODE_GENERATION_BASE_PATH}}/docs/enum-mappings.md`
-
-```markdown
-# Enum Mappings
-
-## User Type
-- Database Code: 'R' → Application Enum: REGULAR
-- Database Code: 'A' → Application Enum: ADMIN
-
-## Status
-- Database Code: 'A' → Application Enum: ACTIVE
-- Database Code: 'I' → Application Enum: INACTIVE
-- Database Code: 'S' → Application Enum: SUSPENDED
-
-## Transaction Type
-- Database Code: 'D' → Application Enum: DEPOSIT
-- Database Code: 'W' → Application Enum: WITHDRAWAL
-- Database Code: 'T' → Application Enum: TRANSFER
-```
-
-#### 1.5 Create Data Loading Script
-
-Create script: `{{CODE_GENERATION_BASE_PATH}}/deployment/load-test-data.sh`
-
+**Example - Test Login (WP-001)**:
 ```bash
-#!/bin/bash
-# Load test data into database
-
-DB_PATH="${1:-./database/test.db}"
-
-echo "Loading test data into $DB_PATH..."
-
-sqlite3 "$DB_PATH" < src/test/resources/data/test-users.sql
-sqlite3 "$DB_PATH" < src/test/resources/data/sample-transactions.sql
-
-echo "Test data loaded successfully"
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"userId":"ADMIN001","password":"password"}'
 ```
 
-### 2. Create Integration Tests
+**Expected**: JSON response with user info and redirect URL
 
-#### 2.1 Test Login Flow (Frontend → Backend → Database)
-
-Create test: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/AuthenticationIntegrationTest.java`
-
-```java
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application-integration-test.properties")
-class AuthenticationIntegrationTest {
-    
-    @Autowired
-    private TestRestTemplate restTemplate;
-    
-    @Autowired
-    private UserRepository userRepository;
-    
-    @Test
-    @DisplayName("Integration: Complete login flow with database")
-    void loginFlow_validCredentials_authenticatesSuccessfully() {
-        // Given - User exists in database (from seed data)
-        String username = "testuser";
-        String password = "Test@123";
-        
-        // When - POST to login endpoint
-        LoginRequest request = new LoginRequest(username, password);
-        ResponseEntity<LoginResponse> response = restTemplate.postForEntity(
-            "/api/auth/login",
-            request,
-            LoginResponse.class
-        );
-        
-        // Then - Verify authentication success
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().isSuccess()).isTrue();
-        assertThat(response.getBody().getSessionId()).isNotBlank();
-        
-        // Verify user loaded from database
-        User user = userRepository.findByUsername(username).orElseThrow();
-        assertThat(user.getStatus()).isEqualTo(UserStatus.ACTIVE);
-    }
-    
-    @Test
-    @DisplayName("Integration: Login with invalid credentials fails")
-    void loginFlow_invalidCredentials_returnsUnauthorized() {
-        // Test negative case
-    }
-}
+**Example - Test Create User (WP-002)**:
+```bash
+curl -X POST http://localhost:8080/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{"userId":"TEST001","firstName":"Test","lastName":"User","password":"test1234","userType":"U"}'
 ```
 
-#### 2.2 Test Each Workpackage End-to-End
+**Expected**: JSON response with created user
 
-For each workpackage, create integration test:
-
-```java
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class WorkpackageXXXIntegrationTest {
-    
-    @Autowired
-    private TestRestTemplate restTemplate;
-    
-    @Test
-    @DisplayName("WP-XXX: Complete user flow from API to database")
-    void workpackageFlow_completeScenario_success() {
-        // 1. Authenticate
-        // 2. Execute workpackage operations
-        // 3. Verify database state
-        // 4. Verify API responses
-    }
-}
+**Example - Test Get Transaction (WP-003)**:
+```bash
+curl http://localhost:8080/api/v1/transactions/TX0000000001
 ```
 
-#### 2.3 Validate CORS/CSRF Configuration
+**Expected**: JSON response with transaction details
 
-Create test: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/SecurityConfigurationTest.java`
+**Document all test results** in integration test report.
 
-```java
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SecurityConfigurationTest {
-    
-    @Autowired
-    private TestRestTemplate restTemplate;
-    
-    @Test
-    @DisplayName("CORS: Frontend origin is allowed")
-    void corsConfiguration_frontendOrigin_isAllowed() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setOrigin("http://localhost:3000");
-        
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(
-            "/api/health",
-            HttpMethod.OPTIONS,
-            entity,
-            String.class
-        );
-        
-        assertThat(response.getHeaders().getAccessControlAllowOrigin())
-            .isEqualTo("http://localhost:3000");
-    }
-    
-    @Test
-    @DisplayName("CSRF: Token validation works correctly")
-    void csrfConfiguration_validToken_requestSucceeds() {
-        // Test CSRF token validation
-    }
-}
-```
+### 5. Test Frontend Integration
 
-#### 2.4 Test Error Handling
+1. **Start frontend**:
+   ```bash
+   cd {{CODE_GENERATION_FRONTEND_OUTPUT}}
+   npm run dev
+   ```
 
-Create test: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/ErrorHandlingIntegrationTest.java`
+2. **Test each workpackage flow**:
+  
 
-```java
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ErrorHandlingIntegrationTest {
-    
-    @Test
-    @DisplayName("Error: Invalid request returns proper error response")
-    void invalidRequest_returnsStructuredError() {
-        // Test error response format
-    }
-    
-    @Test
-    @DisplayName("Error: Database constraint violation handled gracefully")
-    void constraintViolation_returnsUserFriendlyError() {
-        // Test database error handling
-    }
-}
-```
+3. **Check browser console for errors**:
+   - CORS errors? (Add frontend origin to CORS config)
+   - 403 Forbidden? (CSRF not disabled)
+   - 401 Unauthorized? (Password hash mismatch)
+   - Network errors? (Backend not running)
 
-### 3. Fix Common Integration Issues
+### 6. Fix Integration Issues
 
-#### 3.1 Enum Converters for Database Codes
+**Common Issues and Fixes**:
 
-If database uses codes (e.g., 'A', 'R') but application uses full names:
-
-Create converter: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/java/common/converter/UserTypeConverter.java`
-
+#### Issue 1: Enum Mapping Error
+**Symptom**: `No enum constant com.example.UserType.A`
+**Cause**: Database has code 'A', enum expects name 'ADMIN'
+**Fix**: Create JPA converter
 ```java
 @Converter(autoApply = true)
 public class UserTypeConverter implements AttributeConverter<UserType, String> {
-    
     @Override
-    public String convertToDatabaseColumn(UserType attribute) {
-        if (attribute == null) return null;
-        
-        return switch (attribute) {
-            case REGULAR -> "R";
-            case ADMIN -> "A";
-            case MANAGER -> "M";
-        };
+    public String convertToDatabaseColumn(UserType userType) {
+        return userType == null ? null : String.valueOf(userType.getCode());
     }
     
     @Override
-    public UserType convertToEntityAttribute(String dbData) {
-        if (dbData == null) return null;
-        
-        return switch (dbData) {
-            case "R" -> UserType.REGULAR;
-            case "A" -> UserType.ADMIN;
-            case "M" -> UserType.MANAGER;
-            default -> throw new IllegalArgumentException("Unknown code: " + dbData);
-        };
+    public UserType convertToEntityAttribute(String code) {
+        return code == null ? null : UserType.fromCode(code.charAt(0));
     }
 }
 ```
+Update entity: `@Convert(converter = UserTypeConverter.class)`
 
-**Apply to all enum fields**:
-- User types
-- Status codes
-- Transaction types
-- Any other enums
-
-#### 3.2 Fix Reserved SQL Keywords
-
-If entity fields use SQL reserved keywords (e.g., `user`, `order`, `group`):
-
+#### Issue 2: SQL Reserved Keyword
+**Symptom**: `SQL error near "transaction"`
+**Cause**: `transaction` is reserved keyword in SQLite
+**Fix**: Quote table name in entity and migration
 ```java
-@Entity
-@Table(name = "users")  // 'user' is reserved, use 'users'
-public class User {
-    
-    @Column(name = "user_type")  // Escape if needed
-    private UserType type;
+@Table(name = "\"transaction\"")
+```
+
+#### Issue 3: CSRF Protection Blocking API
+**Symptom**: 403 Forbidden on POST requests
+**Cause**: Spring Security CSRF enabled by default
+**Fix**: Add SecurityFilterChain
+```java
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+    return http.build();
 }
 ```
 
-**Check for reserved keywords**:
-- `user`, `order`, `group`, `table`, `index`, `key`, `value`, `date`, `time`
-- Use `@Table` and `@Column` annotations to specify safe names
-
-#### 3.3 Security Configuration (CSRF, CORS)
-
-Update security config: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/java/config/SecurityConfig.java`
-
-```java
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
-    
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-            );
-        
-        return http.build();
-    }
-    
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
-        return source;
-    }
-}
-```
-
-#### 3.4 Validation Rules vs Actual Data
-
-Ensure validation rules match actual data constraints:
-
-```java
-@Entity
-public class User {
-    
-    // If database allows 50 chars, don't validate for 20
-    @Column(length = 50)
-    @Size(max = 50, message = "Username must not exceed 50 characters")
-    private String username;
-    
-    // If database requires email, add validation
-    @Column(nullable = false)
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email is required")
-    private String email;
-}
-```
-
-**Validation checklist**:
-- [ ] String lengths match database column sizes
-- [ ] Required fields have `@NotNull` or `@NotBlank`
-- [ ] Email fields have `@Email` validation
-- [ ] Numeric ranges match business rules
-- [ ] Date formats are consistent
-
-### 4. Deployment Validation
-
-#### 4.1 Verify Startup Scripts
-
-Create startup script: `{{CODE_GENERATION_BASE_PATH}}/deployment/start-backend.sh`
-
+#### Issue 4: Password Hash Mismatch
+**Symptom**: Login fails with correct password
+**Cause**: Password uppercased before hashing but seed data uses lowercase
+**Fix**: Update seed data with correct hash
 ```bash
-#!/bin/bash
-# Start backend application
-
-# Check Java version
-java -version
-
-# Check database exists
-if [ ! -f "./database/app.db" ]; then
-    echo "Database not found. Run migrations first."
-    exit 1
-fi
-
-# Start application
-java -jar target/application.jar \
-    --spring.profiles.active=production \
-    --spring.datasource.url=jdbc:sqlite:./database/app.db
-
-echo "Backend started successfully"
+htpasswd -bnBC 10 '' PASSWORD  # If uppercased
+htpasswd -bnBC 10 '' password  # If not uppercased
 ```
 
-#### 4.2 Test Database Migrations
-
-Create migration test: `{{CODE_GENERATION_BASE_PATH}}/deployment/test-migrations.sh`
-
-```bash
-#!/bin/bash
-# Test database migrations
-
-# Create test database
-TEST_DB="./database/test-migration.db"
-rm -f "$TEST_DB"
-
-# Run migrations
-sqlite3 "$TEST_DB" < src/main/resources/db/migration/V1__initial_schema.sql
-
-# Verify tables created
-TABLES=$(sqlite3 "$TEST_DB" ".tables")
-echo "Tables created: $TABLES"
-
-# Verify seed data
-sqlite3 "$TEST_DB" "SELECT COUNT(*) FROM users;"
-
-echo "Migrations tested successfully"
-```
-
-#### 4.3 Validate Environment Configuration
-
-Create config validator: `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/config/ConfigurationValidationTest.java`
-
+#### Issue 5: Validation Too Strict
+**Symptom**: Validation error "must be 16 characters" but data is 12
+**Cause**: `@Size(min=16, max=16)` doesn't match actual data
+**Fix**: Adjust validation
 ```java
-@SpringBootTest
-class ConfigurationValidationTest {
-    
-    @Autowired
-    private Environment environment;
-    
-    @Test
-    @DisplayName("Configuration: All required properties are set")
-    void requiredProperties_areConfigured() {
-        assertThat(environment.getProperty("spring.datasource.url")).isNotBlank();
-        assertThat(environment.getProperty("server.port")).isNotBlank();
-        assertThat(environment.getProperty("jwt.secret")).isNotBlank();
-    }
-    
-    @Test
-    @DisplayName("Configuration: Database connection is valid")
-    void databaseConnection_isValid() {
-        // Test database connectivity
-    }
-}
+@Size(min=1, max=16, message="Must be 1-16 characters")
 ```
 
-### 5. Create Documentation
+### 7. Create Integration Test Report
 
-#### 5.1 Deployment Guide
+**Create file**: `{{CODE_GENERATION_BASE_PATH}}/INTEGRATION-TEST-REPORT.md`
 
-Create: `{{CODE_GENERATION_BASE_PATH}}/docs/DEPLOYMENT.md`
-
+**Template**:
 ```markdown
-# Deployment Guide
+# Integration Test Report
+
+## Test Date
+[Date and time]
+
+## Workpackages Tested
+- WP-001: [Name] - ✅ PASS / ❌ FAIL
+- WP-002: [Name] - ✅ PASS / ❌ FAIL
+- WP-003: [Name] - ✅ PASS / ❌ FAIL
+
+## Test Environment
+- Database: [SQLite/PostgreSQL/etc.]
+- Backend: Spring Boot [version]
+- Frontend: React + Vite
+- Java: [version]
+- Node: [version]
+
+## Test Results
+
+### WP-001: [Workpackage Name]
+**Status**: ✅ PASS
+
+**Tests Performed**:
+1. Login with admin user - ✅ PASS
+2. Login with regular user - ✅ PASS
+3. Login with invalid credentials - ✅ PASS (correct error)
+4. Frontend redirect after login - ✅ PASS
+
+**Issues Found**: None
+
+---
+
+### WP-002: [Workpackage Name]
+**Status**: ❌ FAIL → ✅ FIXED
+
+**Tests Performed**:
+1. Create user via API - ❌ FAIL (enum mapping error)
+2. Create user via frontend - ❌ FAIL (CORS error)
+
+**Issues Found**:
+1. **Enum Mapping Error**
+   - Error: `No enum constant UserType.A`
+   - Cause: Database stores 'A', enum expects 'ADMIN'
+   - Fix: Created UserTypeConverter
+   - Status: ✅ FIXED
+
+2. **CORS Error**
+   - Error: CORS policy blocked request
+   - Cause: Frontend origin not in CORS config
+   - Fix: Added localhost:3000 to CORS allowed origins
+   - Status: ✅ FIXED
+
+**Retest Results**: ✅ ALL PASS
+
+---
+
+## Summary
+
+**Total Workpackages**: 5
+**Passed**: 5
+**Failed**: 0
+**Issues Found**: 8
+**Issues Fixed**: 8
+
+## Common Issues Fixed
+
+1. Enum converters created for UserType, TransactionTypeCode, TransactionCategoryCode
+2. SQL reserved keyword "transaction" quoted in entity and migration
+3. CSRF disabled for REST APIs
+4. CORS configured for frontend origins
+5. Password hashing corrected (uppercase before hash)
+6. Validation rules adjusted to match actual data
+7. Seed data created with correct enum values
+8. Test users created with proper password hashes
+
+## Deployment Readiness
+
+✅ All integration tests passing
+✅ Seed data created and tested
+✅ Deployment guide created
+✅ Test credentials documented
+✅ Known issues resolved
+
+**Status**: READY FOR DEPLOYMENT
+```
+
+### 8. Create Deployment Guide
+
+**Create file**: `{{CODE_GENERATION_BASE_PATH}}/DEPLOYMENT.md`
+
+**Template**:
+```markdown
+#  Application - Deployment Guide
 
 ## Prerequisites
+
 - Java 17 or higher
-- SQLite 3.x
-- Node.js 18+ (for frontend)
+- Maven 3.8+
+- Node.js 18+ and npm
+- SQLite (embedded, no installation needed)
 
-## Backend Deployment
+## Quick Start
 
-### 1. Build Application
+### 1. Start Backend
 ```bash
-mvn clean package
+cd {{CODE_GENERATION_BACKEND_OUTPUT}}
+mvn spring-boot:run
 ```
 
-### 2. Run Database Migrations
-```bash
-./deployment/test-migrations.sh
-```
+Backend will start on **http://localhost:8080**
 
-### 3. Load Test Data (Optional)
+### 2. Start Frontend
 ```bash
-./deployment/load-test-data.sh ./database/app.db
-```
+cd {{CODE_GENERATION_FRONTEND_OUTPUT}}
 
-### 4. Start Backend
-```bash
-./deployment/start-backend.sh
-```
-
-### 5. Verify Deployment
-```bash
-curl http://localhost:8080/api/health
-```
-
-## Frontend Deployment
-
-### 1. Install Dependencies
-```bash
-cd frontend
+# First time only
+cp .env.example .env
 npm install
+
+# Start dev server
+npm run dev
 ```
 
-### 2. Build Frontend
-```bash
-npm run build
-```
+Frontend will start on **http://localhost:3000**
 
-### 3. Start Frontend
-```bash
-npm start
-```
+### 3. Access Application
+
+Open browser: **http://localhost:3000**
+
+## Test Credentials
+
+### Admin User
+- **Username**: `ADMIN001`
+- **Password**: `password`
+- **Access**: All administrative functions
+
+### Regular User
+- **Username**: `USER001`
+- **Password**: `password`
+- **Access**: Standard user functions
+
+## Sample Data
+
+### Transactions
+- `TX0000000001` - Coffee Shop Purchase ($125.50)
+- `TX0000000002` - Grocery Store ($89.99)
+
+## Available Features
+
+- ✅ **Login** (WP-001) - User authentication
+- ✅ **Create User** (WP-002) - Add new users
+- ✅ **View Transaction** (WP-003) - Transaction details
+- ✅ **Delete User** (WP-004) - Remove users
+- ✅ **Update User** (WP-005) - Modify user profiles
 
 ## Troubleshooting
 
-See TROUBLESHOOTING.md for common issues and solutions.
+### Backend won't start
+
+**Port 8080 already in use**:
+```bash
+lsof -ti:8080 | xargs kill -9
 ```
 
-#### 5.2 Test User Credentials
+**Database errors**:
+- Check `backend/carddemo.db` exists
+- Delete and restart to recreate: `rm backend/carddemo.db`
 
-Create: `{{CODE_GENERATION_BASE_PATH}}/docs/TEST-USERS.md`
+### Frontend won't start
 
-```markdown
-# Test User Credentials
-
-## Admin User
-- Username: `admin`
-- Password: `Admin@123`
-- User Type: ADMIN
-- Status: ACTIVE
-
-## Regular User
-- Username: `testuser`
-- Password: `Test@123`
-- User Type: REGULAR
-- Status: ACTIVE
-
-## Inactive User (for testing)
-- Username: `inactive`
-- Password: `Test@123`
-- User Type: REGULAR
-- Status: INACTIVE
-
-**Note**: These credentials are for testing only. Change in production.
+**Port 3000 already in use**:
+```bash
+lsof -ti:3000 | xargs kill -9
 ```
 
-#### 5.3 Troubleshooting Guide
-
-Create: `{{CODE_GENERATION_BASE_PATH}}/docs/TROUBLESHOOTING.md`
-
-```markdown
-# Troubleshooting Guide
-
-## Common Issues
-
-### Issue: "Enum value not found in database"
-**Cause**: Mismatch between application enum and database codes
-**Solution**: 
-1. Check enum-mappings.md for correct mappings
-2. Verify enum converters are applied
-3. Update seed data with correct codes
-
-### Issue: "SQL syntax error near 'user'"
-**Cause**: Using SQL reserved keyword as table/column name
-**Solution**:
-1. Use `@Table(name = "users")` instead of "user"
-2. Use `@Column(name = "user_type")` with quotes if needed
-
-### Issue: "CORS policy blocked request"
-**Cause**: Frontend origin not allowed
-**Solution**:
-1. Check SecurityConfig.java CORS configuration
-2. Add frontend origin to allowed origins
-3. Restart backend
-
-### Issue: "Authentication failed with valid credentials"
-**Cause**: Password hash mismatch
-**Solution**:
-1. Verify password hashing algorithm matches
-2. Regenerate password hashes using correct encoder
-3. Update seed data with new hashes
-
-### Issue: "Validation failed: field exceeds maximum length"
-**Cause**: Validation rule stricter than database constraint
-**Solution**:
-1. Check database column size
-2. Update `@Size` annotation to match
-3. Recompile and redeploy
+**Dependencies missing**:
+```bash
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-### 6. Update Progress Tracking
+### Login fails
+
+**Check password hash**:
+- Passwords are uppercased before hashing
+- Use BCrypt strength 10
+- Verify seed data has correct hashes
+
+**Check database**:
+```bash
+sqlite3 backend/carddemo.db "SELECT * FROM aws_m2_carddemo_usrsec_vsam_ksds;"
+```
+
+### API errors
+
+**403 Forbidden**:
+- CSRF should be disabled for REST APIs
+- Check SecurityConfig
+
+**CORS errors**:
+- Frontend origin should be in CORS allowed origins
+- Check SecurityConfig corsConfigurationSource
+
+## Database
+
+**Type**: SQLite (embedded)
+**Location**: `backend/carddemo.db`
+**Migrations**: Flyway (automatic on startup)
+**Seed Data**: `backend/src/main/resources/data/seed-data.sql`
+
+## Technical Stack
+
+- **Backend**: Spring Boot 3.2.2, Java 17+
+- **Frontend**: React 18, Vite, TypeScript
+- **Database**: SQLite 3.45
+- **Security**: Spring Security, BCrypt
+- **API**: REST (JSON)
+
+## Production Deployment
+
+For production deployment:
+1. Change database to PostgreSQL/MySQL
+2. Enable CSRF for session-based auth
+3. Configure proper CORS origins
+4. Use environment variables for secrets
+5. Enable HTTPS
+6. Configure logging
+7. Set up monitoring
+
+## Support
+
+For issues, check:
+1. Backend logs: `backend/backend.log`
+2. Frontend console: Browser DevTools (F12)
+3. Database: `sqlite3 backend/carddemo.db`
+```
+
+### 9. Final Validation
+
+**Run through complete user journey**:
+
+1. ✅ Start backend and frontend
+2. ✅ Login as ADMIN001
+3. ✅ Navigate to admin menu
+4. ✅ Create new user
+5. ✅ Update user
+6. ✅ View transaction
+7. ✅ Delete user
+8. ✅ Logout
+9. ✅ Login as USER001
+10. ✅ Navigate to main menu
+11. ✅ View transaction
+12. ✅ Logout
+
+**All steps should work without errors.**
+
+### 10. Update Progress Tracking
 
 Update `{{CODE_GENERATION_STATUS}}`:
 
 ```json
 {
   "phase": "Phase 5 - Code Generation",
-  "currentStep": "5.6 - Integration Testing & Deployment Validation",
-  "integration_testing": {
+  "currentStep": "5.6 - Integration Testing",
+  "status": "completed",
+  "integrationTesting": {
     "status": "completed",
-    "seed_data_created": true,
-    "integration_tests_count": 15,
-    "issues_fixed": 8,
-    "deployment_validated": true,
-    "documentation_complete": true,
-    "completion_date": "2026-03-01T14:30:00Z"
+    "testDate": "[timestamp]",
+    "workpackagesTested": 5,
+    "issuesFound": 8,
+    "issuesFixed": 8,
+    "deploymentReady": true
   }
 }
 ```
 
 ---
 
-## Verification Checklist
+## Quality Checklist
 
-Before marking complete:
-
-### Database & Seed Data
-- [ ] Test users created with correct password hashes
-- [ ] Sample transactions created with valid data
-- [ ] Enum values match database codes
-- [ ] Foreign key relationships are valid
-- [ ] Data loading script works
-
-### Integration Tests
-- [ ] Login flow tested end-to-end
-- [ ] Each workpackage flow tested
-- [ ] CORS configuration validated
-- [ ] CSRF configuration validated
-- [ ] Error handling tested
-- [ ] All integration tests pass
-
-### Integration Fixes
-- [ ] Enum converters created and applied
-- [ ] SQL reserved keywords fixed
-- [ ] Security configuration updated
-- [ ] Validation rules match database constraints
-- [ ] No compilation errors
-- [ ] No runtime errors
-
-### Deployment
-- [ ] Startup scripts work
-- [ ] Database migrations tested
-- [ ] Environment configuration validated
-- [ ] Application starts successfully
-- [ ] Health check endpoint responds
-
-### Documentation
+- [ ] Seed data script created and tested
+- [ ] All workpackages tested end-to-end
+- [ ] Login works with test users
+- [ ] All CRUD operations work
+- [ ] Frontend can call backend APIs
+- [ ] No CORS errors
+- [ ] No CSRF errors
+- [ ] No enum mapping errors
+- [ ] No SQL syntax errors
+- [ ] Integration test report complete
 - [ ] Deployment guide complete
-- [ ] Test user credentials documented
-- [ ] Troubleshooting guide created
-- [ ] Enum mappings documented
-- [ ] All scripts documented
+- [ ] Test credentials documented
+- [ ] All issues fixed and retested
+- [ ] Progress tracking updated
 
 ---
 
-## Notes
-
-- **Real Integration**: Use real database, not mocks. Test actual connections.
-- **End-to-End**: Test complete flows from frontend to database and back.
-- **Fix Issues**: Don't just identify issues, fix them in the codebase.
-- **Document Everything**: Future developers need clear deployment instructions.
-- **Test Credentials**: Clearly document test users and their passwords.
-
----
-
-## End of Phase 5.6
-
-The system is now fully integrated, tested end-to-end, and ready for deployment.
+## End of Phase 5.6 Specification
