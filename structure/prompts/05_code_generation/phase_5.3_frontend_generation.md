@@ -618,6 +618,485 @@ Update `{{CODE_GENERATION_STATUS}}`:
 
 ---
 
+### 12. Integration with Existing Application
+
+**CRITICAL: Each workpackage must integrate seamlessly with the existing application structure**
+
+This section ensures that new features don't exist in isolation but are properly connected to the application's navigation, layout, and user experience.
+
+#### 12.1 Navigation Integration
+
+**Add to Appropriate Menu**
+
+Based on user role and feature type, add navigation links to existing menus:
+
+**Admin Menu** (`src/pages/AdminMenuPage.tsx` or similar):
+```typescript
+// Add menu item for admin-only features
+<MenuItem onClick={() => navigate('/admin/users/create')}>
+  <PersonAddIcon />
+  <span>Create User</span>
+</MenuItem>
+```
+
+**User Menu** (`src/pages/MainMenuPage.tsx` or similar):
+```typescript
+// Add menu item for regular user features
+<MenuItem onClick={() => navigate('/transactions')}>
+  <ReceiptIcon />
+  <span>View Transactions</span>
+</MenuItem>
+```
+
+**Checklist**:
+- [ ] Menu item added to appropriate menu (Admin/User)
+- [ ] Icon selected (use Material-UI icons or similar)
+- [ ] Navigation path matches route definition
+- [ ] Menu item label is clear and action-oriented
+- [ ] Menu item follows existing menu structure
+
+#### 12.2 Routing Integration
+
+**Update Main Router** (`src/App.tsx` or `src/routes/index.tsx`):
+
+```typescript
+// Add routes for new feature
+import { CreateUserPage } from './features/users/profile/pages/CreateUserPage';
+import { UpdateUserPage } from './features/users/profile/pages/UpdateUserPage';
+
+// In router configuration
+<Route path="/admin/users/create" element={<CreateUserPage />} />
+<Route path="/admin/users/:userId/edit" element={<UpdateUserPage />} />
+```
+
+**Route Naming Conventions**:
+- Admin routes: `/admin/[resource]/[action]`
+- User routes: `/[resource]/[action]`
+- Detail routes: `/[resource]/:id`
+- Edit routes: `/[resource]/:id/edit`
+
+**Checklist**:
+- [ ] Routes added to main router
+- [ ] Route paths follow naming conventions
+- [ ] Protected routes have auth guards (if applicable)
+- [ ] Route parameters defined correctly
+- [ ] Lazy loading configured (if applicable)
+
+#### 12.3 Layout Integration
+
+**Use Consistent Page Layout**
+
+All pages should use the same layout structure for consistency:
+
+```typescript
+import { PageLayout } from '@/shared/components/PageLayout';
+
+export const CreateUserPage = () => {
+  return (
+    <PageLayout
+      title="Create User"
+      breadcrumbs={[
+        { label: 'Admin', path: '/admin' },
+        { label: 'Users', path: '/admin/users' },
+        { label: 'Create', path: '/admin/users/create' }
+      ]}
+    >
+      {/* Page content */}
+    </PageLayout>
+  );
+};
+```
+
+**If PageLayout doesn't exist, create it in shared**:
+```typescript
+// src/shared/components/PageLayout.tsx
+export const PageLayout = ({ title, breadcrumbs, children }) => {
+  return (
+    <div className="page-container">
+      <header className="page-header">
+        <Breadcrumbs items={breadcrumbs} />
+        <h1>{title}</h1>
+      </header>
+      <main className="page-content">
+        {children}
+      </main>
+    </div>
+  );
+};
+```
+
+**Checklist**:
+- [ ] Page uses consistent layout component
+- [ ] Page title is clear and descriptive
+- [ ] Breadcrumbs show navigation path
+- [ ] Layout matches existing pages
+
+#### 12.4 UI/UX Consistency
+
+**Follow UI/UX Design Guide**
+
+Reference: `/Users/kerimman/carddemo_migration/input/target/specifications/01-FRONTEND-UIUX-GUIDE.md`
+
+**Key Consistency Points**:
+
+1. **Colors**: Use design system colors
+   ```typescript
+   // Use theme colors, not hardcoded values
+   <Button color="primary">Save</Button>  // ✅ Good
+   <Button style={{backgroundColor: '#1976d2'}}>Save</Button>  // ❌ Bad
+   ```
+
+2. **Spacing**: Use consistent spacing scale (8px base)
+   ```typescript
+   // Use spacing utilities
+   <Box sx={{ p: 3, mb: 2 }}>  // ✅ Good (24px padding, 16px margin)
+   <Box style={{padding: '25px'}}>  // ❌ Bad (arbitrary value)
+   ```
+
+3. **Typography**: Use theme typography
+   ```typescript
+   <Typography variant="h4">Title</Typography>  // ✅ Good
+   <h4 style={{fontSize: '20px'}}>Title</h4>  // ❌ Bad
+   ```
+
+4. **Buttons**: Follow button hierarchy
+   ```typescript
+   // Primary action
+   <Button variant="contained" color="primary">Save</Button>
+   
+   // Secondary action
+   <Button variant="outlined" color="primary">Cancel</Button>
+   
+   // Tertiary action
+   <Button variant="text">Skip</Button>
+   ```
+
+5. **Forms**: Consistent form layout
+   ```typescript
+   // Single column, labels above inputs
+   <FormControl fullWidth sx={{ mb: 2 }}>
+     <FormLabel required>User ID</FormLabel>
+     <TextField {...} />
+     <FormHelperText>Max 8 characters</FormHelperText>
+   </FormControl>
+   ```
+
+**Checklist**:
+- [ ] Uses design system colors (no hardcoded colors)
+- [ ] Uses consistent spacing (8px scale)
+- [ ] Uses theme typography (no inline font styles)
+- [ ] Follows button hierarchy (primary/secondary/tertiary)
+- [ ] Forms use consistent layout (labels above, full width)
+- [ ] Error states use standard error styling
+- [ ] Loading states use standard spinners
+- [ ] Success feedback uses standard toasts/alerts
+
+#### 12.5 Component Reuse
+
+**Check for Existing Components Before Creating New Ones**
+
+Before implementing a component, check if similar functionality exists:
+
+**Common Reusable Components** (should be in `src/shared/components/`):
+- `Button` - Standard button with variants
+- `Input` / `TextField` - Form inputs
+- `Select` / `Dropdown` - Dropdowns
+- `Modal` / `Dialog` - Modals and dialogs
+- `Alert` / `Toast` - Notifications
+- `Card` - Content cards
+- `Table` - Data tables
+- `Pagination` - Pagination controls
+- `Breadcrumbs` - Navigation breadcrumbs
+- `ErrorMessage` - Error display
+- `LoadingSpinner` - Loading indicators
+- `ConfirmDialog` - Confirmation dialogs
+
+**When to Create New Component**:
+- ✅ Component is specific to this feature (e.g., `UserProfileCard`)
+- ✅ Component is complex and reusable (e.g., `DataTable`)
+- ❌ Component is a simple wrapper around existing component
+- ❌ Component duplicates existing shared component
+
+**When to Update Shared Component**:
+- ✅ Adding a new variant to existing component
+- ✅ Adding optional prop to existing component
+- ✅ Fixing bug in existing component
+- ❌ Changing behavior that breaks other features
+
+**Checklist**:
+- [ ] Checked `src/shared/components/` for existing components
+- [ ] Reused existing components where possible
+- [ ] Created new shared components for reusable functionality
+- [ ] Feature-specific components in feature folder
+- [ ] Shared components properly exported from shared module
+
+#### 12.6 State Management Integration
+
+**Connect to Global State (if applicable)**
+
+If using global state management (Redux, Zustand, Context):
+
+```typescript
+// Use existing auth state
+import { useAuth } from '@/shared/hooks/useAuth';
+
+export const CreateUserPage = () => {
+  const { user, isAdmin } = useAuth();
+  
+  if (!isAdmin) {
+    return <Navigate to="/unauthorized" />;
+  }
+  
+  // ...
+};
+```
+
+**Checklist**:
+- [ ] Uses existing auth state for user info
+- [ ] Uses existing global state where applicable
+- [ ] Doesn't duplicate state that exists globally
+- [ ] Feature state is local to feature (not global)
+
+#### 12.7 API Integration
+
+**Use Consistent API Client**
+
+All API calls should use the same HTTP client configuration:
+
+```typescript
+// Use shared API client
+import { apiClient } from '@/shared/services/apiClient';
+
+export const userService = {
+  createUser: async (data: CreateUserRequest) => {
+    return apiClient.post<CreateUserResponse>('/api/v1/users', data);
+  }
+};
+```
+
+**If apiClient doesn't exist, create it**:
+```typescript
+// src/shared/services/apiClient.ts
+import axios from 'axios';
+
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Add interceptors for auth, error handling, etc.
+apiClient.interceptors.request.use(/* ... */);
+apiClient.interceptors.response.use(/* ... */);
+```
+
+**Checklist**:
+- [ ] Uses shared API client (not raw axios/fetch)
+- [ ] API base URL from environment variable
+- [ ] Error handling consistent across all API calls
+- [ ] Loading states handled consistently
+- [ ] Auth tokens added via interceptor (if applicable)
+
+#### 12.8 Error Handling Integration
+
+**Use Consistent Error Display**
+
+All errors should be displayed consistently:
+
+```typescript
+import { useToast } from '@/shared/hooks/useToast';
+
+export const CreateUserForm = () => {
+  const { showError, showSuccess } = useToast();
+  
+  const handleSubmit = async (data) => {
+    try {
+      await userService.createUser(data);
+      showSuccess('User created successfully');
+    } catch (error) {
+      showError(error.message || 'Failed to create user');
+    }
+  };
+};
+```
+
+**Checklist**:
+- [ ] Uses shared toast/notification system
+- [ ] Error messages are user-friendly
+- [ ] Success messages confirm action
+- [ ] Form validation errors shown inline
+- [ ] API errors shown as toasts/alerts
+
+#### 12.9 Accessibility Integration
+
+**Maintain Accessibility Standards**
+
+Ensure new features maintain the same accessibility level as existing features:
+
+```typescript
+// Keyboard navigation
+<Button onClick={handleSave} onKeyDown={(e) => e.key === 'Enter' && handleSave()}>
+  Save
+</Button>
+
+// Screen reader labels
+<IconButton aria-label="Delete user" onClick={handleDelete}>
+  <DeleteIcon />
+</IconButton>
+
+// Focus management
+useEffect(() => {
+  if (error) {
+    errorRef.current?.focus();
+  }
+}, [error]);
+```
+
+**Checklist**:
+- [ ] All interactive elements keyboard accessible
+- [ ] All icons have aria-labels
+- [ ] Form inputs have labels (visible or aria-label)
+- [ ] Error messages announced to screen readers
+- [ ] Focus management for modals/dialogs
+- [ ] Color contrast meets WCAG AA standards
+
+#### 12.10 Testing Integration
+
+**Ensure Feature is Testable**
+
+While unit tests are in Phase 5.5, ensure code is structured for testing:
+
+```typescript
+// Separate business logic from UI
+export const validateUserId = (userId: string): ValidationResult => {
+  if (!userId) return { valid: false, error: 'User ID required' };
+  if (userId.length > 8) return { valid: false, error: 'Max 8 characters' };
+  return { valid: true };
+};
+
+// Use in component
+const handleChange = (value: string) => {
+  const result = validateUserId(value);
+  setError(result.error);
+};
+```
+
+**Checklist**:
+- [ ] Business logic separated from UI components
+- [ ] Components accept props (not hardcoded data)
+- [ ] API calls in separate service layer
+- [ ] Validation logic is pure functions
+- [ ] State management is testable
+
+#### 12.11 Documentation Integration
+
+**Update Application Documentation**
+
+Add feature documentation to help other developers:
+
+**Update README** (if feature-level README exists):
+```markdown
+## Features
+
+### User Management (WP-001, WP-002, WP-004, WP-005)
+- **Create User** (WP-002): Admin can create new users
+  - Route: `/admin/users/create`
+  - Component: `CreateUserPage`
+  - API: `POST /api/v1/users`
+```
+
+**Add Feature README** (in feature folder):
+```markdown
+# User Management Feature
+
+## Overview
+User management functionality including create, update, delete operations.
+
+## Workpackages
+- WP-001: Authentication
+- WP-002: Create User
+- WP-004: Delete User
+- WP-005: Update User
+
+## Routes
+- `/login` - Login page
+- `/admin/users/create` - Create user
+- `/admin/users/:id/edit` - Update user
+- `/admin/users/:id/delete` - Delete user
+
+## Components
+- `LoginForm` - User login
+- `CreateUserForm` - Create user form
+- `UpdateUserForm` - Update user form
+- `DeleteUserDialog` - Delete confirmation
+
+## API Services
+- `authService` - Authentication operations
+- `userManagementService` - User CRUD operations
+```
+
+**Checklist**:
+- [ ] Feature documented in README
+- [ ] Routes documented
+- [ ] Components documented
+- [ ] API services documented
+- [ ] Integration points documented
+
+#### 12.12 Integration Verification Checklist
+
+Before marking workpackage complete, verify all integration points:
+
+**Navigation**:
+- [ ] Menu items added to appropriate menus
+- [ ] Navigation paths work correctly
+- [ ] Breadcrumbs show correct path
+- [ ] Back buttons work correctly
+
+**Routing**:
+- [ ] Routes added to main router
+- [ ] Route paths follow conventions
+- [ ] Protected routes have auth guards
+- [ ] Route parameters work correctly
+
+**UI/UX**:
+- [ ] Follows design system colors
+- [ ] Uses consistent spacing
+- [ ] Uses theme typography
+- [ ] Follows button hierarchy
+- [ ] Forms use consistent layout
+- [ ] Matches look & feel of existing pages
+
+**Components**:
+- [ ] Reuses existing shared components
+- [ ] New shared components properly exported
+- [ ] Feature-specific components in feature folder
+- [ ] No duplicate components
+
+**State Management**:
+- [ ] Uses existing global state
+- [ ] Doesn't duplicate state
+- [ ] Feature state is local
+
+**API Integration**:
+- [ ] Uses shared API client
+- [ ] Error handling consistent
+- [ ] Loading states consistent
+- [ ] Auth tokens handled correctly
+
+**Accessibility**:
+- [ ] Keyboard accessible
+- [ ] Screen reader compatible
+- [ ] Focus management correct
+- [ ] Color contrast sufficient
+
+**Documentation**:
+- [ ] Feature documented
+- [ ] Routes documented
+- [ ] Integration points documented
+
+---
+
 ## Verification
 
 Before marking complete:

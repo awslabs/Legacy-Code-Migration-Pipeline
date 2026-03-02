@@ -87,7 +87,7 @@ WORKPACKAGE_LOOP:
             - Previously created guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
         
         EXPECTED_OUTPUTS:
-            - Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+            - Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
             - Progress tracking: {{TECH_SPEC_STATUS}}
             - Error reports (if any): {{TECH_SPEC_ERRORS}}
         
@@ -119,15 +119,15 @@ WORKPACKAGE_LOOP:
             - workpackage_name: current_workpackage.name
         
         INPUTS:
-            - Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+            - Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
             - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
             - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
             - Target specifications: {{TARGET_SPECIFICATION}}/
             - Previously approved guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
         
         EXPECTED_OUTPUTS:
-            - Review report: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md
-            - Approved guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md (if approved)
+            - Approved guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+            - Review report: {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-review-report.md
             - Progress tracking: {{TECH_SPEC_STATUS}}
         
         VERIFICATION:

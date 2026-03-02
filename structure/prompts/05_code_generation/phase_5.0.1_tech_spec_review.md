@@ -13,19 +13,23 @@
 
 ## Expected Deliverables
 
-1. **Review Report (per workpackage)**
-   - File: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md
+1. **Approved Technical Implementation Guide (per workpackage)**
+   - File: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+   - Description: Approved guide ready for code generation (final deliverable)
+
+2. **Archived Draft** (remains in review folder)
+   - File: {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
+   - Description: Original draft kept in review folder for audit trail
+
+3. **Review Report (per workpackage)**
+   - File: {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-review-report.md
    - Description: Detailed review feedback for the workpackage technical implementation guide
 
-2. **Approved Technical Implementation Guide (per workpackage)**
-   - File: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
-   - Description: Approved guide ready for code generation (if approved)
-
-3. **Progress Tracking**
+4. **Progress Tracking**
    - File: {{TECH_SPEC_STATUS}}
    - Description: Updated with review status for all workpackages
 
-4. **Error Log**
+5. **Error Log**
    - File: {{TECH_SPEC_ERRORS}}
    - Description: Document any blocking issues
 
@@ -34,7 +38,7 @@
 ## Context
 
 ### Input Locations
-- Technical implementation guides (draft): {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+- Technical implementation guides (draft): {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
 - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
 - Target specifications: {{TARGET_SPECIFICATION}}/
@@ -43,8 +47,8 @@
 - Previously approved guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
 
 ### Output Locations
-- Review reports: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md
 - Approved guides: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+- Review reports: {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-review-report.md
 - Progress tracking: {{TECH_SPEC_STATUS}}
 - Error logs: {{TECH_SPEC_ERRORS}}
 
@@ -83,7 +87,7 @@ Review technical implementation guides for each workpackage to ensure they:
 #### 2.1 Load Workpackage Context
 
 Read the following for the current workpackage:
-- Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+- Technical implementation guide (draft): {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
 - Workpackage metadata from {{WORKPACKAGE_PLANNING}}
@@ -455,7 +459,8 @@ Create review report at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md:
 1. Copy draft to approved file: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
 2. Set review status to "APPROVED" in review report
 3. Update {{TECH_SPEC_STATUS}} with approval
-4. Proceed to next workpackage
+4. Draft remains in review folder for audit trail
+5. Proceed to next workpackage
 
 **If corrections needed**:
 1. Set review status to "REVISE" in review report
@@ -478,7 +483,6 @@ After all workpackages reviewed:
 1. Verify all workpackages have review reports
 2. Verify all approved workpackages have approved guides
 3. Check for any blocking issues across workpackages
-4. Generate summary of review results
 
 ### Step 4: Update Progress Tracking
 

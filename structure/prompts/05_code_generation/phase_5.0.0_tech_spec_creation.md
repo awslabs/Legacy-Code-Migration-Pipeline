@@ -13,10 +13,14 @@
 
 ## Expected Deliverables
 
-1. **Technical Implementation Guide (per workpackage)**
-   - File: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md
+1. **Technical Implementation Guide (per workpackage) - Draft**
+   - File: {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
    - Template: {{TECH_IMPLEMENTATION_GUIDE_TEMPLATE}}
-   - Description: Workpackage-specific technical implementation guidance for code generation
+   - Description: Workpackage-specific technical implementation guidance for code generation (draft for review)
+
+2. **Technical Implementation Guide (per workpackage) - Approved**
+   - File: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+   - Description: Approved guide ready for code generation (moved from review folder after approval)
 
 2. **Progress Tracking**
    - File: {{TECH_SPEC_STATUS}}
@@ -42,10 +46,10 @@
 - Sample code: {{TARGET_SAMPLE_CODE}}/
 - Workpackage planning: {{WORKPACKAGE_PLANNING}}
 - Database analysis: {{DATABASE_ANALYSIS_OUTPUT}}/
-- Previously created guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide.md
+- Previously created guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
 
 ### Output Locations
-- Technical implementation guides: {{TECH_SPEC_BASE_PATH}}/
+- Technical implementation guides (draft): {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md
 - Progress tracking: {{TECH_SPEC_STATUS}}
 - Error logs: {{TECH_SPEC_ERRORS}}
 
@@ -126,7 +130,7 @@ Read the following inputs for the current workpackage:
 #### 2.3 Review Existing Technical Implementation Guides
 
 If other workpackages have been completed:
-- Read existing guides from {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide.md
+- Read existing approved guides from {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
 - Identify common patterns and structures
 - Note integration points and shared components
 - Ensure consistency with established patterns
@@ -141,9 +145,9 @@ From the business specification, identify:
 - Integration requirements
 - Non-functional requirements
 
-#### 2.5 Generate Technical Implementation Guide
+#### 2.5 Generate Technical Implementation Guide (Draft)
 
-Create a comprehensive guide at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide.md that includes:
+Create a comprehensive guide at {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md that includes:
 
 **Section 1: Workpackage Overview**
 - Workpackage ID and name
@@ -246,7 +250,6 @@ After all workpackages are processed:
 1. Review all technical implementation guides for consistency
 2. Verify integration points are properly documented
 3. Ensure shared components are identified across workpackages
-4. Generate summary report of completed guides
 
 ---
 

@@ -216,7 +216,40 @@ user-module/
 
 4. **Update parent build file**: Add new module to parent pom.xml `<modules>` section
 
-### 4. Implement Business Entities
+### 4. Database and Integration Considerations
+
+**CRITICAL - Check for SQL Reserved Keywords**:
+- Common reserved keywords: `transaction`, `user`, `order`, `group`, `table`, `index`, `key`, `value`, `date`, `time`
+- If table name is a reserved keyword, quote it in JPA: `@Table(name = "\"transaction\"")`
+- Test with target database (SQLite, PostgreSQL, etc.)
+
+**CRITICAL - Enum Mapping Strategy**:
+- **If database stores codes** (e.g., 'A', 'U', '01', '02'):
+  - Create JPA `@Converter` to map between database codes and enum values
+  - Example: Database has 'A' → Enum is `UserType.ADMIN`
+  - DO NOT use `@Enumerated(EnumType.STRING)` - it expects enum name, not code
+- **If database stores enum names** (e.g., 'ADMIN', 'USER'):
+  - Use `@Enumerated(EnumType.STRING)` - direct mapping
+- **Always check Tech Implementation Guide Section 3** for enum mapping requirements
+
+**CRITICAL - Security Configuration**:
+- For REST APIs, configure Spring Security:
+  - Disable CSRF for stateless REST APIs: `.csrf(csrf -> csrf.disable())`
+  - Enable CORS for frontend: Configure allowed origins (localhost:3000, localhost:5173)
+  - Add to SecurityConfig or create separate WebSecurityConfig
+- For session-based apps, keep CSRF enabled
+
+**CRITICAL - Password Handling**:
+- Check if passwords are case-normalized (uppercase/lowercase) before hashing
+- Ensure BCrypt encoder configuration matches test data
+- Document password requirements in code comments
+
+**Validation Rules**:
+- Ensure `@Size`, `@Length` constraints match actual data
+- Check Tech Implementation Guide Section 5 for validation requirements
+- Don't assume field lengths - verify against database schema
+
+### 5. Implement Business Entities
 
 From Technical Implementation Guide Section 2 and Section 3:
 
@@ -247,7 +280,7 @@ From Technical Implementation Guide Section 2 and Section 3:
    // Relationship definition commented out until WP-002 is complete
    ```
 
-### 5. Implement Repositories
+### 6. Implement Repositories
 
 From Technical Implementation Guide Section 2 and Section 3:
 
@@ -271,7 +304,7 @@ From Technical Implementation Guide Section 2 and Section 3:
    // Caching configuration commented out until external service is ready
    ```
 
-### 6. Implement Services
+### 7. Implement Services
 
 From Technical Implementation Guide Section 5 and Business Specification:
 
@@ -305,7 +338,7 @@ From Technical Implementation Guide Section 5 and Business Specification:
    // notificationService.sendWelcomeEmail(user);
    ```
 
-### 7. Implement Controllers
+### 8. Implement Controllers
 
 From Technical Implementation Guide Section 4:
 
@@ -338,7 +371,7 @@ From Technical Implementation Guide Section 4:
    // TODO: [MISSING-INFO] Confirm if email verification is required before user creation
    ```
 
-### 8. Implement DTOs and Mappers
+### 9. Implement DTOs and Mappers
 
 1. **Read DTO patterns from Technical Implementation Guide and Target Backend Specification**:
    - How to create DTOs (request/response objects)
@@ -359,7 +392,7 @@ From Technical Implementation Guide Section 4:
    - Convert between entities and DTOs
    - Use mapping approach from tech spec (library, manual, etc.)
 
-### 9. Handle External Service Integration
+### 10. Handle External Service Integration
 
 From Technical Implementation Guide Section 6 and Section 7:
 
@@ -383,7 +416,7 @@ From Technical Implementation Guide Section 6 and Section 7:
    // TODO: [CONFIG] Add issuer-uri and jwk-set-uri to application configuration
    ```
 
-### 10. Handle Shared Code
+### 11. Handle Shared Code
 
 If code is needed by multiple workpackages:
 
@@ -401,7 +434,7 @@ If code is needed by multiple workpackages:
    - Follow the project structure from tech spec
    - Use naming conventions from tech spec
 
-### 11. Update Progress Tracking
+### 12. Update Progress Tracking
 
 Update `{{CODE_GENERATION_STATUS}}`:
 

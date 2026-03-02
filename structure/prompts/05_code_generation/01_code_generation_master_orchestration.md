@@ -21,6 +21,8 @@ This document provides orchestration instructions for the Code Generation phase,
 3. **Phase 5.2**: Backend Code Generation - Implement backend tier
 4. **Phase 5.3**: Frontend Code Generation - Implement frontend tier
 5. **Phase 5.4**: Batch Code Generation - Implement batch tier
+6. **Phase 5.5**: Test Implementation - Implement unit tests for workpackage
+7. **Phase 5.6**: Integration Testing & Deployment Validation - Validate full stack integration and deployment readiness
 
 **Critical Principle**: Process **one workpackage at a time** in dependency order, implementing all required tiers for each workpackage before moving to the next.
 
@@ -34,6 +36,8 @@ The complete task documents for each phase are located in the prompts directory:
 - **Phase 5.2**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.2_backend_generation.md
 - **Phase 5.3**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.3_frontend_generation.md
 - **Phase 5.4**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.4_batch_generation.md
+- **Phase 5.5**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.5_test_implementation.md
+- **Phase 5.6**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.6_integration_testing_and_fixes.md
 
 **The supervisor provides these task documents directly to agents** (no task file creation required). Each phase document is self-contained with:
 - Orchestration Information (phase, agent, deliverables, success criteria)
@@ -64,7 +68,13 @@ Phase 4 (Test Case Generation) → Phase 5 (Code Generation)
                                     ↓
                                 Phase 5.4 (Batch - if needed)
                                     ↓
+                                Phase 5.5 (Test Implementation)
+                                    ↓
                                 Next Workpackage
+                                    ↓
+                                (After all workpackages)
+                                    ↓
+                                Phase 5.6 (Integration Testing & Deployment Validation)
 ```
 
 **Prerequisites**:
@@ -285,7 +295,46 @@ WORKPACKAGE_LOOP:
                 
                 IF verification_passed:
                     UPDATE {{CODE_GENERATION_STATUS}} with batch completion
-                    PROCEED to WORKPACKAGE_COMPLETE
+                    PROCEED to Phase_5.5
+    
+    # ========================================
+    # PHASE 5.5: TEST IMPLEMENTATION
+    # ========================================
+    
+    EXECUTE Phase_5.5:
+        ASSIGN: development_specialist_test_generation
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.5_test_implementation.md
+        PROVIDE_CONTEXT:
+            - workpackage_id: current_workpackage.id
+            - workpackage_name: current_workpackage.name
+            - flow_id: current_workpackage.flow_id
+        
+        INPUTS:
+            - Test case specification: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-EN-approved.md
+            - Technical implementation guide: {{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md
+            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
+            - Generated code: {{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/java/
+            - Target specification: {{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md
+        
+        EXPECTED_OUTPUTS:
+            - Test code: {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/
+            - Progress update: {{CODE_GENERATION_STATUS}}
+        
+        VERIFICATION:
+            CHECK test_code_exists(workpackage_id)
+            CHECK tests_compile(workpackage_id)
+            CHECK all_test_cases_implemented(workpackage_id)
+            CHECK test_coverage_adequate(workpackage_id)
+            
+            IF verification_failed:
+                LOG error to {{CODE_GENERATION_ERRORS}}
+                MARK workpackage as failed
+                ESCALATE to human supervisor
+                HALT workpackage processing
+            
+            IF verification_passed:
+                UPDATE {{CODE_GENERATION_STATUS}} with test completion
+                PROCEED to WORKPACKAGE_COMPLETE
     
     # ========================================
     # WORKPACKAGE COMPLETION
@@ -298,6 +347,49 @@ WORKPACKAGE_LOOP:
         PROCEED to next workpackage in WORKPACKAGE_LOOP
 
 END WORKPACKAGE_LOOP
+
+# ========================================
+# PHASE 5.6: INTEGRATION TESTING & DEPLOYMENT VALIDATION
+# ========================================
+
+# Execute after all workpackages are complete
+IF all_workpackages_completed:
+    EXECUTE Phase_5.6:
+        ASSIGN: development_specialist_test_generation
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.6_integration_testing_and_fixes.md
+        
+        INPUTS:
+            - Generated backend code: {{CODE_GENERATION_BACKEND_OUTPUT}}/
+            - Generated frontend code: {{CODE_GENERATION_FRONTEND_OUTPUT}}/
+            - Database schemas: {{DATABASE_GEN_SRC}}/
+            - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/
+            - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/
+            - Target specifications: {{TARGET_SPECIFICATION}}/
+        
+        EXPECTED_OUTPUTS:
+            - Database seed data: {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/resources/data/
+            - Integration tests: {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/
+            - Deployment scripts: {{CODE_GENERATION_BASE_PATH}}/deployment/
+            - Documentation: {{CODE_GENERATION_BASE_PATH}}/docs/
+            - Integration fixes: Throughout codebase
+            - Progress update: {{CODE_GENERATION_STATUS}}
+        
+        VERIFICATION:
+            CHECK seed_data_created()
+            CHECK integration_tests_pass()
+            CHECK deployment_scripts_validated()
+            CHECK integration_issues_fixed()
+            CHECK documentation_complete()
+            
+            IF verification_failed:
+                LOG error to {{CODE_GENERATION_ERRORS}}
+                ESCALATE to human supervisor
+                HALT processing
+            
+            IF verification_passed:
+                UPDATE {{CODE_GENERATION_STATUS}} with Phase 5.6 completion
+                MARK Phase 5 as COMPLETE
+                PROCEED to Phase 6 (if applicable)
 ```
 
 ---
@@ -361,6 +453,31 @@ END WORKPACKAGE_LOOP
 - Restart capability implementation
 - Scheduling configuration
 - Batch framework expertise
+
+### Phase 5.5: Test Implementation
+**Agent**: development_specialist_test_generation
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.5_test_implementation.md
+**Capabilities**:
+- Unit test implementation
+- Integration test implementation
+- Test fixture creation
+- Test data management
+- Mocking and stubbing
+- Test framework expertise
+- Test coverage analysis
+
+### Phase 5.6: Integration Testing & Deployment Validation
+**Agent**: development_specialist_test_generation
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.6_integration_testing_and_fixes.md
+**Capabilities**:
+- End-to-end integration testing
+- Database seed data creation
+- Deployment script validation
+- Integration issue identification and fixing
+- CORS/CSRF configuration
+- Enum converter implementation
+- SQL keyword resolution
+- Deployment documentation
 
 ---
 
@@ -574,6 +691,74 @@ CHECK restart_capability_implemented(workpackage_id):
     RETURN has_restart_config OR has_checkpoint
 ```
 
+### Phase 5.5 Verification
+```
+CHECK test_code_exists(workpackage_id):
+    test_path = {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/
+    RETURN directory_exists(test_path) AND directory_not_empty(test_path)
+
+CHECK tests_compile(workpackage_id):
+    result = execute_build({{CODE_GENERATION_BACKEND_OUTPUT}}, "test-compile")
+    RETURN result.exit_code == 0 AND result.errors.count == 0
+
+CHECK all_test_cases_implemented(workpackage_id):
+    test_spec = load_test_specification(workpackage_id)
+    test_cases = test_spec.section_6.test_cases
+    
+    test_path = {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/
+    
+    FOR EACH test_case IN test_cases:
+        test_method_exists = search_code_for_pattern(test_path, test_case.id)
+        IF NOT test_method_exists:
+            LOG "Test case {test_case.id} not implemented"
+            RETURN FALSE
+    
+    RETURN TRUE
+
+CHECK test_coverage_adequate(workpackage_id):
+    # Run tests and check coverage
+    result = execute_tests({{CODE_GENERATION_BACKEND_OUTPUT}})
+    RETURN result.exit_code == 0 AND result.tests_passed > 0
+```
+
+### Phase 5.6 Verification
+```
+CHECK seed_data_created():
+    seed_data_path = {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/resources/data/
+    has_users = file_exists(seed_data_path + "test-users.sql")
+    has_transactions = file_exists(seed_data_path + "sample-transactions.sql")
+    RETURN has_users AND has_transactions
+
+CHECK integration_tests_pass():
+    integration_test_path = {{CODE_GENERATION_BACKEND_OUTPUT}}/src/test/java/integration/
+    IF NOT directory_exists(integration_test_path):
+        RETURN FALSE
+    
+    result = execute_tests({{CODE_GENERATION_BACKEND_OUTPUT}}, "integration-test")
+    RETURN result.exit_code == 0 AND result.tests_passed > 0
+
+CHECK deployment_scripts_validated():
+    deployment_path = {{CODE_GENERATION_BASE_PATH}}/deployment/
+    has_startup = file_exists(deployment_path + "start-backend.sh")
+    has_migration = file_exists(deployment_path + "test-migrations.sh")
+    has_data_load = file_exists(deployment_path + "load-test-data.sh")
+    RETURN has_startup AND has_migration AND has_data_load
+
+CHECK integration_issues_fixed():
+    # Check for common integration issues
+    has_enum_converters = search_code_for_pattern({{CODE_GENERATION_BACKEND_OUTPUT}}, "@Converter")
+    has_security_config = file_exists({{CODE_GENERATION_BACKEND_OUTPUT}} + "/src/main/java/config/SecurityConfig.java")
+    RETURN has_enum_converters OR has_security_config
+
+CHECK documentation_complete():
+    docs_path = {{CODE_GENERATION_BASE_PATH}}/docs/
+    has_deployment = file_exists(docs_path + "DEPLOYMENT.md")
+    has_test_users = file_exists(docs_path + "TEST-USERS.md")
+    has_troubleshooting = file_exists(docs_path + "TROUBLESHOOTING.md")
+    has_enum_mappings = file_exists(docs_path + "enum-mappings.md")
+    RETURN has_deployment AND has_test_users AND has_troubleshooting AND has_enum_mappings
+```
+
 ---
 
 ## Error Handling and Rework
@@ -647,7 +832,35 @@ CHECK restart_capability_implemented(workpackage_id):
 3. Re-execute Phase 5.4 for the affected workpackage
 4. Re-verify compilation and batch job implementation
 
-#### Scenario 5: Critical Issues (Escalate to Human)
+#### Scenario 5: Test Implementation Issues (Rework Phase 5.5)
+**Triggers**:
+- Test compilation errors
+- Test cases not matching specification
+- Tests failing
+- Missing test coverage
+- Test fixtures incomplete
+
+**Actions**:
+1. Update Phase 5.5 task with specific corrections needed
+2. Re-assign development_specialist_test_generation
+3. Re-execute Phase 5.5 for the affected workpackage
+4. Re-verify test compilation and execution
+
+#### Scenario 6: Integration Testing Issues (Rework Phase 5.6)
+**Triggers**:
+- Integration tests failing
+- Seed data invalid
+- Deployment scripts not working
+- Integration issues not fixed
+- Documentation incomplete
+
+**Actions**:
+1. Update Phase 5.6 task with specific corrections needed
+2. Re-assign development_specialist_test_generation
+3. Re-execute Phase 5.6
+4. Re-verify integration tests and deployment validation
+
+#### Scenario 7: Critical Issues (Escalate to Human)
 **Triggers**:
 - Specification ambiguities preventing implementation
 - Framework compatibility issues
@@ -832,8 +1045,43 @@ When resuming after interruption:
 - [ ] Scheduling configured
 
 **Gate Decision**:
-- **PASS**: Proceed to WORKPACKAGE_COMPLETE
+- **PASS**: Proceed to Phase 5.5
 - **FAIL**: Rework Phase 5.4 or escalate
+
+### Phase 5.5 Quality Gate
+**Criteria**:
+- [ ] Test code exists for workpackage
+- [ ] Tests compile without errors
+- [ ] All test cases from specification implemented
+- [ ] Tests follow target specification patterns
+- [ ] Test coverage matches test case specification
+- [ ] All tests pass successfully
+- [ ] Test fixtures and data created
+- [ ] Traceability maintained (test case IDs in tests)
+
+**Gate Decision**:
+- **PASS**: Proceed to WORKPACKAGE_COMPLETE (or next workpackage)
+- **FAIL**: Rework Phase 5.5 or escalate
+
+### Phase 5.6 Quality Gate
+**Criteria**:
+- [ ] Database seed data created with valid formats
+- [ ] Test users have correct password hashes
+- [ ] Enum values match database codes
+- [ ] Integration tests created and passing
+- [ ] Login flow tested end-to-end
+- [ ] All workpackage flows tested
+- [ ] CORS/CSRF configuration validated
+- [ ] Integration issues fixed (enum converters, SQL keywords, etc.)
+- [ ] Deployment scripts validated
+- [ ] Startup scripts work
+- [ ] Database migrations tested
+- [ ] Documentation complete (deployment, test users, troubleshooting)
+- [ ] System ready for deployment
+
+**Gate Decision**:
+- **PASS**: Phase 5 Complete - Ready for Phase 6
+- **FAIL**: Rework Phase 5.6 or escalate
 
 ---
 
@@ -902,9 +1150,8 @@ Code Generation Master Progress Template = {{CODE_GENERATION_MASTER_PROGRESS_TEM
 ### Post-Execution
 1. Verify all workpackages completed successfully
 2. Verify all code compiles
-3. Generate final summary report
-4. Archive all artifacts
-5. Prepare handoff to Phase 5 (Integration Testing)
+3. Archive all artifacts
+4. Prepare handoff to Phase 6 (Integration Testing)
 
 ---
 
@@ -914,12 +1161,20 @@ Phase 5 is considered complete when:
 - [ ] Technical specifications extracted successfully (Phase 5.0)
 - [ ] Project structure established successfully (Phase 5.1)
 - [ ] All workpackages processed
-- [ ] All required tiers implemented for each workpackage
+- [ ] All required tiers implemented for each workpackage (Phases 5.2, 5.3, 5.4)
+- [ ] All unit tests implemented for each workpackage (Phase 5.5)
 - [ ] All code compiles successfully
+- [ ] All unit tests pass successfully
+- [ ] Integration testing completed (Phase 5.6)
+- [ ] Database seed data created
+- [ ] Integration tests pass
+- [ ] Deployment scripts validated
+- [ ] Integration issues fixed
+- [ ] Documentation complete
 - [ ] All business rules implemented and traceable
 - [ ] Progress tracking shows 100% completion
 - [ ] No critical blockers remain
-- [ ] All artifacts ready for Phase 6 (Integration Testing)
+- [ ] System ready for deployment
 
 ---
 
