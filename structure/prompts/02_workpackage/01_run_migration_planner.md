@@ -13,7 +13,7 @@ Execute the migration planner script:
 ```bash
 cd {{PROJECT_BASE_PATH}}/tools/acm-tools
 bash scripts/run_migration_planner.sh \
-   {{SOURCE_CODE_ANALYSIS_OUTPUT}}/flows \
+   {{SOURCE_CODE_ANALYSIS_OUTPUT}}/flows/Business_Flows.json \
    {{WORKPACKAGE_BASE_PATH}}
 ```
 
