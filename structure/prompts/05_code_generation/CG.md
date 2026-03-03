@@ -21,13 +21,55 @@ Implement modern Java Spring Boot code based on workpackage specifications while
 ## Instructions
 
 ### 1. Workpackage Processing Strategy
-1. **Process workpackages sequentially** (WP-001, WP-002, etc.)
-2. **Organize code by domain modules** (auth, user, transaction, common, etc.)
-3. **Each workpackage may contribute to multiple domain modules**
-4. Track progress by workpackage but maintain domain-based structure
-5. Add workpackage reference in file headers: `@workpackage WP-001: User Authentication`
-6. **Before generating code**, check which modules already exist from previous workpackages
-7. **Preserve existing code** - see Section 11 for critical preservation rules
+
+**CRITICAL - Process by Migration Sequence, Not Workpackage ID**
+
+1. **Process workpackages in migration sequence order** (Seq 1, Seq 2, Seq 3, etc.)
+   - Read `migrationSequence` array from {{WORKPACKAGE_PLANNING}}
+   - Process by `sequenceNumber`, NOT by `workpackageId`
+   - Example: Seq 1 might be WP-001, Seq 19 might be WP-013 (different order)
+
+2. **Check coordination dependencies before starting**:
+   - Read `softPrerequisites` for the current sequence entry
+   - Verify all prerequisite workpackages are completed
+   - Check `sharedModuleContext` to identify modules that should already exist
+   - If prerequisites not met, skip and process next in sequence
+
+3. **Organize code by domain modules** (auth, user, transaction, common, etc.)
+   - Each workpackage may contribute to multiple domain modules
+   - Track progress by both workpackageId (traceability) and sequenceNumber (execution order)
+
+4. **Add workpackage and sequence references** in file headers:
+   - `@workpackage WP-001: User Authentication`
+   - `@sequence Seq 1 (Wave 1, Phase 1)`
+
+5. **Before generating code**:
+   - Check which modules already exist from previous workpackages
+   - Check `sharedModuleContext` for modules that should be reused vs. created
+   - Verify soft prerequisites are complete
+
+6. **Preserve existing code** - see Section 11 for critical preservation rules
+
+**Migration Sequence Structure** (from {{WORKPACKAGE_PLANNING}}):
+```json
+{
+  "sequenceNumber": 1,
+  "workpackageId": 12,
+  "flowId": "FLOW_CBACT02C",
+  "phase": 1,
+  "wave": 1,
+  "prerequisites": [],
+  "softPrerequisites": [],
+  "sharedModuleContext": {
+    "sharesModulesWith": ["FLOW_CBACT03C", "FLOW_CBCUS01C"],
+    "sharedModules": {
+      "FLOW_CBACT03C": ["CEE3ABD"],
+      "FLOW_CBCUS01C": ["CEE3ABD"]
+    },
+    "coordinationReason": "Highest priority flow for shared modules"
+  }
+}
+```
 
 ### 2. Architecture: Spring Modulith Package-Based Modules
 1. Use Spring Modulith for modular monolith architecture
@@ -396,18 +438,26 @@ For each generated component, verify:
 
 ### 17. Progress Tracking
 1. Update progress file after each workpackage: {{CODE_GENERATION_STATUS}}
-2. Format:
+2. Track by both workpackageId (traceability) and sequenceNumber (execution order)
+3. Format:
    ```json
    {
      "phaseId": "05-code-generation",
      "status": "in_progress|completed",
      "targetLanguage": "Java",
      "targetFramework": "Spring Boot + Spring Modulith",
+     "currentSequence": 5,
      "workpackages": [
        {
+         "sequenceNumber": 1,
          "workpackageId": "WP-001",
          "workpackageName": "User Authentication",
+         "flowId": "FLOW_COSGN00C",
+         "phase": 1,
+         "wave": 1,
          "status": "completed",
+         "softPrerequisites": [],
+         "sharedModules": [],
          "modulesAffected": ["auth", "common"],
          "components": {
            "entities": 3,
@@ -424,7 +474,7 @@ For each generated component, verify:
        }
      ],
      "completedCount": 1,
-     "totalCount": 10,
+     "totalCount": 26,
      "lastUpdated": "2026-02-21"
    }
    ```
@@ -970,14 +1020,27 @@ public class UserMapper {
 
 ## Execution Strategy
 
-1. **Start with Workpackage 1** (WP-001)
-2. **Before starting each workpackage**:
+1. **Read Migration Sequence** from {{WORKPACKAGE_PLANNING}}
+   - Load `migrationSequence` array
+   - Sort by `sequenceNumber` (ascending)
+   - Note: sequenceNumber ≠ workpackageId (different ordering)
+
+2. **For each sequence entry** (Seq 1, Seq 2, Seq 3, ...):
+   - Extract `workpackageId`, `flowId`, `phase`, `wave`
+   - Check `softPrerequisites` - verify all are completed
+   - Check `sharedModuleContext` - identify modules to reuse
+   - If prerequisites not met, skip to next sequence
+
+3. **Before starting each workpackage**:
    - Check which modules already exist from previous workpackages
    - Identify which modules this workpackage will affect
+   - Review `sharedModuleContext` for coordination requirements
    - Plan code preservation strategy
-3. **For each workpackage**:
+
+4. **For each workpackage**:
    - Read business specification thoroughly
    - Identify affected domain modules
+   - Check for shared modules that should be reused (from `sharedModuleContext`)
    - Generate/update entities in domain modules (with audit fields, versioning, indexes)
    - Generate/update repositories
    - Generate/update validators (in internal package)
@@ -985,11 +1048,18 @@ public class UserMapper {
    - Generate/update services (with logging, transaction management)
    - Generate/update controllers (with security, validation)
    - Create traceability documentation
-   - Update progress tracking
+   - Update progress tracking (both sequenceNumber and workpackageId)
    - Verify quality criteria
    - Verify no code deleted from other workpackages
-4. **Stop after each workpackage** for review
-5. **Continue with next workpackage** after approval
+
+5. **Stop after each workpackage** for review
+
+6. **Continue with next sequence** after approval
+
+**Wave-Based Parallelization** (Optional):
+- Workpackages in the same wave can be generated in parallel
+- Wave 1 workpackages have no soft dependencies
+- Later waves depend on earlier waves completing first
 
 ## Success Criteria
 

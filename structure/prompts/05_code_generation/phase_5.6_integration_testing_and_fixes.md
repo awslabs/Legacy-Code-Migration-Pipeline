@@ -67,23 +67,31 @@ Validate that all generated code works together as an integrated system. Test wi
 
 **This phase bridges the gap between unit tests (which pass) and production deployment (which may fail due to integration issues).**
 
+**CRITICAL - Test in Migration Sequence Order**:
+- Test workpackages in the order they were implemented (by `sequenceNumber`)
+- Respect soft prerequisites - test dependent workpackages after their prerequisites
+- Verify shared modules work correctly across multiple workpackages
+
 ---
 
 ## Instructions
 
 ### 1. Analyze Generated Code
 
-1. **Review all workpackages implemented**:
-   - Check `{{CODE_GENERATION_STATUS}}`
-   - List all workpackages with status "completed"
+1. **Review migration sequence and workpackages implemented**:
+   - Check `{{WORKPACKAGE_PLANNING}}` for migration sequence
+   - Check `{{CODE_GENERATION_STATUS}}` for implementation status
+   - List all workpackages with status "completed" in sequence order
    - Note which have backend, frontend, and tests
+   - Note soft prerequisites and shared module relationships
 
 2. **Identify potential integration issues**:
    - **Enum mappings**: Check if entities use `@Enumerated(EnumType.STRING)` with code-based enums
    - **SQL keywords**: Check for table names like `transaction`, `user`, `order`, `group`
    - **Security config**: Check if CSRF is disabled for REST APIs
    - **Password handling**: Check if passwords are case-normalized before hashing
-   - **Validation rules**: Check if `@Size` constraints match actual data needs
+   - **Validation rules**: Check if `@Size` constraints match actual data
+   - **Shared modules**: Verify shared modules are used consistently across workpackages
 
 3. **Review database schema**:
    - Check `{{CODE_GENERATION_BACKEND_OUTPUT}}/src/main/resources/db/migration/`
@@ -168,9 +176,11 @@ VALUES
 
 ### 4. Test API Endpoints
 
-For each workpackage, test the main API endpoints with curl:
+**Test in migration sequence order** (respecting soft prerequisites):
 
-**Example - Test Login (WP-001)**:
+For each workpackage (in sequence order), test the main API endpoints with curl:
+
+**Example - Test Login (Seq 1, WP-001)**:
 ```bash
 curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
@@ -179,7 +189,7 @@ curl -X POST http://localhost:8080/api/v1/auth/login \
 
 **Expected**: JSON response with user info and redirect URL
 
-**Example - Test Create User (WP-002)**:
+**Example - Test Create User (Seq 2, WP-002)**:
 ```bash
 curl -X POST http://localhost:8080/api/v1/users \
   -H "Content-Type: application/json" \
@@ -188,7 +198,7 @@ curl -X POST http://localhost:8080/api/v1/users \
 
 **Expected**: JSON response with created user
 
-**Example - Test Get Transaction (WP-003)**:
+**Example - Test Get Transaction (Seq 3, WP-003)**:
 ```bash
 curl http://localhost:8080/api/v1/transactions/TX0000000001
 ```
@@ -196,6 +206,11 @@ curl http://localhost:8080/api/v1/transactions/TX0000000001
 **Expected**: JSON response with transaction details
 
 **Document all test results** in integration test report.
+
+**Verify Shared Module Integration**:
+- For workpackages with `sharedModuleContext`, verify shared modules work correctly
+- Test that later workpackages can use modules created by earlier workpackages
+- Example: If WP-013 shares CEE3ABD with WP-012, verify both can use it
 
 ### 5. Test Frontend Integration
 
@@ -205,14 +220,18 @@ curl http://localhost:8080/api/v1/transactions/TX0000000001
    npm run dev
    ```
 
-2. **Test each workpackage flow**:
-  
+2. **Test each workpackage flow in sequence order**:
+   - Follow the migration sequence from {{WORKPACKAGE_PLANNING}}
+   - Test workpackages in the order they were implemented
+   - Verify soft prerequisites are working before testing dependent workpackages
+   - Test shared components work correctly across multiple workpackages
 
 3. **Check browser console for errors**:
    - CORS errors? (Add frontend origin to CORS config)
    - 403 Forbidden? (CSRF not disabled)
    - 401 Unauthorized? (Password hash mismatch)
    - Network errors? (Backend not running)
+   - Component errors? (Shared components not working correctly)
 
 ### 6. Fix Integration Issues
 
@@ -290,9 +309,9 @@ htpasswd -bnBC 10 '' password  # If not uppercased
 [Date and time]
 
 ## Workpackages Tested
-- WP-001: [Name] - ✅ PASS / ❌ FAIL
-- WP-002: [Name] - ✅ PASS / ❌ FAIL
-- WP-003: [Name] - ✅ PASS / ❌ FAIL
+- Seq 1 (WP-001): [Name] - ✅ PASS / ❌ FAIL
+- Seq 2 (WP-002): [Name] - ✅ PASS / ❌ FAIL
+- Seq 3 (WP-003): [Name] - ✅ PASS / ❌ FAIL
 
 ## Test Environment
 - Database: [SQLite/PostgreSQL/etc.]
@@ -303,8 +322,10 @@ htpasswd -bnBC 10 '' password  # If not uppercased
 
 ## Test Results
 
-### WP-001: [Workpackage Name]
+### Seq 1 (WP-001): [Workpackage Name]
 **Status**: ✅ PASS
+**Soft Prerequisites**: None
+**Shared Modules**: None
 
 **Tests Performed**:
 1. Login with admin user - ✅ PASS
@@ -316,12 +337,15 @@ htpasswd -bnBC 10 '' password  # If not uppercased
 
 ---
 
-### WP-002: [Workpackage Name]
+### Seq 19 (WP-013): [Workpackage Name]
 **Status**: ❌ FAIL → ✅ FIXED
+**Soft Prerequisites**: WP-012 (verified completed)
+**Shared Modules**: CEE3ABD (shared with WP-012, WP-014)
 
 **Tests Performed**:
 1. Create user via API - ❌ FAIL (enum mapping error)
 2. Create user via frontend - ❌ FAIL (CORS error)
+3. Verify shared module CEE3ABD - ✅ PASS (reused from WP-012)
 
 **Issues Found**:
 1. **Enum Mapping Error**
@@ -342,11 +366,30 @@ htpasswd -bnBC 10 '' password  # If not uppercased
 
 ## Summary
 
-**Total Workpackages**: 5
-**Passed**: 5
+**Total Workpackages**: 26
+**Total Sequences**: 26
+**Passed**: 26
 **Failed**: 0
 **Issues Found**: 8
 **Issues Fixed**: 8
+
+## Coordination Dependencies Verified
+
+**Shared Module Integration**:
+- CEE3ABD: Used by 8 workpackages (WP-012, WP-013, WP-014, WP-015, WP-016, WP-018, WP-021, WP-024)
+  - Created by: WP-012 (Seq 12)
+  - Reused by: All subsequent workpackages
+  - Status: ✅ Working correctly
+
+- CEEDAYS, CSUTLDTC: Used by 2 workpackages (WP-020, WP-023)
+  - Created by: WP-020 (Seq 15)
+  - Reused by: WP-023 (Seq 20)
+  - Status: ✅ Working correctly
+
+**Soft Prerequisites Verified**:
+- All soft prerequisites were completed before dependent workpackages
+- No ordering issues detected
+- Wave-based parallelization opportunities identified
 
 ## Common Issues Fixed
 
@@ -433,11 +476,11 @@ Open browser: **http://localhost:3000**
 
 ## Available Features
 
-- ✅ **Login** (WP-001) - User authentication
-- ✅ **Create User** (WP-002) - Add new users
-- ✅ **View Transaction** (WP-003) - Transaction details
-- ✅ **Delete User** (WP-004) - Remove users
-- ✅ **Update User** (WP-005) - Modify user profiles
+- ✅ **Login** (Seq 1, WP-001) - User authentication
+- ✅ **Create User** (Seq 2, WP-002) - Add new users
+- ✅ **View Transaction** (Seq 3, WP-003) - Transaction details
+- ✅ **Delete User** (Seq 4, WP-004) - Remove users
+- ✅ **Update User** (Seq 5, WP-005) - Modify user profiles
 
 ## Troubleshooting
 
@@ -553,10 +596,13 @@ Update `{{CODE_GENERATION_STATUS}}`:
   "integrationTesting": {
     "status": "completed",
     "testDate": "[timestamp]",
-    "workpackagesTested": 5,
+    "workpackagesTested": 26,
+    "sequencesTested": 26,
     "issuesFound": 8,
     "issuesFixed": 8,
-    "deploymentReady": true
+    "deploymentReady": true,
+    "coordinationDependenciesVerified": true,
+    "sharedModulesVerified": true
   }
 }
 ```
@@ -566,7 +612,9 @@ Update `{{CODE_GENERATION_STATUS}}`:
 ## Quality Checklist
 
 - [ ] Seed data script created and tested
-- [ ] All workpackages tested end-to-end
+- [ ] All workpackages tested in sequence order
+- [ ] Soft prerequisites verified before testing dependent workpackages
+- [ ] Shared modules verified across multiple workpackages
 - [ ] Login works with test users
 - [ ] All CRUD operations work
 - [ ] Frontend can call backend APIs
@@ -578,6 +626,7 @@ Update `{{CODE_GENERATION_STATUS}}`:
 - [ ] Deployment guide complete
 - [ ] Test credentials documented
 - [ ] All issues fixed and retested
+- [ ] Coordination dependencies verified
 - [ ] Progress tracking updated
 
 ---

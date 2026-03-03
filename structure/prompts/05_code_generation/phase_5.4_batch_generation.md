@@ -39,10 +39,17 @@
 ## Context
 
 ### Workpackage Context (Provided at Runtime)
-- **Workpackage ID**: WP-{ID} (e.g., WP-001)
+- **Sequence Number**: Seq-{NUM} (e.g., Seq-1, Seq-19)
+- **Workpackage ID**: WP-{ID} (e.g., WP-001, WP-013)
+- **Flow ID**: FLOW_{NAME} (e.g., FLOW_COSGN00C)
 - **Workpackage Name**: [Name from workpackage planning]
+- **Phase**: [Phase number from migration sequence]
+- **Wave**: [Wave number from migration sequence]
+- **Soft Prerequisites**: [List of workpackage IDs that should be completed first]
+- **Shared Module Context**: [Information about shared modules with other workpackages]
 
 ### Input Locations
+- **Workpackage Planning**: `{{WORKPACKAGE_PLANNING}}` (migration sequence, coordination dependencies)
 - **Technical Implementation Guide**: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
 - **Target Specifications**: `{{TARGET_SPECIFICATION}}/` (batch specs)
 - **Database Schemas**: `{{DATABASE_GEN_SRC}}/` (generated database schemas)
@@ -75,6 +82,27 @@ Implement ONE workpackage as a batch module in the existing batch project struct
 ---
 
 ## Instructions
+
+### 0. Verify Prerequisites and Coordination
+
+**CRITICAL - Check Before Starting**
+
+1. **Read Migration Sequence** from `{{WORKPACKAGE_PLANNING}}`:
+   - Locate the current sequence entry by `sequenceNumber`
+   - Extract `workpackageId`, `flowId`, `phase`, `wave`
+   - Note `softPrerequisites` array
+   - Note `sharedModuleContext` object
+
+2. **Verify Soft Prerequisites**:
+   - Check if all workpackages in `softPrerequisites` are completed
+   - Read {{CODE_GENERATION_STATUS}} to verify completion status
+   - If any prerequisite is not completed, STOP and report issue
+
+3. **Review Shared Module Context**:
+   - Check `sharedModuleContext.sharesModulesWith` - list of flows sharing batch components
+   - Check `sharedModuleContext.sharedModules` - which specific components are shared
+   - **If this is the first flow for shared components**: Create the shared components
+   - **If other flows already created shared components**: Reuse existing components, do not recreate
 
 ### 1. Read Specifications
 

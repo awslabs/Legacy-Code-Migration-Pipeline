@@ -39,10 +39,17 @@
 ## Context
 
 ### Workpackage Context (Provided at Runtime)
-- **Workpackage ID**: WP-{ID} (e.g., WP-001)
+- **Sequence Number**: Seq-{NUM} (e.g., Seq-1, Seq-19)
+- **Workpackage ID**: WP-{ID} (e.g., WP-001, WP-013)
+- **Flow ID**: FLOW_{NAME} (e.g., FLOW_COSGN00C)
 - **Workpackage Name**: [Name from workpackage planning]
+- **Phase**: [Phase number from migration sequence]
+- **Wave**: [Wave number from migration sequence]
+- **Soft Prerequisites**: [List of workpackage IDs that should be completed first]
+- **Shared Module Context**: [Information about shared modules with other workpackages]
 
 ### Input Locations
+- **Workpackage Planning**: `{{WORKPACKAGE_PLANNING}}` (migration sequence, coordination dependencies)
 - **Technical Implementation Guide**: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
 - **Target Specifications**: `{{TARGET_SPECIFICATION}}/` (backend, frontend, batch specs)
 - **Database Schemas**: `{{DATABASE_GEN_SRC}}/` (generated database schemas)
@@ -75,6 +82,50 @@ Implement ONE workpackage as a module in the existing backend project structure.
 ---
 
 ## Instructions
+
+### 0. Verify Prerequisites and Coordination
+
+**CRITICAL - Check Before Starting**
+
+1. **Read Migration Sequence** from `{{WORKPACKAGE_PLANNING}}`:
+   - Locate the current sequence entry by `sequenceNumber`
+   - Extract `workpackageId`, `flowId`, `phase`, `wave`
+   - Note `softPrerequisites` array
+   - Note `sharedModuleContext` object
+
+2. **Verify Soft Prerequisites**:
+   - Check if all workpackages in `softPrerequisites` are completed
+   - Read {{CODE_GENERATION_STATUS}} to verify completion status
+   - If any prerequisite is not completed, STOP and report issue
+
+3. **Review Shared Module Context**:
+   - Check `sharedModuleContext.sharesModulesWith` - list of flows sharing modules
+   - Check `sharedModuleContext.sharedModules` - which specific modules are shared
+   - Check `sharedModuleContext.coordinationReason` - why coordination is needed
+   - **If this is the first flow for shared modules**: Create the shared modules
+   - **If other flows already created shared modules**: Reuse existing modules, do not recreate
+
+4. **Example Coordination Check**:
+   ```json
+   {
+     "sequenceNumber": 19,
+     "workpackageId": 13,
+     "flowId": "FLOW_CBACT03C",
+     "softPrerequisites": [12],
+     "sharedModuleContext": {
+       "sharesModulesWith": ["FLOW_CBACT02C", "FLOW_CBCUS01C"],
+       "sharedModules": {
+         "FLOW_CBACT02C": ["CEE3ABD"],
+         "FLOW_CBCUS01C": ["CEE3ABD"]
+       },
+       "coordinationReason": "Should migrate after FLOW_CBACT02C"
+     }
+   }
+   ```
+   - Verify WP-012 (FLOW_CBACT02C) is completed
+   - Check if CEE3ABD module already exists (created by WP-012)
+   - If exists: Reuse it, do not recreate
+   - If not exists: Report error (prerequisite should have created it)
 
 ### 1. Read Specifications
 
@@ -442,9 +493,17 @@ Update `{{CODE_GENERATION_STATUS}}`:
 {
   "phase": "Phase 5 - Code Generation",
   "currentStep": "5.2 - Backend Generation",
+  "currentSequence": {SEQUENCE_NUMBER},
   "workpackages": {
     "WP-{ID}": {
+      "sequenceNumber": {SEQUENCE_NUMBER},
+      "workpackageId": "WP-{ID}",
+      "flowId": "FLOW_{NAME}",
+      "phase": {PHASE},
+      "wave": {WAVE},
       "status": "completed",
+      "softPrerequisites": [{LIST}],
+      "sharedModules": [{LIST}],
       "backend": {
         "moduleCreated": true,
         "moduleName": "[wp-module-name]",
@@ -453,7 +512,8 @@ Update `{{CODE_GENERATION_STATUS}}`:
         "servicesCount": 2,
         "controllersCount": 2,
         "todosCount": 5,
-        "compiles": true
+        "compiles": true,
+        "sharedModulesReused": ["CEE3ABD"]
       }
     }
   }
@@ -687,14 +747,18 @@ Update `{{CODE_GENERATION_STATUS}}`:
 ## Verification
 
 Before marking complete:
-1. ✅ Module compiles without errors
-2. ✅ Module is integrated into parent build
-3. ✅ All entities from business spec are created
-4. ✅ All business rules are implemented (or have TODOs)
-5. ✅ All API endpoints from migration mapping are created
-6. ✅ TODOs are added for all integration points
-7. ✅ Code follows naming conventions from tech spec
-8. ✅ No external service functionality is implemented (only integration code)
+1. ✅ Soft prerequisites verified and completed
+2. ✅ Shared module context reviewed and handled correctly
+3. ✅ Module compiles without errors
+4. ✅ Module is integrated into parent build
+5. ✅ All entities from business spec are created
+6. ✅ All business rules are implemented (or have TODOs)
+7. ✅ All API endpoints from migration mapping are created
+8. ✅ TODOs are added for all integration points
+9. ✅ Code follows naming conventions from tech spec
+10. ✅ No external service functionality is implemented (only integration code)
+11. ✅ Shared modules reused (not recreated) if they already exist
+12. ✅ Progress tracking updated with sequence information
 
 ---
 

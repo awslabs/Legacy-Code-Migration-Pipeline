@@ -7,9 +7,27 @@
 
 **Document Type**: Master Orchestration (Supervisor Level)
 **Phase**: Phase 3 - Business Specification
-**Version**: 1.1
-**Date**: 2026-02-09
+**Version**: 1.2
+**Date**: 2026-03-03
 **Owner**: business_team_supervisor
+
+---
+
+## CRITICAL - Delegation Check
+
+**IF YOU ARE NOT THE OWNER OF THIS DOCUMENT, STOP AND DELEGATE**
+
+This document is owned by: **business_team_supervisor**
+
+**Before proceeding, check your role**:
+- If you are **business_team_supervisor**: Continue with orchestration
+- If you are **ANY OTHER AGENT**: 
+  1. STOP immediately
+  2. Delegate this entire prompt to **business_team_supervisor**
+  3. Wait for their response
+  4. Do NOT attempt to execute the orchestration yourself
+
+**Why this matters**: Only the designated supervisor has the authority and context to orchestrate the entire phase across multiple agents. Attempting to execute orchestration from a non-supervisor role will result in incomplete or incorrect execution.
 
 ---
 
