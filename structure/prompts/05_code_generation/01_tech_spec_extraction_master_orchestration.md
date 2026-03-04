@@ -5,9 +5,9 @@
 ## Document Control
 
 **Document Type**: Master Orchestration (Supervisor Level)
-**Phase**: Phase 5.0 - Technical Implementation Guide Creation
+**Phase**: Phase 5.1 - Technical Implementation Guide Creation
 **Version**: 1.1
-**Date**: 2026-03-03
+**Date**: 2026-03-04
 **Owner**: tech_spec_team_supervisor
 
 ---
@@ -42,32 +42,33 @@ This document provides orchestration instructions for the Technical Implementati
 - Provides clear guidance for code generation
 
 **Sub-Phases**:
-1. **Phase 5.0.0**: Technical Implementation Guide Creation (per workpackage)
-2. **Phase 5.0.1**: Technical Implementation Guide Review (per workpackage)
+1. **Phase 5.1.0**: Technical Implementation Guide Creation (per workpackage)
+2. **Phase 5.1.1**: Technical Implementation Guide Review (per workpackage)
 
 ---
 
 ## Phase Dependencies
 
 ```
-Phase 4 (Test Case Generation) → Phase 5.0 (Technical Specification Extraction)
-                                        ↓
-                                Phase 5.0.0 (Tech Spec Creation)
-                                        ↓
-                                Phase 5.0.1 (Tech Spec Review)
-                                        ↓
-                                Phase 5.1 (Project Structure)
-                                        ↓
-                                Phase 5.2/5.3/5.4 (Code Generation)
+Phase 4 (Test Case Generation) → Phase 5.0 (Database Modernization) → Phase 5.1 (Technical Specification Extraction)
+                                                                              ↓
+                                                                      Phase 5.1.0 (Tech Spec Creation)
+                                                                              ↓
+                                                                      Phase 5.1.1 (Tech Spec Review)
+                                                                              ↓
+                                                                      Phase 5.2 (Project Structure)
+                                                                              ↓
+                                                                      Phase 5.3/5.4/5.5 (Code Generation)
 ```
 
 **Prerequisites**:
 - Phase 3 outputs: Business specifications (approved)
 - Phase 4 outputs: Test case specifications (approved)
+- Phase 5.0 outputs: Modernized database schema (approved) - single target database
 - Phase 2 outputs: Workpackage planning
 - Input specifications: `{{TARGET_SPECIFICATION}}/`
 - Sample code: `{{TARGET_SAMPLE_CODE}}/`
-- Database schemas: `{{DATABASE_GEN_SRC}}/` (check for `new_sqlite_ddl.sql` and `new_sqlite_migration.sql`)
+- Modernized database schema: `{{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql` (DB_NAME auto-detected)
 
 **Outputs**:
 - Technical implementation guide per workpackage: `{{TECH_SPEC_BASE_PATH}}/WP-{ID}-tech-implementation-guide-approved.md`
@@ -85,12 +86,12 @@ WORKPACKAGE_LOOP:
     SELECT next_workpackage FROM workpackage_planning ORDER BY priority
 
     # ========================================
-    # PHASE 5.0.0: TECHNICAL IMPLEMENTATION GUIDE CREATION
+    # PHASE 5.1.0: TECHNICAL IMPLEMENTATION GUIDE CREATION
     # ========================================
     
-    EXECUTE Phase_5.0.0:
+    EXECUTE Phase_5.1.0:
         ASSIGN: tech_spec_extraction_specialist
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.0_tech_spec_creation.md
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1.0_tech_spec_creation.md
         PROVIDE_CONTEXT:
             - workpackage_id: current_workpackage.id
             - workpackage_name: current_workpackage.name
@@ -99,7 +100,8 @@ WORKPACKAGE_LOOP:
             - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
             - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
             - Target specifications: {{TARGET_SPECIFICATION}}/
-            - Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
+            - Modernized database schema: {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql (auto-detect DB_NAME)
+            - Database migration mappings: {{DATABASE_MODERNIZATION_OUTPUT}}/field_mapping.json
             - Sample code: {{TARGET_SAMPLE_CODE}}/
             - Workpackage planning: {{WORKPACKAGE_PLANNING}}
             - Previously created guides: {{TECH_SPEC_BASE_PATH}}/WP-*-tech-implementation-guide-approved.md
@@ -123,15 +125,15 @@ WORKPACKAGE_LOOP:
             
             IF verification_passed:
                 UPDATE {{TECH_SPEC_STATUS}} with completion
-                PROCEED to Phase_5.0.1
+                PROCEED to Phase_5.1.1
 
     # ========================================
-    # PHASE 5.0.1: TECHNICAL IMPLEMENTATION GUIDE REVIEW
+    # PHASE 5.1.1: TECHNICAL IMPLEMENTATION GUIDE REVIEW
     # ========================================
     
-    EXECUTE Phase_5.0.1:
+    EXECUTE Phase_5.1.1:
         ASSIGN: tech_spec_review_specialist
-        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.1_tech_spec_review.md
+        PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1.1_tech_spec_review.md
         PROVIDE_CONTEXT:
             - workpackage_id: current_workpackage.id
             - workpackage_name: current_workpackage.name
@@ -160,7 +162,7 @@ WORKPACKAGE_LOOP:
             ELSE IF decision == "REVISE":
                 CHECK revision_feedback_documented(WP-{ID})
                 UPDATE {{TECH_SPEC_STATUS}} with revision request
-                RETURN to Phase_5.0.0 with feedback
+                RETURN to Phase_5.1.0 with feedback
             
             ELSE IF decision == "REJECT":
                 CHECK rejection_rationale_documented(WP-{ID})
@@ -184,9 +186,9 @@ END WORKPACKAGE_LOOP
 
 ## Agent Assignments
 
-### Phase 5.0.0: Technical Implementation Guide Creation
+### Phase 5.1.0: Technical Implementation Guide Creation
 **Agent**: tech_spec_extraction_specialist
-**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.0_tech_spec_creation.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1.0_tech_spec_creation.md
 **Capabilities**:
 - Pattern extraction from target specifications
 - Business requirement analysis
@@ -195,9 +197,9 @@ END WORKPACKAGE_LOOP
 - Integration point documentation
 - Technical decision documentation
 
-### Phase 5.0.1: Technical Implementation Guide Review
+### Phase 5.1.1: Technical Implementation Guide Review
 **Agent**: tech_spec_review_specialist
-**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.0.1_tech_spec_review.md
+**Task Document**: {{PROMPTS_BASE_PATH}}/05_code_generation/phase_5.1.1_tech_spec_review.md
 **Capabilities**:
 - Completeness verification
 - Consistency checking (with target specs and other workpackages)
@@ -210,22 +212,25 @@ END WORKPACKAGE_LOOP
 
 ## Input/Output Contracts
 
-### Phase 3/4 → Phase 5.0.0
-**Phase 3/4 Outputs** (Phase 5.0.0 Inputs):
+### Phase 3/4/5.0 → Phase 5.1.0
+**Phase 3/4/5.0 Outputs** (Phase 5.1.0 Inputs):
 - Business specifications: `WP-{ID}-specification-approved.md`
 - Test cases: `WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md`
+- Modernized database schemas: `new_sqlite_ddl.sql`, `new_postgres_ddl.sql`
+- Database migration mappings: `field_mapping.json`
 - Workpackage planning with dependencies
 - Target specifications (provided by customer)
-- Database schemas
 
 **Contract**:
 - All business functions documented
 - All test cases defined
+- Modernized database schemas available
+- Database migration mappings available
 - Workpackage dependencies identified
 - Target specifications available
 
-### Phase 5.0.0 → Phase 5.0.1
-**Phase 5.0.0 Outputs** (Phase 5.0.1 Inputs):
+### Phase 5.1.0 → Phase 5.1.1
+**Phase 5.1.0 Outputs** (Phase 5.1.1 Inputs):
 - Technical implementation guide (draft): `WP-{ID}-tech-implementation-guide.md`
 - Progress tracking updated
 
@@ -236,8 +241,8 @@ END WORKPACKAGE_LOOP
 - Integration points documented
 - Technical decisions documented with rationale
 
-### Phase 5.0.1 → Phase 5.1
-**Phase 5.0.1 Outputs** (Phase 5.1 Inputs):
+### Phase 5.1.1 → Phase 5.2
+**Phase 5.1.1 Outputs** (Phase 5.2 Inputs):
 - Approved technical implementation guide: `WP-{ID}-tech-implementation-guide-approved.md`
 - Review report
 - Progress tracking updated
@@ -254,7 +259,7 @@ END WORKPACKAGE_LOOP
 
 ## Verification Criteria
 
-### Phase 5.0.0 Verification
+### Phase 5.1.0 Verification
 ```
 CHECK guide_exists(workpackage_id):
     guide_path = {{TECH_SPEC_BASE_PATH}}/WP-{workpackage_id}-tech-implementation-guide.md
@@ -310,7 +315,7 @@ CHECK integration_points_documented(workpackage_id):
     RETURN TRUE
 ```
 
-### Phase 5.0.1 Verification
+### Phase 5.1.1 Verification
 ```
 CHECK review_report_exists(workpackage_id):
     report_path = {{TECH_SPEC_BASE_PATH}}/WP-{workpackage_id}-review-report.md
@@ -332,7 +337,7 @@ CHECK approved_guide_exists(workpackage_id):
 
 ### Rework Scenarios
 
-#### Scenario 1: Incomplete Guide (Return to Phase 5.0.0)
+#### Scenario 1: Incomplete Guide (Return to Phase 5.1.0)
 **Triggers**:
 - Missing required sections
 - Insufficient implementation detail
@@ -341,12 +346,12 @@ CHECK approved_guide_exists(workpackage_id):
 
 **Actions**:
 1. Document gaps in review report
-2. Update Phase 5.0.0 task with specific sections to complete
+2. Update Phase 5.1.0 task with specific sections to complete
 3. Re-assign tech_spec_extraction_specialist
-4. Re-execute Phase 5.0.0 with focus on identified gaps
+4. Re-execute Phase 5.1.0 with focus on identified gaps
 5. Re-verify completeness
 
-#### Scenario 2: Inconsistencies Found (Return to Phase 5.0.0)
+#### Scenario 2: Inconsistencies Found (Return to Phase 5.1.0)
 **Triggers**:
 - Patterns don't match target specifications
 - Inconsistent with other approved workpackage guides
@@ -356,10 +361,10 @@ CHECK approved_guide_exists(workpackage_id):
 **Actions**:
 1. Document inconsistencies in review report
 2. Re-assign tech_spec_extraction_specialist
-3. Re-execute Phase 5.0.0 to resolve inconsistencies
+3. Re-execute Phase 5.1.0 to resolve inconsistencies
 4. Re-verify consistency
 
-#### Scenario 3: Missing Traceability (Return to Phase 5.0.0)
+#### Scenario 3: Missing Traceability (Return to Phase 5.1.0)
 **Triggers**:
 - Technical decisions without rationale
 - Patterns without target spec references
@@ -368,7 +373,7 @@ CHECK approved_guide_exists(workpackage_id):
 **Actions**:
 1. Document traceability gaps in review report
 2. Re-assign tech_spec_extraction_specialist
-3. Re-execute Phase 5.0.0 to add traceability
+3. Re-execute Phase 5.1.0 to add traceability
 4. Re-verify traceability
 
 #### Scenario 4: Critical Issues (Escalate to Human)
@@ -411,7 +416,7 @@ When resuming after interruption:
 
 ## Quality Gates
 
-### Phase 5.0.0 Quality Gate
+### Phase 5.1.0 Quality Gate
 **Criteria**:
 - [ ] All four specifications created
 - [ ] All required sections populated
@@ -422,10 +427,10 @@ When resuming after interruption:
 - [ ] Progress tracking updated
 
 **Gate Decision**:
-- **PASS**: Proceed to Phase 5.0.1
-- **FAIL**: Rework Phase 5.0.0 or escalate
+- **PASS**: Proceed to Phase 5.1.1
+- **FAIL**: Rework Phase 5.1.0 or escalate
 
-### Phase 5.0.1 Quality Gate
+### Phase 5.1.1 Quality Gate
 **Criteria**:
 - [ ] All specifications reviewed
 - [ ] Completeness verified
@@ -436,8 +441,8 @@ When resuming after interruption:
 - [ ] No blocking issues
 
 **Gate Decision**:
-- **PASS**: Proceed to Phase 5.1 (Project Structure)
-- **FAIL**: Rework Phase 5.0.0 or escalate
+- **PASS**: Proceed to Phase 5.2 (Project Structure)
+- **FAIL**: Rework Phase 5.1.0 or escalate
 
 ---
 
@@ -445,8 +450,12 @@ When resuming after interruption:
 
 ### Input Paths
 ```
+Business Specification Base Path = {{BUSINESS_SPECIFICATION_BASE_PATH}}
+Test Case Generation Base Path = {{TEST_CASE_GENERATION_BASE_PATH}}
 Target Specification = {{TARGET_SPECIFICATION}}
 Target Sample Code = {{TARGET_SAMPLE_CODE}}
+Modernized Database Schemas = {{DATABASE_MODERNIZATION_OUTPUT}}
+Workpackage Planning = {{WORKPACKAGE_PLANNING}}
 ```
 
 ### Output Paths
@@ -490,22 +499,23 @@ Tech Spec Errors Template = {{TECH_SPEC_ERRORS_TEMPLATE}}
 2. Verify all quality gates passed
 3. Generate final summary
 4. Archive artifacts
-5. Prepare handoff to Phase 5.1
+5. Prepare handoff to Phase 5.2
 
 ---
 
 ## Success Criteria
 
-Phase 5.0 is considered complete when:
+Phase 5.1 is considered complete when:
 - [ ] All workpackages have technical implementation guides
 - [ ] All guides reviewed and approved
 - [ ] All guides follow patterns from target specifications
 - [ ] All guides consistent with each other
 - [ ] All business functions covered in implementation tasks
 - [ ] All integration points documented
+- [ ] Database schema references included
 - [ ] No blocking issues remain
 - [ ] Progress tracking shows 100% completion
-- [ ] Ready for Phase 5.1 (Code Generation)
+- [ ] Ready for Phase 5.2 (Code Generation)
 
 ---
 

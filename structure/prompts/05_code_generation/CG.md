@@ -11,6 +11,7 @@
   - {{LEGACY_SPECIFICATION}} - Legacy documentation (Chapter 6)
   - {{TARGET_SPECIFICATION}} - Target framework specifications (Spring Boot, Spring Modulith)
   - {{TARGET_SAMPLE_CODE}} - Java example code for guidance
+  - {{DATABASE_MODERNIZATION_OUTPUT}} - Modernized database schema (new_{DB_NAME}_ddl.sql, auto-detect DB_NAME)
 - Output Location: 
   - {{CODE_GENERATION_BACKEND_OUTPUT}} - Generated Java implementation code
   - {{CODE_GENERATION_BASE_PATH}}/progress - Phase completion tracking
@@ -117,17 +118,19 @@ Implement modern Java Spring Boot code based on workpackage specifications while
 ### 4. Domain Model Implementation (Production-Ready Entities)
 1. For each business entity in specifications:
    - Create JPA entity classes in `[module]/domain/`
-   - **Use surrogate keys** (`Long id` with `@GeneratedValue`) + business keys
-   - **Add audit fields**: `createdAt`, `updatedAt`, `createdBy`, `updatedBy`
-   - **Add optimistic locking**: `@Version` field
-   - **Define database indexes** in `@Table` annotation
+   - **Reference modernized database schema** from {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql
+   - **Use surrogate keys** (`Long id` with `@GeneratedValue`) matching modern schema
+   - **Add audit fields**: `createdAt`, `updatedAt`, `createdBy`, `updatedBy` (matching modern schema)
+   - **Add optimistic locking**: `@Version` field (matching modern schema)
+   - **Define database indexes** in `@Table` annotation (matching modern schema)
    - **Use enums** for type fields (not strings)
    - **Use Lombok** (`@Getter`, `@Setter`) for boilerplate reduction
    - **Add JPA Auditing**: `@EntityListeners(AuditingEntityListener.class)`
    - Implement validation annotations matching business rules
-   - Create appropriate relationships between entities
+   - Create appropriate relationships between entities (matching modern schema foreign keys)
    - Ensure proper encapsulation
    - Add comprehensive Javadoc with traceability (see section 9)
+   - **Note**: The database type (PostgreSQL, MySQL, SQLite, DB2) is determined by the `{DB_NAME}` in the schema filename
 
 ### 5. Data Access Layer Implementation
 1. For each domain module:

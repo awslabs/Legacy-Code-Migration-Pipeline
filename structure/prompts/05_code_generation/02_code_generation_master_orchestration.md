@@ -214,7 +214,8 @@ WORKPACKAGE_LOOP:
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
                 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
                 - Target specification: {{TARGET_SPECIFICATION}}/02-BACKEND-SPECIFICATION.md
-                - Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
+                - Modernized database schema: {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql
+                - Database migration mappings: {{DATABASE_MODERNIZATION_OUTPUT}}/field_mapping.json
                 - Sample code: {{TARGET_SAMPLE_CODE}}/backend/
             
             EXPECTED_OUTPUTS:
@@ -292,7 +293,8 @@ WORKPACKAGE_LOOP:
                 - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-specification-approved.md
                 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
                 - Target specification: {{TARGET_SPECIFICATION}}/03-BATCH-SPECIFICATION.md
-                - Database schemas: {{DATABASE_GEN_SRC}}/ (check for `new_sqlite_ddl.sql`)
+                - Modernized database schema: {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql
+                - Database migration mappings: {{DATABASE_MODERNIZATION_OUTPUT}}/field_mapping.json
                 - Sample code: {{TARGET_SAMPLE_CODE}}/batch/
             
             EXPECTED_OUTPUTS:
@@ -379,7 +381,7 @@ IF all_workpackages_completed:
         INPUTS:
             - Generated backend code: {{CODE_GENERATION_BACKEND_OUTPUT}}/
             - Generated frontend code: {{CODE_GENERATION_FRONTEND_OUTPUT}}/
-            - Database schemas: {{DATABASE_GEN_SRC}}/
+            - Modernized database schemas: {{DATABASE_MODERNIZATION_OUTPUT}}/
             - Technical specifications: {{TECH_SPEC_BASE_PATH}}/specs/
             - Business specifications: {{BUSINESS_SPECIFICATION_BASE_PATH}}/
             - Target specifications: {{TARGET_SPECIFICATION}}/
@@ -1120,7 +1122,7 @@ Test Case Generation = {{TEST_CASE_GENERATION_BASE_PATH}}
 Technical Implementation Guides = {{TECH_SPEC_BASE_PATH}}
 Target Specification = {{TARGET_SPECIFICATION}}
 Target Sample Code = {{TARGET_SAMPLE_CODE}}
-Database Schemas = {{DATABASE_GEN_SRC}} (check for `new_sqlite_ddl.sql` and `new_sqlite_migration.sql`)
+Modernized Database Schemas = {{DATABASE_MODERNIZATION_OUTPUT}}
 ```
 
 ### Output Paths
