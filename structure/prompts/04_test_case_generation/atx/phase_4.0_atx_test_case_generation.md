@@ -12,19 +12,19 @@
 ### Expected Deliverables
 
 1. **Functional Equivalence Test Specification (Draft)**
-   - File: {{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-draft.md
+   - File: {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
    - Description: Test cases for verifying functional equivalence between legacy and modern systems
 
 2. **Test Data Sets**
-   - File: {{ATX_TEST_GENERATION_TEST_DATA}}/WP-XXX-test-data.json
-   - Description: Input/output pairs extracted from legacy code and ATX analysis
+   - File: {{ATX_TEST_GENERATION_TEST_DATA}}/{domain_name}-{entrypoint_name}-test-data.json
+   - Description: Input/output pairs extracted from legacy code and ATX BRE analysis
 
 3. **Legacy Code Traceability Matrix**
-   - File: {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-legacy-traceability.md
+   - File: {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-legacy-traceability.md
    - Description: Mapping of test cases to legacy programs, modules, and code sections
 
 4. **Coverage Report**
-   - File: {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-coverage-notes.md
+   - File: {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-coverage-notes.md
    - Description: Analysis of legacy code coverage and test scenario completeness
 
 5. **Progress Tracking**
@@ -36,12 +36,12 @@
    - Description: Documentation of errors and issues encountered
 
 ### Success Criteria
-- [ ] All legacy programs identified in ATX analysis have test coverage
+- [ ] All legacy programs identified in ATX BRE entrypoint have test coverage
 - [ ] Test data sets include realistic input/output pairs
 - [ ] Comparative test scenarios defined (legacy vs modern)
 - [ ] Equivalence validation points are explicit and measurable
 - [ ] Edge cases and error handling scenarios included
-- [ ] Traceability to legacy code is complete
+- [ ] Traceability to legacy code and ATX BRE is complete
 - [ ] All deliverables produced at specified paths
 - [ ] Ready for review
 
@@ -50,11 +50,11 @@
 ## Context
 
 ### Input Locations
-- **ATX app-domain analysis**: `{{ATX_APP_DOMAIN}}/`
-- **ATX data analysis**: `{{ATX_DATA_DICTIONARY}}/`
-- **ATX dependency analysis**: `{{ATX_DEPENDENCY_ANALYSIS}}/`
+- **ATX BRE entrypoint analysis**: `{{ATX_APPLICATION_ANALYSIS}}/{domain_name}/entrypoint-{entrypoint_name}/entrypoint-{entrypoint_name}.json`
+- **ATX domain analysis**: `{{ATX_APPLICATION_ANALYSIS}}/{domain_name}/{domain_name}.json`
+- **ATX data dictionary**: `{{ATX_DATA_DICTIONARY}}/`
+- **ATX data lineage**: `{{ATX_DATA_LINEAGE}}/`
 - **Legacy source code**: `{{SOURCE_CODE}}/`
-- **Workpackage planning**: `{{WORKPACKAGE_PLANNING}}`
 
 ### Output Locations
 - **Test specifications**: `{{ATX_TEST_GENERATION_SPECS}}/`
@@ -67,7 +67,7 @@
 
 ## Objective
 
-Generate functional equivalence test cases from ATX analysis artifacts and legacy source code to verify that modernized systems produce identical outputs to legacy systems for the same inputs. Focus on behavioral equivalence, data transformation validation, and comparative testing scenarios.
+Generate functional equivalence test cases from ATX BRE entrypoint analysis and legacy source code to verify that modernized systems produce identical outputs to legacy systems for the same inputs. Focus on behavioral equivalence, data transformation validation, and comparative testing scenarios.
 
 **CRITICAL PRINCIPLES**:
 1. **Behavioral Equivalence**: Test actual legacy behavior, not intended requirements
@@ -80,61 +80,61 @@ Generate functional equivalence test cases from ATX analysis artifacts and legac
 
 ## Instructions
 
-### 1. ATX Analysis Review and Legacy Code Mapping
+### 1. ATX BRE Entrypoint Analysis Review and Legacy Code Mapping
 
-**Purpose**: Understand legacy system behavior from ATX analysis and source code
+**Purpose**: Understand legacy system behavior from ATX BRE entrypoint analysis and source code
 
-#### 1.1 Review ATX App-Domain Analysis
-1. **Load ATX app-domain artifacts**:
-   - Read all files in `{{ATX_APP_DOMAIN}}/`
-   - Extract business logic patterns
-   - Identify workflows and process flows
-   - Document business rules and validations
+#### 1.1 Review ATX BRE Entrypoint Analysis
+1. **Load ATX BRE entrypoint JSON**:
+   - Read `{{ATX_APPLICATION_ANALYSIS}}/{domain_name}/entrypoint-{entrypoint_name}/entrypoint-{entrypoint_name}.json`
+   - Extract document_title, document_name, type
+   - Review summary.overview for high-level understanding
+   - Extract summary.business_functions list
+   - Review summary.environment_summary for technical context
+
+2. **Analyze functionality flow**:
+   - Review functionality_flow section
+   - Identify all programs in the flow (program_name, program_overview)
+   - Document called_programs for each program
+   - Understand program interactions and sequence
+
+3. **Extract business functions**:
+   - List all business_functions from summary
+   - Understand what each function does
+   - Identify validation rules and business logic
    - Note error handling patterns
 
-2. **Identify key behaviors**:
-   - Main processing flows
-   - Data transformations
-   - Business rule applications
-   - Error conditions and handling
-   - Edge cases and boundary conditions
+#### 1.2 Review ATX Domain Analysis
+1. **Load ATX domain JSON**:
+   - Read `{{ATX_APPLICATION_ANALYSIS}}/{domain_name}/{domain_name}.json`
+   - Extract domain-level context
+   - Understand domain scope and boundaries
+   - Note domain-level business rules
 
-#### 1.2 Review ATX Data Analysis
-1. **Load ATX data analysis artifacts**:
-   - Read all files in `{{ATX_DATA_DICTIONARY}}/`
+#### 1.3 Review ATX Data Dictionary
+1. **Load ATX data dictionary artifacts**:
+   - Read files in `{{ATX_DATA_DICTIONARY}}/`
    - Extract data structures and schemas
-   - Identify data transformations
-   - Document data flows
+   - Identify data field definitions
+   - Document data types and formats
    - Note data validation rules
 
-2. **Identify data patterns**:
-   - Input data structures
-   - Output data structures
-   - Data transformation logic
-   - Data validation rules
-   - Data constraints and relationships
+#### 1.4 Review ATX Data Lineage
+1. **Load ATX data lineage artifacts**:
+   - Read files in `{{ATX_DATA_LINEAGE}}/`
+   - Extract data flows and transformations
+   - Identify source and target data elements
+   - Document transformation logic
+   - Note data dependencies
 
-#### 1.3 Review ATX Dependency Analysis
-1. **Load ATX dependency analysis artifacts**:
-   - Read all files in `{{ATX_DEPENDENCY_ANALYSIS}}/`
-   - Extract component dependencies
-   - Identify call graphs and interaction patterns
-   - Document integration points
-   - Note cross-component data flows
-
-2. **Identify integration patterns**:
-   - Component interactions
-   - Data exchange patterns
-   - Synchronous vs asynchronous calls
-   - Error propagation
-   - Transaction boundaries
-
-#### 1.4 Map to Legacy Source Code
-1. **Identify relevant legacy programs**:
-   - COBOL programs in `{{SOURCE_CODE}}/app/cbl/`
-   - JCL scripts in `{{SOURCE_CODE}}/app/jcl/`
-   - BMS maps in `{{SOURCE_CODE}}/app/bms/`
-   - Copybooks in `{{SOURCE_CODE}}/app/cpy/`
+#### 1.5 Map to Legacy Source Code
+1. **Identify relevant legacy programs from ATX BRE**:
+   - Extract program names from functionality_flow
+   - For each program, locate source files:
+     - COBOL programs in `{{SOURCE_CODE}}/app/cbl/`
+     - JCL scripts in `{{SOURCE_CODE}}/app/jcl/`
+     - BMS maps in `{{SOURCE_CODE}}/app/bms/`
+     - Copybooks in `{{SOURCE_CODE}}/app/cpy/`
 
 2. **Analyze legacy code for each program**:
    - Read program source code
@@ -146,17 +146,17 @@ Generate functional equivalence test cases from ATX analysis artifacts and legac
    - Identify external calls and dependencies
 
 3. **Create legacy code inventory**:
-   - List all programs in scope for workpackage
+   - List all programs in scope for entrypoint
    - Document program purpose and behavior
-   - Map programs to ATX analysis findings
+   - Map programs to ATX BRE business functions
    - Identify test-critical code sections
 
 ### 2. Test Scenario Identification
 
-**Purpose**: Identify all scenarios requiring functional equivalence testing
+**Purpose**: Identify all scenarios requiring functional equivalence testing based on ATX BRE business functions
 
-#### 2.1 Main Flow Scenarios
-1. **For each legacy program**:
+#### 2.1 Main Flow Scenarios (from ATX BRE business_functions)
+1. **For each business function in ATX BRE**:
    - Identify happy path (normal processing)
    - Define typical input data
    - Define expected output data
@@ -164,21 +164,22 @@ Generate functional equivalence test cases from ATX analysis artifacts and legac
    - Note data transformations
 
 2. **Create main flow test scenarios**:
-   - Test ID: WP-XXX-ATX-TC-001 (main flow)
+   - Test ID: {domain_name}-{entrypoint_name}-TC-001 (main flow)
+   - Business function reference
    - Input data specification
    - Expected legacy output
    - Expected modern output (should match legacy)
    - Comparison criteria
 
 #### 2.2 Error Handling Scenarios
-1. **For each legacy program**:
+1. **For each legacy program in functionality_flow**:
    - Identify error conditions from code
    - Extract error messages and codes
    - Document error handling logic
    - Note error recovery mechanisms
 
 2. **Create error handling test scenarios**:
-   - Test ID: WP-XXX-ATX-TC-0XX (error scenarios)
+   - Test ID: {domain_name}-{entrypoint_name}-TC-0XX (error scenarios)
    - Invalid input data specification
    - Expected error behavior (legacy)
    - Expected error behavior (modern - should match)
@@ -192,35 +193,35 @@ Generate functional equivalence test cases from ATX analysis artifacts and legac
    - Note special value processing (zeros, nulls, spaces)
 
 2. **Create boundary test scenarios**:
-   - Test ID: WP-XXX-ATX-TC-1XX (boundary scenarios)
+   - Test ID: {domain_name}-{entrypoint_name}-TC-1XX (boundary scenarios)
    - Boundary input data specification
    - Expected boundary behavior (legacy)
    - Expected boundary behavior (modern - should match)
    - Boundary validation criteria
 
 #### 2.4 Data Transformation Scenarios
-1. **From ATX data analysis**:
+1. **From ATX data lineage**:
    - Identify all data transformations
    - Extract transformation logic from legacy code
    - Document input/output data formats
    - Note calculation formulas and algorithms
 
 2. **Create data transformation test scenarios**:
-   - Test ID: WP-XXX-ATX-TC-2XX (transformation scenarios)
+   - Test ID: {domain_name}-{entrypoint_name}-TC-2XX (transformation scenarios)
    - Input data before transformation
    - Expected output data after transformation (legacy)
    - Expected output data after transformation (modern - should match)
    - Transformation validation criteria
 
 #### 2.5 Integration Scenarios
-1. **From ATX dependency analysis**:
-   - Identify component interactions
+1. **From ATX BRE functionality_flow**:
+   - Identify program interactions (called_programs)
    - Extract integration patterns from legacy code
    - Document data exchange formats
    - Note integration error handling
 
 2. **Create integration test scenarios**:
-   - Test ID: WP-XXX-ATX-TC-3XX (integration scenarios)
+   - Test ID: {domain_name}-{entrypoint_name}-TC-3XX (integration scenarios)
    - Integration input data specification
    - Expected integration behavior (legacy)
    - Expected integration behavior (modern - should match)
@@ -258,11 +259,14 @@ Generate functional equivalence test cases from ATX analysis artifacts and legac
 3. **Create test data JSON**:
    ```json
    {
-     "workpackage_id": "WP-XXX",
+     "domain_name": "{domain_name}",
+     "entrypoint_name": "{entrypoint_name}",
+     "document_title": "{from ATX BRE}",
      "test_data_sets": [
        {
-         "test_case_id": "WP-XXX-ATX-TC-001",
+         "test_case_id": "{domain_name}-{entrypoint_name}-TC-001",
          "scenario": "Main flow - valid transaction",
+         "business_function": "{from ATX BRE business_functions}",
          "input_data": {
            "field1": "value1",
            "field2": "value2"
@@ -332,16 +336,17 @@ Generate functional equivalence test cases from ATX analysis artifacts and legac
 **Purpose**: Create comprehensive test specification document
 
 #### 5.1 Document Structure
-Create test specification: `{{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-draft.md`
+Create test specification: `{{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md`
 
 **Structure**:
 ```markdown
 # Functional Equivalence Test Specification
 
 ## Document Control
-- Workpackage ID: WP-XXX
-- Flow ID: FLOW_XXX
-- Flow Name: [Name]
+- Domain: {domain_name}
+- Entrypoint: {entrypoint_name}
+- Document Title: {from ATX BRE}
+- Transaction/Program: {document_name from ATX BRE}
 - Version: 1.0 (Draft)
 - Date: [Date]
 - Agent: development_specialist_test_generation
@@ -349,25 +354,27 @@ Create test specification: `{{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-te
 ## Test Plan Overview
 - Test Objective: Verify functional equivalence between legacy and modern systems
 - Test Approach: Comparative testing with input/output validation
-- Test Scope: [List legacy programs covered]
-- Test Data Source: ATX analysis + legacy source code
+- Test Scope: [List legacy programs from ATX BRE functionality_flow]
+- Test Data Source: ATX BRE analysis + legacy source code
 - Comparison Method: Field-by-field output comparison
 
-## Legacy System Context
+## ATX BRE Context
+- Business Functions: [List from ATX BRE summary.business_functions]
+- Functionality Flow: [List programs from ATX BRE functionality_flow]
+- Environment: [From ATX BRE summary.environment_summary]
 - Legacy Programs: [List]
 - Legacy Data Structures: [List]
-- Legacy Dependencies: [List]
-- ATX Analysis References: [List files]
 
 ## Test Cases
 
-### Test Case: WP-XXX-ATX-TC-001
-- **Test ID**: WP-XXX-ATX-TC-001
+### Test Case: {domain_name}-{entrypoint_name}-TC-001
+- **Test ID**: {domain_name}-{entrypoint_name}-TC-001
 - **Test Type**: Main Flow / Error Handling / Boundary / Transformation / Integration
 - **Priority**: Critical / High / Medium / Low
+- **Business Function**: [From ATX BRE business_functions]
 - **Description**: [Clear description of what is being tested]
-- **Legacy Programs**: [List of legacy programs involved]
-- **ATX Analysis Reference**: [Reference to ATX analysis section]
+- **Legacy Programs**: [List from ATX BRE functionality_flow]
+- **ATX BRE Reference**: [Reference to entrypoint JSON section]
 
 #### Test Scenario
 [Detailed description of the test scenario]
@@ -407,6 +414,7 @@ Create test specification: `{{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-te
 - **Copybook**: [Copybook name]
 - **JCL**: [JCL name if applicable]
 - **Code Section**: [Specific code section being tested]
+- **ATX BRE Business Function**: [Business function name]
 
 ---
 
@@ -464,17 +472,19 @@ Create traceability matrix: `{{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-legacy-
 
 **Purpose**: Analyze and document test coverage of legacy code
 
-Create coverage report: `{{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-coverage-notes.md`
+Create coverage report: `{{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-coverage-notes.md`
 
 **Analysis**:
 1. **Calculate coverage metrics**:
    - Legacy programs covered: X / Y (percentage)
+   - ATX BRE business functions covered: X / Y (percentage)
    - Code paths covered: X / Y (percentage)
    - Error scenarios covered: X / Y (percentage)
    - Edge cases covered: X / Y (percentage)
 
 2. **Identify coverage gaps**:
    - Uncovered legacy programs
+   - Uncovered business functions
    - Uncovered code paths
    - Missing error scenarios
    - Missing edge cases
@@ -494,75 +504,90 @@ Update progress tracking: `{{ATX_TEST_GENERATION_STATUS}}`
   "document_type": "ATX Test Generation Progress Tracking",
   "last_updated": "2026-03-04T10:00:00+01:00",
   "phase": "Phase 4-ATX - ATX-Based Functional Equivalence Test Generation",
-  "workpackages": {
-    "WP-001": {
-      "workpackage_id": "WP-001",
-      "flow_id": "FLOW_COSGN00C",
-      "flow_name": "Sign-On Functionality",
-      "status": "Draft Created",
-      "completed_date": "2026-03-04",
-      "test_cases": {
-        "total": 15,
-        "main_flow": 3,
-        "error_handling": 5,
-        "boundary": 4,
-        "transformation": 2,
-        "integration": 1
-      },
-      "legacy_coverage": {
-        "programs_total": 2,
-        "programs_covered": 2,
-        "coverage_percentage": "100%",
-        "programs": [
-          {
-            "name": "COSGN00C.cbl",
-            "test_cases": ["TC-001", "TC-002", "TC-003"],
-            "coverage": "100%"
-          }
-        ]
-      },
-      "test_data": {
-        "test_data_sets": 15,
-        "input_scenarios": 15,
-        "expected_outputs": 15,
-        "status": "Complete"
-      },
-      "deliverables": {
-        "test_specification_draft": {
-          "path": "output/specifications/test_cases/atx/specs/WP-001-FLOW_COSGN00C-atx-tests-draft.md",
-          "status": "Created",
-          "test_cases_count": 15
-        },
-        "test_data": {
-          "path": "output/specifications/test_cases/atx/test_data/WP-001-test-data.json",
-          "status": "Created",
-          "data_sets_count": 15
-        },
-        "traceability_matrix": {
-          "path": "output/specifications/test_cases/atx/traceability/WP-001-legacy-traceability.md",
-          "status": "Created"
-        },
-        "coverage_report": {
-          "path": "output/specifications/test_cases/atx/traceability/WP-001-coverage-notes.md",
-          "status": "Created"
+  "domains": {
+    "CreditCardAccountManagement": {
+      "domain_name": "CreditCardAccountManagement",
+      "status": "In Progress",
+      "entrypoints": {
+        "COACTUPC": {
+          "entrypoint_name": "COACTUPC",
+          "document_title": "CAUP Transaction Documentation",
+          "status": "Draft Created",
+          "completed_date": "2026-03-04",
+          "test_cases": {
+            "total": 15,
+            "main_flow": 3,
+            "error_handling": 5,
+            "boundary": 4,
+            "transformation": 2,
+            "integration": 1
+          },
+          "legacy_coverage": {
+            "programs_total": 2,
+            "programs_covered": 2,
+            "coverage_percentage": "100%",
+            "programs": [
+              {
+                "name": "COACTUPC.cbl",
+                "test_cases": ["TC-001", "TC-002", "TC-003"],
+                "coverage": "100%"
+              }
+            ]
+          },
+          "business_function_coverage": {
+            "functions_total": 12,
+            "functions_covered": 12,
+            "coverage_percentage": "100%"
+          },
+          "test_data": {
+            "test_data_sets": 15,
+            "input_scenarios": 15,
+            "expected_outputs": 15,
+            "status": "Complete"
+          },
+          "deliverables": {
+            "test_specification_draft": {
+              "path": "output/specifications/test_cases/atx/specs/CreditCardAccountManagement-COACTUPC-atx-tests-draft.md",
+              "status": "Created",
+              "test_cases_count": 15
+            },
+            "test_data": {
+              "path": "output/specifications/test_cases/atx/test_data/CreditCardAccountManagement-COACTUPC-test-data.json",
+              "status": "Created",
+              "data_sets_count": 15
+            },
+            "traceability_matrix": {
+              "path": "output/specifications/test_cases/atx/traceability/CreditCardAccountManagement-COACTUPC-legacy-traceability.md",
+              "status": "Created"
+            },
+            "coverage_report": {
+              "path": "output/specifications/test_cases/atx/traceability/CreditCardAccountManagement-COACTUPC-coverage-notes.md",
+              "status": "Created"
+            }
+          },
+          "quality_checks": {
+            "legacy_code_coverage_complete": true,
+            "business_function_coverage_complete": true,
+            "test_data_sets_complete": true,
+            "comparative_scenarios_defined": true,
+            "traceability_to_legacy_complete": true,
+            "equivalence_validation_points_defined": true
+          },
+          "ready_for_review": true
         }
-      },
-      "quality_checks": {
-        "legacy_code_coverage_complete": true,
-        "test_data_sets_complete": true,
-        "comparative_scenarios_defined": true,
-        "traceability_to_legacy_complete": true,
-        "equivalence_validation_points_defined": true
-      },
-      "ready_for_review": true
+      }
     }
   },
   "summary": {
-    "total_workpackages": 33,
-    "completed_workpackages": 1,
-    "in_progress_workpackages": 0,
-    "pending_workpackages": 32,
-    "overall_progress": "3%"
+    "total_domains": 9,
+    "completed_domains": 0,
+    "in_progress_domains": 1,
+    "pending_domains": 8,
+    "total_entrypoints": 50,
+    "completed_entrypoints": 1,
+    "in_progress_entrypoints": 0,
+    "pending_entrypoints": 49,
+    "overall_progress": "2%"
   }
 }
 ```
@@ -612,8 +637,8 @@ Update progress tracking: `{{ATX_TEST_GENERATION_STATUS}}`
 
 ### Common Error Scenarios
 
-1. **ATX Analysis Incomplete or Ambiguous**
-   - Detection: Missing behavioral patterns or unclear logic
+1. **ATX BRE Analysis Incomplete or Ambiguous**
+   - Detection: Missing business functions or unclear functionality flow
    - Recovery: Rely more heavily on legacy source code analysis
    - Escalation: Flag for human review if critical behavior is unclear
 

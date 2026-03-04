@@ -32,7 +32,7 @@ This document is owned by: **development_team_supervisor**
 
 ## Overview
 
-This document provides orchestration instructions for ATX-Based Functional Equivalence Test Generation, which creates test case specifications from AWS Transform (ATX) analysis artifacts to verify that modernized systems behave identically to legacy systems.
+This document provides orchestration instructions for ATX-Based Functional Equivalence Test Generation, which creates test case specifications from AWS Transform (ATX) BRE analysis artifacts to verify that modernized systems behave identically to legacy systems.
 
 **Purpose**: Generate functional equivalence test cases that:
 - Verify modernized system produces same outputs as legacy system for same inputs
@@ -44,8 +44,8 @@ This document provides orchestration instructions for ATX-Based Functional Equiv
 **Critical Principle**: Test for **behavioral equivalence**, not requirement conformance. The goal is to prove the new system replicates the old system's actual behavior, including quirks and edge cases.
 
 **Sub-Phases**:
-1. **Phase 4-ATX.0**: ATX-Based Test Case Generation (per workpackage)
-2. **Phase 4-ATX.0.1**: ATX-Based Test Case Review (per workpackage)
+1. **Phase 4-ATX.0**: ATX-Based Test Case Generation (per domain/entrypoint)
+2. **Phase 4-ATX.0.1**: ATX-Based Test Case Review (per domain/entrypoint)
 
 ---
 
@@ -54,7 +54,7 @@ This document provides orchestration instructions for ATX-Based Functional Equiv
 ```
 Phase 1 (Analysis) → Phase 4-ATX (ATX-Based Test Generation) → Phase 5 (Code Generation)
         ↓                           ↓
-   ATX Analysis              Phase 4-ATX.0 (Test Case Creation)
+   ATX BRE Analysis           Phase 4-ATX.0 (Test Case Creation)
    Legacy Code                       ↓
                               Phase 4-ATX.0.1 (Test Case Review)
                                       ↓
@@ -64,15 +64,15 @@ Phase 1 (Analysis) → Phase 4-ATX (ATX-Based Test Generation) → Phase 5 (Code
 ```
 
 **Prerequisites**:
-- ATX Analysis outputs: Application domain, data analysis, dependency analysis
+- ATX BRE outputs: ApplicationLevelAnalysis with domains and entrypoints
+- ATX data analysis: Data dictionary and lineage
 - Legacy source code: COBOL, JCL, BMS, copybooks
-- Workpackage planning: Migration sequence and priorities
 
 **Outputs**:
-- Functional equivalence test specifications
+- Functional equivalence test specifications (per domain/entrypoint)
 - Test data sets (input/output pairs)
 - Comparative test scenarios
-- Test traceability to legacy code
+- Test traceability to legacy code and ATX analysis
 - Progress tracking
 
 ---
@@ -89,113 +89,124 @@ The complete task documents for each phase are located in the prompts directory:
 
 ## Orchestration Workflow
 
-### For Each Workpackage (in migration sequence order):
+### For Each Domain and Entrypoint (from ATX BRE Analysis):
 
 ```
-WORKPACKAGE_LOOP:
-    SELECT next_workpackage FROM workpackage_planning ORDER BY migration_sequence
+DOMAIN_LOOP:
+    FOR EACH domain IN {{ATX_APPLICATION_ANALYSIS}}:
+        domain_name = domain.name  # e.g., CreditCardAccountManagement
+        
+        ENTRYPOINT_LOOP:
+            FOR EACH entrypoint IN domain.entrypoints:
+                entrypoint_name = entrypoint.name  # e.g., COACTUPC
+                
+                # ========================================
+                # PHASE 4-ATX.0: ATX-BASED TEST CASE GENERATION
+                # ========================================
+                
+                EXECUTE Phase_4_ATX_0:
+                    ASSIGN: development_specialist_test_generation
+                    PROVIDE_TASK: {{ATX_TEST_GENERATION_PROMPTS}}/phase_4.0_atx_test_case_generation.md
+                    PROVIDE_CONTEXT:
+                        - domain_name: domain_name
+                        - entrypoint_name: entrypoint_name
+                        - entrypoint_json: {{ATX_APPLICATION_ANALYSIS}}/{domain_name}/entrypoint-{entrypoint_name}/entrypoint-{entrypoint_name}.json
+                    
+                    INPUTS:
+                        - ATX BRE entrypoint analysis: {{ATX_APPLICATION_ANALYSIS}}/{domain_name}/entrypoint-{entrypoint_name}/
+                        - ATX domain analysis: {{ATX_APPLICATION_ANALYSIS}}/{domain_name}/{domain_name}.json
+                        - ATX data dictionary: {{ATX_DATA_DICTIONARY}}/
+                        - ATX data lineage: {{ATX_DATA_LINEAGE}}/
+                        - Legacy source code: {{SOURCE_CODE}}/
+                    
+                    EXPECTED_OUTPUTS:
+                        - Test case specification (draft): {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
+                        - Test data sets: {{ATX_TEST_GENERATION_TEST_DATA}}/{domain_name}-{entrypoint_name}-test-data.json
+                        - Legacy code traceability: {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-legacy-traceability.md
+                        - Coverage report: {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-coverage-notes.md
+                        - Progress tracking: {{ATX_TEST_GENERATION_STATUS}}
+                        - Error reports (if any): {{ATX_TEST_GENERATION_ERRORS}}
+                    
+                    VERIFICATION:
+                        CHECK test_specification_exists(domain_name, entrypoint_name)
+                        CHECK legacy_code_coverage_complete(domain_name, entrypoint_name)
+                        CHECK test_data_sets_complete(domain_name, entrypoint_name)
+                        CHECK comparative_scenarios_defined(domain_name, entrypoint_name)
+                        CHECK traceability_to_legacy_complete(domain_name, entrypoint_name)
+                        CHECK equivalence_validation_points_defined(domain_name, entrypoint_name)
+                        
+                        IF verification_failed:
+                            LOG error to {{ATX_TEST_GENERATION_ERRORS}}
+                            ESCALATE to human supervisor
+                            HALT entrypoint processing
+                        
+                        IF verification_passed:
+                            UPDATE {{ATX_TEST_GENERATION_STATUS}} with completion
+                            PROCEED to Phase_4_ATX_0_1
 
-    # ========================================
-    # PHASE 4-ATX.0: ATX-BASED TEST CASE GENERATION
-    # ========================================
+                # ========================================
+                # PHASE 4-ATX.0.1: ATX-BASED TEST CASE REVIEW
+                # ========================================
+                
+                EXECUTE Phase_4_ATX_0_1:
+                    ASSIGN: development_reviewer_test_generation
+                    PROVIDE_TASK: {{ATX_TEST_GENERATION_PROMPTS}}/phase_4.0.1_atx_test_case_review.md
+                    PROVIDE_CONTEXT:
+                        - domain_name: domain_name
+                        - entrypoint_name: entrypoint_name
+                    
+                    INPUTS:
+                        - Test case specification (draft): {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
+                        - Test data sets: {{ATX_TEST_GENERATION_TEST_DATA}}/{domain_name}-{entrypoint_name}-test-data.json
+                        - Legacy code traceability: {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-legacy-traceability.md
+                        - Coverage report: {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-coverage-notes.md
+                        - ATX BRE analysis: {{ATX_APPLICATION_ANALYSIS}}/{domain_name}/
+                        - Legacy source code: {{SOURCE_CODE}}/
+                    
+                    EXPECTED_OUTPUTS:
+                        - Review report: {{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-{domain_name}-{entrypoint_name}-review.md
+                        - Approved test specification: {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-approved.md (if approved)
+                        - Archived draft: {{ATX_TEST_GENERATION_REVIEW}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md (moved to review folder)
+                        - Progress tracking: {{ATX_TEST_GENERATION_STATUS}}
+                    
+                    VERIFICATION:
+                        CHECK review_report_exists(domain_name, entrypoint_name)
+                        CHECK approval_decision_documented(domain_name, entrypoint_name)
+                        
+                        IF decision == "APPROVED":
+                            CHECK approved_specification_exists(domain_name, entrypoint_name)
+                            CHECK draft_archived_to_review_folder(domain_name, entrypoint_name)
+                            UPDATE {{ATX_TEST_GENERATION_STATUS}} with approval
+                            PROCEED to ENTRYPOINT_COMPLETE
+                        
+                        ELSE IF decision == "REVISE":
+                            CHECK revision_feedback_documented(domain_name, entrypoint_name)
+                            UPDATE {{ATX_TEST_GENERATION_STATUS}} with revision request
+                            RETURN to Phase_4_ATX_0 with feedback
+                        
+                        ELSE IF decision == "REJECT":
+                            CHECK rejection_rationale_documented(domain_name, entrypoint_name)
+                            UPDATE {{ATX_TEST_GENERATION_STATUS}} with rejection
+                            ESCALATE to human supervisor
+                            HALT entrypoint processing
+
+                # ========================================
+                # ENTRYPOINT COMPLETION
+                # ========================================
+                
+                ENTRYPOINT_COMPLETE:
+                    LOG "ATX-based test generation for {domain_name}/{entrypoint_name} completed successfully"
+                    UPDATE {{ATX_TEST_GENERATION_STATUS}} with entrypoint completion
+                    PROCEED to next entrypoint in ENTRYPOINT_LOOP
+            
+            END ENTRYPOINT_LOOP
+        
+        DOMAIN_COMPLETE:
+            LOG "ATX-based test generation for domain {domain_name} completed successfully"
+            UPDATE {{ATX_TEST_GENERATION_STATUS}} with domain completion
+            PROCEED to next domain in DOMAIN_LOOP
     
-    EXECUTE Phase_4_ATX_0:
-        ASSIGN: development_specialist_test_generation
-        PROVIDE_TASK: {{ATX_TEST_GENERATION_PROMPTS}}/phase_4.0_atx_test_case_generation.md
-        PROVIDE_CONTEXT:
-            - workpackage_id: current_workpackage.id
-            - workpackage_name: current_workpackage.name
-            - flow_id: current_workpackage.flow_id
-        
-        INPUTS:
-            - ATX app-domain analysis: {{ATX_APP_DOMAIN}}/
-            - ATX data analysis: {{ATX_DATA_DICTIONARY}}/
-            - ATX dependency analysis: {{ATX_DEPENDENCY_ANALYSIS}}/
-            - Legacy source code: {{SOURCE_CODE}}/
-            - Workpackage planning: {{WORKPACKAGE_PLANNING}}
-        
-        EXPECTED_OUTPUTS:
-            - Test case specification (draft): {{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-draft.md
-            - Test data sets: {{ATX_TEST_GENERATION_TEST_DATA}}/WP-XXX-test-data.json
-            - Legacy code traceability: {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-legacy-traceability.md
-            - Coverage report: {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-coverage-notes.md
-            - Progress tracking: {{ATX_TEST_GENERATION_STATUS}}
-            - Error reports (if any): {{ATX_TEST_GENERATION_ERRORS}}
-        
-        VERIFICATION:
-            CHECK test_specification_exists(WP-XXX)
-            CHECK legacy_code_coverage_complete(WP-XXX)
-            CHECK test_data_sets_complete(WP-XXX)
-            CHECK comparative_scenarios_defined(WP-XXX)
-            CHECK traceability_to_legacy_complete(WP-XXX)
-            CHECK equivalence_validation_points_defined(WP-XXX)
-            
-            IF verification_failed:
-                LOG error to {{ATX_TEST_GENERATION_ERRORS}}
-                ESCALATE to human supervisor
-                HALT workpackage processing
-            
-            IF verification_passed:
-                UPDATE {{ATX_TEST_GENERATION_STATUS}} with completion
-                PROCEED to Phase_4_ATX_0_1
-
-    # ========================================
-    # PHASE 4-ATX.0.1: ATX-BASED TEST CASE REVIEW
-    # ========================================
-    
-    EXECUTE Phase_4_ATX_0_1:
-        ASSIGN: development_reviewer_test_generation
-        PROVIDE_TASK: {{ATX_TEST_GENERATION_PROMPTS}}/phase_4.0.1_atx_test_case_review.md
-        PROVIDE_CONTEXT:
-            - workpackage_id: current_workpackage.id
-            - workpackage_name: current_workpackage.name
-            - flow_id: current_workpackage.flow_id
-        
-        INPUTS:
-            - Test case specification (draft): {{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-draft.md
-            - Test data sets: {{ATX_TEST_GENERATION_TEST_DATA}}/WP-XXX-test-data.json
-            - Legacy code traceability: {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-legacy-traceability.md
-            - Coverage report: {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-coverage-notes.md
-            - ATX analysis artifacts: {{ATX_BASE_PATH}}/
-            - Legacy source code: {{SOURCE_CODE}}/
-        
-        EXPECTED_OUTPUTS:
-            - Review report: {{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-XXX-review.md
-            - Approved test specification: {{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-approved.md (if approved)
-            - Archived draft: {{ATX_TEST_GENERATION_REVIEW}}/WP-XXX-FLOW_XXX-atx-tests-draft.md (moved to review folder)
-            - Progress tracking: {{ATX_TEST_GENERATION_STATUS}}
-        
-        VERIFICATION:
-            CHECK review_report_exists(WP-XXX, "atx_test")
-            CHECK approval_decision_documented(WP-XXX, "atx_test")
-            
-            IF decision == "APPROVED":
-                CHECK approved_specification_exists(WP-XXX, "atx_test")
-                CHECK draft_archived_to_review_folder(WP-XXX, "atx_test")
-                UPDATE {{ATX_TEST_GENERATION_STATUS}} with approval
-                PROCEED to WORKPACKAGE_COMPLETE
-            
-            ELSE IF decision == "REVISE":
-                CHECK revision_feedback_documented(WP-XXX, "atx_test")
-                UPDATE {{ATX_TEST_GENERATION_STATUS}} with revision request
-                RETURN to Phase_4_ATX_0 with feedback
-            
-            ELSE IF decision == "REJECT":
-                CHECK rejection_rationale_documented(WP-XXX, "atx_test")
-                UPDATE {{ATX_TEST_GENERATION_STATUS}} with rejection
-                ESCALATE to human supervisor
-                HALT workpackage processing
-
-    # ========================================
-    # WORKPACKAGE COMPLETION
-    # ========================================
-    
-    WORKPACKAGE_COMPLETE:
-        LOG "ATX-based test generation for WP-{ID} completed successfully"
-        UPDATE {{ATX_TEST_GENERATION_STATUS}} with workpackage completion
-        PROCEED to next workpackage in WORKPACKAGE_LOOP
-
-END WORKPACKAGE_LOOP
+    END DOMAIN_LOOP
 ```
 
 ---
@@ -229,15 +240,16 @@ END WORKPACKAGE_LOOP
 
 ## Input/Output Contracts
 
-### ATX Analysis + Legacy Code → Phase 4-ATX.0
+### ATX BRE Analysis + Legacy Code → Phase 4-ATX.0
 **Inputs**:
-- ATX app-domain analysis: Business logic, workflows, rules extracted from legacy
-- ATX data analysis: Data structures, transformations, flows
-- ATX dependency analysis: Component interactions, call graphs
+- ATX BRE entrypoint analysis: Business functions, functionality flows, programs
+- ATX domain analysis: Domain-level business context
+- ATX data dictionary: Data structures, field definitions
+- ATX data lineage: Data flows and transformations
 - Legacy source code: COBOL programs, JCL, BMS maps, copybooks
 
 **Contract**:
-- ATX analysis provides behavioral patterns
+- ATX BRE provides entrypoint-level behavioral patterns and business functions
 - Legacy code provides implementation details
 - Both sources are used to create comprehensive test scenarios
 
@@ -271,15 +283,15 @@ END WORKPACKAGE_LOOP
 
 ### Phase 4-ATX.0 Verification
 ```
-CHECK test_specification_exists(workpackage_id):
-    draft_path = {{ATX_TEST_GENERATION_SPECS}}/WP-{workpackage_id}-FLOW_XXX-atx-tests-draft.md
+CHECK test_specification_exists(domain_name, entrypoint_name):
+    draft_path = {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
     RETURN file_exists(draft_path)
 
-CHECK legacy_code_coverage_complete(workpackage_id):
-    atx_analysis = load_atx_analysis(workpackage_id)
-    test_spec = load_test_specification(workpackage_id)
+CHECK legacy_code_coverage_complete(domain_name, entrypoint_name):
+    atx_entrypoint = load_atx_entrypoint(domain_name, entrypoint_name)
+    test_spec = load_test_specification(domain_name, entrypoint_name)
     
-    legacy_programs = atx_analysis.get_programs()
+    legacy_programs = atx_entrypoint.functionality_flow.get_programs()
     FOR EACH program IN legacy_programs:
         has_test = any(tc.legacy_programs contains program.name for tc in test_spec.test_cases)
         IF NOT has_test:
@@ -288,13 +300,13 @@ CHECK legacy_code_coverage_complete(workpackage_id):
     
     RETURN TRUE
 
-CHECK test_data_sets_complete(workpackage_id):
-    test_data_path = {{ATX_TEST_GENERATION_TEST_DATA}}/WP-{workpackage_id}-test-data.json
+CHECK test_data_sets_complete(domain_name, entrypoint_name):
+    test_data_path = {{ATX_TEST_GENERATION_TEST_DATA}}/{domain_name}-{entrypoint_name}-test-data.json
     IF NOT file_exists(test_data_path):
         RETURN FALSE
     
     test_data = load_json(test_data_path)
-    test_spec = load_test_specification(workpackage_id)
+    test_spec = load_test_specification(domain_name, entrypoint_name)
     
     FOR EACH test_case IN test_spec.test_cases:
         has_data = test_data.has_data_for_test(test_case.id)
@@ -304,8 +316,8 @@ CHECK test_data_sets_complete(workpackage_id):
     
     RETURN TRUE
 
-CHECK comparative_scenarios_defined(workpackage_id):
-    test_spec = load_test_specification(workpackage_id)
+CHECK comparative_scenarios_defined(domain_name, entrypoint_name):
+    test_spec = load_test_specification(domain_name, entrypoint_name)
     
     FOR EACH test_case IN test_spec.test_cases:
         has_legacy_output = test_case.has_field("expected_legacy_output")
@@ -318,12 +330,12 @@ CHECK comparative_scenarios_defined(workpackage_id):
     
     RETURN TRUE
 
-CHECK traceability_to_legacy_complete(workpackage_id):
-    traceability_path = {{ATX_TEST_GENERATION_TRACEABILITY}}/WP-{workpackage_id}-legacy-traceability.md
+CHECK traceability_to_legacy_complete(domain_name, entrypoint_name):
+    traceability_path = {{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-legacy-traceability.md
     RETURN file_exists(traceability_path) AND file_not_empty(traceability_path)
 
-CHECK equivalence_validation_points_defined(workpackage_id):
-    test_spec = load_test_specification(workpackage_id)
+CHECK equivalence_validation_points_defined(domain_name, entrypoint_name):
+    test_spec = load_test_specification(domain_name, entrypoint_name)
     
     FOR EACH test_case IN test_spec.test_cases:
         has_validation_points = test_case.has_field("equivalence_validation_points")
@@ -336,22 +348,22 @@ CHECK equivalence_validation_points_defined(workpackage_id):
 
 ### Phase 4-ATX.0.1 Verification
 ```
-CHECK review_report_exists(workpackage_id, phase_type):
-    review_path = {{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-{workpackage_id}-review.md
+CHECK review_report_exists(domain_name, entrypoint_name):
+    review_path = {{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-{domain_name}-{entrypoint_name}-review.md
     RETURN file_exists(review_path)
 
-CHECK approval_decision_documented(workpackage_id, phase_type):
-    review_report = load_review_report(workpackage_id, phase_type)
+CHECK approval_decision_documented(domain_name, entrypoint_name):
+    review_report = load_review_report(domain_name, entrypoint_name)
     RETURN review_report.has_field("decision") AND 
            review_report.decision IN ["APPROVED", "REVISE", "REJECT"]
 
-CHECK approved_specification_exists(workpackage_id, phase_type):
-    approved_path = {{ATX_TEST_GENERATION_SPECS}}/WP-{workpackage_id}-FLOW_XXX-atx-tests-approved.md
+CHECK approved_specification_exists(domain_name, entrypoint_name):
+    approved_path = {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-approved.md
     RETURN file_exists(approved_path)
 
-CHECK draft_archived_to_review_folder(workpackage_id, phase_type):
-    archived_path = {{ATX_TEST_GENERATION_REVIEW}}/WP-{workpackage_id}-FLOW_XXX-atx-tests-draft.md
-    original_path = {{ATX_TEST_GENERATION_SPECS}}/WP-{workpackage_id}-FLOW_XXX-atx-tests-draft.md
+CHECK draft_archived_to_review_folder(domain_name, entrypoint_name):
+    archived_path = {{ATX_TEST_GENERATION_REVIEW}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
+    original_path = {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
     RETURN file_exists(archived_path) AND NOT file_exists(original_path)
 ```
 
@@ -424,9 +436,10 @@ CHECK draft_archived_to_review_folder(workpackage_id, phase_type):
 
 When resuming after interruption:
 1. Read {{ATX_TEST_GENERATION_STATUS}}
-2. Check which workpackages are completed
-3. Check which workpackages are in review
-4. Resume from first incomplete workpackage or review step
+2. Check which domains are completed
+3. Check which entrypoints are completed
+4. Check which entrypoints are in review
+5. Resume from first incomplete entrypoint or review step
 
 ---
 
@@ -515,12 +528,13 @@ ATX Test Errors = /Users/kerimman/carddemo_migration_new/output/specifications/t
 ## Success Criteria
 
 Phase 4-ATX is considered complete when:
-- [ ] All workpackages have ATX-based test specifications
+- [ ] All domains have been processed
+- [ ] All entrypoints have ATX-based test specifications
 - [ ] All test specifications reviewed and approved
-- [ ] All legacy programs covered by tests
+- [ ] All legacy programs (from ATX BRE) covered by tests
 - [ ] Test data sets complete and realistic
 - [ ] Equivalence validation points defined
-- [ ] Traceability to legacy code complete
+- [ ] Traceability to legacy code and ATX BRE complete
 - [ ] No blocking issues remain
 - [ ] Progress tracking shows 100% completion
 - [ ] Ready for Phase 5 (Code Generation)

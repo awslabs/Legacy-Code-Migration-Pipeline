@@ -12,15 +12,15 @@
 ### Expected Deliverables
 
 1. **Approved Test Specification**
-   - File: {{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-approved.md
+   - File: {{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-approved.md
    - Description: Validated and approved functional equivalence test specification
 
 2. **Archived Draft** (moved to review folder)
-   - File: {{ATX_TEST_GENERATION_REVIEW}}/WP-XXX-FLOW_XXX-atx-tests-draft.md
+   - File: {{ATX_TEST_GENERATION_REVIEW}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md
    - Description: Original draft moved to review folder for audit trail
 
 3. **Review Report**
-   - File: {{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-XXX-review.md
+   - File: {{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-{domain_name}-{entrypoint_name}-review.md
    - Description: Detailed review findings, changes made, and approval status
 
 4. **Progress Tracking**
@@ -29,11 +29,12 @@
 
 ### Success Criteria
 - [ ] All test specifications reviewed and validated
-- [ ] Complete coverage of legacy programs verified
+- [ ] Complete coverage of legacy programs (from ATX BRE) verified
+- [ ] Complete coverage of ATX BRE business functions verified
 - [ ] Test data completeness and realism verified
 - [ ] Equivalence validation points are clear and measurable
 - [ ] Comparative test scenarios verified
-- [ ] Traceability to legacy code verified
+- [ ] Traceability to legacy code and ATX BRE verified
 - [ ] All review reports completed
 - [ ] Test specifications approved for code generation
 - [ ] Ready for Phase 5 (Code Generation)
@@ -43,17 +44,17 @@
 ## Context
 
 ### Input Locations
-- **Test specification (draft)**: `{{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-draft.md`
-- **Test data sets**: `{{ATX_TEST_GENERATION_TEST_DATA}}/WP-XXX-test-data.json`
-- **Legacy traceability**: `{{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-legacy-traceability.md`
-- **Coverage report**: `{{ATX_TEST_GENERATION_TRACEABILITY}}/WP-XXX-coverage-notes.md`
-- **ATX analysis**: `{{ATX_BASE_PATH}}/`
+- **Test specification (draft)**: `{{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md`
+- **Test data sets**: `{{ATX_TEST_GENERATION_TEST_DATA}}/{domain_name}-{entrypoint_name}-test-data.json`
+- **Legacy traceability**: `{{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-legacy-traceability.md`
+- **Coverage report**: `{{ATX_TEST_GENERATION_TRACEABILITY}}/{domain_name}-{entrypoint_name}-coverage-notes.md`
+- **ATX BRE analysis**: `{{ATX_APPLICATION_ANALYSIS}}/{domain_name}/`
 - **Legacy source code**: `{{SOURCE_CODE}}/`
 
 ### Output Locations
-- **Approved test specifications**: `{{ATX_TEST_GENERATION_SPECS}}/WP-XXX-FLOW_XXX-atx-tests-approved.md`
-- **Archived drafts**: `{{ATX_TEST_GENERATION_REVIEW}}/WP-XXX-FLOW_XXX-atx-tests-draft.md`
-- **Review reports**: `{{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-XXX-review.md`
+- **Approved test specifications**: `{{ATX_TEST_GENERATION_SPECS}}/{domain_name}-{entrypoint_name}-atx-tests-approved.md`
+- **Archived drafts**: `{{ATX_TEST_GENERATION_REVIEW}}/{domain_name}-{entrypoint_name}-atx-tests-draft.md`
+- **Review reports**: `{{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-{domain_name}-{entrypoint_name}-review.md`
 - **Progress tracking**: `{{ATX_TEST_GENERATION_STATUS}}`
 - **Error logs** (if needed): `{{ATX_TEST_GENERATION_ERRORS}}`
 
@@ -61,29 +62,30 @@
 
 ## Objective
 
-Review and validate ATX-based functional equivalence test specifications to ensure complete legacy code coverage, realistic test data, clear equivalence validation points, and readiness for code generation.
+Review and validate ATX-based functional equivalence test specifications to ensure complete legacy code coverage, complete ATX BRE business function coverage, realistic test data, clear equivalence validation points, and readiness for code generation.
 
 **CRITICAL REVIEW PRINCIPLES**:
 1. **Legacy Code Coverage** - Verify all legacy programs and code paths are tested
-2. **Test Data Realism** - Ensure test data matches actual legacy data patterns
-3. **Equivalence Clarity** - Confirm validation points are explicit and measurable
-4. **Comparative Completeness** - Verify all tests support legacy vs modern comparison
-5. **Traceability Verification** - Confirm all tests link to specific legacy code
+2. **Business Function Coverage** - Verify all ATX BRE business functions are tested
+3. **Test Data Realism** - Ensure test data matches actual legacy data patterns
+4. **Equivalence Clarity** - Confirm validation points are explicit and measurable
+5. **Comparative Completeness** - Verify all tests support legacy vs modern comparison
+6. **Traceability Verification** - Confirm all tests link to specific legacy code and ATX BRE
 
 ---
 
 ## Instructions
 
 ### 1. Preparation and Review Planning
-1. Review the list of workpackages requiring test case review
-2. For each workpackage, gather all relevant materials:
+1. Review the list of domains and entrypoints requiring test case review
+2. For each entrypoint, gather all relevant materials:
    - Test case specification (draft)
    - Test data sets
    - Legacy code traceability matrix
    - Coverage report
-   - ATX analysis artifacts
+   - ATX BRE entrypoint analysis
    - Legacy source code
-3. Prioritize review based on workpackage priority
+3. Prioritize review based on domain/entrypoint criticality
 4. Prepare coverage verification checklist
 5. Prepare quality assessment checklist
 
@@ -92,8 +94,8 @@ Review and validate ATX-based functional equivalence test specifications to ensu
 **Purpose**: Verify complete coverage of all legacy programs and code paths
 
 #### 2.1 Legacy Program Coverage Check
-1. **Identify legacy programs in scope**:
-   - Review workpackage definition
+1. **Identify legacy programs in scope from ATX BRE**:
+   - Review ATX BRE entrypoint JSON functionality_flow
    - List all legacy programs that should be covered
    - Count total legacy programs
 
@@ -114,7 +116,30 @@ Review and validate ATX-based functional equivalence test specifications to ensu
 
 **If coverage < 100%**: Document missing programs in review report and return for revision.
 
-#### 2.2 Code Path Coverage Check
+#### 2.2 ATX BRE Business Function Coverage Check
+1. **Identify business functions from ATX BRE**:
+   - Review ATX BRE entrypoint JSON summary.business_functions
+   - List all business functions
+   - Count total business functions
+
+2. **Verify test coverage for each business function**:
+   - For each business function:
+     - Search test specification for business function reference
+     - Verify at least one test case covers this function
+     - Check if test cases adequately test the function
+   - Record coverage status (covered/not covered)
+
+3. **Calculate business function coverage**:
+   - Formula: (covered functions / total functions) × 100
+   - **Business Function Coverage**: [percentage]
+
+4. **Coverage assessment**:
+   - Coverage = 100%: Pass
+   - Coverage < 100%: Fail - identify missing coverage
+
+**If coverage < 100%**: Document missing business functions in review report and return for revision.
+
+#### 2.3 Code Path Coverage Check
 1. **For each legacy program**:
    - Review legacy source code
    - Identify main code paths
@@ -143,7 +168,7 @@ Review and validate ATX-based functional equivalence test specifications to ensu
 
 #### 3.1 Test Data Completeness Check
 1. **Load test data JSON**:
-   - Read `{{ATX_TEST_GENERATION_TEST_DATA}}/WP-XXX-test-data.json`
+   - Read `{{ATX_TEST_GENERATION_TEST_DATA}}/{domain_name}-{entrypoint_name}-test-data.json`
    - Count test data sets
    - Verify one data set per test case
 
@@ -361,16 +386,16 @@ Based on all verification checks, make one of three decisions:
 
 ### 9. Review Report Creation
 
-Create review report: `{{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-XXX-review.md`
+Create review report: `{{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-{domain_name}-{entrypoint_name}-review.md`
 
 **Report Structure**:
 ```markdown
 # ATX-Based Functional Equivalence Test Review Report
 
 ## Document Control
-- **Workpackage ID**: WP-XXX
-- **Flow ID**: FLOW_XXX
-- **Flow Name**: [Name]
+- **Domain**: {domain_name}
+- **Entrypoint**: {entrypoint_name}
+- **Document Title**: {from ATX BRE}
 - **Review Date**: [Date]
 - **Reviewer**: development_reviewer_test_generation
 - **Review Decision**: [APPROVED/REVISE/REJECT]
@@ -383,6 +408,13 @@ Create review report: `{{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-XXX
 ### Program Coverage
 - Total Legacy Programs: [count]
 - Covered Programs: [count]
+- Coverage Percentage: [percentage]
+- Status: [Pass/Fail]
+- Missing Coverage: [list if any]
+
+### ATX BRE Business Function Coverage
+- Total Business Functions: [count]
+- Covered Functions: [count]
 - Coverage Percentage: [percentage]
 - Status: [Pass/Fail]
 - Missing Coverage: [list if any]
@@ -444,6 +476,12 @@ Create review report: `{{ATX_TEST_GENERATION_REVIEW}}/atx-test-generation-WP-XXX
 - Status: [Pass/Fail]
 - Issues Found: [list if any]
 
+### Test-to-ATX-BRE Traceability
+- Test Cases with ATX BRE References: [count]
+- Test Cases Missing ATX BRE References: [count]
+- Status: [Pass/Fail]
+- Issues Found: [list if any]
+
 ### Code-to-Test Traceability
 - Legacy Programs with Test Mappings: [count]
 - Legacy Programs Missing Mappings: [count]
@@ -502,7 +540,8 @@ Update progress tracking with review results.
 ## Quality Criteria
 
 ### Legacy Code Coverage Quality
-- 100% legacy program coverage
+- 100% legacy program coverage (from ATX BRE functionality_flow)
+- 100% ATX BRE business function coverage
 - >= 90% code path coverage
 - All main flows tested
 - All error paths tested
@@ -522,9 +561,10 @@ Update progress tracking with review results.
 
 ### Traceability Quality
 - All tests link to legacy code
+- All tests link to ATX BRE business functions
 - All legacy programs mapped to tests
 - Code sections identified
-- ATX analysis referenced
+- ATX BRE referenced
 
 ### Test Specification Quality
 - All test cases are clear
