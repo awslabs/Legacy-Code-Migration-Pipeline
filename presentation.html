@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReImagine Framework - Legacy Code Migration</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+        .reveal .slides section { text-align: left; }
+        .reveal .center { text-align: center; }
+        .reveal ul { margin-left: 1em; }
+        .reveal code { color: #e7ad52; }
+        .mermaid { background: white; padding: 20px; border-radius: 10px; }
+        .highlight { color: #42affa; font-weight: bold; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; }
+        .box { background: rgba(255,255,255,0.1); padding: 1em; border-radius: 8px; margin: 0.5em 0; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section class="center">
+                <h1>ReImagine Framework</h1>
+                <h3>AI-Powered Legacy Code Migration</h3>
+                <p>A Multi-Agent System for Systematic Modernization</p>
+            </section>
+
+            <!-- Agenda -->
+            <section>
+                <h2>Agenda</h2>
+                <ul>
+                    <li>What is CAO (CLI Agent Orchestrator)?</li>
+                    <li>Agent Architecture Overview</li>
+                    <li>Migration Phases & Workflow</li>
+                    <li>ATX Deliverables & Templates</li>
+                    <li>End-to-End Process</li>
+                </ul>
+            </section>
+
+
+            <!-- CAO Section -->
+            <section>
+                <section>
+                    <h2>What is CAO?</h2>
+                    <p class="highlight">CLI Agent Orchestrator</p>
+                    <div class="box">
+                        <p>A framework for managing and orchestrating AI agents across different providers</p>
+                    </div>
+                    <ul>
+                        <li><strong>Multi-Provider Support:</strong> Kiro CLI, Amazon Q CLI, Claude Code</li>
+                        <li><strong>Centralized Management:</strong> Install agents once, use everywhere</li>
+                        <li><strong>Standardized Format:</strong> Markdown files with YAML frontmatter</li>
+                        <li><strong>Reusable Agents:</strong> Generic agents work across projects</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>CAO Installation & Usage</h2>
+                    <pre><code class="bash"># Install CAO (one-time setup)
+python install_cao.py
+
+# Create a project
+python create_project.py my_migration_project
+
+# Install agents
+cd my_migration_project
+python acm/install_agents.py
+
+# Launch an agent
+cao launch --agents migration_supervisor
+# or with Kiro CLI
+kiro-cli chat --agent migration_supervisor</code></pre>
+                </section>
+
+                <section>
+                    <h2>CAO Agent Profile Format</h2>
+                    <pre><code class="markdown">---
+name: agent-name
+description: Brief description
+mcpServers:
+  cao-mcp-server:
+    type: stdio
+    command: uvx
+    args: ["cao-mcp-server"]
+---
+
+# Agent Instructions
+
+Your detailed instructions here...</code></pre>
+                </section>
+            </section>
+
+
+            <!-- Architecture Section -->
+            <section>
+                <section>
+                    <h2>Agent Architecture Overview</h2>
+                    <p class="highlight">3-Layer Orchestration Model</p>
+                </section>
+
+                <section>
+                    <h2>Complete Agent Hierarchy</h2>
+                    <p class="highlight">All 31 Agents Organized by Team</p>
+                    <div class="mermaid" style="font-size: 0.6em;">
+graph TB
+    MS["🎯 Migration Supervisor<br/>Layer 1"]
+    
+    MS --> ATS["📊 Analysis Team Supervisor<br/>Layer 2"]
+    MS --> PTS["📋 Planning Team Supervisor<br/>Layer 2"]
+    MS --> BTS["💼 Business Team Supervisor<br/>Layer 2"]
+    MS --> TSS["📐 Tech Spec Team Supervisor<br/>Layer 2"]
+    MS --> DTS["⚙️ Development Team Supervisor<br/>Layer 2"]
+    MS --> DPTS["🚀 Deployment Team Supervisor<br/>Layer 2"]
+    
+    ATS --> AS1["👨‍💻 Legacy Code<br/>Specialist"]
+    ATS --> AS2["🗄️ Database<br/>Specialist"]
+    ATS --> AR1["✅ Legacy Code<br/>Reviewer"]
+    ATS --> AR2["✅ Database<br/>Reviewer"]
+    
+    PTS --> PS1["📦 Workpackage<br/>Specialist"]
+    PTS --> PR1["✅ Workpackage<br/>Reviewer"]
+    
+    BTS --> BS1["🔍 Logic Extraction<br/>Specialist"]
+    BTS --> BS2["📝 Requirements<br/>Specialist"]
+    BTS --> BS3["🧪 Test Design<br/>Specialist"]
+    BTS --> BR1["✅ Logic Extraction<br/>Reviewer"]
+    BTS --> BR2["✅ Requirements<br/>Reviewer"]
+    BTS --> BR3["✅ Test Design<br/>Reviewer"]
+    
+    TSS --> TS1["📐 Tech Spec Extraction<br/>Specialist"]
+    TSS --> TR1["✅ Tech Spec Review<br/>Specialist"]
+    
+    DTS --> DS1["💻 Code Generation<br/>Specialist"]
+    DTS --> DS2["🧪 Test Generation<br/>Specialist"]
+    DTS --> DR1["✅ Code Generation<br/>Reviewer"]
+    DTS --> DR2["✅ Test Generation<br/>Reviewer"]
+    
+    DPTS --> DPS1["📜 Migration Scripts<br/>Specialist"]
+    DPTS --> DPS2["🗄️ Database Migration<br/>Specialist"]
+    DPTS --> DPS3["🎼 Orchestration<br/>Specialist"]
+    DPTS --> DPR1["✅ Migration Scripts<br/>Reviewer"]
+    DPTS --> DPR2["✅ Database Migration<br/>Reviewer"]
+    DPTS --> DPR3["✅ Orchestration<br/>Reviewer"]
+    
+    style MS fill:#ff6b6b,stroke:#333,stroke-width:4px,color:#fff
+    style ATS fill:#4ecdc4,stroke:#333,stroke-width:2px
+    style PTS fill:#4ecdc4,stroke:#333,stroke-width:2px
+    style BTS fill:#4ecdc4,stroke:#333,stroke-width:2px
+    style TSS fill:#4ecdc4,stroke:#333,stroke-width:2px
+    style DTS fill:#4ecdc4,stroke:#333,stroke-width:2px
+    style DPTS fill:#4ecdc4,stroke:#333,stroke-width:2px
+    style AS1 fill:#95e1d3,stroke:#333
+    style AS2 fill:#95e1d3,stroke:#333
+    style PS1 fill:#95e1d3,stroke:#333
+    style BS1 fill:#95e1d3,stroke:#333
+    style BS2 fill:#95e1d3,stroke:#333
+    style BS3 fill:#95e1d3,stroke:#333
+    style TS1 fill:#95e1d3,stroke:#333
+    style DS1 fill:#95e1d3,stroke:#333
+    style DS2 fill:#95e1d3,stroke:#333
+    style DPS1 fill:#95e1d3,stroke:#333
+    style DPS2 fill:#95e1d3,stroke:#333
+    style DPS3 fill:#95e1d3,stroke:#333
+    style AR1 fill:#f38181,stroke:#333
+    style AR2 fill:#f38181,stroke:#333
+    style PR1 fill:#f38181,stroke:#333
+    style BR1 fill:#f38181,stroke:#333
+    style BR2 fill:#f38181,stroke:#333
+    style BR3 fill:#f38181,stroke:#333
+    style TR1 fill:#f38181,stroke:#333
+    style DR1 fill:#f38181,stroke:#333
+    style DR2 fill:#f38181,stroke:#333
+    style DPR1 fill:#f38181,stroke:#333
+    style DPR2 fill:#f38181,stroke:#333
+    style DPR3 fill:#f38181,stroke:#333
+                    </div>
+                    <p style="font-size: 0.7em; margin-top: 0.5em;">
+                        <span style="color: #ff6b6b;">●</span> Layer 1: Migration Supervisor (1) 
+                        <span style="color: #4ecdc4; margin-left: 1em;">●</span> Layer 2: Team Supervisors (6)
+                        <span style="color: #95e1d3; margin-left: 1em;">●</span> Layer 3: Specialists (12)
+                        <span style="color: #f38181; margin-left: 1em;">●</span> Layer 3: Reviewers (12)
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Agent Count by Team</h2>
+                    <table style="font-size: 0.8em; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>Supervisor</th>
+                                <th>Specialists</th>
+                                <th>Reviewers</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Analysis</strong></td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Planning</strong></td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Business</strong></td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tech Spec</strong></td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Development</strong></td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Deployment</strong></td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>7</td>
+                            </tr>
+                            <tr style="background: rgba(255,255,255,0.1); font-weight: bold;">
+                                <td><strong>Migration Supervisor</strong></td>
+                                <td colspan="3">Top-level orchestrator</td>
+                                <td>1</td>
+                            </tr>
+                            <tr style="background: rgba(66,175,250,0.2); font-weight: bold;">
+                                <td><strong>TOTAL</strong></td>
+                                <td>7</td>
+                                <td>12</td>
+                                <td>12</td>
+                                <td><strong>31</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size: 0.7em; margin-top: 1em;">
+                        <span style="color: #ff6b6b;">●</span> Supervisors (Red) 
+                        <span style="color: #95e1d3; margin-left: 1em;">●</span> Specialists (Green) 
+                        <span style="color: #f38181; margin-left: 1em;">●</span> Reviewers (Pink)
+                    </p>
+                </section>
+
+
+                <section>
+                    <h2>28 Specialized Agents</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Supervisors (6)</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Migration Supervisor</li>
+                                <li>Analysis Team Supervisor</li>
+                                <li>Planning Team Supervisor</li>
+                                <li>Business Team Supervisor</li>
+                                <li>Development Team Supervisor</li>
+                                <li>Deployment Team Supervisor</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Specialists (11)</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Legacy Code Specialist</li>
+                                <li>Database Specialist</li>
+                                <li>Workpackage Specialist</li>
+                                <li>Logic Extraction Specialist</li>
+                                <li>Requirements Specialist</li>
+                                <li>Test Design Specialist</li>
+                                <li>Code Generation Specialist</li>
+                                <li>Test Generation Specialist</li>
+                                <li>Migration Scripts Specialist</li>
+                                <li>Database Migration Specialist</li>
+                                <li>Orchestration Specialist</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Reviewers (11):</strong> Each specialist has a paired reviewer for quality assurance</p>
+                </section>
+
+                <section>
+                    <h2>Orchestration Flow</h2>
+                    <div class="mermaid">
+sequenceDiagram
+    participant MS as Migration Supervisor
+    participant TS as Team Supervisor
+    participant SP as Specialist
+    participant RV as Reviewer
+    
+    MS->>TS: Delegate Phase (Phase Prompt)
+    TS->>TS: Create Task Files (Resolve Paths)
+    TS->>SP: Delegate Task (Task File)
+    SP->>SP: Execute Work
+    SP->>TS: Deliverables Ready
+    TS->>RV: Review Request (Review Task File)
+    RV->>RV: Validate Quality
+    alt Issues Found
+        RV->>TS: Feedback
+        TS->>SP: Remediate
+        SP->>TS: Updated Deliverables
+        TS->>RV: Re-review
+    else Approved
+        RV->>TS: Approved
+        TS->>MS: Phase Complete
+    end
+                    </div>
+                </section>
+
+
+                <section>
+                    <h2>Key Architecture Principles</h2>
+                    <div class="box">
+                        <h4>1. Separation of Concerns</h4>
+                        <p>Agents are generic • Prompts are project-specific • Task files are runtime-specific</p>
+                    </div>
+                    <div class="box">
+                        <h4>2. Supervisor-Based Delegation</h4>
+                        <p>Supervisors create task files and orchestrate work, never perform technical tasks</p>
+                    </div>
+                    <div class="box">
+                        <h4>3. Iterative Quality Assurance</h4>
+                        <p>Review is built into each phase, not a separate step</p>
+                    </div>
+                    <div class="box">
+                        <h4>4. Runtime Task Creation</h4>
+                        <p>Task files combine generic agents with project-specific context dynamically</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Agent Roles & Responsibilities</h2>
+                    <table style="font-size: 0.7em;">
+                        <tr>
+                            <th>Role</th>
+                            <th>Responsibilities</th>
+                            <th>Never Does</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Supervisors</strong></td>
+                            <td>Create task files<br/>Delegate work<br/>Orchestrate review</td>
+                            <td>Technical work</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Specialists</strong></td>
+                            <td>Execute tasks<br/>Produce deliverables<br/>Remediate issues</td>
+                            <td>Review others' work</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reviewers</strong></td>
+                            <td>Validate quality<br/>Provide feedback<br/>Approve deliverables</td>
+                            <td>Create deliverables</td>
+                        </tr>
+                    </table>
+                </section>
+            </section>
+
+
+            <!-- Migration Phases Section -->
+            <section>
+                <section>
+                    <h2>Migration Phases</h2>
+                    <p class="highlight">5 Sequential Phases</p>
+                    <div class="mermaid">
+graph LR
+    P0["Phase 0
+    Preparation"] --> P1["Phase 1
+    Analysis"]
+    P1 --> P2["Phase 2
+    Workpackage
+    Planning"]
+    P2 --> P3["Phase 3
+    Business
+    Extraction"]
+    P3 --> P4["Phase 4
+    Code
+    Generation"]
+    P4 --> P5["Phase 5
+    Deployment"]
+    
+    style P0 fill:#95e1d3
+    style P1 fill:#4ecdc4
+    style P2 fill:#45b7d1
+    style P3 fill:#5f9ea0
+    style P4 fill:#4a90e2
+    style P5 fill:#667eea
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Phase 0: Preparation</h2>
+                    <ul>
+                        <li><strong>Purpose:</strong> Initial setup and validation</li>
+                        <li><strong>Activities:</strong>
+                            <ul>
+                                <li>Environment setup validation</li>
+                                <li>Source code inventory</li>
+                                <li>Initial assessment and scoping</li>
+                                <li>Prerequisite verification</li>
+                            </ul>
+                        </li>
+                        <li><strong>Status:</strong> Currently placeholder for future expansion</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Phase 1: Analysis</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Objectives</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Understand legacy system structure</li>
+                                <li>Extract dependencies</li>
+                                <li>Document business flows</li>
+                                <li>Assess database schemas</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Key Deliverables</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Source Code Analysis Report</li>
+                                <li>Database Analysis Report</li>
+                                <li>Business Flows Documentation</li>
+                                <li>Module Classifications</li>
+                                <li>Target System DDL Scripts</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Team:</strong> Analysis Team Supervisor → Legacy Code Specialist + Database Specialist</p>
+                </section>
+
+
+                <section>
+                    <h2>Phase 2: Workpackage Planning</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Objectives</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Break down migration into manageable units</li>
+                                <li>Analyze dependencies</li>
+                                <li>Assess risks</li>
+                                <li>Estimate effort</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Key Deliverables</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Workpackage Definitions</li>
+                                <li>Migration Roadmap</li>
+                                <li>Priority Assignments</li>
+                                <li>Resource Allocation Plan</li>
+                                <li>Risk Assessment</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Team:</strong> Planning Team Supervisor → Workpackage Specialist</p>
+                </section>
+
+                <section>
+                    <h2>Phase 3: Business Extraction</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Objectives</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Extract business logic from legacy code</li>
+                                <li>Consolidate domain knowledge</li>
+                                <li>Create modern specifications</li>
+                                <li>Define comprehensive test cases</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Key Deliverables</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Business Logic Specifications</li>
+                                <li>Domain Consolidation Docs</li>
+                                <li>Requirements Specifications</li>
+                                <li>Service-Based Test Cases</li>
+                                <li>Domain-Based Test Cases</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Team:</strong> Business Team Supervisor → Logic Extraction + Requirements + Test Design Specialists</p>
+                </section>
+
+                <section>
+                    <h2>Phase 4: Code Generation</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Objectives</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Generate modern application code</li>
+                                <li>Implement test suites</li>
+                                <li>Apply transformation patterns</li>
+                                <li>Ensure quality standards</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Key Deliverables</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Target Source Code</li>
+                                <li>Test Implementations</li>
+                                <li>Test Data</li>
+                                <li>Code Quality Reports</li>
+                                <li>Pattern Mapping Docs</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Team:</strong> Development Team Supervisor → Code Generation + Test Generation Specialists</p>
+                </section>
+
+
+                <section>
+                    <h2>Phase 5: Deployment</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Objectives</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Create migration scripts</li>
+                                <li>Plan database migration</li>
+                                <li>Orchestrate deployment</li>
+                                <li>Ensure rollback capability</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Key Deliverables</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Migration Scripts</li>
+                                <li>Database Migration Plan</li>
+                                <li>Deployment Automation</li>
+                                <li>Rollback Procedures</li>
+                                <li>Production Readiness Checklist</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Team:</strong> Deployment Team Supervisor → Migration Scripts + Database Migration + Orchestration Specialists</p>
+                </section>
+
+                <section>
+                    <h2>Phase Dependencies</h2>
+                    <div class="mermaid">
+graph TB
+    subgraph "Phase 1: Analysis"
+        A1[Database Analysis]
+        A2[Source Code Analysis]
+    end
+    
+    subgraph "Phase 2: Planning"
+        B1[Workpackage Definition]
+    end
+    
+    subgraph "Phase 3: Business"
+        C1[Logic Extraction]
+        C2[Requirements Spec]
+        C3[Test Design]
+    end
+    
+    subgraph "Phase 4: Development"
+        D1[Code Generation]
+        D2[Test Implementation]
+    end
+    
+    subgraph "Phase 5: Deployment"
+        E1[Migration Scripts]
+        E2[Database Migration]
+        E3[Orchestration]
+    end
+    
+    A1 --> B1
+    A2 --> B1
+    B1 --> C1
+    C1 --> C2
+    C2 --> C3
+    C3 --> D1
+    C3 --> D2
+    D1 --> E1
+    D2 --> E1
+    E1 --> E2
+    E2 --> E3
+    
+    style A1 fill:#4ecdc4
+    style A2 fill:#4ecdc4
+    style B1 fill:#45b7d1
+    style C1 fill:#5f9ea0
+    style C2 fill:#5f9ea0
+    style C3 fill:#5f9ea0
+    style D1 fill:#4a90e2
+    style D2 fill:#4a90e2
+    style E1 fill:#667eea
+    style E2 fill:#667eea
+    style E3 fill:#667eea
+                    </div>
+                </section>
+            </section>
+
+
+            <!-- ATX Deliverables Section -->
+            <section>
+                <section>
+                    <h2>ATX Deliverables & Templates</h2>
+                    <p class="highlight">Standardized Output Structure</p>
+                    <p>ATX (AWS Transform) provides standardized templates and deliverable formats that ensure consistency across migration projects.</p>
+                </section>
+
+                <section>
+                    <h2>ACM Tools Suite - Core Tools</h2>
+                    <p class="highlight">Primary Analysis & Planning Tools</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em;">
+                        <div class="box">
+                            <h4>🔍 Legacy Analyzer</h4>
+                            <ul style="font-size: 0.75em;">
+                                <li>Multi-language parsing (COBOL, JCL, PL/I, RPG, Natural, REXX)</li>
+                                <li>Dependency mapping</li>
+                                <li>Complexity metrics</li>
+                                <li>Flow visualization</li>
+                                <li>Call graph generation</li>
+                            </ul>
+                        </div>
+                        <div class="box">
+                            <h4>🗄️ Database Analyzer</h4>
+                            <ul style="font-size: 0.75em;">
+                                <li>Schema analysis</li>
+                                <li>DDL generation</li>
+                                <li>Migration scripts</li>
+                                <li>Compatibility assessment</li>
+                                <li>Field mapping</li>
+                            </ul>
+                        </div>
+                        <div class="box">
+                            <h4>📋 Migration Planner</h4>
+                            <ul style="font-size: 0.75em;">
+                                <li>Workpackage creation</li>
+                                <li>Dependency analysis</li>
+                                <li>Risk assessment</li>
+                                <li>Effort estimation</li>
+                                <li>Priority assignment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ACM Tools Suite - Supporting Tools</h2>
+                    <p class="highlight">Infrastructure & Visualization Tools</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
+                        <div>
+                            <div class="box">
+                                <h4>📊 SMF Analyzer</h4>
+                                <ul style="font-size: 0.75em;">
+                                    <li>Parse binary SMF files</li>
+                                    <li>Load into databases</li>
+                                    <li>36+ pre-built queries</li>
+                                    <li>Performance analysis</li>
+                                    <li>Cross-type correlation</li>
+                                </ul>
+                            </div>
+                            <div class="box" style="margin-top: 1em;">
+                                <h4>🌐 Web Dashboard</h4>
+                                <ul style="font-size: 0.75em;">
+                                    <li>Interactive visualization</li>
+                                    <li>Real-time querying</li>
+                                    <li>Report generation</li>
+                                    <li>Data exploration</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="box">
+                                <h4>📈 SMF Dashboard</h4>
+                                <ul style="font-size: 0.75em;">
+                                    <li>SMF-specific interface</li>
+                                    <li>Performance metrics</li>
+                                    <li>Workload analysis</li>
+                                    <li>Resource monitoring</li>
+                                </ul>
+                            </div>
+                            <div class="box" style="margin-top: 1em;">
+                                <h4>⚙️ Agent Installer</h4>
+                                <ul style="font-size: 0.75em;">
+                                    <li>Install 28 agents</li>
+                                    <li>Multi-provider support</li>
+                                    <li>Validation & verification</li>
+                                    <li>Configuration management</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                                    <ul style="font-size: 0.9em;">
+                                        <li>Generate realistic SMF data</li>
+                                        <li>Support testing workflows</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>SMF Analyzer Pipeline</h2>
+                    <div class="mermaid">
+flowchart LR
+    A["📄 Binary SMF Files"] --> B["🔍 SMF Parser"]
+    B --> C["📊 JSON Records"]
+    C --> D["💾 Database Loader"]
+    D --> E["🗄️ SQLite/PostgreSQL"]
+    E --> F["🔎 Query Engine"]
+    F --> G["📈 Analysis Reports"]
+    
+    style A fill:#e1f5ff
+    style B fill:#95e1d3
+    style C fill:#e1f5ff
+    style D fill:#95e1d3
+    style E fill:#4ecdc4
+    style F fill:#95e1d3
+    style G fill:#42affa
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;">
+                        <strong>Supports:</strong> Type 30 (Job/Step), Type 100-102 (DB2), Type 110 (CICS)
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Legacy Analyzer Capabilities</h2>
+                    <div class="box">
+                        <h4>Multi-Language Support</h4>
+                        <p style="font-size: 0.8em;">COBOL • JCL • PL/I • RPG • Natural • REXX • Assembler</p>
+                    </div>
+                    <div class="two-column" style="margin-top: 1em;">
+                        <div>
+                            <h4 style="font-size: 0.9em;">Analysis Features</h4>
+                            <ul style="font-size: 0.75em;">
+                                <li>Static code analysis</li>
+                                <li>Dependency extraction</li>
+                                <li>Call graph generation</li>
+                                <li>Circular dependency detection</li>
+                                <li>Complexity metrics (LOC, cyclomatic)</li>
+                                <li>Missing code detection</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 0.9em;">Migration Planning</h4>
+                            <ul style="font-size: 0.75em;">
+                                <li>Workpackage grouping</li>
+                                <li>Risk assessment</li>
+                                <li>Effort estimation</li>
+                                <li>Priority assignment</li>
+                                <li>Artifact lifecycle analysis</li>
+                                <li>Cleanup recommendations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>ACM Tools Integration</h2>
+                    <div class="mermaid">
+graph TB
+    LA["Legacy Analyzer"] --> DB["Unified Database"]
+    SA["SMF Analyzer"] --> DB
+    DB --> QE["Query Engine"]
+    QE --> AR["Analysis Reports"]
+    QE --> DASH["SMF Dashboard"]
+    QE --> AI["AI Agents"]
+    
+    LA --> |"Code Analysis"| INV["Inventory Data"]
+    LA --> |"Dependencies"| DEP["Dependency Graph"]
+    SA --> |"Performance"| SMF["SMF Records"]
+    
+    INV --> DB
+    DEP --> DB
+    SMF --> DB
+    
+    style LA fill:#95e1d3
+    style SA fill:#95e1d3
+    style DB fill:#4ecdc4
+    style QE fill:#42affa
+    style AR fill:#667eea
+    style DASH fill:#667eea
+    style AI fill:#ff6b6b
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;">
+                        All tools share a unified database for cross-analysis and comprehensive insights
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Template Categories</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Analysis Templates</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Source Analysis Report</li>
+                                <li>Database Analysis Report</li>
+                                <li>Business Flows (JSON)</li>
+                                <li>Module Classifications (JSON)</li>
+                                <li>Analysis Status Tracking</li>
+                                <li>Error Logs</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Planning Templates</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li>Workpackage Definitions</li>
+                                <li>Migration Roadmap</li>
+                                <li>Workpackage Planning (JSON)</li>
+                                <li>Workpackage Status Tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Template Integration Flow</h2>
+                    <div class="mermaid">
+sequenceDiagram
+    participant PP as Phase Prompt
+    participant TS as Team Supervisor
+    participant TF as Task File
+    participant SP as Specialist
+    participant RV as Reviewer
+    
+    Note over PP,TS: Template Path
+    PP->>TS: {{TEMPLATE_BASE_PATH}}/report.md
+    Note over TS: Resolve Path
+    TS->>TS: /project/templates/report.md
+    Note over TS,TF: Create Task File
+    TS->>TF: with resolved path
+    TF->>SP: Template: /project/templates/report.md
+    Note over SP: Use template
+    SP->>SP: to structure output
+    SP->>RV: Deliverable
+    Note over RV: Validate against
+    RV->>RV: template structure
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Key Deliverable Examples</h2>
+                    <div class="box">
+                        <h4>Source Code Analysis Report</h4>
+                        <p style="font-size: 0.8em;">Comprehensive analysis of legacy code structure, dependencies, business flows, and module classifications</p>
+                    </div>
+                    <div class="box">
+                        <h4>Workpackage Planning (JSON)</h4>
+                        <p style="font-size: 0.8em;">Priority scores, workpackage assignments, phase groupings, and migration sequence</p>
+                    </div>
+                    <div class="box">
+                        <h4>Business Logic Specifications</h4>
+                        <p style="font-size: 0.8em;">Extracted business rules, domain models, and requirements in modern format</p>
+                    </div>
+                </section>
+
+
+                <section>
+                    <h2>Validation Framework</h2>
+                    <p>ACM (Agent Configuration Management) provides validation tools:</p>
+                    <ul>
+                        <li><strong>Template Validation:</strong> Ensures deliverables match template structure</li>
+                        <li><strong>Quality Criteria:</strong> Automated checks for completeness and correctness</li>
+                        <li><strong>Reviewer Validation:</strong> Human-in-the-loop quality assurance</li>
+                        <li><strong>Progress Tracking:</strong> JSON-based status tracking for all phases</li>
+                    </ul>
+                    <pre><code class="bash"># Validate deliverables
+./validate_deliverables.sh</code></pre>
+                </section>
+
+                <section>
+                    <h2>Path Resolution System</h2>
+                    <p>All paths are resolved from <code>config/paths.cfg</code>:</p>
+                    <pre><code class="ini">[paths]
+PROJECT_BASE_PATH = /path/to/project
+SOURCE_CODE = ${PROJECT_BASE_PATH}/input/legacy/source
+DATABASE_ANALYSIS_REPORT = ${PROJECT_BASE_PATH}/output/analysis/database_analysis.md
+TEMPLATE_BASE_PATH = ${PROJECT_BASE_PATH}/templates</code></pre>
+                    <p style="font-size: 0.8em; margin-top: 1em;">Templates use placeholders like <code>{{DATABASE_ANALYSIS_REPORT}}</code> which are resolved at runtime by team supervisors.</p>
+                </section>
+            </section>
+
+
+            <!-- Workflow Process Section -->
+            <section>
+                <section>
+                    <h2>End-to-End Workflow</h2>
+                    <p class="highlight">From Setup to Deployment</p>
+                </section>
+
+                <section>
+                    <h2>Step 1: Project Setup</h2>
+                    <pre><code class="bash"># One-command installation
+./install_all.sh my_migration_project
+
+# Or step-by-step
+python install_cao.py
+python create_project.py my_migration_project
+cd my_migration_project
+python acm/install_agents.py</code></pre>
+                    <p style="font-size: 0.8em; margin-top: 1em;">This creates the complete project structure with agents, templates, and configuration.</p>
+                </section>
+
+                <section>
+                    <h2>Step 2: Prepare Source Files</h2>
+                    <div class="box">
+                        <h4>Input Structure</h4>
+                        <pre><code>input/
+├── legacy/
+│   ├── source/          # COBOL, PL/I, etc.
+│   ├── database/        # DDL, schemas
+│   └── specifications/  # Documentation
+├── target/
+│   ├── specifications/  # Target platform docs
+│   └── samples/         # Sample code
+└── migration/
+    └── guidance/        # Migration guides</code></pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Step 3: Configure Project</h2>
+                    <p>Edit <code>project-config.json</code>:</p>
+                    <pre><code class="json">{
+  "projectName": "CardDemo Migration",
+  "projectDescription": "Migration from z/OS to Cloud",
+  "legacySystem": {
+    "language": "COBOL",
+    "framework": "CICS",
+    "platform": "z/OS Mainframe",
+    "database": "DB2"
+  },
+  "targetSystem": {
+    "language": "Java",
+    "framework": "Spring Boot",
+    "platform": "Cloud Native",
+    "database": "PostgreSQL"
+  }
+}</code></pre>
+                </section>
+
+
+                <section>
+                    <h2>Step 4: Launch Migration Supervisor</h2>
+                    <pre><code class="bash"># Using CAO
+cao launch --agents migration_supervisor
+
+# Using Kiro CLI
+kiro-cli chat --agent migration_supervisor
+
+# Using Amazon Q CLI
+q chat --agent migration_supervisor</code></pre>
+                    <p style="font-size: 0.8em; margin-top: 1em;">The Migration Supervisor receives the main prompt with all phases and begins orchestration.</p>
+                </section>
+
+                <section>
+                    <h2>Step 5: Execution Flow</h2>
+                    <div class="mermaid">
+graph TB
+    Start["Migration Supervisor
+    Starts"] --> Phase1["Delegate Phase 1
+    to Analysis Team"]
+    Phase1 --> Task1["Team Supervisor
+    Creates Task Files"]
+    Task1 --> Spec1["Specialists
+    Execute Work"]
+    Spec1 --> Rev1["Reviewers
+    Validate"]
+    Rev1 --> Check1{"Approved?"}
+    Check1 -->|No| Spec1
+    Check1 -->|Yes| Phase2["Delegate Phase 2
+    to Planning Team"]
+    Phase2 --> Task2["Team Supervisor
+    Creates Task Files"]
+    Task2 --> Spec2["Specialists
+    Execute Work"]
+    Spec2 --> Rev2["Reviewers
+    Validate"]
+    Rev2 --> Check2{"Approved?"}
+    Check2 -->|No| Spec2
+    Check2 -->|Yes| Continue["Continue to
+    Next Phases..."]
+    
+    style Start fill:#ff6b6b
+    style Phase1 fill:#4ecdc4
+    style Phase2 fill:#45b7d1
+    style Check1 fill:#f38181
+    style Check2 fill:#f38181
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Step 6: Monitor Progress</h2>
+                    <p>Track progress through status files:</p>
+                    <ul style="font-size: 0.8em;">
+                        <li><code>output/analysis/analysis_status.json</code> - Analysis phase progress</li>
+                        <li><code>output/workpackages/workpackage_status.json</code> - Planning progress</li>
+                        <li><code>output/analysis/analysis_errors.json</code> - Error tracking</li>
+                    </ul>
+                    <p style="font-size: 0.8em; margin-top: 1em;">Each status file tracks completion percentage, current step, and issues.</p>
+                </section>
+
+
+                <section>
+                    <h2>Step 7: Review Deliverables</h2>
+                    <p>Deliverables are organized by phase:</p>
+                    <pre><code>output/
+├── analysis/
+│   ├── source_code_analysis.md
+│   ├── database_analysis.md
+│   └── business_flows.json
+├── workpackages/
+│   ├── workpackage_definitions.md
+│   └── migration_roadmap.md
+├── specifications/
+│   ├── business_logic/
+│   └── requirements/
+├── generated/
+│   ├── source/
+│   └── tests/
+└── deployment/
+    └── scripts/</code></pre>
+                </section>
+
+                <section>
+                    <h2>Complete Workflow Diagram</h2>
+                    <div class="mermaid">
+flowchart TD
+    A[Install Framework] --> B[Create Project]
+    B --> C[Prepare Source Files]
+    C --> D[Configure Project]
+    D --> E[Launch Migration Supervisor]
+    E --> F[Phase 1: Analysis]
+    F --> G[Phase 2: Planning]
+    G --> H[Phase 3: Business Extraction]
+    H --> I[Phase 4: Code Generation]
+    I --> J[Phase 5: Deployment]
+    J --> K[Validate Deliverables]
+    K --> L{Quality OK?}
+    L -->|No| M[Remediate Issues]
+    M --> K
+    L -->|Yes| N[Migration Complete]
+    
+    style A fill:#95e1d3
+    style E fill:#ff6b6b
+    style F fill:#4ecdc4
+    style G fill:#45b7d1
+    style H fill:#5f9ea0
+    style I fill:#4a90e2
+    style J fill:#667eea
+    style N fill:#51cf66
+                    </div>
+                </section>
+            </section>
+
+
+            <!-- Example: CardDemo -->
+            <section>
+                <section>
+                    <h2>Real Example: CardDemo</h2>
+                    <p class="highlight">COBOL to Java Migration</p>
+                </section>
+
+                <section>
+                    <h2>CardDemo Project</h2>
+                    <div class="two-column">
+                        <div>
+                            <h4>Legacy System</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li><strong>Language:</strong> COBOL</li>
+                                <li><strong>Framework:</strong> CICS</li>
+                                <li><strong>Platform:</strong> z/OS Mainframe</li>
+                                <li><strong>Database:</strong> DB2</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Target System</h4>
+                            <ul style="font-size: 0.8em;">
+                                <li><strong>Language:</strong> Java</li>
+                                <li><strong>Framework:</strong> Spring Boot</li>
+                                <li><strong>Platform:</strong> Cloud Native</li>
+                                <li><strong>Database:</strong> PostgreSQL</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8em; margin-top: 1em;"><strong>Domain:</strong> Credit card operations - customer accounts, transactions, billing, reporting</p>
+                </section>
+
+                <section>
+                    <h2>CardDemo Structure</h2>
+                    <pre><code>carddemo/
+├── input/
+│   └── legacy/
+│       ├── source/      # COBOL programs
+│       └── database/    # DB2 schemas
+├── output/
+│   ├── analysis/        # Analysis reports
+│   ├── workpackages/    # Migration plan
+│   └── generated/       # Java code
+├── agents/              # 28 agent definitions
+├── prompts/             # Phase prompts
+├── templates/           # Deliverable templates
+└── project-config.json  # Project metadata</code></pre>
+                </section>
+            </section>
+
+
+            <!-- Key Benefits -->
+            <section>
+                <section>
+                    <h2>Key Benefits</h2>
+                </section>
+
+                <section>
+                    <h2>Systematic Approach</h2>
+                    <ul>
+                        <li><strong>Structured Phases:</strong> Clear progression from analysis to deployment</li>
+                        <li><strong>Dependency Management:</strong> Phases build on previous outputs</li>
+                        <li><strong>Quality Gates:</strong> Review approval required before proceeding</li>
+                        <li><strong>Traceability:</strong> All decisions and transformations documented</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Scalability & Reusability</h2>
+                    <ul>
+                        <li><strong>Generic Agents:</strong> Same 28 agents work across all projects</li>
+                        <li><strong>Template-Driven:</strong> Consistent deliverable structure</li>
+                        <li><strong>Configurable:</strong> Adapt to different legacy systems and targets</li>
+                        <li><strong>Extensible:</strong> Add new phases or agents without restructuring</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Quality Assurance</h2>
+                    <ul>
+                        <li><strong>Built-in Review:</strong> Every deliverable validated by reviewer agents</li>
+                        <li><strong>Iterative Improvement:</strong> Remediation cycles until quality criteria met</li>
+                        <li><strong>Template Validation:</strong> Automated structure checks</li>
+                        <li><strong>Progress Tracking:</strong> Real-time status monitoring</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Automation & Efficiency</h2>
+                    <ul>
+                        <li><strong>AI-Powered Analysis:</strong> Automated legacy code understanding</li>
+                        <li><strong>Code Generation:</strong> Automated transformation to modern code</li>
+                        <li><strong>Test Generation:</strong> Comprehensive test suite creation</li>
+                        <li><strong>Reduced Manual Effort:</strong> Focus on validation, not implementation</li>
+                    </ul>
+                </section>
+            </section>
+
+
+            <!-- Summary -->
+            <section>
+                <section>
+                    <h2>Summary</h2>
+                </section>
+
+                <section>
+                    <h2>What We Covered</h2>
+                    <div class="box">
+                        <h4>✓ CAO (CLI Agent Orchestrator)</h4>
+                        <p style="font-size: 0.8em;">Multi-provider agent management framework</p>
+                    </div>
+                    <div class="box">
+                        <h4>✓ 3-Layer Architecture</h4>
+                        <p style="font-size: 0.8em;">28 agents organized hierarchically with supervisor-based delegation</p>
+                    </div>
+                    <div class="box">
+                        <h4>✓ 5 Migration Phases</h4>
+                        <p style="font-size: 0.8em;">Analysis → Planning → Business Extraction → Code Generation → Deployment</p>
+                    </div>
+                    <div class="box">
+                        <h4>✓ ATX Deliverables</h4>
+                        <p style="font-size: 0.8em;">Standardized templates with validation framework</p>
+                    </div>
+                    <div class="box">
+                        <h4>✓ End-to-End Workflow</h4>
+                        <p style="font-size: 0.8em;">From setup to deployment with iterative quality assurance</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Getting Started</h2>
+                    <pre><code class="bash"># One command to rule them all
+./install_all.sh my_migration_project
+
+# Then launch
+cd my_migration_project
+kiro-cli chat --agent migration_supervisor</code></pre>
+                    <p style="margin-top: 2em;">📚 <strong>Documentation:</strong></p>
+                    <ul style="font-size: 0.8em;">
+                        <li>Quick Start: <code>QUICK_START.md</code></li>
+                        <li>User Guide: <code>docs/USER_GUIDE.md</code></li>
+                        <li>Architecture: <code>structure/doc/orchestration_architecture.md</code></li>
+                    </ul>
+                </section>
+
+                <section class="center">
+                    <h1>Questions?</h1>
+                    <p style="margin-top: 2em;">ReImagine Framework</p>
+                    <p style="font-size: 0.8em;">AI-Powered Legacy Code Migration</p>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        
+        // Initialize Reveal.js first
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            transition: 'slide',
+            width: 1280,
+            height: 720,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 2.0
+        }).then(() => {
+            // Initialize Mermaid after Reveal is ready
+            mermaid.initialize({ 
+                startOnLoad: false,
+                theme: 'default',
+                securityLevel: 'loose'
+            });
+            
+            // Render all Mermaid diagrams
+            mermaid.run({
+                querySelector: '.mermaid'
+            });
+            
+            // Re-render Mermaid on slide change
+            Reveal.on('slidechanged', () => {
+                mermaid.run({
+                    querySelector: '.mermaid'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

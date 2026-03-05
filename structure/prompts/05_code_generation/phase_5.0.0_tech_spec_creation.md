@@ -55,6 +55,44 @@
 
 ---
 
+## Standards Compliance
+
+### IEEE 1016-2009: Software Design Descriptions (SDD)
+
+This phase produces technical implementation guides following **IEEE 1016-2009** standards for Software Design Descriptions. An SDD is a representation of software design used to communicate design information to key stakeholders (in this case, code generation agents, reviewers, and developers).
+
+**Required IEEE 1016-2009 Elements:**
+
+1. **Design Stakeholders and Concerns** (Guide Section 1)
+   - Primary: Code generation agents (need implementation patterns and details)
+   - Secondary: Review agents (need traceability and rationale)
+   - Tertiary: Human developers (need maintainability and integration context)
+
+2. **Design Viewpoints** (Guide Sections 2-6)
+   - **Architectural Viewpoint**: System structure, components, layers, patterns
+   - **Interface Viewpoint**: APIs, data contracts, integration points
+   - **Detailed Viewpoint**: Algorithms, data structures, implementation patterns
+   - **Behavioral Viewpoint**: State machines, workflows, business logic flow
+
+3. **Design Rationale** (Guide Section 8)
+   - Justify pattern selections from target specifications
+   - Document tradeoffs and alternatives considered
+   - Explain integration decisions with traceability
+
+4. **Design Languages and Notations** (Throughout)
+   - Use consistent notation (UML, JSON schemas, code examples)
+   - Reference target framework documentation
+   - Provide implementation-ready pseudocode where appropriate
+
+**Quality Criteria for IEEE Compliance:**
+- ✓ All required SDD sections present and complete
+- ✓ Design concerns of all stakeholders addressed
+- ✓ Multiple viewpoints provided for comprehensive understanding
+- ✓ Design rationale documented with traceability
+- ✓ Consistent notation and terminology throughout
+
+---
+
 ## Objective
 
 For each workpackage, create a comprehensive technical implementation guide that enables a code generation agent to implement the workpackage by:
@@ -67,6 +105,8 @@ For each workpackage, create a comprehensive technical implementation guide that
 6. **Documenting technical decisions** with traceability to requirements and specifications
 
 **Critical**: The guide must be derived from the actual target specifications provided in the project. Do NOT assume or hardcode any specific technology stack, framework, or architectural pattern.
+
+**Standards Compliance**: All guides must follow IEEE 1016-2009 structure to ensure professional quality and completeness.
 
 ---
 
@@ -149,19 +189,54 @@ From the business specification, identify:
 
 Create a comprehensive guide at {{TECH_SPEC_BASE_PATH}}/review/WP-{ID}-tech-implementation-guide-draft.md that includes:
 
-**Section 1: Workpackage Overview**
+**Document Header (IEEE 1016-2009 Compliance)**
+```markdown
+---
+# Technical Implementation Guide: WP-{ID}
+
+## Document Control
+- **Standard Compliance**: IEEE 1016-2009 (Software Design Descriptions)
+- **Document Type**: Technical Implementation Guide
+- **Workpackage**: WP-{ID} - {Workpackage Name}
+- **Version**: 1.0
+- **Date**: {Current Date}
+- **Status**: Draft
+
+## Standards Compliance Statement
+
+This document follows IEEE 1016-2009 standards for Software Design Descriptions,
+providing structured design information to enable code generation and implementation.
+
+**IEEE 1016-2009 Coverage Map:**
+| IEEE Requirement | This Document | Status |
+|------------------|---------------|--------|
+| Design Stakeholders | Section 1 | ✓ |
+| Architectural Viewpoint | Section 2 | ✓ |
+| Interface Viewpoint | Section 5 | ✓ |
+| Detailed Design Viewpoint | Sections 3-4 | ✓ |
+| Design Rationale | Section 8 | ✓ |
+| Design Languages | Throughout | ✓ |
+---
+```
+
+**Section 1: Design Stakeholders and Workpackage Overview**
 - Workpackage ID and name
 - Business context summary
+- **Stakeholder Concerns**:
+  - Code generation agents: Need implementation patterns, API specs, data models
+  - Review agents: Need traceability, completeness, standards compliance
+  - Human developers: Need maintainability, integration context, rationale
 - Dependencies on other workpackages
 - Tier(s) involved (frontend, backend, batch)
 
-**Section 2: Architecture and Structure**
+**Section 2: Architecture and Structure (Architectural Viewpoint)**
 - Applicable architecture patterns (from target specs)
 - Package/directory structure for this workpackage
 - Component organization
 - Layer responsibilities
+- System context and boundaries
 
-**Section 3: Implementation Tasks**
+**Section 3: Implementation Tasks (Detailed Design Viewpoint)**
 For each business function in the workpackage:
 - Task description
 - Required components/classes/modules
@@ -171,33 +246,37 @@ For each business function in the workpackage:
 - Validation requirements
 - Error handling approach
 
-**Section 4: Data Model Implementation**
+**Section 4: Data Model Implementation (Detailed Design Viewpoint)**
 - Entity/model definitions needed
 - Database table mappings
 - Relationships and constraints
 - Data access patterns to use
 
-**Section 5: API Design** (if applicable)
+**Section 5: API Design (Interface Viewpoint)**
 - Endpoint definitions
 - Request/response structures
 - HTTP methods and status codes
 - Authentication/authorization requirements
+- Data contracts and schemas
 
-**Section 6: Integration Points**
+**Section 6: Integration Points (Interface Viewpoint)**
 - Dependencies on other workpackages
 - Shared components to use
 - External system integrations
 - Database dependencies
+- Communication protocols
 
 **Section 7: Testing Guidance**
 - Test case references
 - Testing approach per layer/component
 - Integration testing requirements
 
-**Section 8: Technical Decisions**
+**Section 8: Technical Decisions and Rationale (Design Rationale)**
 - Key technical decisions made
 - Rationale with traceability to requirements
 - Alternative approaches considered
+- Justification for pattern selections
+- Tradeoff analysis
 
 **Section 9: Implementation Checklist**
 - Ordered list of implementation steps
@@ -207,6 +286,10 @@ For each business function in the workpackage:
 #### 2.6 Validate Technical Implementation Guide
 
 Ensure the guide:
+- [ ] Follows IEEE 1016-2009 structure with all required sections
+- [ ] Addresses concerns of all design stakeholders
+- [ ] Provides multiple design viewpoints (architectural, interface, detailed)
+- [ ] Documents design rationale with traceability
 - [ ] Follows patterns from target specifications
 - [ ] Is consistent with existing workpackage guides
 - [ ] Covers all business functions from business spec

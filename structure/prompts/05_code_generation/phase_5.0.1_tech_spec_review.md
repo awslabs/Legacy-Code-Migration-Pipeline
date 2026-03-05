@@ -54,17 +54,60 @@
 
 ---
 
+## Standards Compliance
+
+### IEEE 1016-2009: Software Design Descriptions (SDD) Review
+
+This phase reviews technical implementation guides for compliance with **IEEE 1016-2009** standards for Software Design Descriptions. The review ensures that guides provide complete, consistent, and traceable design information to all stakeholders.
+
+**IEEE 1016-2009 Review Criteria:**
+
+1. **Design Stakeholders and Concerns** (Section 1)
+   - ✓ All stakeholders identified (code generation agents, reviewers, developers)
+   - ✓ Stakeholder concerns explicitly addressed
+   - ✓ Information needs of each stakeholder met
+
+2. **Design Viewpoints** (Sections 2-6)
+   - ✓ **Architectural Viewpoint**: System structure, components, patterns complete
+   - ✓ **Interface Viewpoint**: APIs, integration points, data contracts specified
+   - ✓ **Detailed Viewpoint**: Implementation details, algorithms, data structures provided
+   - ✓ **Behavioral Viewpoint**: Workflows, state machines, business logic flows documented
+
+3. **Design Rationale** (Section 8)
+   - ✓ Technical decisions documented with justification
+   - ✓ Traceability to requirements and specifications established
+   - ✓ Alternative approaches considered and evaluated
+   - ✓ Pattern selections justified with source references
+
+4. **Design Languages and Notations**
+   - ✓ Consistent notation used throughout
+   - ✓ Appropriate level of formality for stakeholders
+   - ✓ Clear and unambiguous representation
+   - ✓ References to target framework documentation
+
+5. **Design Completeness**
+   - ✓ All required SDD sections present
+   - ✓ Sufficient detail for implementation
+   - ✓ No critical information gaps
+   - ✓ Traceability maintained throughout
+
+**Review Validation**: Each guide must pass all IEEE 1016-2009 criteria before approval.
+
+---
+
 ## Objective
 
 Review technical implementation guides for each workpackage to ensure they:
-1. Follow patterns extracted from target specifications
-2. Are consistent with previously approved workpackage guides
-3. Cover all business requirements from the business specification
-4. Provide sufficient detail for code generation
-5. Properly document integration points with other workpackages
-6. Include clear traceability to requirements and specifications
+1. **Comply with IEEE 1016-2009 standards** for Software Design Descriptions
+2. Follow patterns extracted from target specifications
+3. Are consistent with previously approved workpackage guides
+4. Cover all business requirements from the business specification
+5. Provide sufficient detail for code generation
+6. Properly document integration points with other workpackages
+7. Include clear traceability to requirements and specifications
 
 **Review Principles**:
+- **Standards Compliance**: All IEEE 1016-2009 requirements met
 - **Completeness**: All required sections present with sufficient detail
 - **Consistency**: Patterns match target specs and other workpackage guides
 - **Clarity**: Clear, unambiguous, implementation-ready
@@ -92,25 +135,39 @@ Read the following for the current workpackage:
 - Test cases: {{TEST_CASE_GENERATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-tests-{LANG}-approved.md
 - Workpackage metadata from {{WORKPACKAGE_PLANNING}}
 
-#### 2.2 Review Section 1: Workpackage Overview
+#### 2.2 Review Section 1: Design Stakeholders and Workpackage Overview
+
+**IEEE 1016-2009 Compliance Check**:
+- [ ] Design stakeholders explicitly identified
+- [ ] Stakeholder concerns documented
+- [ ] Information needs addressed
 
 **Completeness Check**:
 - [ ] Workpackage ID and name present
 - [ ] Business context summary present
+- [ ] Stakeholder concerns section present
 - [ ] Dependencies on other workpackages listed
 - [ ] Tier(s) involved clearly stated
 
 **Accuracy Check**:
 - [ ] Business context matches business specification
+- [ ] Stakeholder concerns are relevant and complete
 - [ ] Dependencies match workpackage planning
 - [ ] Tiers match business specification requirements
 
 **Issues to Document**:
 - Missing or incomplete overview information
+- Missing stakeholder identification or concerns
 - Inaccurate business context
 - Missing or incorrect dependencies
 
-#### 2.3 Review Section 2: Architecture and Structure
+#### 2.3 Review Section 2: Architecture and Structure (Architectural Viewpoint)
+
+**IEEE 1016-2009 Compliance Check**:
+- [ ] Architectural viewpoint clearly presented
+- [ ] System structure and boundaries defined
+- [ ] Component organization documented
+- [ ] Architectural patterns identified
 
 **Completeness Check**:
 - [ ] Architecture patterns documented
@@ -129,6 +186,7 @@ Read the following for the current workpackage:
 - [ ] Structure decisions justified with source references
 
 **Issues to Document**:
+- Missing architectural viewpoint elements
 - Patterns not matching target specifications
 - Inconsistencies with other workpackages
 - Missing source references
@@ -318,12 +376,19 @@ Create review report at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md:
 **Review Date**: {Date}
 **Reviewer**: tech_spec_review_specialist
 **Review Status**: [APPROVED / REVISE / REJECT]
+**Standards Compliance**: IEEE 1016-2009 (Software Design Descriptions)
 
 ---
 
 ## Overall Assessment
 
 **Summary**: [Brief assessment of the guide quality]
+
+**IEEE 1016-2009 Compliance**: [PASS / FAIL]
+- Design stakeholders identified: [YES / NO]
+- Multiple viewpoints provided: [YES / NO]
+- Design rationale documented: [YES / NO]
+- Traceability established: [YES / NO]
 
 **Strengths**:
 - [Strength 1]
@@ -335,39 +400,79 @@ Create review report at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md:
 
 ---
 
+## IEEE 1016-2009 Standards Compliance Review
+
+### Design Stakeholders and Concerns
+**Status**: [PASS / FAIL]
+- Stakeholders identified: [YES / NO]
+- Concerns documented: [YES / NO]
+- Information needs addressed: [YES / NO]
+**Issues**: [List any issues]
+
+### Design Viewpoints
+**Architectural Viewpoint**: [PASS / FAIL]
+- System structure defined: [YES / NO]
+- Components organized: [YES / NO]
+**Issues**: [List any issues]
+
+**Interface Viewpoint**: [PASS / FAIL]
+- APIs specified: [YES / NO]
+- Integration points documented: [YES / NO]
+**Issues**: [List any issues]
+
+**Detailed Design Viewpoint**: [PASS / FAIL]
+- Implementation details provided: [YES / NO]
+- Data structures specified: [YES / NO]
+**Issues**: [List any issues]
+
+### Design Rationale
+**Status**: [PASS / FAIL]
+- Decisions documented: [YES / NO]
+- Traceability established: [YES / NO]
+- Alternatives considered: [YES / NO]
+**Issues**: [List any issues]
+
+### Design Languages and Notations
+**Status**: [PASS / FAIL]
+- Consistent notation: [YES / NO]
+- Clear representation: [YES / NO]
+**Issues**: [List any issues]
+
+---
+
 ## Section-by-Section Review
 
-### Section 1: Workpackage Overview
+### Section 1: Design Stakeholders and Workpackage Overview
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
 - [Issue 2]
 
-### Section 2: Architecture and Structure
+### Section 2: Architecture and Structure (Architectural Viewpoint)
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
 - [Issue 2]
 
-### Section 3: Implementation Tasks
+### Section 3: Implementation Tasks (Detailed Design Viewpoint)
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
 - [Issue 2]
 
-### Section 4: Data Model Implementation
+### Section 4: Data Model Implementation (Detailed Design Viewpoint)
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
 - [Issue 2]
 
-### Section 5: API Design
+### Section 5: API Design (Interface Viewpoint)
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
 - [Issue 2]
 
-### Section 6: Integration Points
+### Section 6: Integration Points (Interface Viewpoint)
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
@@ -379,7 +484,7 @@ Create review report at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md:
 - [Issue 1]
 - [Issue 2]
 
-### Section 8: Technical Decisions
+### Section 8: Technical Decisions and Rationale (Design Rationale)
 **Status**: [PASS / FAIL]
 **Issues**:
 - [Issue 1]
@@ -394,6 +499,13 @@ Create review report at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md:
 ---
 
 ## Quality Assessment
+
+### IEEE 1016-2009 Compliance: [PASS / FAIL]
+- All required SDD elements present: [YES / NO]
+- Design stakeholders addressed: [YES / NO]
+- Multiple viewpoints provided: [YES / NO]
+- Design rationale documented: [YES / NO]
+- Consistent notation used: [YES / NO]
 
 ### Completeness: [PASS / FAIL]
 - All required sections present: [YES / NO]
@@ -443,6 +555,8 @@ Create review report at {{TECH_SPEC_BASE_PATH}}/WP-{ID}-review-report.md:
 **Decision**: [APPROVED / REVISE / REJECT]
 
 **Rationale**: [Explanation of decision]
+
+**IEEE 1016-2009 Compliance**: [Explanation of standards compliance status]
 
 **Next Steps**:
 - [Step 1]
