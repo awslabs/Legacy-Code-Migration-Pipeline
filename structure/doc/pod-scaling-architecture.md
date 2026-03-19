@@ -1,8 +1,8 @@
 # Pod-Based Scaling Architecture for Large-Scale Migrations
 
 ## Document Control
-- **Version:** 1.2
-- **Date:** 2026-03-17
+- **Version:** 1.3
+- **Date:** 2026-03-19
 - **Status:** Proposal
 - **Purpose:** Architecture for scaling the Agentic Code Migrator to handle large engagements (50M+ projects) through parallel pod execution, Git-based artifact management, and relative path resolution.
 
@@ -15,14 +15,16 @@
 3. [Pod Model Architecture](#3-pod-model-architecture)
    - 3.4 [Pod Spawning Mechanics](#34-pod-spawning-mechanics)
    - 3.5 [Single-Machine Scalability Assessment](#35-single-machine-scalability-assessment)
+   - 3.6 [Fan-Out / Fan-In Execution Pattern](#36-fan-out--fan-in-execution-pattern)
 4. [Git Branching Strategy](#4-git-branching-strategy)
    - 4.5 [Git-Based Document Versioning](#45-git-based-document-versioning-replacing-draftapproved-file-duplication)
 5. [Relative Path Migration](#5-relative-path-migration)
 6. [Phase 2.5: Pod Partitioning](#6-phase-25-pod-partitioning)
-7. [Friction Points and Mitigations](#7-friction-points-and-mitigations)
-8. [Staffing Impact](#8-staffing-impact)
-9. [Required Changes](#9-required-changes)
-10. [Implementation Sequence](#10-implementation-sequence)
+7. [Tracker-Based Work Distribution](#7-tracker-based-work-distribution)
+8. [Friction Points and Mitigations](#8-friction-points-and-mitigations)
+9. [Staffing Impact](#9-staffing-impact)
+10. [Required Changes](#10-required-changes)
+11. [Implementation Sequence](#11-implementation-sequence)
 
 ---
 
@@ -430,6 +432,48 @@ A key question: how much can a single machine handle before requiring multi-mach
 - The engagement has 20+ pods (rare — implies 60+ workpackages)
 - Organizational requirements mandate resource isolation
 
+### 3.6 Fan-Out / Fan-In Execution Pattern
+
+The pod model follows a classic fan-out/fan-in pattern. This is the core execution flow:
+
+```
+                         FAN-OUT
+                            │
+Phase 1 (Analysis)          │  ← shared, sequential
+Phase 2 (Workpackage Plan)  │  ← shared, sequential
+Phase 2.5 (Pod Partition)   │  ← shared, sequential
+                            │
+    ┌───────────────────────┼───────────────────────┐
+    ▼                       ▼                       ▼
+  Pod A                   Pod B                   Pod C
+  assign(worker_1,        assign(worker_2,        assign(worker_3,
+    "WP-001,003,007         "WP-002,004,008         "WP-005,006,009
+     through all phases")    through all phases")    through all phases")
+    │                       │                       │
+    Phase 3→4→5→6           Phase 3→4→5→6           Phase 3→4→5→6
+    (independent)           (independent)           (independent)
+    │                       │                       │
+    └───────────────────────┼───────────────────────┘
+                            │
+                         FAN-IN
+                            │
+              Merge Validation (deployment_reviewer_orchestration)
+              Consolidate pod artifacts (glossaries, status)
+              Merge pod branches → main
+                            │
+                     Integrated main
+                     (deployment-ready)
+```
+
+Each "worker" in the fan-out is a Migration Supervisor instance scoped to a subset of workpackages. Internally, each pod uses the existing 3-layer hierarchy unchanged — the supervisor delegates to team supervisors, who delegate to specialists, who produce deliverables that reviewers validate. The parallelism is between pods, not within them.
+
+The fan-in is where the work recombines:
+1. Each pod signals completion via `send_message` (single machine) or REST API (multi-machine)
+2. The Migration Supervisor triggers merge validation for `deployment_reviewer_orchestration`
+3. The validator checks cross-pod consistency (API contracts, shared entities, glossary alignment)
+4. Pod branches merge to `main` in dependency order (if Pod B depends on Pod A's entity, Pod A merges first — defined by `cross_pod_dependencies` from Phase 2.5)
+5. Once all pods are merged, `main` has the complete integrated output
+
 ---
 
 ## 4. Git Branching Strategy
@@ -749,9 +793,130 @@ No new orchestration layer needed. The Migration Supervisor reads the pod assign
 
 ---
 
-## 7. Friction Points and Mitigations
+## 7. Tracker-Based Work Distribution
 
-### 7.1 Git Merge Conflicts
+### 7.1 Motivation
+
+The pod assignment JSON from Phase 2.5 is a static artifact — the supervisor reads it and delegates. But if you push the workpackages and pod assignments to a bug/feature tracker (GitHub Issues, Jira, or a project board), the model becomes dynamic and self-service:
+
+- Pods become claimable: an agent (or a human) picks up an unassigned pod from the board
+- Progress is visible without reading git branches or status JSONs
+- If a pod fails or stalls, another agent can pick up the remaining workpackages
+- Fast pods that finish early can claim more work (natural load balancing)
+- Humans and agents use the same interface to see what's done and what's pending
+
+### 7.2 Static Assignment vs. Dynamic Claiming
+
+```
+STATIC (current design — supervisor assigns):
+  Supervisor → assign(pod-a, WP-001,003,007)
+  Supervisor → assign(pod-b, WP-002,004,008)
+  Supervisor → assign(pod-c, WP-005,006,009)
+
+DYNAMIC (tracker-based — workers claim):
+  Supervisor → publishes pods to tracker (GitHub Issues / Jira board)
+  Worker 1 → claims pod-a from tracker → processes it → marks complete
+  Worker 2 → claims pod-b from tracker → processes it → marks complete
+  Worker 3 → finishes early → claims next available pod from tracker
+```
+
+Both models can coexist. Phase 2.5 produces the pod assignment JSON regardless. The question is whether the supervisor pushes assignments to workers (static) or publishes them to a board where workers pull (dynamic).
+
+### 7.3 Tracker Structure
+
+Each pod becomes a tracker item (GitHub Issue, Jira ticket, etc.):
+
+```
+┌─────────────────────────────────────────────────────┐
+│ Issue: Pod A — Account Management Domain             │
+│ Status: Available / Claimed / In Progress / Complete │
+│ Assignee: (none until claimed)                       │
+│ Labels: pod, domain:account-management, priority:1   │
+│                                                      │
+│ Workpackages:                                        │
+│   - [ ] WP-001: Account CRUD operations              │
+│   - [ ] WP-003: Account validation rules             │
+│   - [ ] WP-007: Account reporting                    │
+│                                                      │
+│ Branch: pod/pod-a                                    │
+│ Estimated effort: High                               │
+│ Dependencies: None (can start immediately)           │
+│                                                      │
+│ Cross-pod dependencies:                              │
+│   - Pod B depends on Account entity from this pod    │
+│   - This pod must merge before Pod B                 │
+└─────────────────────────────────────────────────────┘
+```
+
+Within each pod issue, individual workpackages can be sub-issues or checklist items with their own status:
+
+```
+Pod A (Issue #12)
+  ├── WP-001 (Sub-issue #13) — Phase 3: In Progress
+  ├── WP-003 (Sub-issue #14) — Phase 3: Not Started
+  └── WP-007 (Sub-issue #15) — Not Started
+```
+
+### 7.4 Agent Self-Assignment Flow
+
+For agents to claim pods autonomously, they need tracker API access. This can be provided via an MCP server for the tracker (GitHub MCP, Jira MCP, etc.):
+
+```
+Agent starts up
+    → Queries tracker: "List pods with status=Available, sorted by priority"
+    → Claims highest-priority available pod: updates status to "Claimed", sets assignee
+    → Reads pod details: workpackage list, branch name, dependencies
+    → Checks out pod branch, starts Phase 3 pipeline
+    → Updates tracker as workpackages complete (checkboxes, status updates)
+    → On pod completion: updates status to "Complete", notifies supervisor
+    → Queries tracker again: "Any more Available pods?"
+    → If yes: claims next pod (load balancing)
+    → If no: signals idle to supervisor
+```
+
+This requires:
+- A tracker MCP server (GitHub Issues MCP already exists)
+- A `publish_pods_to_tracker.py` script that reads `Pod_Assignment.json` and creates issues
+- Agent prompts that include tracker interaction instructions
+
+### 7.5 Benefits Over Static Assignment
+
+| Aspect | Static Assignment | Tracker-Based Claiming |
+|--------|------------------|----------------------|
+| Visibility | Git branches + status JSONs | Project board (humans + agents see same view) |
+| Load balancing | Fixed at assignment time | Dynamic — fast workers claim more |
+| Failure recovery | Manual reassignment | Another agent claims the stalled pod |
+| Human oversight | Read git logs | Glance at project board |
+| Scalability | Works, but rigid | Scales naturally with more workers |
+| Agent autonomy | Supervisor must assign | Agents self-organize |
+| Progress tracking | Per-pod status files | Tracker dashboard (built-in) |
+
+### 7.6 Implementation Approach
+
+This is an additive enhancement — it doesn't replace the static assignment model, it layers on top:
+
+1. Phase 2.5 still produces `Pod_Assignment.json` (the source of truth)
+2. A `publish_pods_to_tracker.py` script creates tracker items from the JSON
+3. Agent prompts include optional tracker interaction (claim/update/complete)
+4. If no tracker is configured, the static `assign` model works as before
+5. The tracker becomes the single pane of glass for project progress
+
+### 7.7 Future: Fully Autonomous Pod Fleet
+
+The tracker model opens the door to a fully autonomous fleet where:
+- A pool of agent instances runs continuously
+- Each instance queries the tracker for available work
+- Instances claim pods, process them, and return for more
+- The supervisor only intervenes for escalations and merge validation
+- Humans monitor the project board and handle exceptions
+
+This is the end-state vision. The static assignment model is the starting point, the tracker is the bridge.
+
+---
+
+## 8. Friction Points and Mitigations
+
+### 8.1 Git Merge Conflicts
 
 **Risk**: Multiple pods writing to the same files.
 
@@ -767,13 +932,13 @@ No new orchestration layer needed. The Migration Supervisor reads the pod assign
 
 A conflict resolution prompt exists as a fallback but should be an exception handler, not a regular part of the flow.
 
-### 7.2 Concurrent Git Operations
+### 8.2 Concurrent Git Operations
 
 **On same machine (worktrees)**: `git worktree` provides separate working directories sharing the same `.git` object store. No concurrent git operation conflicts — each worktree is independent.
 
 **On separate machines**: Each instance has its own clone. Push/pull to shared remote. Standard Git concurrency model applies — no issues as long as pods push to different branches (which they do by design).
 
-### 7.3 Large Repositories
+### 8.3 Large Repositories
 
 **Legacy input codebase**: Read-only for all pods, never changes after Phase 1. Options:
 - If in same repo: committed to `main` before branching, every worktree/clone already has it
@@ -782,7 +947,7 @@ A conflict resolution prompt exists as a fallback but should be an exception han
 
 **Generated outputs**: Much smaller than legacy input. Repo size is not a concern on the output side.
 
-### 7.4 Final Merge to Main
+### 8.4 Final Merge to Main
 
 The most critical integration point. Use the existing `deployment_reviewer_orchestration` agent (already in the deployment team) with a merge validation task file.
 
@@ -808,15 +973,15 @@ No new agent needed — `deployment_reviewer_orchestration` already handles orch
 
 ---
 
-## 8. Staffing Impact
+## 9. Staffing Impact
 
-### 8.1 Why Pods Reduce Headcount
+### 9.1 Why Pods Reduce Headcount
 
 The current framework already automates the specialist→reviewer iteration loop (AI reviews AI). Quality gates have automated confidence thresholds (drift detection at <5% and <10%). Human intervention is exception-based, not checkpoint-based.
 
 With pods, the parallelism multiplier means the same amount of work completes in a fraction of the time, and the AI-driven review loops handle the volume that would otherwise require proportionally more humans.
 
-### 8.2 Estimated Staffing Model
+### 9.2 Estimated Staffing Model
 
 | Role | Without Pods (Sequential) | With Pods (10 Parallel) |
 |------|--------------------------|------------------------|
@@ -834,9 +999,9 @@ Human roles shift from "doing the work" to "supervising the AI doing the work":
 
 ---
 
-## 9. Required Changes
+## 10. Required Changes
 
-### 9.1 New Files to Create
+### 10.1 New Files to Create
 
 | File | Purpose |
 |------|---------|
@@ -849,8 +1014,10 @@ Human roles shift from "doing the work" to "supervising the AI doing the work":
 | `scripts/check_pod_status.sh` | Health check script for CAO flow service — checks git commit timestamps and status files per pod |
 | `flows/pod-health-check.md` | CAO flow definition for scheduled pod monitoring (see Section 3.4) |
 | `launch_pods.py` | External launcher for multi-machine deployments only (Option B) — reads pod assignments, SSHs to machines, starts CAO servers, monitors via REST API |
+| `publish_pods_to_tracker.py` | Script that reads `Pod_Assignment.json` and creates tracker items (GitHub Issues / Jira tickets) for each pod and its workpackages (see Section 7) |
+| Tracker MCP configuration | Configuration for tracker MCP server (GitHub Issues MCP or Jira MCP) to enable agent self-assignment and status updates |
 
-### 9.2 Files to Modify
+### 10.2 Files to Modify
 
 | File | Change |
 |------|--------|
@@ -871,7 +1038,7 @@ Human roles shift from "doing the work" to "supervising the AI doing the work":
 | **All reviewer agent prompts** | Add instruction: "Use `git diff` to identify changes since last review. Focus validation on changed sections." Change approval action from "create approved copy" to "update status header to approved". |
 | **`structure/web-dashboard/`** | Update dashboard to read from multiple worktrees/branches for cross-pod visibility. |
 
-### 9.3 Git Workflow Additions to Agent Prompts
+### 10.3 Git Workflow Additions to Agent Prompts
 
 Team supervisor prompts need these additions for the pod workflow:
 
@@ -897,7 +1064,7 @@ These are additions to existing supervisor prompts, not new agents or layers.
 
 ---
 
-## 10. Implementation Sequence
+## 11. Implementation Sequence
 
 ### Phase 1: Foundation (Relative Paths)
 1. Update `config/paths.cfg` — all paths relative
@@ -937,10 +1104,17 @@ These are additions to existing supervisor prompts, not new agents or layers.
 27. Test cross-provider pod execution (e.g., Pod A on Kiro CLI, Pod B on Claude Code)
 28. Validate merge flow and cross-pod integration
 
-### Phase 6: Multi-Machine Scale (Optional — 10+ Pods)
-29. Create `launch_pods.py` for multi-machine orchestration via CAO REST API
-30. Test: run pods on separate machines with shared Git remote
-31. Validate cross-machine monitoring and merge coordination
+### Phase 6: Tracker-Based Work Distribution (Optional — Dynamic Claiming)
+29. Create `publish_pods_to_tracker.py` script — reads `Pod_Assignment.json`, creates GitHub Issues / Jira tickets per pod
+30. Configure tracker MCP server (GitHub Issues MCP or Jira MCP) for agent access
+31. Add tracker interaction instructions to pod supervisor prompts (claim/update/complete)
+32. Test: publish pods to tracker, verify agent can claim and process a pod via tracker
+33. Test: verify fast-finishing agent claims additional available pods (load balancing)
+
+### Phase 7: Multi-Machine Scale (Optional — 10+ Pods)
+34. Create `launch_pods.py` for multi-machine orchestration via CAO REST API
+35. Test: run pods on separate machines with shared Git remote
+36. Validate cross-machine monitoring and merge coordination
 
 ---
 
@@ -989,3 +1163,4 @@ Phase 1 → Phase 2 → Phase 2.5 (Pod Partitioning)
 | Pod-scoped glossaries over shared writes | Eliminates merge conflicts on shared files. Consolidation at merge time is clean and deterministic. |
 | Worktrees for small scale, separate instances for large | Worktrees share object store (efficient), separate instances provide resource isolation (scalable). 3-5 pods per machine is the practical sweet spot — LLM API rate limits are the bottleneck, not local compute. See Section 3.5. |
 | Phase 2.5 uses domain affinity clustering | Minimizes cross-pod dependencies and merge conflicts by keeping related workpackages together. |
+| Tracker-based work distribution as optional layer | Adds dynamic claiming, visible progress, and failure recovery on top of static assignment. Agents and humans share the same project board. Does not replace static `assign` — layers on top. See Section 7. |
