@@ -79,9 +79,8 @@ class TestIntegrationWithSampleData:
             # At least some workpackages should be present
             assert len(wp_ids) >= 0
     
-    def test_bilingual_specifications_detected(self, data_loader):
-        """Test that bilingual specifications are properly detected and parsed."""
-        # Get Phase 3 details which should contain bilingual specifications
+    def test_specifications_detected(self, data_loader):
+        """Test that specifications are properly detected and parsed."""
         phase3_details = data_loader.get_phase_details(3)
         
         assert phase3_details is not None
@@ -91,15 +90,15 @@ class TestIntegrationWithSampleData:
         if 'artifacts' in phase3_details:
             artifacts = phase3_details['artifacts']
             
-            # Look for bilingual artifacts
-            bilingual_artifacts = [
+            # Verify specification artifacts exist
+            spec_artifacts = [
                 a for a in artifacts 
-                if a.get('hasMultipleLanguages', False)
+                if a.get('type') == 'Business Specification'
             ]
             
-            # If bilingual specs exist, verify they have both language paths
-            for artifact in bilingual_artifacts:
-                assert 'pathEN' in artifact or 'pathDE' in artifact
+            for artifact in spec_artifacts:
+                assert 'name' in artifact
+                assert 'workpackage' in artifact
     
     def test_phase_status_calculation(self, data_loader):
         """Test that phase status is calculated correctly from actual progress files."""
@@ -158,11 +157,10 @@ class TestIntegrationWithSampleData:
                 assert 'workpackage_id' in wp
                 assert 'status' in wp
                 
-                # Check bilingual specifications structure
+                # Check specifications structure
                 if 'specifications' in wp:
                     specs = wp['specifications']
-                    # Should have english and/or german
-                    assert 'english' in specs or 'german' in specs
+                    assert isinstance(specs, dict)
     
     def test_all_phases_display_properly(self, data_loader):
         """Test that all phases (0-7) can be queried without errors."""

@@ -101,7 +101,7 @@ WORKPACKAGE_LOOP:
             - flow_id: current_workpackage.flow_id
         
         INPUTS:
-            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md
+            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md
             - Legacy database schema: {{DATABASE_GEN_SRC}}/legacy_{DB_NAME}_ddl.sql (auto-detect DB_NAME)
             - Workpackage planning: {{WORKPACKAGE_PLANNING}}
             - Previously created schema: {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql (if exists)
@@ -146,7 +146,7 @@ WORKPACKAGE_LOOP:
             - flow_id: current_workpackage.flow_id
         
         INPUTS:
-            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md
+            - Business specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md
             - Modernized DDL: {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql
             - Migration script: {{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_migration.sql
             - Comparison report: {{DATABASE_MODERNIZATION_OUTPUT}}/schema_comparison_report.md
@@ -224,7 +224,7 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3 → Phase 5.0.0
 **Phase 3 Outputs** (Phase 5.0.0 Inputs):
-- Business specifications: `WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md`
+- Business specifications: `WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md`
 - Chapter 2: Business Entities with attributes and relationships
 
 **Contract**:

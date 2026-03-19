@@ -12,9 +12,8 @@
 
 ### Expected Deliverables
 
-1. **Business Specification Documents (Chapters 1-5) - Draft**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
+1. **Business Specification Document (Chapters 1-5) - Draft**
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md
    - Template: {{BUSINESS_SPECIFICATION_TEMPLATE}}
    - Description: IEEE 830-1998 formatted business specifications (Chapters 1-5 only, Chapter 6 already approved from Phase 3.1.1) - draft for review
 
@@ -34,7 +33,6 @@
 - [ ] All business processes use business terminology
 - [ ] Technology-agnostic language in Chapters 1-5 (no technical jargon)
 - [ ] Every business element traces to Chapter 6 evidence
-- [ ] Bilingual versions (EN and other) have identical structure
 - [ ] Traceability matrix complete
 - [ ] Ready for Phase 3.2.1 review
 
@@ -49,8 +47,7 @@
 - **Logic extraction notes**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md`
 
 ### Output Locations
-- **Business specifications (EN) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
-- **Business specifications (other) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+- **Business specification - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md`
 - **Traceability matrix**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
 - **Progress tracking**: `{{BUSINESS_SPECIFICATION_STATUS}}`
 
@@ -81,8 +78,7 @@ Create business specification (Chapters 1-5) using approved Chapter 6 as evidenc
 **YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
 
 **Allowed Outputs** (from Output Locations section above):
-- Business specification (EN) - draft: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
-- Business specification (other) - draft: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANG}-draft.md`
+- Business specification - draft: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md`
 - Traceability matrix: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
 - Progress tracking: `{{BUSINESS_SPECIFICATION_STATUS}}`
 - Error logs (if errors occur): `{{BUSINESS_SPECIFICATION_ERRORS}}`
@@ -452,40 +448,14 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 - [ ] All business vocabulary from glossary
 - [ ] Readable by non-technical business analysts
 
-### 9. Bilingual Documentation (if required)
-
-**Create additional language version:**
-
-1. **Translate business terms**:
-   - Use business glossary for translations
-   - Format: "English Term (FOREIGN TERM)"
-   - Example: "Creation Initials (SKABELSESINITIALER)"
-
-2. **Maintain identical structure**:
-   - Same number of BE-XXX identifiers
-   - Same number of BR-XXX identifiers
-   - Same number of F-XXX identifiers
-   - Same business logic
-
-3. **Keep technical terms in English**:
-   - Chapter 6 references stay in English
-   - Code snippets stay in original language
-   - Technical architecture terms stay in English
-
-**Quality Check:**
-- [ ] EN and other versions have identical structure
-- [ ] Same business logic in both versions
-- [ ] Business terms properly translated
-- [ ] Technical terms appropriately handled
-
-### 10. Final Assembly
+### 9. Final Assembly
 
 **Combine all chapters into complete specification:**
 
 1. **Document Control Section**:
    - Document Type: Business Specification (IEEE 830-1998)
    - Workpackage ID, Flow ID
-   - Version, Date, Language
+   - Version, Date
    - Status: Draft
    - Author, Confidence Level
 
@@ -505,10 +475,9 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 - [ ] IEEE 830-1998 format followed
 - [ ] Technology-agnostic (Chapters 1-5)
 - [ ] Complete traceability to Chapter 6
-- [ ] Bilingual consistency (if applicable)
 - [ ] Ready for Phase 3.2.1 review
 
-### 11. Progress Tracking
+### 10. Progress Tracking
 - Update progress tracking with completion status
 - Document any issues encountered
 - Note confidence levels
@@ -518,8 +487,8 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 
 ## Output Format
 
-### Business Specification Document (English) - Draft
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
+### Business Specification Document - Draft
+**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md`
 **Template**: `{{BUSINESS_SPECIFICATION_TEMPLATE}}`
 **Note**: This is a draft version that will be reviewed in Phase 3.2.1
 
@@ -536,10 +505,6 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 - Chapter 6 references: `[Section 6.X]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md#section-6x)` (note: Chapter 6 is in traceability folder)
 - Business glossary: `[Business Glossary]({{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md)`
 - Traceability matrix: `[Traceability Matrix]({{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md)`
-
-### Business Specification Document (Other Language) - Draft
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
-**Note**: This is a draft version that will be reviewed in Phase 3.2.1
 
 ### Traceability Matrix
 **File**: `{{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md`
@@ -575,11 +540,6 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
 - Every business element references Chapter 6
 - Clear links between chapters
 
-### Bilingual Consistency
-- EN and other versions structurally identical
-- Same business logic
-- Proper translations
-
 ---
 
 ## Error Handling
@@ -605,11 +565,6 @@ This traceability matrix maps all business elements in Chapters 1-5 to their cor
    - Detection: Traceability matrix has gaps
    - Recovery: Add missing references
    - Escalation: If systematic, review process
-
-5. **Bilingual Inconsistency**
-   - Detection: EN and other versions differ in structure
-   - Recovery: Synchronize versions
-   - Escalation: If major differences, review translation process
 
 ---
 

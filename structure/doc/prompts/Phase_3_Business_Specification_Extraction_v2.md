@@ -210,8 +210,7 @@ Confidence: HIGH
 ```
 
 **Deliverables**:
-- Business Specification (English version) - IEEE 830-1998
-- Business Specification (Danish version) - IEEE 830-1998
+- Business Specification - IEEE 830-1998
 - Requirements Traceability Matrix
 
 **Why This Matters**: Chapter 6 provides the control mechanism for drift detection. Clean Chapters 1-5 enable modern implementation. Both are essential.
@@ -228,7 +227,6 @@ Confidence: HIGH
 - IEEE 830-1998 compliance
 - Technology-agnostic language (no technical jargon)
 - Business vocabulary consistency with glossary
-- Bilingual consistency (EN/DN identical structure)
 - Testability of requirements
 
 **Backward Validation** (Chapters 1-5 vs Chapter 6):
@@ -345,10 +343,7 @@ Use Chapter 6 to validate Chapters 1-5 accuracy. Sample 20%, full validation if 
 ### 7. Technology-Agnostic Focus
 Chapters 1-5 must be free of technical jargon. Ask: "Could a business specialist who has never seen COBOL understand this?"
 
-### 8. Bilingual Consistency
-EN and DN versions must have identical structure, entity count, rule count, and business logic.
-
-### 9. Complete Traceability
+### 8. Complete Traceability
 Every business requirement in Chapters 1-5 must trace to legacy code in Chapter 6.
 
 ---
@@ -426,7 +421,6 @@ Every business requirement in Chapters 1-5 must trace to legacy code in Chapter 
 - ✅ Business functions extracted (minimum 3)
 - ✅ Technology-agnostic language in Chapters 1-5
 - ✅ Complete legacy implementation in Chapter 6
-- ✅ Bilingual consistency verified
 
 ### Phase 3.2.1 Quality Gate (Specification Review)
 - ✅ Standard quality review passed
@@ -458,7 +452,6 @@ Every business requirement in Chapters 1-5 must trace to legacy code in Chapter 
 ### Overall
 - Technology-agnostic business requirements ready for modern implementation
 - Complete traceability to legacy code for verification (Chapter 6)
-- Bilingual documentation (English and Danish)
 - Approved specifications ready for Phase 4 (Code Generation)
 - Clear audit trail of all reviews and approvals
 - Drift metrics documented (< 5% acceptable)

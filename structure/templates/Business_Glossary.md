@@ -1,5 +1,4 @@
-
-# Business Glossary - Consolidated
+# Business Glossary - [Project Name] Migration Project
 
 ---
 
@@ -8,119 +7,123 @@
 **Document Type**: Business Glossary (Consolidated)
 **Version**: 1.0
 **Date**: YYYY-MM-DD
+**Author**: business_specialist_requirements
+**Status**: Living Document
 **Last Updated**: YYYY-MM-DD
-**Status**: [Active / In Progress]
-**Total Terms**: 0
+**Scope**: All Workpackages
 
 ---
 
 ## Purpose
 
-This consolidated business glossary contains business vocabulary extracted from all workpackages during Phase 3.0 (Business Context Discovery) and refined during Phase 3.1 (Business Specification Extraction). It serves as the authoritative source for business terminology used throughout the modernization project.
-
-**Usage**:
-- Reference this glossary when creating business specifications
-- Ensure consistent terminology across all workpackages
-- Use business terms from this glossary in Chapters 1-5 of business specifications
-- Update this glossary as new business terms are discovered
+This glossary provides a consolidated view of business terminology used across all workpackages in the migration project. It serves as a single source of truth for business vocabulary, ensuring consistent understanding and communication across technical and business teams.
 
 ---
 
-## Glossary Organization
+## Business Entities
 
-Terms are organized by business domain for easy reference.
-
----
-
-## Business Domain: [Domain Name 1]
-
-### [Business Term 1]
-
-**Definition**: [Clear, concise definition in business language]
-
-**Usage Context**: [Where and how this term is used in the business]
-
-**Related Terms**: [Other related business terms]
-
-**Workpackage Source**: [WP-XXX where this term was first identified]
-
-**Technical Mapping** (if applicable): [Legacy technical term(s) that map to this business term]
-
-**Examples**:
-- [Example usage 1]
-- [Example usage 2]
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (entity name) | (business definition of the real-world concept) | WP-XXX, WP-YYY | (legacy variable, file, copybook reference) | (concrete usage examples) |
 
 ---
 
-### [Business Term 2]
+## Business Attributes
 
-**Definition**: [Clear, concise definition in business language]
-
-**Usage Context**: [Where and how this term is used in the business]
-
-**Related Terms**: [Other related business terms]
-
-**Workpackage Source**: [WP-XXX where this term was first identified]
-
-**Technical Mapping** (if applicable): [Legacy technical term(s) that map to this business term]
-
-**Examples**:
-- [Example usage 1]
-- [Example usage 2]
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (attribute name) | (business definition of the property) | WP-XXX | (legacy variable reference) | (example values) |
 
 ---
 
-## Business Domain: [Domain Name 2]
+## Business Actions
 
-[Repeat structure for each business domain]
-
----
-
-## Cross-Domain Terms
-
-**Note**: These terms are used across multiple business domains.
-
-### [Cross-Domain Term]
-
-**Definition**: [Clear, concise definition in business language]
-
-**Usage Context**: [Where and how this term is used across domains]
-
-**Related Terms**: [Other related business terms]
-
-**Workpackage Sources**: [WP-XXX, WP-YYY where this term appears]
-
-**Domain Usage**:
-- **[Domain 1]**: [How it's used in this domain]
-- **[Domain 2]**: [How it's used in this domain]
-
-**Technical Mapping** (if applicable): [Legacy technical term(s) that map to this business term]
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (action name) | (business definition of the operation) | WP-XXX | (legacy program, paragraph, transaction reference) | (concrete usage examples) |
 
 ---
 
-## Acronyms and Abbreviations
+## Business States
 
-| Acronym | Full Term | Definition | Usage Context |
-|---------|-----------|------------|---------------|
-| [ABC] | [Full term] | [Definition] | [Where used] |
-
----
-
-## Deprecated Terms
-
-**Note**: These terms were used in legacy systems but are no longer relevant or have been replaced.
-
-| Deprecated Term | Replacement Term | Reason for Deprecation | Workpackage Source |
-|-----------------|------------------|------------------------|-------------------|
-| [Old term] | [New term] | [Why deprecated?] | [WP-XXX] |
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (state name) | (business definition of the status/condition) | WP-XXX | (legacy condition, status code reference) | (concrete usage examples) |
 
 ---
 
-## Term Change History
+## Business Rules Terms
 
-| Date | Term | Change Type | Description | Changed By |
-|------|------|-------------|-------------|------------|
-| YYYY-MM-DD | [Term] | [Added/Modified/Deprecated] | [What changed?] | [Agent/Person] |
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (rule term) | (business definition of the policy or constraint) | WP-XXX | (legacy validation logic reference) | (concrete usage examples) |
+
+---
+
+## Security and Compliance Terms
+
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (security term) | (business definition of the security concept) | WP-XXX | (legacy security mechanism reference) | (concrete usage examples) |
+
+---
+
+## System and Technical Terms (Business Context)
+
+| Term | Definition | Used in Workpackages | Technical Mappings | Examples |
+|------|------------|----------------------|--------------------|----------|
+| (system term) | (business-level definition of the technical concept) | WP-XXX | (legacy technical reference) | (concrete usage examples) |
+
+---
+
+## Cross-References
+
+### Synonyms
+
+| Term 1 | Term 2 | Context | Preferred Term |
+|--------|--------|---------|----------------|
+| (term) | (synonym) | (context where both are used) | (which term to prefer) |
+
+### Related Terms
+
+| Term 1 | Relationship | Term 2 | Description |
+|--------|--------------|--------|-------------|
+| (term) | (has/requires/performs/creates/etc.) | (related term) | (description of the relationship) |
+
+---
+
+## Usage Guidelines
+
+### For Business Analysts
+- Use these terms when documenting business requirements
+- Reference this glossary when clarifying business rules
+- Propose new terms or definitions as business understanding evolves
+
+### For Developers
+- Map technical implementations to these business terms
+- Use business terms in code comments and documentation
+- Maintain traceability between code and business vocabulary
+
+### For Stakeholders
+- Use this glossary to understand system functionality
+- Provide feedback on term definitions and usage
+- Suggest additional terms or clarifications needed
+
+---
+
+## Glossary Maintenance
+
+### Update Process
+1. New terms identified during workpackage analysis are added
+2. Conflicts and synonyms are resolved through team review
+3. Definitions are refined based on stakeholder feedback
+4. Cross-references are maintained as relationships are discovered
+
+### Version History
+
+| Version | Date | Changes | Author |
+|---------|------|---------|--------|
+| 1.0 | YYYY-MM-DD | Initial glossary created from WP-XXX analysis | business_specialist_requirements |
 
 ---
 

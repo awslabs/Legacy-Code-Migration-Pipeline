@@ -211,8 +211,7 @@ Before starting business specification activities, verify:
 - Business Glossary (from Phase 3.0.1)
 
 **Expected Deliverables**:
-- Business Specification (English version): [Path provided in phase prompt]
-- Business Specification (Danish version): [Path provided in phase prompt]
+- Business Specification: [Path provided in phase prompt]
 - Requirements Traceability Matrix: [Path provided in phase prompt]
 
 **Specification Structure** (IEEE 830-1998):
@@ -242,7 +241,6 @@ Before starting business specification activities, verify:
 - IEEE 830-1998 compliance
 - Technology-agnostic language in Chapters 1-5
 - Business vocabulary consistency with glossary
-- Bilingual consistency (EN/DN identical structure)
 - Complete traceability in Chapter 6
 - Testability of requirements
 - Implementation readiness
@@ -259,7 +257,6 @@ Before starting business specification activities, verify:
 **Approval Criteria**:
 - All quality criteria met
 - Technology-agnostic language verified
-- Bilingual consistency confirmed
 - Complete traceability validated
 - Backward validation passed (< 5% drift)
 - No invented functionality detected
@@ -268,7 +265,7 @@ Before starting business specification activities, verify:
 **Rejection Scenarios**:
 - **Return to Phase 3.0**: Business context issues (domain misidentification, missing stakeholders)
 - **Return to Phase 3.1**: Logic extraction issues (missing business rules, incomplete domain models)
-- **Return to Phase 3.2**: Specification issues (technical jargon in Chapters 1-5, bilingual inconsistencies, drift detected)
+- **Return to Phase 3.2**: Specification issues (technical jargon in Chapters 1-5, drift detected)
 
 **If APPROVED**: Proceed to Phase Completion
 **If REQUIRES_REVISION**: Create remediation task, delegate back to specialist, iterate

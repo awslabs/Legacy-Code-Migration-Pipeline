@@ -15,7 +15,7 @@
 ## Context
 
 **Input Locations**:
-- Business Specification: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md`
+- Business Specification: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md`
 - Modernized SQLite DDL: `{{DATABASE_MODERNIZATION_OUTPUT}}/new_sqlite_ddl.sql`
 - Modernized PostgreSQL DDL: `{{DATABASE_MODERNIZATION_OUTPUT}}/new_postgres_ddl.sql`
 - SQLite Migration Script: `{{DATABASE_MODERNIZATION_OUTPUT}}/new_sqlite_migration.sql`
@@ -50,7 +50,7 @@ Review the database schemas created in Phase 5.0.0 to ensure:
 ### Step 1: Business Entity Coverage Verification
 
 1. **Load business specification**:
-   - Read `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md`
+   - Read `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md`
    - Extract all business entities from Chapter 2
 
 2. **Load modernized schemas**:
@@ -567,7 +567,7 @@ Create comprehensive review report:
 - `{{DATABASE_MODERNIZATION_OUTPUT}}/field_mapping.json`
 
 ### Reference Documents
-- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md`
+- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md`
 - `{{DATABASE_GEN_SRC}}/legacy_sqlite_ddl.sql`
 ```
 

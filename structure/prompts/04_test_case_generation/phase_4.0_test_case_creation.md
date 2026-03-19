@@ -242,7 +242,6 @@ The template (located at `{{TEST_CASE_DEFINITION_TEMPLATE}}`) follows IEEE 829 s
 **File Naming Convention**: `WP-XXX-FLOW_XXX-tests-[LANG]-draft.md`
 - WP-XXX: Workpackage identifier
 - FLOW_XXX: Flow identifier from business specification
-- [LANG]: Language code (EN, DE, etc.)
 - -draft: Indicates this is a draft version awaiting review
 
 ### Progress Tracking Format

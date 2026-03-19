@@ -10,7 +10,6 @@
 **Flow ID**: FLOW_XXX
 **Version**: 1.0
 **Date**: YYYY-MM-DD
-**Language**: [English / Danish]
 **Status**: [Draft / In Review / Approved / Approved with Changes]
 **Confidence Level**: [High / Medium / Low]
 **Author**: [Agent/Person Name]

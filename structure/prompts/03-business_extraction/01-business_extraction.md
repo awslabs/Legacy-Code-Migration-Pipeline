@@ -13,7 +13,7 @@
 ### Expected Deliverables
 
 1. **Business Specification Documents**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification.md
    - Template: {{BUSINESS_SPECIFICATION_TEMPLATE}}
    - Description: IEEE-formatted business specifications for each workpackage flow
 
@@ -115,7 +115,7 @@ This step requires outputs from Phase 1 (Analysis) and Phase 2 (Workpackage Plan
 
 - Output Location:
   -- IEEE-formatted business specifications: `{{BUSINESS_SPECIFICATION_BASE_PATH}}`
-    --- English versions: `WP-XXX-FLOW_XXX-specification-EN.md`
+    --- Specifications: `WP-XXX-FLOW_XXX-specification.md`
   -- Review: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md``
      --- (IMPORTANT: **Reviewer must create review files, NOT output to STDOUT**)
   -- Progress Tracking: `{{BUSINESS_SPECIFICATION_STATUS}}`
@@ -206,7 +206,6 @@ Extract business rules, entities, and functions from legacy code in a technology
    - Validate that all business functions are specified
    - Check that all legacy code functionality is represented
    - Confirm traceability to legacy implementation
-   - **Verify EN and DN versions have identical structure and content (same BE/BR/F counts and logic)**
  
 ### 9. Progress Tracking
 1. Update progress tracking for each completed workpackage:
@@ -219,7 +218,7 @@ Extract business rules, entities, and functions from legacy code in a technology
  
 ## Output Format
 ### Business Specification Document 
-**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN.md`
+**File**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification.md`
 **Template for the file**: `{{BUSINESS_SPECIFICATION_TEMPLATE}}`
  
  

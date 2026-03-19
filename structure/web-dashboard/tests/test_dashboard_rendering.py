@@ -87,10 +87,8 @@ class TestDashboardUIRendering:
                 # Should have some identifying information
                 assert len(wp) > 0
     
-    def test_bilingual_specs_in_phase3_details(self, client):
-        """Test that Phase 3 details include bilingual specifications."""
-        # This would typically be accessed via a phase details endpoint
-        # For now, we test through the data loader
+    def test_specs_in_phase3_details(self, client):
+        """Test that Phase 3 details include specifications."""
         from models.data_loader import MigrationDataLoader
         from pathlib import Path
         
@@ -103,16 +101,11 @@ class TestDashboardUIRendering:
         if 'artifacts' in phase3_details and phase3_details['artifacts']:
             artifacts = phase3_details['artifacts']
             
-            # Look for bilingual artifacts
-            bilingual_found = False
+            # Check artifacts have correct structure
             for artifact in artifacts:
-                if artifact.get('hasMultipleLanguages'):
-                    bilingual_found = True
-                    # Should have both language paths
-                    assert 'pathEN' in artifact or 'pathDE' in artifact
-                    break
+                assert 'name' in artifact
+                assert 'type' in artifact
             
-            # If we have artifacts, at least check structure is correct
             assert len(artifacts) >= 0
     
     def test_phase_status_shows_completion(self, client):
@@ -207,52 +200,26 @@ class TestDashboardUIRendering:
             assert 'phase' in details or 'artifacts' in details or details == {}
 
 
-class TestBilingualSpecificationDisplay:
-    """Test bilingual specification handling in the UI."""
+class TestSpecificationDisplay:
+    """Test specification handling in the UI."""
     
-    def test_bilingual_specs_have_both_languages(self, client):
-        """Test that bilingual specifications include both language versions."""
+    def test_specs_have_correct_structure(self, client):
+        """Test that specifications have correct structure."""
         from models.data_loader import MigrationDataLoader
         from pathlib import Path
         
         project_root = Path(__file__).parent.parent.parent.parent
         loader = MigrationDataLoader(project_root=project_root)
         
-        # Get Phase 3 details which should have bilingual specs
         phase3_details = loader.get_phase_details(3)
         
         if 'artifacts' in phase3_details:
             artifacts = phase3_details['artifacts']
             
-            # Find bilingual artifacts
             for artifact in artifacts:
-                if artifact.get('hasMultipleLanguages'):
-                    # Should have paths for both languages
-                    has_en = 'pathEN' in artifact
-                    has_de = 'pathDE' in artifact
-                    
-                    # At least one language should be present
-                    assert has_en or has_de
-    
-    def test_single_language_specs_handled_correctly(self, client):
-        """Test that single-language specifications are handled correctly."""
-        from models.data_loader import MigrationDataLoader
-        from pathlib import Path
-        
-        project_root = Path(__file__).parent.parent.parent.parent
-        loader = MigrationDataLoader(project_root=project_root)
-        
-        # Get Phase 3 details
-        phase3_details = loader.get_phase_details(3)
-        
-        if 'artifacts' in phase3_details:
-            artifacts = phase3_details['artifacts']
-            
-            # Find single-language artifacts
-            for artifact in artifacts:
-                if not artifact.get('hasMultipleLanguages'):
-                    # Should have a path field
-                    assert 'path' in artifact
+                assert 'name' in artifact
+                assert 'type' in artifact
+                assert 'workpackage' in artifact
 
 
 class TestErrorHandling:

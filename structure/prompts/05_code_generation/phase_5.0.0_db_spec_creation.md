@@ -15,7 +15,7 @@
 ## Context
 
 **Input Locations**:
-- Business Specification: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md`
+- Business Specification: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md`
 - Legacy Database Schema: `{{DATABASE_GEN_SRC}}/legacy_{DB_NAME}_ddl.sql` (auto-detect DB_NAME from available file)
 - Workpackage Planning: `{{WORKPACKAGE_PLANNING}}`
 - Previously Created Schema: `{{DATABASE_MODERNIZATION_OUTPUT}}/new_{DB_NAME}_ddl.sql` (if exists)
@@ -94,7 +94,7 @@ For the given workpackage, analyze business entities from the business specifica
 ### Step 1: Read Business Specification
 
 1. **Load the approved business specification** for the current workpackage
-   - File: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-EN-approved.md`
+   - File: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{ID}-FLOW_{FLOW_ID}-specification-approved.md`
 
 2. **Extract business entities from Chapter 2**:
    - Entity identifier (BE-XXX-YYY)

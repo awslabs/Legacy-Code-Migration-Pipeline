@@ -156,8 +156,7 @@ Critical Separation:
 • Chapter 6: Complete legacy technical implementation (already created in Phase 3.1)
 
 Deliverables:
-• Business Specification Chapters 1-5 (English version)
-• Business Specification Chapters 1-5 (Danish version)
+• Business Specification Chapters 1-5
 • Traceability Matrix (business elements → Chapter 6 references)
 
 Why This Matters: Evidence-based specification prevents drift by requiring explicit traceability to Chapter 6 for every business element.
@@ -189,7 +188,6 @@ Chapter-by-Chapter Review:
 Cross-Cutting Verification:
 • Technology-Agnostic Language: Scan Chapters 1-5 for technical jargon
 • Business Vocabulary Consistency: Terms match Phase 3.0.1 glossary
-• Bilingual Consistency: EN and DN versions identical in structure and logic
 • Traceability: All business requirements traced to Chapter 6
 
 Drift Detection Metrics:
@@ -296,9 +294,6 @@ Business vs Technical Separation
 • Business rules (would exist in any implementation) → Chapter 3
 • Technical rules (mainframe-specific) → Chapter 6
 
-Bilingual Consistency
-EN and DN versions must have identical structure, entity count, rule count, and business logic.
-
 Complete Traceability
 Every business requirement in Chapters 1-5 must trace to Chapter 6 evidence.
 
@@ -386,7 +381,6 @@ Phase 3.2 Quality Gate (Business Specification Generation)
 • ✅ Business functions extracted (minimum 3 functions)
 • ✅ Technology-agnostic language in Chapters 1-5
 • ✅ All elements trace to Chapter 6
-• ✅ Bilingual consistency verified
 
 Phase 3.2.1 Quality Gate (Business Specification Review)
 • ✅ Backward validation performed (20% sample)
@@ -413,7 +407,6 @@ Overall
 • Technology-agnostic business requirements ready for modern implementation
 • Complete traceability to legacy code for verification
 • Drift-controlled abstractions (evidence-based)
-• Bilingual documentation (English and Danish)
 • Approved specifications ready for Phase 4 (Code Generation)
 
 When to Escalate to Human Supervisor

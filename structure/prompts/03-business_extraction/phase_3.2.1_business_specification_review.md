@@ -13,15 +13,13 @@
 
 ### Expected Deliverables
 
-1. **Approved Business Specification Documents**
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md
-   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md
-   - Description: Validated and refined business specifications ready for code generation (final deliverables)
+1. **Approved Business Specification Document**
+   - File: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-approved.md
+   - Description: Validated and refined business specification ready for code generation (final deliverable)
 
-2. **Archived Drafts** (moved to review folder)
-   - File: {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
-   - File: {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
-   - Description: Original drafts moved to review folder for audit trail
+2. **Archived Draft** (moved to review folder)
+   - File: {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-draft.md
+   - Description: Original draft moved to review folder for audit trail
 
 3. **Review Reports**
    - File: {{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md
@@ -47,7 +45,6 @@
 - [ ] Business rationale and context added where missing
 - [ ] Technology-agnostic language verified (Chapters 1-5)
 - [ ] Legacy implementation details verified (Chapter 6)
-- [ ] Bilingual consistency verified (EN and other versions)
 - [ ] All review reports completed
 - [ ] Specifications approved for modernization
 - [ ] Ready for code generation phase
@@ -57,18 +54,15 @@
 ## Context
 
 ### Input Locations
-- **Business specifications (EN) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
-- **Business specifications (other) - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+- **Business specification - draft**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md`
 - **Business context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md`
 - **Business glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
 - **Source code**: `{{SOURCE_CODE}}` (for verification)
 - **Legacy specifications**: `{{PROJECT_BASE_PATH}}/input/legacy_specifications/`
 
 ### Output Locations
-- **Approved specifications (EN)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md` (main folder - final deliverable)
-- **Approved specifications (other)**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md` (main folder - final deliverable)
-- **Archived drafts (EN)**: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md` (moved from main folder)
-- **Archived drafts (other)**: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md` (moved from main folder)
+- **Approved specification**: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-approved.md` (main folder - final deliverable)
+- **Archived draft**: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-draft.md` (moved from main folder)
 - **Review reports**: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md`
 - **Updated context**: `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md` (if needed)
 - **Updated glossary**: `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md` (living document)
@@ -79,7 +73,7 @@
 - **Business context template**: `{{BUSINESS_CONTEXT_TEMPLATE}}`
 
 ### Previous Phase Artifacts
-- **From Phase 3.1**: Business specification documents (EN and other versions)
+- **From Phase 3.2**: Business specification document
 - **From Phase 3.0**: Business context documents, business glossary
 
 ---
@@ -102,9 +96,8 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 **YOU MUST ONLY CREATE THE EXPLICITLY DEFINED OUTPUT FILES. NO ADDITIONAL ARTIFACTS.**
 
 **Allowed Outputs** (from Output Locations section above):
-- Approved specifications (EN): `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md`
-- Approved specifications (other): `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANG}-approved.md`
-- Archived drafts: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-*-draft.md`
+- Approved specification: `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-approved.md`
+- Archived draft: `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-draft.md`
 - Review report: `{{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md`
 - Updated context (if needed): `{{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md`
 - Updated glossary (if needed): `{{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md`
@@ -126,7 +119,7 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 ### 1. Preparation and Review Planning
 1. Review the list of workpackages requiring review
 2. For each workpackage, gather all relevant materials:
-   - Business specification (EN and other versions) from Phase 3.2
+   - Business specification from Phase 3.2
    - Approved Chapter 6 from Phase 3.1.1
    - Traceability matrix from Phase 3.2
    - Business context document from Phase 3.0.1
@@ -438,30 +431,6 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
    - Rewrite sections to be technology-agnostic
    - Update business glossary if needed
 
-### 9. Bilingual Consistency Verification
-1. **Verify structural consistency**:
-   - Do EN and other versions have same number of chapters?
-   - Do EN and other versions have same number of BE-XXX identifiers?
-   - Do EN and other versions have same number of BR-XXX identifiers?
-   - Do EN and other versions have same number of F-XXX identifiers?
-
-2. **Verify content consistency**:
-   - Is business logic identical in EN and other versions?
-   - Are business requirements identical?
-   - Are Chapter 6 technical details identical?
-
-3. **Verify translation quality**: (if translations exist)
-   - Are translations accurate?
-   - Is foreign language terminology consistent?
-   - Are business terms properly translated?
-   - Are technical terms appropriately handled?
-
-4. **Review actions**:
-   - Synchronize EN and other versions if inconsistent
-   - Correct translation errors
-   - Ensure identical business logic
-   - Update foreign language terminology if needed
-
 ### 10. Overall Specification Review
 1. **Verify completeness**:
    - Are all business requirements documented?
@@ -525,7 +494,6 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
    - **Section 4: Cross-Cutting Issues**
      - Technology-agnostic language issues
      - Business vocabulary consistency issues
-     - Bilingual consistency issues
      - Traceability issues
 
    - **Section 5: Missing Requirements**
@@ -557,9 +525,8 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
      - Rejected: Drift ≥ 5%, return to Phase 3.2 with specific corrections
 
 ### 12. Specification Updates and File Management
-1. **Apply approved changes to specifications**:
-   - Update both EN and other versions
-   - Maintain structural consistency
+1. **Apply approved changes to specification**:
+   - Update the specification
    - Preserve BE-XXX, BR-XXX, F-XXX identifiers
    - Update document version and date
 
@@ -575,11 +542,9 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
    - Resolve terminology conflicts
    - Ensure consistency across workpackages
 
-4. **Create approved versions and archive drafts**:
-   - Create: `WP-XXX-FLOW_XXX-specification-EN-approved.md` (main folder)
-   - Create: `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md` (main folder)
-   - Move: `WP-XXX-FLOW_XXX-specification-EN-draft.md` → `/review/` (archive)
-   - Move: `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md` → `/review/` (archive)
+4. **Create approved version and archive draft**:
+   - Create: `WP-XXX-FLOW_XXX-specification-approved.md` (main folder)
+   - Move: `WP-XXX-FLOW_XXX-specification-draft.md` → `/review/` (archive)
 
 ### 13. Progress Tracking and Approval
 1. **Update progress tracking**:
@@ -756,17 +721,6 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 - [Resolution 1]
 - [Resolution 2]
 
-### Bilingual Consistency
-**Status**: [Consistent / Issues Found]
-
-**Issues**:
-- [Issue 1: EN and other versions have different number of rules]
-- [Issue 2]
-
-**Resolutions**:
-- [Resolution 1]
-- [Resolution 2]
-
 ### Traceability
 **Status**: [Complete / Issues Found]
 
@@ -863,14 +817,12 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 **Date**: YYYY-MM-DD
 ```
 
-### Approved Specification Documents
+### Approved Specification Document
 **Files**:
-- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md` (main folder - final deliverable)
-- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md` (main folder - final deliverable)
+- `{{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-approved.md` (main folder - final deliverable)
 
-**Archived Drafts** (moved to review folder):
-- `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md`
-- `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md`
+**Archived Draft** (moved to review folder):
+- `{{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-draft.md`
 
 **Changes from draft**:
 - Document version updated
@@ -915,12 +867,6 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 - Business rules testable
 - Modernization guidance sufficient
 
-### Bilingual Consistency
-- EN and other versions structurally identical
-- Business logic identical in both versions
-- Translation quality verified
-- Terminology consistent
-
 ---
 
 ## Error Handling
@@ -940,12 +886,9 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 3. **Technical Jargon in Business Sections**
    - Detection: Technical terms found in Chapters 1-5
    - Recovery: Replace with business terms from glossary
-   - Escalation: Return to Phase 3.1 if pervasive throughout your source document. **Bilingual Inconsistency**
-   - Detection: EN and other versions have different structure or logic
-   - Recovery: Synchronize versions to ensure identical content
-   - Escalation: Return to Phase 3.1 if major discrepancies exist
+   - Escalation: Return to Phase 3.1 if pervasive throughout your source document.
 
-5. **Incomplete Traceability**
+4. **Incomplete Traceability**
    - Detection: Business requirements not traced to legacy code in Chapter 6
    - Recovery: Add missing code references and traceability
    - Escalation: Return to Phase 3.1 if extensive technical analysis needed
@@ -964,7 +907,6 @@ Review and validate business specifications from Phase 3.2 against Chapter 6 evi
 - When business accuracy is uncertain, consult Phase 3.0 business context
 - When requirements are missing, review source code to identify gaps
 - When technical jargon is found, replace with business glossary terms
-- When bilingual inconsistency exists, use EN version as source of truth
 - When traceability is incomplete, request Phase 3.1 rework
 - Prioritize approval with minor changes over rejection when possible
 - Flag all critical issues for human escalation

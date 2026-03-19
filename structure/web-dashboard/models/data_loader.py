@@ -1456,8 +1456,8 @@ class MigrationDataLoader:
                 
                 if specs_dir.exists():
                     try:
-                        # Count WP-XXX-*-specification-EN-approved.md files (only approved specs)
-                        spec_files = list(specs_dir.glob("WP-*-specification-EN-approved.md"))
+                        # Count WP-XXX-*-specification-approved.md files (only approved specs)
+                        spec_files = list(specs_dir.glob("WP-*-specification-approved.md"))
                         progress["phase3_completed"] = len(spec_files)
                         
                         logger.info(f"Found {progress['phase3_completed']} approved business specifications")
@@ -1795,28 +1795,21 @@ class MigrationDataLoader:
                                         "accuracy": quality_assessment.get("accuracy", ""),
                                         "testability": quality_assessment.get("testability", ""),
                                         "traceability": quality_assessment.get("traceability", ""),
-                                        "technology_agnostic": quality_assessment.get("technology_agnostic", ""),
-                                        "bilingual_consistency": quality_assessment.get("bilingual_consistency", "")
+                                        "technology_agnostic": quality_assessment.get("technology_agnostic", "")
                                     }
                                 
                                 completed_workpackages.append(wp_info)
                                 
-                                # Extract bilingual specification paths (Subtask 5.2: Requirements 3.5, 6.2, 8.1, 8.2, 8.3)
+                                # Extract specification paths
                                 specifications = wp.get("specifications", {})
-                                english_spec = specifications.get("english", {})
-                                german_spec = specifications.get("german", {})
+                                spec_path = specifications.get("path", "")
                                 
-                                # Check if specifications exist (Subtask 5.4: Requirement 8.4)
-                                has_english = bool(english_spec.get("original") or english_spec.get("reviewed"))
-                                has_german = bool(german_spec.get("original") or german_spec.get("reviewed"))
-                                
-                                if has_english or has_german:
-                                    # Create artifact entry with bilingual paths
+                                if spec_path:
                                     artifact = {
                                         "name": f"{wp_id}-{flow_id}-specification.md",
                                         "type": "Business Specification",
                                         "workpackage": wp_id,
-                                        "hasMultipleLanguages": has_english and has_german
+                                        "hasMultipleLanguages": False
                                     }
                                     
                                     # Add English paths if available
@@ -2399,7 +2392,6 @@ class MigrationDataLoader:
                                 "businessDomain": wp.get("businessDomain", ""),
                                 "programType": wp.get("programType", ""),
                                 "testCaseGeneration": wp.get("testCaseGeneration", {}),
-                                "bilingualDocuments": wp.get("bilingualDocuments", {}),
                                 "testPrioritization": wp.get("testPrioritization", {}),
                                 "traceabilityMatrix": wp.get("traceabilityMatrix", {}),
                                 "standardCompliance": wp.get("standardCompliance", {}),

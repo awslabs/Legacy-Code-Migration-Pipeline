@@ -382,7 +382,6 @@ Before completing your specification, verify:
 - [ ] No missing functionality
 
 **Overall Quality**:
-- [ ] Bilingual consistency (EN/DN versions identical structure)
 - [ ] Complete traceability maintained
 - [ ] No invented functionality (all grounded in code)
 - [ ] Clean abstractions (business intent preserved)

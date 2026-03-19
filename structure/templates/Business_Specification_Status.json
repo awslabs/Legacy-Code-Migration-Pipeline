@@ -53,8 +53,7 @@
       
       "phase_3_1": {
         "status": "completed",
-        "specificationEN": "output/business_specification/specifications/WP-001-FLOW_001-specification-EN.md",
-        "specificationDN": "output/business_specification/specifications/WP-001-FLOW_001-specification-DN.md",
+        "specification": "output/business_specification/specifications/WP-001-FLOW_001-specification.md",
         "completedDate": "YYYY-MM-DDTHH:MM:SSZ",
         "entityCount": 0,
         "ruleCount": 0,
@@ -64,8 +63,7 @@
       
       "phase_3_2": {
         "status": "approved",
-        "reviewedSpecificationEN": "output/business_specification/specifications/WP-001-FLOW_001-specification-EN-reviewed.md",
-        "reviewedSpecificationDN": "output/business_specification/specifications/WP-001-FLOW_001-specification-DN-reviewed.md",
+        "reviewedSpecification": "output/business_specification/specifications/WP-001-FLOW_001-specification-reviewed.md",
         "reviewReport": "output/business_specification/review/business-extraction-WP-001-review.md",
         "approvalStatus": "Approved",
         "reviewerName": "business_analyst_reviewer",

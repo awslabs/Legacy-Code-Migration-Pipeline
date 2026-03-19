@@ -1,8 +1,8 @@
 # Pod-Based Scaling Architecture for Large-Scale Migrations
 
 ## Document Control
-- **Version:** 1.0
-- **Date:** 2026-03-06
+- **Version:** 1.2
+- **Date:** 2026-03-17
 - **Status:** Proposal
 - **Purpose:** Architecture for scaling the Agentic Code Migrator to handle large engagements (50M+ projects) through parallel pod execution, Git-based artifact management, and relative path resolution.
 
@@ -13,7 +13,10 @@
 1. [Problem Statement](#1-problem-statement)
 2. [Solution Overview](#2-solution-overview)
 3. [Pod Model Architecture](#3-pod-model-architecture)
+   - 3.4 [Pod Spawning Mechanics](#34-pod-spawning-mechanics)
+   - 3.5 [Single-Machine Scalability Assessment](#35-single-machine-scalability-assessment)
 4. [Git Branching Strategy](#4-git-branching-strategy)
+   - 4.5 [Git-Based Document Versioning](#45-git-based-document-versioning-replacing-draftapproved-file-duplication)
 5. [Relative Path Migration](#5-relative-path-migration)
 6. [Phase 2.5: Pod Partitioning](#6-phase-25-pod-partitioning)
 7. [Friction Points and Mitigations](#7-friction-points-and-mitigations)
@@ -108,6 +111,325 @@ Change all paths from absolute to relative (relative to repo root). This allows 
 
 Each pod is a self-contained migration unit running the full Phase 3→4→5→6 pipeline for its assigned workpackages. The agent definitions are already generic and reusable — each pod just gets its own CAO session with different workpackage assignments pointing to the same shared inputs.
 
+### 3.4 Pod Spawning Mechanics — CAO Capability Assessment
+
+#### CAO Architecture (Source Code Evaluation)
+
+Based on analysis of the [cli-agent-orchestrator](https://github.com/awslabs/cli-agent-orchestrator) source code (v0.1.0), CAO provides a layered architecture that maps directly to the pod scaling model:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Entry Points                          │
+│   CLI (cao launch/shutdown)  │  MCP Server (agent tools) │
+└──────────────────────┬───────┴──────────────────────────┘
+                       │
+                ┌──────▼──────┐
+                │  FastAPI    │  ← REST API on localhost:9889
+                │  HTTP API   │    All MCP tools call this API internally
+                └──────┬──────┘
+                       │
+                ┌──────▼──────┐
+                │  Services   │
+                ├─────────────┤
+                │ • session   │  ← tmux session lifecycle
+                │ • terminal  │  ← agent terminal create/input/output/delete
+                │ • inbox     │  ← queued message delivery via watchdog
+                │ • flow      │  ← cron-scheduled agent sessions
+                │ • cleanup   │  ← 14-day retention, auto-cleanup
+                └──────┬──────┘
+                       │
+          ┌────────────┴────────────┐
+          │                         │
+     ┌────▼────┐              ┌─────▼─────┐
+     │ Clients │              │ Providers │  ← kiro_cli, claude_code, codex,
+     │ • tmux  │              │           │    gemini_cli, kimi_cli, copilot_cli,
+     │ • sqlite│              │           │    q_cli
+     └─────────┘              └───────────┘
+```
+
+Key implementation details relevant to pod scaling:
+
+- **Terminal isolation**: Each agent runs in its own tmux window within a session. Terminals are identified by 8-char hex IDs (`CAO_TERMINAL_ID` env var). This provides process-level isolation between pods.
+- **Status detection**: Providers detect terminal state (IDLE, PROCESSING, COMPLETED, ERROR, WAITING_USER_ANSWER) by parsing tmux output via provider-specific regex patterns. The inbox service uses a watchdog on terminal log files to detect when agents become idle.
+- **Message queuing**: Messages are persisted in SQLite before delivery. The inbox service monitors terminal log files via `PollingObserver` (5-second interval). When an idle pattern is detected in the log tail, pending messages are delivered via `send_input()`.
+- **Working directory**: Enabled via `CAO_ENABLE_WORKING_DIRECTORY=true`. Paths are canonicalized via `realpath` and validated against a security policy (blocks system dirs like `/`, `/etc`, `/var`, `/tmp`). When not specified, agents inherit the supervisor's current working directory.
+- **Provider inheritance**: Worker agents inherit the supervisor's provider by default. Agent profiles can override this with a `provider` key in frontmatter, enabling cross-provider workflows (e.g., Kiro CLI supervisor delegating to Claude Code workers).
+
+#### CAO's Three Orchestration Modes
+
+1. **`handoff`** — Synchronous/blocking (current framework usage)
+   - Creates terminal → waits for IDLE/COMPLETED (120s timeout) → sends message → polls until COMPLETED → extracts last response → sends `/exit` → returns output
+   - Default task timeout: 600s (configurable up to 3600s)
+   - Implementation: `_handoff_impl()` in `mcp_server/server.py`
+
+2. **`assign`** — Asynchronous/parallel (what pods need)
+   - Creates terminal → sends message → returns immediately with `terminal_id`
+   - Worker must use `send_message` to return results to the caller
+   - Implementation: `_assign_impl()` — notably simpler than handoff (no polling, no output extraction)
+
+3. **`send_message`** — Queued inter-agent communication
+   - Posts message to receiver's inbox via REST API
+   - Messages persisted in SQLite (survives crashes)
+   - Delivered when receiver terminal is IDLE (detected via log file watchdog)
+   - Delivery order: oldest first (FIFO)
+
+#### Pod Spawning via `assign` (Recommended — Single Machine)
+
+After Phase 2.5 produces the pod assignment JSON, the Migration Supervisor spawns pods using `assign`. This requires `CAO_ENABLE_WORKING_DIRECTORY=true` so each pod can target its own worktree:
+
+```
+MIGRATION SUPERVISOR (after Phase 2.5):
+
+    1. Read Pod_Assignment.json
+    2. Get own terminal ID: my_id = CAO_TERMINAL_ID
+    3. Create git worktrees for each pod (shell commands)
+
+    4. FOR EACH pod in assignments:
+        assign(
+            agent_profile = "migration_supervisor",
+            message = "You are Pod {pod_id}.
+                       Your workpackages: {wp_list}.
+                       Start at Phase 3 (Phases 1-2.5 complete on main).
+                       When all workpackages complete, send results to
+                       terminal {my_id} using send_message.",
+            working_directory = "./worktrees/{pod_id}/"
+        )
+        → Returns immediately with terminal_id
+
+    5. Supervisor becomes IDLE after dispatching all assigns
+       → Pod completion messages will be delivered to inbox when they arrive
+
+    6. Receive pod completion messages (send_message from each pod)
+       → "Pod {pod_id} complete. All WPs approved. Ready for merge."
+
+    7. When all pods report complete:
+       → handoff to deployment_reviewer_orchestration for merge validation
+```
+
+**Critical: Message delivery requires supervisor to be IDLE.** After dispatching `assign` calls, the supervisor must finish its turn — not loop or sleep. The CAO inbox watchdog monitors terminal log files and delivers queued messages only when the idle pattern is detected. Running shell commands in a loop keeps the supervisor in PROCESSING state and blocks delivery.
+
+**Productive wait pattern**: The supervisor can use `handoff` for sequential work while pods run (e.g., preparing merge validation templates, consolidating shared artifacts). Pod messages queue in SQLite and deliver after the handoff completes and the supervisor returns to IDLE.
+
+```
+Migration Supervisor
+    │
+    ├── Phase 1 (handoff → analysis_team_supervisor)
+    ├── Phase 2 (handoff → planning_team_supervisor)
+    ├── Phase 2.5 (handoff → pod partitioning task)
+    │
+    ├── assign → Pod A supervisor (returns immediately)
+    ├── assign → Pod B supervisor (returns immediately)
+    ├── assign → Pod C supervisor (returns immediately)
+    │
+    ├── OPTIONAL: handoff → prepare merge templates (productive wait)
+    │
+    │   [Pods work in parallel on separate worktrees/tmux windows]
+    │
+    ├── Pod A ──send_message──→ Supervisor inbox (queued in SQLite)
+    ├── Pod B ──send_message──→ Supervisor inbox (queued in SQLite)
+    ├── Pod C ──send_message──→ Supervisor inbox (delivered when IDLE)
+    │
+    └── Merge validation (handoff → deployment_reviewer_orchestration)
+```
+
+#### What Each Pod Session Looks Like
+
+Each pod is a Migration Supervisor instance scoped to a subset of workpackages. Internally it uses `handoff` for its sequential pipeline — identical to the current single-session model:
+
+```
+Pod A Supervisor (tmux window, worktree: ./worktrees/pod-a/, branch: pod/pod-a)
+    │
+    ├── Phase 3: WP-001 (handoff → business_team_supervisor)
+    ├── Phase 3: WP-003 (handoff → business_team_supervisor)
+    ├── Phase 3: WP-007 (handoff → business_team_supervisor)
+    ├── Phase 4: WP-001 (handoff → business_team_supervisor)
+    ├── ... (full pipeline per WP)
+    │
+    └── send_message(receiver_id=supervisor_id, message="Pod A complete")
+```
+
+The parallelism is between pods, not within them. Each pod's internal orchestration is unchanged.
+
+#### Concrete Example: Mapping the CAO Assign Pattern to Pods
+
+The CAO `examples/assign/` directory provides a working reference implementation. The pattern maps directly to pod spawning:
+
+| Assign Example | Pod Equivalent |
+|---------------|----------------|
+| `analysis_supervisor` | Migration Supervisor (after Phase 2.5) |
+| `data_analyst` (×3, parallel via `assign`) | Pod Supervisor (×N, parallel via `assign`) |
+| `report_generator` (sequential via `handoff`) | Merge validation (sequential via `handoff` after all pods complete) |
+| `send_message` callback with results | Pod completion notification with status summary |
+
+**Key patterns from the example that must be replicated in pod agent profiles:**
+
+1. **Supervisor "How Message Delivery Works" block** (from `analysis_supervisor.md`):
+   The Migration Supervisor prompt must include equivalent instructions:
+   ```
+   ## How Message Delivery Works
+   After you call assign() for each pod, worker pods will send results back
+   via send_message(). Messages are delivered to your terminal automatically
+   when your turn ends and you become idle. This means:
+   - DO NOT run shell commands (sleep, echo, etc.) to wait for results
+   - DO finish your turn by stating what you dispatched and what you expect
+   - Messages will arrive as your next input automatically
+   ```
+
+2. **Worker "ALWAYS use send_message" emphasis** (from `data_analyst.md`):
+   Pod supervisor profiles must include explicit instructions to call `send_message` on completion:
+   ```
+   ## IMPORTANT: Completion Callback
+   You HAVE the send_message MCP tool available. When all workpackages in your
+   pod are complete (all phases approved), you MUST call:
+     send_message(receiver_id="[supervisor_terminal_id]",
+                  message="Pod [pod_id] complete. All WPs approved.")
+   Do NOT present results to the user. ALWAYS call send_message to notify
+   the Migration Supervisor.
+   ```
+
+3. **Mixed assign + handoff in same workflow**:
+   The supervisor dispatches pods via `assign` (parallel), then can use `handoff` for sequential work (e.g., preparing merge templates) while pods run. This is exactly the analysis_supervisor pattern: assign analysts → handoff report_generator → finish turn → receive analyst results → combine.
+
+#### Cross-Provider Pod Execution
+
+CAO supports cross-provider orchestration via agent profile frontmatter. This means different pods could run on different LLM providers to distribute API rate limits:
+
+```markdown
+---
+name: migration_supervisor_claude
+description: Migration Supervisor (Claude Code provider)
+provider: claude_code
+mcpServers:
+  cao-mcp-server:
+    type: stdio
+    command: uvx
+    args: ["--from", "git+https://github.com/awslabs/cli-agent-orchestrator.git@main", "cao-mcp-server"]
+---
+```
+
+The supervisor could `assign` Pod A to `migration_supervisor_kiro` and Pod B to `migration_supervisor_claude`, spreading load across providers. This is a natural extension — no code changes needed, just additional agent profile variants.
+
+#### CAO Flow Service — Scheduled Pod Monitoring
+
+CAO includes a flow service (`services/flow_service.py`) that supports cron-scheduled agent sessions. This could be repurposed for pod monitoring:
+
+```markdown
+---
+name: pod-health-check
+schedule: "*/10 * * * *"    # Every 10 minutes
+agent_profile: pod_monitor
+script: ./check_pod_status.sh
+---
+
+Pod status report:
+- Pod A: [[pod_a_status]]
+- Pod B: [[pod_b_status]]
+- Pod C: [[pod_c_status]]
+
+If any pod has stalled (no git commits in 30+ minutes), investigate and report.
+```
+
+The flow service:
+- Runs a script that checks pod health (git log timestamps, status files)
+- If `execute: true`, launches an agent session with the rendered prompt
+- If `execute: false`, skips (all pods healthy)
+
+This provides automated monitoring without manual polling. The flow daemon runs as a background task in the CAO server's FastAPI lifespan.
+
+#### CAO REST API for External Monitoring
+
+The CAO server exposes a REST API on `localhost:9889` that enables external monitoring and control:
+
+| Endpoint | Use for Pods |
+|----------|-------------|
+| `GET /sessions` | List all active sessions (pods) |
+| `GET /terminals/{id}` | Check pod terminal status (IDLE/PROCESSING/COMPLETED/ERROR) |
+| `GET /terminals/{id}/output?mode=last` | Get pod's last output (completion report) |
+| `GET /terminals/{id}/inbox/messages?status=pending` | Check queued messages for a pod |
+| `POST /terminals/{id}/input` | Send steering/correction to a running pod |
+| `GET /terminals/{id}/working-directory` | Verify pod is in correct worktree |
+
+This API enables:
+- A dashboard to show real-time pod status
+- Human operators to steer individual pods mid-execution
+- External scripts to monitor and alert on pod failures
+- Integration with the existing web-dashboard
+
+#### Option B: External Launcher (Multi-Machine / 10+ Pods)
+
+For deployments where pods run on separate machines, each machine runs its own CAO server. An external launcher script coordinates:
+
+```
+launch_pods.py
+    ↓
+    Reads Pod_Assignment.json
+    ↓
+    FOR EACH pod:
+        1. SSH to target machine (or trigger container/EC2)
+        2. Clone repo + checkout pod branch
+        3. Start CAO server (cao-server on port 9889)
+        4. cao launch --agents migration_supervisor --provider kiro_cli
+        5. Send pod-scoped prompt via REST API: POST /terminals/{id}/input
+    ↓
+    Monitor via REST API: GET /terminals/{id} on each machine
+    ↓
+    On all pods complete: trigger merge validation on main machine
+```
+
+Each machine's CAO server is independent — no cross-machine CAO communication needed. Git is the coordination layer (push/pull to shared remote).
+
+#### Spawning Decision Matrix
+
+| Criterion | Option A (`assign` — single machine) | Option B (Launcher — multi-machine) |
+|-----------|--------------------------------------|-------------------------------------|
+| Parallelism | Yes (tmux sessions, shared CAO server) | Yes (separate machines, separate CAO servers) |
+| CAO changes required | None — uses existing `assign` + `working_directory` | None — uses existing REST API |
+| External dependencies | `CAO_ENABLE_WORKING_DIRECTORY=true` | Python launcher script |
+| Complexity | Low | Medium |
+| Multi-machine | No | Yes |
+| Cross-provider | Yes (agent profile `provider` key) | Yes (each machine can use different provider) |
+| Monitoring | REST API + flow service | REST API per machine |
+| Pod limit | 3-5 practical (single machine API rate limits) | Scales with machines |
+| Recommended for | Most engagements | Very large engagements (10+ pods) |
+
+### 3.5 Single-Machine Scalability Assessment
+
+A key question: how much can a single machine handle before requiring multi-machine deployment?
+
+**Where the work actually happens**:
+
+| Activity | Runs Where | Resource Impact on Local Machine |
+|----------|-----------|--------------------------------|
+| LLM inference (prompt processing, generation) | Remote (API call) | Negligible — HTTP request/response |
+| File I/O (read inputs, write deliverables) | Local | Low — documents are KB-sized, not GB |
+| Prompt assembly (resolve paths, build task files) | Local | Negligible — string operations |
+| Git operations (commit, branch, merge) | Local | Low — small repo, fast operations |
+| CAO server (FastAPI + SQLite + watchdog) | Local | Low — single process, ~50MB |
+| CAO tmux sessions (one per agent terminal) | Local | Moderate — each provider CLI process uses ~200-500MB |
+| CAO inbox watchdog (PollingObserver) | Local | Low — 5-second polling interval, checks log file tails |
+
+**The bottleneck is LLM API throughput, not local compute.** Since all heavy processing (understanding code, generating specifications, writing documents) happens on the remote LLM, the local machine is essentially a thin client that assembles prompts and writes files.
+
+**CAO-specific resource considerations**:
+- Each pod spawns multiple tmux windows (pod supervisor + team supervisors + specialists/reviewers). With `handoff`, child terminals are created and destroyed per task, so the peak concurrent terminal count per pod is ~3-4 (supervisor + active specialist + active reviewer).
+- For 3 pods: ~12 concurrent tmux windows at peak, each running a CLI agent process.
+- SQLite handles the inbox and terminal metadata — no scaling concern for this volume.
+- The watchdog monitors terminal log files in `~/.aws/cli-agent-orchestrator/logs/terminal/`. With 12 log files, the 5-second polling is negligible.
+
+**Practical limits per machine**:
+
+| Pod Count | Feasibility | Limiting Factor |
+|-----------|------------|-----------------|
+| 1-3 pods | Comfortable | No issues — ~12 concurrent tmux windows, well within capacity |
+| 3-5 pods | Recommended max for single machine | ~20 concurrent tmux windows, ~2-4GB RAM for CLI agent processes |
+| 5-10 pods | Possible but watch API rate limits | LLM API rate limits become the constraint; use cross-provider to distribute |
+| 10+ pods | Use separate machines | Each machine runs its own CAO server; coordinate via git + REST API |
+
+**Recommendation**: Start with 3-5 pods on a single machine using git worktrees + CAO `assign`. This is sufficient for most engagements. Scale to separate machines only when:
+- LLM API rate limits are hit (mitigate first with cross-provider pod profiles)
+- The engagement has 20+ pods (rare — implies 60+ workpackages)
+- Organizational requirements mandate resource isolation
+
 ---
 
 ## 4. Git Branching Strategy
@@ -196,6 +518,116 @@ Each pod's CAO session gets its own worktree path. No cloning overhead, no objec
 - Runs its pod independently
 - Pushes to shared Git remote
 - Resource isolation — one pod's heavy LLM usage doesn't starve another
+
+### 4.5 Git-Based Document Versioning (Replacing Draft/Approved File Duplication)
+
+#### The Current Problem
+
+The existing workflow creates separate files for each document state:
+
+```
+WP-001-business-context-draft.md      ← specialist creates
+WP-001-business-context-approved.md   ← created on approval (near-copy of draft)
+```
+
+When a reviewer rejects a draft, the specialist often regenerates the entire document from scratch rather than editing the existing one. This means:
+- **Duplicate token cost**: The LLM generates the full document again (output tokens are the expensive/slow ones)
+- **Duplicate files**: Draft and approved versions coexist, consuming storage and creating confusion about which is canonical
+- **Lost diff visibility**: No easy way to see what changed between iterations
+
+#### The Git-Based Alternative
+
+With git, there is only one file per deliverable. Version history replaces file duplication:
+
+```
+WP-001-business-context.md            ← single file, versioned in git
+```
+
+The document carries its status in a metadata header:
+
+```markdown
+---
+status: draft | in_review | approved
+workpackage: WP-001
+phase: 3.0
+last_updated: 2026-03-17
+reviewed_by: business_reviewer_requirements
+approval_iteration: 2
+---
+```
+
+#### Lifecycle with Git Versioning
+
+```
+1. Specialist CREATES document (status: draft)
+   → git add WP-001-business-context.md
+   → git commit -m "WP-001: Phase 3.0 business context - draft"
+
+2. Reviewer REVIEWS document (status: in_review)
+   → Reviewer reads existing file, produces review report
+   → If changes needed: review report lists specific sections to fix
+
+3. Specialist EDITS document in place (status: draft, iteration 2)
+   → LLM reads existing document + review feedback
+   → LLM produces TARGETED EDITS (not full regeneration)
+   → git commit -m "WP-001: Phase 3.0 business context - revision per review"
+
+4. Reviewer RE-REVIEWS (reads doc + git diff from previous version)
+   → git diff HEAD~1 shows exactly what changed
+   → Reviewer focuses on changed sections, not entire document
+
+5. Approval (status: approved)
+   → Specialist updates status header to "approved"
+   → git commit -m "WP-001: Phase 3.0 business context - approved"
+   → git merge wp/WP-001 → pod/pod-a (merge = quality gate)
+```
+
+#### Token Savings Analysis
+
+| Scenario | Current (Regenerate) | Git-Based (Edit in Place) | Savings |
+|----------|---------------------|--------------------------|---------|
+| 50-page spec, minor revisions | ~50 pages output tokens × N iterations | ~5 pages output tokens × N iterations | ~90% output token reduction per iteration |
+| 50-page spec, major revisions | ~50 pages output tokens × N iterations | ~20 pages output tokens × N iterations | ~60% output token reduction per iteration |
+| Reviewer re-review | Reads full document each time | Reads full doc + focused diff | Faster review, same input tokens |
+| Approval step | Generate new approved file (~50 pages) | Update 1 metadata field (1 line) | ~99% reduction for approval step |
+
+The savings compound across workpackages and phases. For a 50-workpackage engagement with 3 review iterations average, the difference is substantial.
+
+#### Speed Improvement
+
+Editing an existing document is faster than regenerating it because:
+- **Fewer output tokens**: The LLM only produces the changed sections, not the entire document
+- **Output tokens are the slow/expensive dimension** — input tokens (reading the existing doc) are fast and cheap by comparison
+- **Reviewer cycles are faster**: `git diff` gives the reviewer a precise scope of changes, reducing review time
+
+#### Required Prompt Changes
+
+Agent prompts must shift from a "create new" to an "edit existing" model:
+
+| Current Prompt Pattern | New Prompt Pattern |
+|----------------------|-------------------|
+| "Create the business context document at path X" | "If the document exists at path X, read it and apply the required changes. If it does not exist, create it." |
+| "Create approved version at path X-approved.md" | "Update the status field in the document header to 'approved' and commit." |
+| "Archive draft to review folder" | Remove — git history serves as the archive |
+| "Compare draft against approved" | "Run `git diff HEAD~1` to see changes since last version" |
+
+**Key instruction for specialists**: "When revising a document after reviewer feedback, read the existing document and make targeted edits to the specific sections identified in the review report. Do NOT regenerate the entire document."
+
+**Key instruction for reviewers**: "When re-reviewing a revised document, use `git diff` to identify what changed since your last review. Focus your validation on the changed sections while confirming the unchanged sections remain intact."
+
+#### What This Replaces
+
+| Current Mechanism | Replaced By |
+|------------------|-------------|
+| `*-draft.md` / `*-approved.md` file pairs | Single file with status header |
+| Draft archival to review folder | Git history (`git log --follow <file>`) |
+| Separate review report files | Review reports remain (structured feedback), but audit trail is in git |
+| Status tracking in separate JSON files | Status in document header + git tags for milestones |
+| Manual diff between draft iterations | `git diff` between commits |
+
+#### Backward Compatibility
+
+For single-machine, non-pod projects that don't use git branching, the edit-in-place model still works — the specialist edits the file and the reviewer reviews it. The only difference is the status header convention and the prompt instructions to edit rather than recreate. No git operations are required for the single-machine case (though they're recommended for audit trail).
 
 ---
 
@@ -413,6 +845,10 @@ Human roles shift from "doing the work" to "supervising the AI doing the work":
 | `structure/templates/Pod_Merge_Validation.md` | Template for merge validation task file used by `deployment_reviewer_orchestration` |
 | `create_pod_worktrees.py` | Script that reads pod assignment JSON and creates Git branches + worktrees |
 | `consolidate_pod_artifacts.py` | Script that merges pod-scoped glossaries, status files, and progress tracking at merge time |
+| `structure/agents/migration_supervisor_pod.md` | Pod-scoped variant of migration supervisor agent profile (same as base but with `assign`/`send_message` instructions for pod completion callback) |
+| `scripts/check_pod_status.sh` | Health check script for CAO flow service — checks git commit timestamps and status files per pod |
+| `flows/pod-health-check.md` | CAO flow definition for scheduled pod monitoring (see Section 3.4) |
+| `launch_pods.py` | External launcher for multi-machine deployments only (Option B) — reads pod assignments, SSHs to machines, starts CAO servers, monitors via REST API |
 
 ### 9.2 Files to Modify
 
@@ -429,7 +865,10 @@ Human roles shift from "doing the work" to "supervising the AI doing the work":
 | **`structure/agents/deployment_team/deployment_team_supervisor.md`** | Same path rule update. Add merge validation task delegation. |
 | **`structure/doc/orchestration_architecture.md`** | Update Section 6.3 (Path Resolution Rules): relative instead of absolute. Add pod scaling section. |
 | **`structure/doc/task_file_template.md`** | Update Section 4 (Path Resolution Guidelines): relative to repo root. Update all examples. |
-| **`structure/prompts/03-business_extraction/01_business_specification_master-orchestration.md`** | Update `WORKPACKAGE_LOOP` to support pod-scoped execution. Add pod-scoped glossary pattern. Add git commit after deliverable approval. |
+| **`structure/prompts/03-business_extraction/01_business_specification_master-orchestration.md`** | Update `WORKPACKAGE_LOOP` to support pod-scoped execution. Add pod-scoped glossary pattern. Add git commit after deliverable approval. Change document lifecycle from draft/approved file pairs to single-file edit-in-place with status header (see Section 4.5). |
+| **`structure/prompts/05_code_generation/02_code_generation_master_orchestration.md`** | Same document versioning changes as business orchestration — edit-in-place model for all deliverables. |
+| **All specialist agent prompts** | Change "create document at path" to "if document exists, edit in place; if not, create". Add instruction: "When revising after review, make targeted edits, do NOT regenerate the entire document." |
+| **All reviewer agent prompts** | Add instruction: "Use `git diff` to identify changes since last review. Focus validation on changed sections." Change approval action from "create approved copy" to "update status header to approved". |
 | **`structure/web-dashboard/`** | Update dashboard to read from multiple worktrees/branches for cross-pod visibility. |
 
 ### 9.3 Git Workflow Additions to Agent Prompts
@@ -467,26 +906,41 @@ These are additions to existing supervisor prompts, not new agents or layers.
 4. Update all agent supervisor prompts — "relative to repo root"
 5. Test: create a project, verify all agents work with relative paths
 
-### Phase 2: Pod Partitioning
-6. Create Phase 2.5 prompt (`02_pod_partitioning.md`)
-7. Create pod assignment template (`Pod_Assignment.json`)
-8. Update Migration Supervisor prompt — add Phase 2.5 delegation
-9. Update `ReImagine_Main_Prompt.md` — add Phase 2.5 section
-10. Test: run Phase 2.5 on existing workpackage output, verify clustering
+### Phase 2: Document Versioning (Edit-in-Place)
+6. Define document status header convention (draft / in_review / approved)
+7. Update specialist prompts — edit existing documents instead of regenerating
+8. Update reviewer prompts — use git diff for re-reviews, update status header on approval
+9. Remove draft/approved file pair logic from orchestration prompts
+10. Test: run one workpackage through Phase 3 with edit-in-place model, verify token reduction
 
-### Phase 3: Git Branching
-11. Create `create_pod_worktrees.py` script
-12. Create `consolidate_pod_artifacts.py` script
-13. Add git operations to team supervisor prompts
-14. Create merge validation task template
-15. Test: create branches, run one pod end-to-end, merge to main
+### Phase 3: Pod Partitioning
+11. Create Phase 2.5 prompt (`02_pod_partitioning.md`)
+12. Create pod assignment template (`Pod_Assignment.json`)
+13. Update Migration Supervisor prompt — add Phase 2.5 delegation
+14. Update `ReImagine_Main_Prompt.md` — add Phase 2.5 section
+15. Test: run Phase 2.5 on existing workpackage output, verify clustering
 
-### Phase 4: Multi-Pod Execution
-16. Update business orchestration for pod-scoped execution
-17. Update dashboard for multi-branch visibility
-18. Test: run 2-3 pods in parallel on worktrees
-19. Test: run pods on separate machines with shared Git remote
-20. Validate merge flow and cross-pod integration
+### Phase 4: Git Branching + CAO Pod Configuration
+16. Create `create_pod_worktrees.py` script
+17. Create pod-scoped migration supervisor agent profile (`migration_supervisor_pod.md`)
+18. Configure `CAO_ENABLE_WORKING_DIRECTORY=true` in CAO server environment
+19. Create `consolidate_pod_artifacts.py` script
+20. Add git operations to team supervisor prompts
+21. Create merge validation task template
+22. Test: create branches, run one pod end-to-end via `assign`, merge to main
+
+### Phase 5: Multi-Pod Execution
+23. Update Migration Supervisor prompt to use `assign` for pod spawning after Phase 2.5
+24. Create CAO flow for pod health monitoring (`pod-health-check.md` + `check_pod_status.sh`)
+25. Update dashboard for multi-branch visibility + CAO REST API integration
+26. Test: run 2-3 pods in parallel via `assign` on single machine with worktrees
+27. Test cross-provider pod execution (e.g., Pod A on Kiro CLI, Pod B on Claude Code)
+28. Validate merge flow and cross-pod integration
+
+### Phase 6: Multi-Machine Scale (Optional — 10+ Pods)
+29. Create `launch_pods.py` for multi-machine orchestration via CAO REST API
+30. Test: run pods on separate machines with shared Git remote
+31. Validate cross-machine monitoring and merge coordination
 
 ---
 
@@ -523,8 +977,15 @@ Phase 1 → Phase 2 → Phase 2.5 (Pod Partitioning)
 |----------|-----------|
 | No new orchestration layer | Migration Supervisor already delegates phases. Pod partitioning is just a new task, not a new layer. |
 | No new agent types | `deployment_reviewer_orchestration` already handles integration review. Merge validation is a new task file, not a new agent. |
+| CAO `assign` for pod spawning (single machine) | Native CAO capability — no external scripts needed. `assign` creates tmux terminal, sends pod-scoped prompt, returns immediately. `send_message` provides completion callback. See Section 3.4. |
+| External launcher only for multi-machine (10+ pods) | Most engagements fit on one machine. External launcher (`launch_pods.py`) only needed when pods must run on separate machines for API rate limit distribution. |
+| `CAO_ENABLE_WORKING_DIRECTORY=true` | Required for pod worktree isolation. Each `assign` call targets a different worktree path. Security policy blocks system dirs. |
+| Cross-provider pod profiles for rate limit distribution | CAO agent profiles support `provider` key in frontmatter. Different pods can use different LLM providers (Kiro CLI, Claude Code, etc.) to spread API load without separate machines. |
+| CAO flow service for pod monitoring | Cron-scheduled health checks via existing flow service. Script checks git commit timestamps; agent investigates stalled pods. No custom monitoring infrastructure needed. |
+| CAO REST API for dashboard integration | `GET /terminals/{id}` provides real-time pod status. Dashboard polls API instead of parsing files. Human operators can steer pods via `POST /terminals/{id}/input`. |
 | Git branches as artifact layer | File-system based (matches existing framework), provides audit trail, enables PRs as quality gates, supports multi-machine execution. |
+| Single-file edit-in-place over draft/approved pairs | Reduces output token cost by ~60-90% per revision iteration. Git history replaces file duplication. Status tracked in document header. See Section 4.5. |
 | Relative paths over late-binding | Simpler, no runtime resolution step, "relative to repo root" is a universal convention. |
 | Pod-scoped glossaries over shared writes | Eliminates merge conflicts on shared files. Consolidation at merge time is clean and deterministic. |
-| Worktrees for small scale, separate instances for large | Worktrees share object store (efficient), separate instances provide resource isolation (scalable). |
+| Worktrees for small scale, separate instances for large | Worktrees share object store (efficient), separate instances provide resource isolation (scalable). 3-5 pods per machine is the practical sweet spot — LLM API rate limits are the bottleneck, not local compute. See Section 3.5. |
 | Phase 2.5 uses domain affinity clustering | Minimizes cross-pod dependencies and merge conflicts by keeping related workpackages together. |

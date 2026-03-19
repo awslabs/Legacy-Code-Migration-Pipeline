@@ -287,14 +287,12 @@ WORKPACKAGE_LOOP:
             - Logic extraction notes: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-logic-notes.md
         
         EXPECTED_OUTPUTS:
-            - Business specification (EN) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
-            - Business specification (other) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
+            - Business specification - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md
             - Traceability matrix: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
             - Progress tracking: {{BUSINESS_SPECIFICATION_STATUS}}
         
         VERIFICATION:
-            CHECK specification_exists(WP-XXX, language="EN")
-            CHECK specification_exists(WP-XXX, language="..")
+            CHECK specification_exists(WP-XXX)
             CHECK traceability_matrix_exists(WP-XXX)
             CHECK ieee_830_compliance(WP-XXX)
             CHECK business_entities_extracted(WP-XXX)
@@ -302,7 +300,6 @@ WORKPACKAGE_LOOP:
             CHECK business_functions_extracted(WP-XXX)
             CHECK process_flows_extracted(WP-XXX)
             CHECK technology_agnostic_chapters_1_5(WP-XXX)
-            CHECK bilingual_consistency(WP-XXX)
             CHECK all_elements_trace_to_chapter6(WP-XXX)
             
             IF verification_failed:
@@ -323,18 +320,15 @@ WORKPACKAGE_LOOP:
         PROVIDE_TASK: {{PROMPTS_BASE_PATH}}/03-business_extraction/phase_3.2.1_business_specification_review.md
         
         INPUTS:
-            - Business specification (EN) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-draft.md
-            - Business specification (other) - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md
+            - Business specification - draft: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-draft.md
             - Approved Chapter 6: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-chapter6-approved.md
             - Traceability matrix: {{BUSINESS_TRACEABILITY_BASE_PATH}}/WP-XXX-FLOW_XXX-traceability-matrix.md
             - Approved business context: {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-approved.md
             - Business glossary: {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md
         
         EXPECTED_OUTPUTS:
-            - Approved specification (EN): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-EN-approved.md (main folder)
-            - Approved specification (other): {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-approved.md (main folder)
-            - Archived draft (EN): {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-EN-draft.md (moved to review folder)
-            - Archived draft (other): {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-draft.md (moved to review folder)
+            - Approved specification: {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-XXX-FLOW_XXX-specification-approved.md (main folder)
+            - Archived draft: {{BUSINESS_SPECIFICATION_REVIEW}}/WP-XXX-FLOW_XXX-specification-draft.md (moved to review folder)
             - Review report: {{BUSINESS_SPECIFICATION_REVIEW}}/business-extraction-WP-XXX-review.md
             - Updated context (if needed): {{BUSINESS_CONTEXT_BASE_PATH}}/WP-XXX-business-context-updated.md
             - Updated glossary (if needed): {{BUSINESS_CONTEXT_BASE_PATH}}/business-glossary.md (living document)
@@ -455,7 +449,6 @@ END WORKPACKAGE_LOOP
 - Process flow documentation from Chapter 6
 - IEEE 830-1998 documentation
 - Technology-agnostic specification writing
-- Bilingual documentation
 
 ### Phase 3.2.1: Business Specification Review
 **Agent**: business_reviewer_requirements
@@ -466,7 +459,6 @@ END WORKPACKAGE_LOOP
 - Business policy validation
 - Requirement completeness verification
 - Technology-agnostic language verification
-- Bilingual consistency verification
 - Modernization readiness assessment
 
 ---
@@ -487,8 +479,7 @@ END WORKPACKAGE_LOOP
 
 ### Phase 3.1 → Phase 3.2
 **Phase 3.1 Outputs** (Phase 3.2 Inputs):
-- Business specification (EN): `WP-XXX-FLOW_XXX-specification-EN.md`
-- Business specification (other): `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}.md`
+- Business specification: `WP-XXX-FLOW_XXX-specification.md`
 
 **Contract**:
 - IEEE 830-1998 format compliance
@@ -498,12 +489,10 @@ END WORKPACKAGE_LOOP
 - Business functions with F-XXX identifiers
 - Technology-agnostic Chapters 1-5
 - Complete legacy implementation in Chapter 6
-- Bilingual consistency (EN and other)
 
 ### Phase 3.2 → Phase 4
 **Phase 3.2 Outputs** (Phase 4 Inputs):
-- Reviewed specification (EN): `WP-XXX-FLOW_XXX-specification-EN-reviewed.md`
-- Reviewed specification (other): `WP-XXX-FLOW_XXX-specification-{LANGUAGE_SHORTCUT}-reviewed.md`
+- Reviewed specification: `WP-XXX-FLOW_XXX-specification-reviewed.md`
 - Review report: `business-extraction-WP-XXX-review.md`
 
 **Contract**:
@@ -551,12 +540,12 @@ CHECK confidence_level_documented(workpackage_id):
 
 ### Phase 3.1 Verification
 ```
-CHECK specification_exists(workpackage_id, language):
-    file_path = {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{workpackage_id}-FLOW_XXX-specification-{language}.md
+CHECK specification_exists(workpackage_id):
+    file_path = {{BUSINESS_SPECIFICATION_BASE_PATH}}/WP-{workpackage_id}-FLOW_XXX-specification.md
     RETURN file_exists(file_path)
 
 CHECK ieee_830_compliance(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     RETURN spec_doc.has_chapter(1, "Introduction")
         AND spec_doc.has_chapter(2, "Business Entities")
         AND spec_doc.has_chapter(3, "Business Rules")
@@ -565,32 +554,32 @@ CHECK ieee_830_compliance(workpackage_id):
         AND spec_doc.has_chapter(6, "Legacy Implementation References")
 
 CHECK business_entities_extracted(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     RETURN spec_doc.chapter_2.entity_count >= 1
         AND all_entities_have_identifier(spec_doc.chapter_2, pattern="BE-{workpackage_id}-XXX")
 
 CHECK business_rules_extracted(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     RETURN spec_doc.chapter_3.rule_count >= 1
         AND all_rules_have_identifier(spec_doc.chapter_3, pattern="BR-{workpackage_id}-XXX")
 
 CHECK business_functions_extracted(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     RETURN spec_doc.chapter_4.function_count >= 1
         AND all_functions_have_identifier(spec_doc.chapter_4, pattern="F-{workpackage_id}-XXX")
 
 CHECK process_flows_extracted(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     RETURN spec_doc.chapter_5.flow_count >= 1
 
 CHECK legacy_implementation_documented(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     RETURN spec_doc.chapter_6.source_files IS NOT EMPTY
         AND spec_doc.chapter_6.business_rule_implementation IS NOT EMPTY
         AND spec_doc.chapter_6.function_implementation IS NOT EMPTY
 
 CHECK technology_agnostic_chapters_1_5(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     technical_terms = ["COBOL", "CICS", "JCL", "DB2", "mainframe", "batch", "online", 
                        "transaction", "file", "record", "paragraph", "PERFORM", "MOVE", "CALL"]
     
@@ -603,16 +592,8 @@ CHECK technology_agnostic_chapters_1_5(workpackage_id):
     
     RETURN TRUE
 
-CHECK bilingual_consistency(workpackage_id):
-    spec_en = load_specification(workpackage_id, "EN")
-    spec_xx = load_specification(workpackage_id, "xx")
-    
-    RETURN spec_en.chapter_2.entity_count == spec_xx.chapter_2.entity_count
-        AND spec_en.chapter_3.rule_count == spec_xx.chapter_3.rule_count
-        AND spec_en.chapter_4.function_count == spec_xx.chapter_4.function_count
-
 CHECK business_context_incorporated(workpackage_id):
-    spec_doc = load_specification(workpackage_id, "EN")
+    spec_doc = load_specification(workpackage_id)
     context_doc = load_business_context(workpackage_id)
     
     RETURN spec_doc.chapter_1.business_domain == context_doc.section_1.business_domain
@@ -683,7 +664,6 @@ GET_ISSUE_TYPE(workpackage_id):
 **Triggers**:
 - Minor wording improvements
 - Small clarifications needed
-- Bilingual translation adjustments
 - Minor business rationale additions
 
 **Actions**:
@@ -773,7 +753,7 @@ Rework History:
 
 ### Phase 3.1 Quality Gate
 **Criteria**:
-- [ ] Business specification documents exist (EN and other)
+- [ ] Business specification document exists
 - [ ] IEEE 830-1998 compliance verified
 - [ ] Business entities extracted (minimum 3 entities)
 - [ ] Business rules extracted (minimum 5 rules)
@@ -781,7 +761,6 @@ Rework History:
 - [ ] Process flows documented
 - [ ] Legacy implementation complete in Chapter 6
 - [ ] Technology-agnostic language in Chapters 1-5
-- [ ] Bilingual consistency verified
 - [ ] Business context incorporated
 
 **Gate Decision**:
@@ -902,8 +881,7 @@ Phase 3 is considered complete when:
 1. **Business context first**: Phase 3.0 must establish solid business understanding before extraction
 2. **Technology-agnostic focus**: Chapters 1-5 must be free of technical jargon
 3. **Business vs technical separation**: Business rules in Chapter 3, technical rules in Chapter 6
-4. **Bilingual consistency**: EN and other versions must have identical structure and logic
-5. **Traceability**: All business requirements must trace to legacy code in Chapter 6
+4. **Traceability**: All business requirements must trace to legacy code in Chapter 6
 
 **Common Pitfalls to Avoid**:
 
@@ -911,7 +889,6 @@ Phase 3 is considered complete when:
 2. Allowing technical jargon in Chapters 1-5 (violates technology-agnostic principle)
 3. Documenting code patterns as business rules (results in translated COBOL, not business policies)
 4. Incomplete Chapter 6 (breaks traceability)
-5. Inconsistent EN/other versions (breaks bilingual requirement)
 **When to Escalate**:
 
 1. Major business requirement gaps that cannot be resolved from code
