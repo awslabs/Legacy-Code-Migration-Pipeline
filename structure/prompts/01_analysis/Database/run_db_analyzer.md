@@ -8,7 +8,7 @@ Analyze legacy database files (VSAM, Sequential, DDL) to generate equivalent rel
 
 ## Prerequisites
 
-**Tool**: Database Analyzer (part of ACM Tools at `tools/acm-tools/tools/database_analyzer`)
+**Tool**: Database Analyzer (part of LCMP Tools at `tools/framework-tools/tools/database_analyzer`)
 **Input**: Legacy code in `{{SOURCE_CODE}}`
 **Output**: `{{DATABASE_GEN_SRC}}`
 
@@ -21,7 +21,7 @@ Analyze legacy database files (VSAM, Sequential, DDL) to generate equivalent rel
 Execute the database analyzer tool:
 
 ```bash
-python3 -m tools.acm-tools.tools.database_analyzer analyze \
+python3 -m tools.framework-tools.tools.database_analyzer analyze \
   --base-path . \
   --legacy-root {{SOURCE_CODE}} \
   --output-dir {{DATABASE_GEN_SRC}} \
@@ -68,7 +68,7 @@ Check the following outputs in `carddemo/output/analysis/database/gen_src_db`:
 Verify the analyzer found the expected business tables:
 
 ```bash
-grep "^CREATE TABLE" /Users/kerimman/Agentic_Code_Migrator/carddemo/output/analysis/database/gen_src_db/postgresql_ddl.sql | wc -l
+grep "^CREATE TABLE" /Users/kerimman/Legacy_Code_Migration_Pipeline/carddemo/output/analysis/database/gen_src_db/postgresql_ddl.sql | wc -l
 ```
 
 Review the discovered tables and verify they match the expected business entities from the legacy system.

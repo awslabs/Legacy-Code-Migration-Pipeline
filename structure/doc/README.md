@@ -12,8 +12,8 @@ This directory contains comprehensive documentation for the ReImagine Framework,
 - **[Agents](agents/agents.md)** - AI agent configurations and specifications
 - **[Prompts](prompts/prompts.md)** - AI prompts organized by migration phases
 - **[Templates](templates/templates.md)** - Standardized templates for deliverables
-- **[ACM Framework](acm/acm.md)** - Quality assurance and validation tools
-- **[Deliverable Validator](acm/deliverable_validator.md)** - Validation tool usage guide
+- **[LCMP Framework](lcmp/lcmp.md)** - Quality assurance and validation tools
+- **[Deliverable Validator](lcmp/deliverable_validator.md)** - Validation tool usage guide
 
 ### Directory Structure
 - **[Input Structure](input/input.md)** - Source materials and specifications organization
@@ -37,7 +37,7 @@ The ReImagine Framework uses a **3-layer orchestration architecture**:
 2. **Understand Agents**: Review [agents/agents.md](agents/agents.md) to learn about the 28 agents and their roles
 3. **Learn About Prompts**: Read [prompts/prompts.md](prompts/prompts.md) to understand how prompts guide the workflow
 4. **Explore Task Files**: Study [task_file_template.md](task_file_template.md) to learn how supervisors create task files
-5. **Set Up Validation**: Review [acm/acm.md](acm/acm.md) to understand quality assurance
+5. **Set Up Validation**: Review [lcmp/lcmp.md](lcmp/lcmp.md) to understand quality assurance
 
 ### Key Concepts
 
@@ -73,12 +73,12 @@ Specialist/Reviewer Agent (executes work)
 1. Start with [Orchestration Architecture](orchestration_architecture.md)
 2. Review [Agents Documentation](agents/agents.md) for agent capabilities
 3. Check [Prompts Documentation](prompts/prompts.md) for workflow guidance
-4. Use [Deliverable Validator](acm/deliverable_validator.md) for quality checks
+4. Use [Deliverable Validator](lcmp/deliverable_validator.md) for quality checks
 
 #### For Framework Developers
 1. Study [Orchestration Architecture](orchestration_architecture.md) for design principles
 2. Review [Task File Template](task_file_template.md) for task file structure
-3. Understand [ACM Framework](acm/acm.md) for validation integration
+3. Understand [LCMP Framework](lcmp/lcmp.md) for validation integration
 4. Check component docs for extension points
 
 #### For Team Supervisors (AI Agents)
@@ -91,7 +91,7 @@ Specialist/Reviewer Agent (executes work)
 1. Understand your role in [Agents Documentation](agents/agents.md)
 2. Learn about task files in [Task File Template](task_file_template.md)
 3. Review [Templates Documentation](templates/templates.md) for deliverable structure
-4. Check [Deliverable Validator](acm/deliverable_validator.md) for self-validation
+4. Check [Deliverable Validator](lcmp/deliverable_validator.md) for self-validation
 
 ## Additional Resources
 
@@ -102,7 +102,7 @@ Specialist/Reviewer Agent (executes work)
 
 ### Validation
 - Run `./validate_deliverables.sh` to validate all deliverables
-- Use ACM framework for continuous quality assurance
+- Use LCMP framework for continuous quality assurance
 - Integrate validation into CI/CD pipelines
 
 ### Templates

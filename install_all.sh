@@ -29,7 +29,7 @@ PROVIDER="kiro_cli"
 SKIP_VALIDATION=""
 PROJECT_NAME=""
 SKIP_AGENTS=""
-ACM_TOOLS_ZIP=""
+LCMP_TOOLS_ZIP=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -46,8 +46,8 @@ while [[ $# -gt 0 ]]; do
             SKIP_AGENTS="true"
             shift
             ;;
-        --acm-tools-zip)
-            ACM_TOOLS_ZIP="$2"
+        --framework-tools-zip)
+            LCMP_TOOLS_ZIP="$2"
             shift 2
             ;;
         --help)
@@ -60,14 +60,14 @@ while [[ $# -gt 0 ]]; do
             echo "  --provider PROVIDER    CLI provider (kiro_cli, q_cli, claude_code; default: kiro_cli)"
             echo "  --skip-validation      Skip prerequisite validation (not recommended)"
             echo "  --skip-agents          Skip agent installation (use if agents already installed)"
-            echo "  --acm-tools-zip PATH   Path to local ACM tools ZIP file (optional)"
+            echo "  --framework-tools-zip PATH   Path to local LCMP tools ZIP file (optional)"
             echo "  --help                 Show this help message"
             echo ""
             echo "Examples:"
             echo "  ./install_all.sh my_migration_project"
             echo "  ./install_all.sh my_project --provider q_cli"
             echo "  ./install_all.sh my_project --skip-agents"
-            echo "  ./install_all.sh my_project --acm-tools-zip ./acm-tools-main.zip"
+            echo "  ./install_all.sh my_project --framework-tools-zip ./framework-tools-main.zip"
             echo "  ./install_all.sh my_project --provider kiro_cli --skip-validation"
             exit 0
             ;;
@@ -126,10 +126,10 @@ if [ -n "$SKIP_AGENTS" ]; then
 else
     echo "  • Agent Installation: Enabled"
 fi
-if [ -n "$ACM_TOOLS_ZIP" ]; then
-    echo "  • ACM Tools ZIP: $ACM_TOOLS_ZIP"
+if [ -n "$LCMP_TOOLS_ZIP" ]; then
+    echo "  • LCMP Tools ZIP: $LCMP_TOOLS_ZIP"
 else
-    echo "  • ACM Tools ZIP: Will download from repository"
+    echo "  • LCMP Tools ZIP: Will download from repository"
 fi
 echo ""
 
@@ -214,7 +214,7 @@ if [ -n "$SKIP_AGENTS" ]; then
     echo ""
     echo "To install agents later, run:"
     echo "  cd $PROJECT_NAME"
-    echo "  python3 acm/install_agents.py --provider $PROVIDER"
+    echo "  python3 lcmp/install_agents.py --provider $PROVIDER"
     echo ""
 else
     echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
@@ -228,20 +228,20 @@ else
     # Change to project directory and install agents
     cd "$PROJECT_NAME"
 
-    if [ ! -f "acm/install_agents.py" ]; then
+    if [ ! -f "lcmp/install_agents.py" ]; then
         echo -e "${RED}✗ Agent installation script not found${NC}"
-        echo "Expected: $PROJECT_NAME/acm/install_agents.py"
+        echo "Expected: $PROJECT_NAME/lcmp/install_agents.py"
         exit 1
     fi
 
     # Install agents with automatic "yes" response
-    echo "Y" | python3 acm/install_agents.py --provider "$PROVIDER"
+    echo "Y" | python3 lcmp/install_agents.py --provider "$PROVIDER"
 
     if [ $? -ne 0 ]; then
         echo -e "${YELLOW}⚠️  Agent installation completed with some issues${NC}"
         echo "You can retry later by running:"
         echo "  cd $PROJECT_NAME"
-        echo "  python3 acm/install_agents.py --provider $PROVIDER"
+        echo "  python3 lcmp/install_agents.py --provider $PROVIDER"
     else
         echo -e "${GREEN}✓ Agents installed successfully${NC}"
     fi
@@ -252,84 +252,84 @@ else
     echo ""
 fi
 
-# Step 4: Install ACM Tools (Optional)
+# Step 4: Install LCMP Tools (Optional)
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 4/5: Installing ACM Tools (Optional)                 ║${NC}"
+echo -e "${BLUE}║  Step 4/5: Installing LCMP Tools (Optional)                 ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-echo "ACM tools provide validation and analysis utilities for your migration project."
+echo "LCMP tools provide validation and analysis utilities for your migration project."
 echo ""
 
 # Check if custom ZIP file was provided
-if [ -n "$ACM_TOOLS_ZIP" ]; then
-    echo "Custom ACM tools ZIP file specified: $ACM_TOOLS_ZIP"
+if [ -n "$LCMP_TOOLS_ZIP" ]; then
+    echo "Custom LCMP tools ZIP file specified: $LCMP_TOOLS_ZIP"
     echo ""
 fi
 
-# Ask user if they want to install ACM tools
-read -p "Do you want to install ACM tools? (y/N): " -r
+# Ask user if they want to install LCMP tools
+read -p "Do you want to install LCMP tools? (y/N): " -r
 echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "Installing ACM tools..."
+    echo "Installing LCMP tools..."
     echo ""
     
     # Check if custom ZIP file was provided
-    if [ -n "$ACM_TOOLS_ZIP" ]; then
+    if [ -n "$LCMP_TOOLS_ZIP" ]; then
         # Verify the ZIP file exists
-        if [ ! -f "$ACM_TOOLS_ZIP" ]; then
-            echo -e "${RED}✗ ACM tools ZIP file not found: $ACM_TOOLS_ZIP${NC}"
-            echo "Skipping ACM tools installation"
+        if [ ! -f "$LCMP_TOOLS_ZIP" ]; then
+            echo -e "${RED}✗ LCMP tools ZIP file not found: $LCMP_TOOLS_ZIP${NC}"
+            echo "Skipping LCMP tools installation"
         else
-            echo "Using custom ZIP file: $ACM_TOOLS_ZIP"
-            python3 install_acm_tools.py --tools-dir "$PROJECT_NAME/tools" --zip-file "$ACM_TOOLS_ZIP"
+            echo "Using custom ZIP file: $LCMP_TOOLS_ZIP"
+            python3 install_framework_tools.py --tools-dir "$PROJECT_NAME/tools" --zip-file "$LCMP_TOOLS_ZIP"
             
-            if [ $? -eq 0 ] && [ -d "$PROJECT_NAME/tools/acm-tools" ]; then
+            if [ $? -eq 0 ] && [ -d "$PROJECT_NAME/tools/framework-tools" ]; then
                 echo ""
-                echo -e "${GREEN}✓ ACM tools installed successfully from custom ZIP${NC}"
+                echo -e "${GREEN}✓ LCMP tools installed successfully from custom ZIP${NC}"
             else
                 echo ""
-                echo -e "${YELLOW}⚠️  ACM tools installation from custom ZIP had issues${NC}"
+                echo -e "${YELLOW}⚠️  LCMP tools installation from custom ZIP had issues${NC}"
                 echo "You can retry manually:"
                 echo "  cd $PROJECT_NAME"
-                echo "  python3 ../install_acm_tools.py --tools-dir ./tools --zip-file $ACM_TOOLS_ZIP"
+                echo "  python3 ../install_framework_tools.py --tools-dir ./tools --zip-file $LCMP_TOOLS_ZIP"
             fi
         fi
     else
         # Install from default URL
-        echo "Attempting to download ACM tools from repository..."
+        echo "Attempting to download LCMP tools from repository..."
         echo ""
-        python3 install_acm_tools.py --tools-dir "$PROJECT_NAME/tools" --skip-on-error
+        python3 install_framework_tools.py --tools-dir "$PROJECT_NAME/tools" --skip-on-error
         
         echo ""
         # Verify installation by checking if directory actually exists
-        if [ -d "$PROJECT_NAME/tools/acm-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/acm-tools 2>/dev/null)" ]; then
-            echo -e "${GREEN}✓ ACM tools installed successfully${NC}"
+        if [ -d "$PROJECT_NAME/tools/framework-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/framework-tools 2>/dev/null)" ]; then
+            echo -e "${GREEN}✓ LCMP tools installed successfully${NC}"
         else
-            echo -e "${YELLOW}⚠️  ACM tools not installed${NC}"
+            echo -e "${YELLOW}⚠️  LCMP tools not installed${NC}"
             echo ""
             echo "This is expected if:"
             echo "  • The repository is private or requires authentication"
             echo "  • You have SSL certificate issues"
             echo "  • You don't have network access to the repository"
             echo ""
-            echo "To install ACM tools later:"
-            echo "  1. Download acm-tools-main.zip manually from the repository"
+            echo "To install LCMP tools later:"
+            echo "  1. Download framework-tools-main.zip manually from the repository"
             echo "  2. Run: cd $PROJECT_NAME"
-            echo "  3. Run: python3 ../install_acm_tools.py --tools-dir ./tools --zip-file /path/to/acm-tools-main.zip"
+            echo "  3. Run: python3 ../install_framework_tools.py --tools-dir ./tools --zip-file /path/to/framework-tools-main.zip"
             echo ""
             echo "  Or specify the ZIP file location:"
-            echo "  python3 ../install_acm_tools.py --tools-dir ./tools --zip-file /path/to/acm-tools-main.zip"
+            echo "  python3 ../install_framework_tools.py --tools-dir ./tools --zip-file /path/to/framework-tools-main.zip"
         fi
     fi
 else
-    echo -e "${YELLOW}⚠️  ACM tools installation skipped${NC}"
+    echo -e "${YELLOW}⚠️  LCMP tools installation skipped${NC}"
     echo ""
-    echo "To install ACM tools later:"
-    echo "  1. Download acm-tools-main.zip and place it in the installation directory"
+    echo "To install LCMP tools later:"
+    echo "  1. Download framework-tools-main.zip and place it in the installation directory"
     echo "  2. Run: cd $PROJECT_NAME"
-    echo "  3. Run: python3 ../install_acm_tools.py --tools-dir ./tools"
+    echo "  3. Run: python3 ../install_framework_tools.py --tools-dir ./tools"
 fi
 
 echo ""
@@ -397,10 +397,10 @@ if [ -n "$SKIP_AGENTS" ]; then
 else
     echo "  ✓ Agents installed with provider: $PROVIDER"
 fi
-if [ -d "$PROJECT_NAME/tools/acm-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/acm-tools 2>/dev/null)" ]; then
-    echo "  ✓ ACM tools installed"
+if [ -d "$PROJECT_NAME/tools/framework-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/framework-tools 2>/dev/null)" ]; then
+    echo "  ✓ LCMP tools installed"
 else
-    echo "  ⊘ ACM tools not installed"
+    echo "  ⊘ LCMP tools not installed"
 fi
 echo ""
 
@@ -442,7 +442,7 @@ esac
 echo ""
 echo "Useful Commands:"
 echo "  • List agents:        cao list"
-echo "  • Update agents:      python3 acm/install_agents.py"
+echo "  • Update agents:      python3 lcmp/install_agents.py"
 echo "  • Validate outputs:   ./validate_deliverables.sh"
 echo "  • Get help:           cao --help"
 echo ""
@@ -451,7 +451,7 @@ echo "Documentation:"
 echo "  • Quick Start:        ../QUICK_START.md"
 echo "  • Installation Guide: ../INSTALLATION_GUIDE.md"
 echo "  • User Guide:         ../docs/USER_GUIDE.md"
-echo "  • ACM Tools:          ../structure/doc/acm/acm.md"
+echo "  • LCMP Tools:          ../structure/doc/lcmp/lcmp.md"
 echo ""
 
 echo -e "${BLUE}Happy migrating! 🚀${NC}"

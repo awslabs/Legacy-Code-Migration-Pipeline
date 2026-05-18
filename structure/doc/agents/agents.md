@@ -420,7 +420,7 @@ cao agent install ./structure/agents/deployment_team/deployment_specialist_orche
 Agents integrate with the migration framework through:
 - **Standardized Templates**: All outputs use templates from `structure/templates/`
 - **Path Configuration**: Agents respect project-specific path configurations
-- **ACM Validation**: Outputs are validated against framework templates
+- **LCMP Validation**: Outputs are validated against framework templates
 - **Progress Tracking**: Status updates follow standardized progress tracking formats
 
 ### Tool Generation and Integration

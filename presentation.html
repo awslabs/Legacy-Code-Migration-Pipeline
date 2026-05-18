@@ -36,7 +36,6 @@
                     <li>What is CAO (CLI Agent Orchestrator)?</li>
                     <li>Agent Architecture Overview</li>
                     <li>Migration Phases & Workflow</li>
-                    <li>ATX Deliverables & Templates</li>
                     <li>End-to-End Process</li>
                 </ul>
             </section>
@@ -68,7 +67,7 @@ python create_project.py my_migration_project
 
 # Install agents
 cd my_migration_project
-python acm/install_agents.py
+python lcmp/install_agents.py
 
 # Launch an agent
 cao launch --agents migration_supervisor
@@ -611,16 +610,10 @@ graph TB
             </section>
 
 
-            <!-- ATX Deliverables Section -->
+            <!-- Tools Section -->
             <section>
                 <section>
-                    <h2>ATX Deliverables & Templates</h2>
-                    <p class="highlight">Standardized Output Structure</p>
-                    <p>ATX (AWS Transform) provides standardized templates and deliverable formats that ensure consistency across migration projects.</p>
-                </section>
-
-                <section>
-                    <h2>ACM Tools Suite - Core Tools</h2>
+                    <h2>LCMP Tools Suite - Core Tools</h2>
                     <p class="highlight">Primary Analysis & Planning Tools</p>
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em;">
                         <div class="box">
@@ -657,21 +650,11 @@ graph TB
                 </section>
 
                 <section>
-                    <h2>ACM Tools Suite - Supporting Tools</h2>
+                    <h2>LCMP Tools Suite - Supporting Tools</h2>
                     <p class="highlight">Infrastructure & Visualization Tools</p>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em;">
                         <div>
                             <div class="box">
-                                <h4>📊 SMF Analyzer</h4>
-                                <ul style="font-size: 0.75em;">
-                                    <li>Parse binary SMF files</li>
-                                    <li>Load into databases</li>
-                                    <li>36+ pre-built queries</li>
-                                    <li>Performance analysis</li>
-                                    <li>Cross-type correlation</li>
-                                </ul>
-                            </div>
-                            <div class="box" style="margin-top: 1em;">
                                 <h4>🌐 Web Dashboard</h4>
                                 <ul style="font-size: 0.75em;">
                                     <li>Interactive visualization</li>
@@ -683,15 +666,6 @@ graph TB
                         </div>
                         <div>
                             <div class="box">
-                                <h4>📈 SMF Dashboard</h4>
-                                <ul style="font-size: 0.75em;">
-                                    <li>SMF-specific interface</li>
-                                    <li>Performance metrics</li>
-                                    <li>Workload analysis</li>
-                                    <li>Resource monitoring</li>
-                                </ul>
-                            </div>
-                            <div class="box" style="margin-top: 1em;">
                                 <h4>⚙️ Agent Installer</h4>
                                 <ul style="font-size: 0.75em;">
                                     <li>Install 28 agents</li>
@@ -702,39 +676,6 @@ graph TB
                             </div>
                         </div>
                     </div>
-                </section>
-                                    <ul style="font-size: 0.9em;">
-                                        <li>Generate realistic SMF data</li>
-                                        <li>Support testing workflows</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <section>
-                    <h2>SMF Analyzer Pipeline</h2>
-                    <div class="mermaid">
-flowchart LR
-    A["📄 Binary SMF Files"] --> B["🔍 SMF Parser"]
-    B --> C["📊 JSON Records"]
-    C --> D["💾 Database Loader"]
-    D --> E["🗄️ SQLite/PostgreSQL"]
-    E --> F["🔎 Query Engine"]
-    F --> G["📈 Analysis Reports"]
-    
-    style A fill:#e1f5ff
-    style B fill:#95e1d3
-    style C fill:#e1f5ff
-    style D fill:#95e1d3
-    style E fill:#4ecdc4
-    style F fill:#95e1d3
-    style G fill:#42affa
-                    </div>
-                    <p style="font-size: 0.8em; margin-top: 1em;">
-                        <strong>Supports:</strong> Type 30 (Job/Step), Type 100-102 (DB2), Type 110 (CICS)
-                    </p>
                 </section>
 
                 <section>
@@ -770,26 +711,22 @@ flowchart LR
                 </section>
 
                 <section>
-                    <h2>ACM Tools Integration</h2>
+                    <h2>LCMP Tools Integration</h2>
                     <div class="mermaid">
 graph TB
     LA["Legacy Analyzer"] --> DB["Unified Database"]
-    SA["SMF Analyzer"] --> DB
     DB --> QE["Query Engine"]
     QE --> AR["Analysis Reports"]
-    QE --> DASH["SMF Dashboard"]
+    QE --> DASH["Dashboard"]
     QE --> AI["AI Agents"]
     
     LA --> |"Code Analysis"| INV["Inventory Data"]
     LA --> |"Dependencies"| DEP["Dependency Graph"]
-    SA --> |"Performance"| SMF["SMF Records"]
     
     INV --> DB
     DEP --> DB
-    SMF --> DB
     
     style LA fill:#95e1d3
-    style SA fill:#95e1d3
     style DB fill:#4ecdc4
     style QE fill:#42affa
     style AR fill:#667eea
@@ -871,7 +808,7 @@ sequenceDiagram
 
                 <section>
                     <h2>Validation Framework</h2>
-                    <p>ACM (Agent Configuration Management) provides validation tools:</p>
+                    <p>LCMP (Legacy Code Migration Pipeline) provides validation tools:</p>
                     <ul>
                         <li><strong>Template Validation:</strong> Ensures deliverables match template structure</li>
                         <li><strong>Quality Criteria:</strong> Automated checks for completeness and correctness</li>
@@ -911,7 +848,7 @@ TEMPLATE_BASE_PATH = ${PROJECT_BASE_PATH}/templates</code></pre>
 python install_cao.py
 python create_project.py my_migration_project
 cd my_migration_project
-python acm/install_agents.py</code></pre>
+python lcmp/install_agents.py</code></pre>
                     <p style="font-size: 0.8em; margin-top: 1em;">This creates the complete project structure with agents, templates, and configuration.</p>
                 </section>
 
@@ -1188,7 +1125,7 @@ flowchart TD
                         <p style="font-size: 0.8em;">Analysis → Planning → Business Extraction → Code Generation → Deployment</p>
                     </div>
                     <div class="box">
-                        <h4>✓ ATX Deliverables</h4>
+                        <h4>✓ Standardized Deliverables</h4>
                         <p style="font-size: 0.8em;">Standardized templates with validation framework</p>
                     </div>
                     <div class="box">

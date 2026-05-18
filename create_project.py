@@ -179,12 +179,12 @@ def main():
         print(f"\n✅ Project '{args.project_name}' created successfully!")
         print(f"📁 Location: {final_path}")
         
-        # Install ACM tools
-        print(f"\n🔧 Installing ACM Tools")
-        print("Downloading and installing ACM tools from AWS Code repository...")
+        # Install LCMP tools
+        print(f"\n🔧 Installing LCMP Tools")
+        print("Downloading and installing LCMP tools from AWS Code repository...")
         try:
             import subprocess
-            install_tools_script = current_dir / "install_acm_tools.py"
+            install_tools_script = current_dir / "install_framework_tools.py"
             tools_dir = final_path / "tools"
             
             result = subprocess.run(
@@ -193,20 +193,20 @@ def main():
             )
             
             if result.returncode == 0:
-                print("✅ ACM tools installed successfully!")
+                print("✅ LCMP tools installed successfully!")
             else:
-                print("⚠️  ACM tools installation had issues")
+                print("⚠️  LCMP tools installation had issues")
                 print("   This may be due to repository access restrictions.")
                 print(f"   You can install manually later using:")
                 print(f"   python3 {install_tools_script} --tools-dir {tools_dir}")
                 print(f"   Or use a local ZIP file:")
-                print(f"   python3 {install_tools_script} --zip-file /path/to/acm-tools.zip --tools-dir {tools_dir}")
+                print(f"   python3 {install_tools_script} --zip-file /path/to/framework-tools.zip --tools-dir {tools_dir}")
         except Exception as e:
-            print(f"⚠️  Error installing ACM tools: {e}")
+            print(f"⚠️  Error installing LCMP tools: {e}")
             print(f"   You can install manually later using:")
-            print(f"   python3 install_acm_tools.py --tools-dir {tools_dir}")
+            print(f"   python3 install_framework_tools.py --tools-dir {tools_dir}")
             print(f"   Or use a local ZIP file:")
-            print(f"   python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir {tools_dir}")
+            print(f"   python3 install_framework_tools.py --zip-file /path/to/framework-tools.zip --tools-dir {tools_dir}")
         
         # Install web-dashboard requirements
         print(f"\n📦 Installing Web Dashboard Requirements")
@@ -236,7 +236,7 @@ def main():
         # Ask if user wants to install agents
         print(f"\n🤖 Agent Installation")
         print("Would you like to install agents now?")
-        print("(You can also install them later using: python acm/install_agents.py)")
+        print("(You can also install them later using: python lcmp/install_agents.py)")
         response = input("Install agents now? (y/N): ")
         
         if response.lower() == 'y':
@@ -251,13 +251,13 @@ def main():
             if not cao_installed:
                 print("\n⚠️  CAO (CLI Agent Orchestrator) is not installed")
                 print("Please install CAO first using: python install_cao.py")
-                print("Then run: python acm/install_agents.py from your project directory")
+                print("Then run: python lcmp/install_agents.py from your project directory")
             else:
                 # Run the agent installation script
                 print("\n🚀 Running agent installation...")
                 try:
                     import subprocess
-                    install_script = final_path / "acm" / "install_agents.py"
+                    install_script = final_path / "lcmp" / "install_agents.py"
                     result = subprocess.run(
                         ["python3", str(install_script), "--agents-dir", str(final_path / "agents")],
                         cwd=str(final_path)
@@ -266,19 +266,19 @@ def main():
                         print("\n✅ Agents installed successfully!")
                     else:
                         print("\n⚠️  Agent installation completed with issues")
-                        print("You can retry later using: python acm/install_agents.py")
+                        print("You can retry later using: python lcmp/install_agents.py")
                 except Exception as e:
                     print(f"\n⚠️  Error running agent installation: {e}")
-                    print("You can install agents manually using: python acm/install_agents.py")
+                    print("You can install agents manually using: python lcmp/install_agents.py")
         else:
             print("\n📝 To install agents later, run from your project directory:")
-            print("   python acm/install_agents.py")
+            print("   python lcmp/install_agents.py")
         
         print(f"\n🎉 Setup complete!")
         print(f"\nNext steps:")
         print(f"1. cd {final_path}")
         if response.lower() != 'y' or not cao_installed:
-            print(f"2. Install agents: python acm/install_agents.py")
+            print(f"2. Install agents: python lcmp/install_agents.py")
         print(f"{'2' if response.lower() == 'y' and cao_installed else '3'}. Start using your agents with CAO")
         
     except Exception as e:

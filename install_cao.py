@@ -12,7 +12,7 @@ Features:
 
 Usage: python install_cao.py
 
-Note: To install agents, use the install_agents.py script in your project's acm folder
+Note: To install agents, use the install_agents.py script in your project's lcmp folder
 """
 
 import os

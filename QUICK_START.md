@@ -26,15 +26,15 @@ Installs: tmux, uv, and CLI Agent Orchestrator
 python create_project.py my_migration_project
 ```
 
-Creates: Complete project structure with agents, templates, tools, and ACM utilities
+Creates: Complete project structure with agents, templates, tools, and LCMP utilities
 
-**Note**: ACM tools are automatically downloaded and installed during project creation.
+**Note**: LCMP tools are automatically downloaded and installed during project creation.
 
 ### 3️⃣ Install Agents
 
 ```bash
 cd my_migration_project
-python acm/install_agents.py
+python lcmp/install_agents.py
 ```
 
 Installs: All 28 specialized migration agents
@@ -75,21 +75,21 @@ cao launch --agents migration_supervisor
 
 ### Update Agents After Modifications
 ```bash
-python acm/install_agents.py
+python lcmp/install_agents.py
 ```
 
 ### Switch Provider
 ```bash
-python acm/install_agents.py --provider q_cli
+python lcmp/install_agents.py --provider q_cli
 ```
 
-### Update ACM Tools
+### Update LCMP Tools
 ```bash
 # From project directory
-python ../install_acm_tools.py --tools-dir ./tools
+python ../install_framework_tools.py --tools-dir ./tools
 
 # Or from repository root
-python install_acm_tools.py --tools-dir my_project/tools
+python install_framework_tools.py --tools-dir my_project/tools
 ```
 
 ### Update Prompts in Existing Project
@@ -98,38 +98,38 @@ python install_acm_tools.py --tools-dir my_project/tools
 python update_prompts.py /path/to/my_project
 ```
 
-## ACM Tools Installation
+## LCMP Tools Installation
 
-ACM tools are automatically installed during project creation. If you need to install manually:
+LCMP tools are automatically installed during project creation. If you need to install manually:
 
 ### Standard Installation
 ```bash
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 ```
 
 ### Private Repository (Use Local ZIP)
 ```bash
 # If repository is private, download ZIP manually then:
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 ```
 
 ### Common Options
 ```bash
 # Custom directory
-python3 install_acm_tools.py --tools-dir /custom/path
+python3 install_framework_tools.py --tools-dir /custom/path
 
 # Skip on error (automation)
-python3 install_acm_tools.py --skip-on-error
+python3 install_framework_tools.py --skip-on-error
 
 # Get help
-python3 install_acm_tools.py --help
+python3 install_framework_tools.py --help
 ```
 
 ### If Download Fails
 The repository may be private. Solutions:
 1. Download ZIP manually and use `--zip-file` option
 2. Request repository access from owner
-3. Use `--skip-on-error` to continue without ACM tools
+3. Use `--skip-on-error` to continue without LCMP tools
 
 ## Need Help?
 
@@ -157,7 +157,7 @@ kiro-cli login
 ```bash
 # Install Kiro CLI from https://kiro.ai
 # Or use a different provider:
-python acm/install_agents.py --provider claude_code
+python lcmp/install_agents.py --provider claude_code
 ```
 
 ### Agents Not Installing?
@@ -169,7 +169,7 @@ cao --help
 pwd
 
 # Try with verbose output
-python acm/install_agents.py
+python lcmp/install_agents.py
 ```
 
 ## Supported Providers
@@ -184,7 +184,7 @@ python acm/install_agents.py
 
 ```
 my_migration_project/
-├── acm/                  # Tools (install_agents.py, validators)
+├── lcmp/                  # Tools (install_agents.py, validators)
 ├── agents/              # 28 AI agents in 5 teams
 ├── input/               # Your legacy code goes here
 ├── output/              # Generated artifacts

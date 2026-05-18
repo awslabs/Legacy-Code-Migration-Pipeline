@@ -74,7 +74,7 @@ Contains migration workpackage definitions and tracking:
 ## Quality Assurance
 
 ### Validation Framework
-All outputs are validated using the ACM (Application Configuration Management) framework within the orchestration architecture:
+All outputs are validated using the LCMP (Application Configuration Management) framework within the orchestration architecture:
 - **Deliverable Validation**: Ensures all required outputs are present
 - **Format Validation**: Verifies file formats and structure
 - **Content Validation**: Checks for completeness and consistency

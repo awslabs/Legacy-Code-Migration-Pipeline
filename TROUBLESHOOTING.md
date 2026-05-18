@@ -5,7 +5,7 @@ This guide covers common issues and solutions for the Legacy Code Migration Fram
 ## Table of Contents
 
 - [Installation Issues](#installation-issues)
-- [ACM Tools Issues](#acm-tools-issues)
+- [LCMP Tools Issues](#framework-tools-issues)
 - [Kiro CLI Issues](#kiro-cli-issues)
 - [CAO Issues](#cao-issues)
 - [Agent Installation Issues](#agent-installation-issues)
@@ -70,11 +70,11 @@ sudo apt install git
 git --version
 ```
 
-## ACM Tools Issues
+## LCMP Tools Issues
 
-### ACM Tools Download Fails
+### LCMP Tools Download Fails
 
-**Problem**: `install_acm_tools.py` fails to download from AWS Code
+**Problem**: `install_framework_tools.py` fails to download from AWS Code
 
 **Solution**:
 ```bash
@@ -90,39 +90,39 @@ export HTTP_PROXY=http://proxy.example.com:8080
 export HTTPS_PROXY=http://proxy.example.com:8080
 
 # Retry installation
-python3 install_acm_tools.py --tools-dir ./tools
+python3 install_framework_tools.py --tools-dir ./tools
 ```
 
 **Alternative**: Download manually
 ```bash
 # Download the ZIP file manually from browser
-# URL: https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools/-/archive/main/acm-tools-main.zip
+# URL: https://code.aws.dev/personal_projects/alias_k/kerimman/framework-tools/-/archive/main/framework-tools-main.zip
 
 # Extract to tools directory
-unzip acm-tools-main.zip -d tools/
-mv tools/acm-tools-main tools/acm-tools
+unzip framework-tools-main.zip -d tools/
+mv tools/framework-tools-main tools/framework-tools
 
 # Install dependencies
-cd tools/acm-tools
+cd tools/framework-tools
 pip3 install -r requirements.txt
 ```
 
-### ACM Tools Extraction Fails
+### LCMP Tools Extraction Fails
 
 **Problem**: ZIP extraction fails or corrupted archive
 
 **Solution**:
 ```bash
 # Remove corrupted download
-rm -rf /tmp/acm-tools*
+rm -rf /tmp/framework-tools*
 
 # Retry download
-python3 install_acm_tools.py --tools-dir ./tools
+python3 install_framework_tools.py --tools-dir ./tools
 
 # If still fails, download manually (see above)
 ```
 
-### ACM Tools Dependencies Fail to Install
+### LCMP Tools Dependencies Fail to Install
 
 **Problem**: `pip install -r requirements.txt` fails
 
@@ -132,7 +132,7 @@ python3 install_acm_tools.py --tools-dir ./tools
 pip3 install --upgrade pip
 
 # Try installing dependencies manually
-cd tools/acm-tools
+cd tools/framework-tools
 pip3 install -r requirements.txt --verbose
 
 # If specific package fails, install individually
@@ -155,13 +155,13 @@ ls -la ./tools
 chmod 755 ./tools
 
 # Or install to different location
-python3 install_acm_tools.py --tools-dir ~/my-tools
+python3 install_framework_tools.py --tools-dir ~/my-tools
 
 # Or use sudo (not recommended)
-sudo python3 install_acm_tools.py --tools-dir ./tools
+sudo python3 install_framework_tools.py --tools-dir ./tools
 ```
 
-### ACM Tools Already Exist
+### LCMP Tools Already Exist
 
 **Problem**: Tools directory already exists
 
@@ -169,14 +169,14 @@ sudo python3 install_acm_tools.py --tools-dir ./tools
 ```bash
 # The script automatically removes old version
 # But if you want to backup first:
-mv tools/acm-tools tools/acm-tools.backup
+mv tools/framework-tools tools/framework-tools.backup
 
 # Then reinstall
-python3 install_acm_tools.py --tools-dir ./tools
+python3 install_framework_tools.py --tools-dir ./tools
 
 # Or force reinstall (script does this automatically)
-rm -rf tools/acm-tools
-python3 install_acm_tools.py --tools-dir ./tools
+rm -rf tools/framework-tools
+python3 install_framework_tools.py --tools-dir ./tools
 ```
 
 ### Using Local ZIP File for Private Repository
@@ -191,20 +191,20 @@ python3 install_acm_tools.py --tools-dir ./tools
 # - Or download manually if you have access
 
 # Step 2: Install from local ZIP
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 
 # Step 3: Verify installation
-ls -la tools/acm-tools/
+ls -la tools/framework-tools/
 ```
 
 **For Project Creation**:
 ```bash
-# Create project first (will skip ACM tools if download fails)
+# Create project first (will skip LCMP tools if download fails)
 python3 create_project.py my_project
 
-# Then install ACM tools manually with local ZIP
+# Then install LCMP tools manually with local ZIP
 cd my_project
-python3 ../install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 ../install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 ```
 
 ### Network Timeout During Download
@@ -378,7 +378,7 @@ They have **separate authentication contexts**. If Kiro IDE works but `kiro-cli`
    q --version         # for q_cli
    
    # Or use a different provider
-   python3 acm/install_agents.py --provider claude_code
+   python3 lcmp/install_agents.py --provider claude_code
    ```
 
 ### Agent Files Not Found
@@ -428,7 +428,7 @@ ls -la ~/.kiro/agents/
    
    # Reinstall if missing
    cd your_project
-   python3 acm/install_agents.py
+   python3 lcmp/install_agents.py
    ```
 
 2. **tmux issues**:
@@ -469,7 +469,7 @@ ls -la ~/.kiro/agents/
    vim agents/<team>/<agent_name>.md
    
    # Reinstall
-   python3 acm/install_agents.py
+   python3 lcmp/install_agents.py
    ```
 
 3. **Check paths in agent files**:
@@ -637,7 +637,7 @@ If you're still experiencing problems:
 4. **Use Alternative Provider**:
    ```bash
    # If kiro_cli has issues, try claude_code
-   python3 acm/install_agents.py --provider claude_code
+   python3 lcmp/install_agents.py --provider claude_code
    ```
 
 ## Quick Reference

@@ -47,7 +47,7 @@ We use this task tracker to keep track of team tasks: TBD
 - **[User Guide](docs/USER_GUIDE.md)** - Comprehensive step-by-step usage guide
 - **[Orchestration Architecture](structure/doc/orchestration_architecture.md)** - Complete architecture documentation
 - **[Agent Documentation](structure/doc/agents/agents.md)** - AI agent configurations and team structure
-- **[ACM Framework](structure/doc/acm/acm.md)** - Agent management and validation tools
+- **[LCMP Framework](structure/doc/lcmp/lcmp.md)** - Agent management and validation tools
 - **[Prompt Documentation](structure/doc/prompts/prompts.md)** - AI prompts for migration phases
 - **[Template Library](structure/doc/templates/templates.md)** - Standardized deliverable templates
 - **[Task File Template](structure/doc/task_file_template.md)** - Guide for creating task files
@@ -157,7 +157,7 @@ python create_project.py <project_name>
 3. **Install agents (if you chose to skip during project creation):**
 ```bash
 cd <project_name>
-python acm/install_agents.py --provider kiro_cli
+python lcmp/install_agents.py --provider kiro_cli
 ```
 
 The first command installs [CLI Agent Orchestrator (CAO)](https://github.com/awslabs/cli-agent-orchestrator) and its dependencies (tmux, uv). The second command creates a complete project structure with all necessary folders, templates, and configuration files. The third command installs the 28 specialized agents into CAO with your chosen provider.
@@ -171,7 +171,7 @@ The installation process is now separated into two parts:
 - Validates system prerequisites
 - Sets up CAO for use across all projects
 
-**Agent Installation (`acm/install_agents.py`):**
+**Agent Installation (`lcmp/install_agents.py`):**
 - Discovers and installs all 28 agents from the project's agents directory
 - Supports provider selection (Kiro CLI default, Amazon Q CLI, Claude Code)
 - Can be run at any time to install or update agents
@@ -195,9 +195,9 @@ project_name/
 ├── output/               # Analysis results and generated artifacts
 ├── templates/            # Report and tracking templates
 ├── prompts/             # AI prompts for different migration phases
-├── tools/               # ACM tools and utilities
-│   └── acm-tools/       # Downloaded ACM tools (auto-installed)
-├── acm/                 # Framework tools and validators
+├── tools/               # LCMP tools and utilities
+│   └── framework-tools/       # Downloaded LCMP tools (auto-installed)
+├── lcmp/                 # Framework tools and validators
 │   ├── install_agents.py      # Agent installation/update script
 │   └── deliverable_validator.py  # Deliverable validation tool
 └── agents/              # AI agent configurations (28 agents in 5 teams)
@@ -210,9 +210,9 @@ project_name/
 ```
 
 **Note**: 
-- ACM tools are automatically downloaded and installed during project creation
-- For detailed ACM documentation, see [structure/doc/acm/acm.md](structure/doc/acm/acm.md)
-- To update ACM tools: `python install_acm_tools.py --tools-dir ./tools`
+- LCMP tools are automatically downloaded and installed during project creation
+- For detailed LCMP documentation, see [structure/doc/lcmp/lcmp.md](structure/doc/lcmp/lcmp.md)
+- To update LCMP tools: `python install_framework_tools.py --tools-dir ./tools`
 
 ## Usage
 
@@ -223,15 +223,15 @@ For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.m
 **Quick Start Steps:**
 
 1. **Install CAO**: Run `install_cao.py` to set up agent orchestration (one-time setup)
-2. **Initialize Project**: Use `create_project.py` to create your migration project (ACM tools auto-installed)
-3. **Install Agents**: Run `acm/install_agents.py` from your project directory
+2. **Initialize Project**: Use `create_project.py` to create your migration project (LCMP tools auto-installed)
+3. **Install Agents**: Run `lcmp/install_agents.py` from your project directory
 4. **Configure Paths**: Review `config/paths.cfg` (auto-configured)
 5. **Add Legacy Code**: Place source code in `input/legacy/`
 6. **Start Migration**: Use Migration Supervisor with main prompt
 7. **Monitor Progress**: Check task files and deliverables
 8. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
-9. **Update Agents**: Modify agent files and run `acm/install_agents.py` to reinstall
-10. **Update ACM Tools**: Run `python ../install_acm_tools.py --tools-dir ./tools` when needed
+9. **Update Agents**: Modify agent files and run `lcmp/install_agents.py` to reinstall
+10. **Update LCMP Tools**: Run `python ../install_framework_tools.py --tools-dir ./tools` when needed
 
 ### Understanding the Workflow
 
@@ -247,25 +247,25 @@ The framework uses a **supervisor-based orchestration model**:
 
 For detailed workflow information, see the [Orchestration Architecture Documentation](structure/doc/orchestration_architecture.md).
 
-### ACM Tools Installation
+### LCMP Tools Installation
 
-ACM tools are automatically installed during project creation. For manual installation or updates:
+LCMP tools are automatically installed during project creation. For manual installation or updates:
 
 **Standard Installation:**
 ```bash
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 ```
 
 **Private Repository (Use Local ZIP):**
 ```bash
 # If repository is private, download ZIP manually then:
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 ```
 
 **Update Existing Project:**
 ```bash
 cd my_project
-python3 ../install_acm_tools.py --tools-dir ./tools
+python3 ../install_framework_tools.py --tools-dir ./tools
 ```
 
 **Available Options:**
@@ -277,9 +277,9 @@ python3 ../install_acm_tools.py --tools-dir ./tools
 The repository may be private. Solutions:
 1. Download ZIP manually and use `--zip-file` option
 2. Request repository access from owner
-3. Use `--skip-on-error` to continue without ACM tools
+3. Use `--skip-on-error` to continue without LCMP tools
 
-For complete details, see [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) (install_acm_tools.py section) or [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) (ACM Tools Installation Reference section).
+For complete details, see [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) (install_framework_tools.py section) or [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) (LCMP Tools Installation Reference section).
 
 ### Using CAO Agents
 
@@ -294,18 +294,18 @@ python create_project.py my_migration_project
 cd my_migration_project
 
 # Install all agents with provider selection (Kiro CLI is default)
-python acm/install_agents.py --provider kiro_cli     # Kiro CLI (default, recommended)
-python acm/install_agents.py --provider q_cli        # Amazon Q CLI  
-python acm/install_agents.py --provider claude_code  # Claude Code
+python lcmp/install_agents.py --provider kiro_cli     # Kiro CLI (default, recommended)
+python lcmp/install_agents.py --provider q_cli        # Amazon Q CLI  
+python lcmp/install_agents.py --provider claude_code  # Claude Code
 
 # Verify agent installation
 cao list
 
 # Update agents after modifying agent files
-python acm/install_agents.py
+python lcmp/install_agents.py
 
 # Install specific agents only
-python acm/install_agents.py --agent-sources migration_supervisor.md
+python lcmp/install_agents.py --agent-sources migration_supervisor.md
 
 # Examples of agent usage:
 # Launch agents with Kiro CLI
@@ -490,7 +490,7 @@ Detailed documentation for each component is available in the `structure/doc/` d
 - **[Agents](structure/doc/agents/agents.md)** - AI agent configuration, team structure, and usage
 - **[Prompts](structure/doc/prompts/prompts.md)** - AI prompts for migration phases
 - **[Templates](structure/doc/templates/templates.md)** - Available templates and their usage
-- **[ACM Framework](structure/doc/acm/)** - Framework tools and validation
+- **[LCMP Framework](structure/doc/lcmp/)** - Framework tools and validation
 - **[Input Structure](structure/doc/input/)** - How to organize source materials
 - **[Output Structure](structure/doc/output/)** - Understanding generated artifacts
 

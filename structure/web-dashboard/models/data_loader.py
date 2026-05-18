@@ -250,7 +250,7 @@ class MigrationDataLoader:
         """Get tools generated for a specific phase
         
         Scans output/tools/ directory and categorizes tools by phase if subdirectories exist.
-        For Phase 2, checks tools/acm-tools/tools/migration-planner specifically.
+        For Phase 2, checks tools/framework-tools/tools/migration-planner specifically.
         Identifies tool types by extension (.py, .sh, .md).
         
         Returns empty list when directory is missing (Requirement 12.3).
@@ -259,9 +259,9 @@ class MigrationDataLoader:
         """
         tools = []
         
-        # Special handling for Phase 2 - check tools/acm-tools/tools/migration-planner
+        # Special handling for Phase 2 - check tools/framework-tools/tools/migration-planner
         if phase_id == 2:
-            migration_planner_dir = self.project_root / "tools" / "acm-tools" / "tools" / "migration-planner"
+            migration_planner_dir = self.project_root / "tools" / "framework-tools" / "tools" / "migration-planner"
             if migration_planner_dir.exists() and migration_planner_dir.is_dir():
                 try:
                     for f in migration_planner_dir.iterdir():
@@ -1513,7 +1513,7 @@ class MigrationDataLoader:
                 "files": [
                     {"path": "input/legacy/legacy_code/", "type": "Source", "description": "All legacy source files (COBOL, JCL, ASM, copybooks, etc.)"},
                     {"path": "input/legacy/specifications/", "type": "Documentation", "description": "Legacy framework documentation"},
-                    {"path": "tools/acm-tools/", "type": "Tools", "description": "Pre-existing analysis tools"}
+                    {"path": "tools/framework-tools/", "type": "Tools", "description": "Pre-existing analysis tools"}
                 ]
             },
             2: {  # Workpackage Definition
@@ -1524,7 +1524,7 @@ class MigrationDataLoader:
                     {"path": "output/analysis/source_code/flows/Business_Flows.json", "type": "Analysis", "description": "Business flows identified from source code"},
                     {"path": "output/analysis/source_code/reports/jobs.json", "type": "Analysis", "description": "All jobs identified"},
                     {"path": "output/analysis/source_code/reports/entry_points.json", "type": "Analysis", "description": "All entry points identified"},
-                    {"path": "tools/acm-tools/tools/migration-analyzer", "type": "Tools", "description": "Migration analyzer tool (if available)"}
+                    {"path": "tools/framework-tools/tools/migration-analyzer", "type": "Tools", "description": "Migration analyzer tool (if available)"}
                 ]
             },
             3: {  # Business Extraction

@@ -15,7 +15,7 @@ The fastest way to get started is using the all-in-one installation script:
 This single command performs all installation steps automatically:
 1. Installs CAO and dependencies (tmux, uv)
 2. Creates your project structure
-3. Downloads and installs ACM tools
+3. Downloads and installs LCMP tools
 4. Installs all 28 agents with your chosen provider
 
 **Options:**
@@ -51,16 +51,16 @@ The installation process is separated into distinct steps for maximum flexibilit
 
 1. **CAO Installation** - Install the CLI Agent Orchestrator (one-time setup)
 2. **Project Creation** - Create a new migration project
-3. **ACM Tools Installation** - Download and install ACM tools (automatic during project creation)
+3. **LCMP Tools Installation** - Download and install LCMP tools (automatic during project creation)
 4. **Agent Installation** - Install agents into the project (can be repeated)
 
 This separation allows you to:
 - Install CAO once and use it for multiple projects
-- Automatically get the latest ACM tools with each project
+- Automatically get the latest LCMP tools with each project
 - Modify agent files and easily reinstall them
 - Switch providers without reinstalling CAO
 - Update agents independently of CAO installation
-- Update ACM tools separately when needed
+- Update LCMP tools separately when needed
 
 ## Prerequisites
 
@@ -114,18 +114,18 @@ This creates a complete project structure with:
 - Template files for reports and tracking
 - AI agent configurations (28 agents in 5 teams)
 - Validation tools
-- **ACM tools** (automatically downloaded and installed to `./tools/acm-tools/`)
+- **LCMP tools** (automatically downloaded and installed to `./tools/framework-tools/`)
 
-**ACM Tools Installation**: The script automatically:
-1. Downloads the latest ACM tools from AWS Code repository
-2. Extracts them to `<project>/tools/acm-tools/`
+**LCMP Tools Installation**: The script automatically:
+1. Downloads the latest LCMP tools from AWS Code repository
+2. Extracts them to `<project>/tools/framework-tools/`
 3. Installs Python dependencies from requirements.txt
 
 **Interactive Prompt**: The script will ask if you want to install agents now:
 ```
 🤖 Agent Installation
 Would you like to install agents now?
-(You can also install them later using: python acm/install_agents.py)
+(You can also install them later using: python lcmp/install_agents.py)
 Install agents now? (y/N):
 ```
 
@@ -134,39 +134,39 @@ Install agents now? (y/N):
 
 **When to run**: Once for each migration project.
 
-### Step 2.5: ACM Tools Installation (Automatic)
+### Step 2.5: LCMP Tools Installation (Automatic)
 
-ACM tools are automatically installed during project creation, but you can also install or update them manually:
+LCMP tools are automatically installed during project creation, but you can also install or update them manually:
 
 ```bash
 # Install to default location (./tools)
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 
 # Install from local ZIP file (if repository is private)
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 
 # Install to custom location
-python3 install_acm_tools.py --tools-dir /path/to/tools
+python3 install_framework_tools.py --tools-dir /path/to/tools
 
-# Update ACM tools in existing project
+# Update LCMP tools in existing project
 cd my_existing_project
-python3 ../install_acm_tools.py --tools-dir ./tools
+python3 ../install_framework_tools.py --tools-dir ./tools
 ```
 
 **What gets installed:**
-- Latest ACM tools from AWS Code repository (or local ZIP file)
-- Source: `https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools`
-- Target: `<tools-dir>/acm-tools/`
+- Latest LCMP tools from AWS Code repository (or local ZIP file)
+- Source: `https://code.aws.dev/personal_projects/alias_k/kerimman/framework-tools`
+- Target: `<tools-dir>/framework-tools/`
 - Python dependencies from requirements.txt
 
 **Private Repository Access:**
 If the repository is private or you encounter access issues:
 1. Download the ZIP file manually
-2. Use `--zip-file` option: `python3 install_acm_tools.py --zip-file /path/to/zip --tools-dir ./tools`
-3. Or use `--skip-on-error` during project creation to continue without ACM tools
+2. Use `--zip-file` option: `python3 install_framework_tools.py --zip-file /path/to/zip --tools-dir ./tools`
+3. Or use `--skip-on-error` during project creation to continue without LCMP tools
 
 **When to run manually:**
-- To update ACM tools to the latest version
+- To update LCMP tools to the latest version
 - To install tools in an existing project
 - To reinstall after corruption or deletion
 - To install to a custom location
@@ -174,17 +174,17 @@ If the repository is private or you encounter access issues:
 
 **Note**: During normal project creation, this step happens automatically with `--skip-on-error` flag, so the installation continues even if download fails.
 
-## ACM Tools Installation Reference
+## LCMP Tools Installation Reference
 
 ### Overview
 
-ACM tools are automatically installed during project creation. This section provides complete reference for manual installation, troubleshooting, and private repository scenarios.
+LCMP tools are automatically installed during project creation. This section provides complete reference for manual installation, troubleshooting, and private repository scenarios.
 
 ### Automatic Installation
 
-During project creation (`create_project.py`), ACM tools are automatically:
+During project creation (`create_project.py`), LCMP tools are automatically:
 1. Downloaded from AWS Code repository
-2. Extracted to `<project>/tools/acm-tools/`
+2. Extracted to `<project>/tools/framework-tools/`
 3. Dependencies installed from requirements.txt
 4. Installation continues even if download fails (uses `--skip-on-error`)
 
@@ -192,7 +192,7 @@ During project creation (`create_project.py`), ACM tools are automatically:
 
 #### Standard Installation (Public Repository)
 ```bash
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 ```
 
 #### Private Repository Installation
@@ -200,26 +200,26 @@ If the repository is private or you encounter HTTP 403 errors:
 
 **Step 1: Obtain ZIP File**
 - Request access from repository owner
-- Download manually: `https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools/-/archive/main/acm-tools-main.zip`
+- Download manually: `https://code.aws.dev/personal_projects/alias_k/kerimman/framework-tools/-/archive/main/framework-tools-main.zip`
 - Or receive ZIP file through approved channels
 
 **Step 2: Install from Local ZIP**
 ```bash
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 ```
 
 #### Custom Installation Location
 ```bash
-python3 install_acm_tools.py --tools-dir /custom/path
+python3 install_framework_tools.py --tools-dir /custom/path
 ```
 
 #### Update Existing Project
 ```bash
 cd my_project
-python3 ../install_acm_tools.py --tools-dir ./tools
+python3 ../install_framework_tools.py --tools-dir ./tools
 
 # Or with local ZIP
-python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools
+python3 ../install_framework_tools.py --zip-file /path/to/framework-tools.zip --tools-dir ./tools
 ```
 
 ### Command-Line Options
@@ -227,7 +227,7 @@ python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./
 | Option | Description | Example |
 |--------|-------------|---------|
 | `--tools-dir PATH` | Target directory | `--tools-dir ./tools` |
-| `--zip-file PATH` | Use local ZIP file | `--zip-file ~/acm-tools.zip` |
+| `--zip-file PATH` | Use local ZIP file | `--zip-file ~/framework-tools.zip` |
 | `--skip-on-error` | Continue on failure | `--skip-on-error` |
 | `--help` | Show help message | `--help` |
 
@@ -236,26 +236,26 @@ python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./
 #### Scenario 1: First Time Installation
 ```bash
 # Try automatic download
-python3 install_acm_tools.py --tools-dir ./tools
+python3 install_framework_tools.py --tools-dir ./tools
 
 # If fails with "Access Denied", use local ZIP
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 ```
 
 #### Scenario 2: Project Creation with Private Repository
 ```bash
-# Create project (ACM tools installation may fail gracefully)
+# Create project (LCMP tools installation may fail gracefully)
 python3 create_project.py my_project
 
-# Install ACM tools manually with local ZIP
+# Install LCMP tools manually with local ZIP
 cd my_project
-python3 ../install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools
+python3 ../install_framework_tools.py --zip-file /path/to/framework-tools.zip --tools-dir ./tools
 ```
 
 #### Scenario 3: Automation/CI-CD
 ```bash
 # Use skip-on-error for automation
-python3 install_acm_tools.py --skip-on-error
+python3 install_framework_tools.py --skip-on-error
 ```
 
 ### Error Handling
@@ -270,7 +270,7 @@ python3 install_acm_tools.py --skip-on-error
 **Solutions:**
 1. Download ZIP manually and use `--zip-file` option
 2. Request repository access from owner
-3. Use `--skip-on-error` to continue without ACM tools
+3. Use `--skip-on-error` to continue without LCMP tools
 
 #### HTTP 404 - Repository Not Found
 **Error Message:**
@@ -298,25 +298,25 @@ python3 install_acm_tools.py --skip-on-error
 
 ### Verification
 
-After installation, verify ACM tools:
+After installation, verify LCMP tools:
 ```bash
 # Check directory exists
-ls -la tools/acm-tools/
+ls -la tools/framework-tools/
 
 # View contents
-ls tools/acm-tools/
+ls tools/framework-tools/
 
 # Read documentation
-cat tools/acm-tools/README.md
+cat tools/framework-tools/README.md
 
 # Verify dependencies
-pip3 list | grep -i acm
+pip3 list | grep -i lcmp
 ```
 
 ### Additional Resources
 
-- **Script Reference**: [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) - See "install_acm_tools.py" section
-- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - See "ACM Tools Issues" section
+- **Script Reference**: [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) - See "install_framework_tools.py" section
+- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - See "LCMP Tools Issues" section
 
 ### Step 3: Install Agents
 
@@ -325,20 +325,20 @@ Install the 28 specialized agents into CAO with your preferred provider:
 
 ```bash
 cd my_migration_project
-python3 acm/install_agents.py
+python3 lcmp/install_agents.py
 ```
 
 **Provider Selection**: Choose your preferred CLI provider for agent integration:
 
 ```bash
 # Kiro CLI (Default - Recommended)
-python3 acm/install_agents.py --provider kiro_cli
+python3 lcmp/install_agents.py --provider kiro_cli
 
 # Amazon Q CLI
-python3 acm/install_agents.py --provider q_cli
+python3 lcmp/install_agents.py --provider q_cli
 
 # Claude Code
-python3 acm/install_agents.py --provider claude_code
+python3 lcmp/install_agents.py --provider claude_code
 ```
 
 The script will:
@@ -369,12 +369,12 @@ Kiro CLI is the recommended default provider. To set up Kiro CLI:
 
 1. **Install Kiro CLI**: Follow the [Kiro installation guide](https://kiro.ai)
 2. **Verify Installation**: Run `kiro-cli --version` to confirm Kiro CLI is available
-3. **Install Agents**: Run `python3 acm/install_agents.py --provider kiro_cli`
+3. **Install Agents**: Run `python3 lcmp/install_agents.py --provider kiro_cli`
 
 Example Kiro CLI usage:
 ```bash
 # Install agents with Kiro CLI (default)
-python3 acm/install_agents.py --provider kiro_cli
+python3 lcmp/install_agents.py --provider kiro_cli
 
 # Verify Kiro CLI integration
 kiro-cli --version
@@ -390,7 +390,7 @@ kiro-cli chat --agent migration_supervisor
 
 ```bash
 # Install only certain agents
-python3 acm/install_agents.py --agent-sources \
+python3 lcmp/install_agents.py --agent-sources \
     migration_supervisor.md \
     agents/analysis_team/analysis_team_supervisor.md
 ```
@@ -399,7 +399,7 @@ python3 acm/install_agents.py --agent-sources \
 
 ```bash
 # Install from a different directory
-python3 acm/install_agents.py --agents-dir /path/to/custom/agents
+python3 lcmp/install_agents.py --agents-dir /path/to/custom/agents
 ```
 
 ## Common Workflows
@@ -415,7 +415,7 @@ python3 create_project.py project1
 
 # Step 3: Install agents
 cd project1
-python3 acm/install_agents.py
+python3 lcmp/install_agents.py
 ```
 
 ### Creating Additional Projects
@@ -423,20 +423,20 @@ python3 acm/install_agents.py
 ```bash
 # CAO already installed, just create and configure
 python3 create_project.py project2
-# ACM tools are automatically installed
+# LCMP tools are automatically installed
 cd project2
-python3 acm/install_agents.py
+python3 lcmp/install_agents.py
 ```
 
-### Updating ACM Tools
+### Updating LCMP Tools
 
 ```bash
-# Update ACM tools in existing project
+# Update LCMP tools in existing project
 cd my_project
-python3 ../install_acm_tools.py --tools-dir ./tools
+python3 ../install_framework_tools.py --tools-dir ./tools
 
 # Or from repository root
-python3 install_acm_tools.py --tools-dir my_project/tools
+python3 install_framework_tools.py --tools-dir my_project/tools
 ```
 
 ### Updating Agents
@@ -446,14 +446,14 @@ python3 install_acm_tools.py --tools-dir my_project/tools
 vim agents/migration_supervisor.md
 
 # Reinstall agents
-python3 acm/install_agents.py
+python3 lcmp/install_agents.py
 ```
 
 ### Switching Providers
 
 ```bash
 # Reinstall with different provider
-python3 acm/install_agents.py --provider q_cli
+python3 lcmp/install_agents.py --provider q_cli
 ```
 
 ## Post-Installation Usage

@@ -9,7 +9,7 @@ The framework provides several scripts for managing installations:
 | Script | Purpose | When to Use |
 |--------|---------|-------------|
 | `install_all.sh` | Complete installation in one command | First-time setup, quick demos |
-| `install_acm_tools.py` | Download and install ACM tools | Standalone or during project creation |
+| `install_framework_tools.py` | Download and install LCMP tools | Standalone or during project creation |
 | `update_prompts.py` | Update prompts in existing projects | After modifying prompts in structure/prompts |
 | `uninstall_all.sh` | Remove CAO and all agents | Cleanup, troubleshooting |
 
@@ -71,14 +71,14 @@ Performs a complete installation of the Legacy Code Migration Framework:
 
 #### Step 2: Create Project
 - Runs `create_project.py` to create project structure
-- Automatically installs ACM tools from AWS Code repository
+- Automatically installs LCMP tools from AWS Code repository
 - Automatically answers "no" to agent installation prompt (agents installed in next step)
 - Creates all necessary directories and files
 - Copies templates, prompts, and agent configurations
 
 #### Step 3: Install Agents
 - Changes to project directory
-- Runs `acm/install_agents.py` with specified provider
+- Runs `lcmp/install_agents.py` with specified provider
 - Automatically answers "yes" to installation prompt
 - Installs all 28 agents from the agents directory
 - Configures agents for the selected provider
@@ -135,18 +135,18 @@ This is a common issue when your Kiro CLI session has expired or AWS credentials
 **Agent installation fails:**
 - Check CAO is working: `cao --help`
 - Verify provider CLI is installed (if required)
-- Retry manually: `cd project_name && python3 acm/install_agents.py`
+- Retry manually: `cd project_name && python3 lcmp/install_agents.py`
 
-## install_acm_tools.py
+## install_framework_tools.py
 
 ### Description
 
-Downloads and installs ACM (Agentic Code Migration) tools from the AWS Code repository. This script is automatically executed during project creation but can also be run standalone to install or update the tools.
+Downloads and installs LCMP (Agentic Code Migration) tools from the AWS Code repository. This script is automatically executed during project creation but can also be run standalone to install or update the tools.
 
 ### Usage
 
 ```bash
-python3 install_acm_tools.py [OPTIONS]
+python3 install_framework_tools.py [OPTIONS]
 ```
 
 ### Options
@@ -160,43 +160,43 @@ python3 install_acm_tools.py [OPTIONS]
 
 **Install to default location (./tools):**
 ```bash
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 ```
 
 **Install to custom location:**
 ```bash
-python3 install_acm_tools.py --tools-dir /path/to/custom/tools
+python3 install_framework_tools.py --tools-dir /path/to/custom/tools
 ```
 
 **Install from local ZIP file (private repository):**
 ```bash
 # Download the ZIP file manually first, then:
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 ```
 
 **Install to existing project:**
 ```bash
 cd my_project
-python3 ../install_acm_tools.py --tools-dir ./tools
+python3 ../install_framework_tools.py --tools-dir ./tools
 ```
 
 **Skip on error (for automation):**
 ```bash
-python3 install_acm_tools.py --skip-on-error
+python3 install_framework_tools.py --skip-on-error
 ```
 
 ### What It Does
 
-#### Step 1: Download ACM Tools
-- Downloads the latest ACM tools from AWS Code repository
-- URL: `https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools`
+#### Step 1: Download LCMP Tools
+- Downloads the latest LCMP tools from AWS Code repository
+- URL: `https://code.aws.dev/personal_projects/alias_k/kerimman/framework-tools`
 - Shows download progress with size and percentage
 - Saves to temporary directory
 
-#### Step 2: Extract ACM Tools
+#### Step 2: Extract LCMP Tools
 - Extracts the downloaded ZIP archive
-- Removes any existing `acm-tools` directory in target location
-- Moves extracted files to `<tools-dir>/acm-tools/`
+- Removes any existing `framework-tools` directory in target location
+- Moves extracted files to `<tools-dir>/framework-tools/`
 - Preserves all file permissions and structure
 
 #### Step 3: Install Dependencies
@@ -229,11 +229,11 @@ The script provides:
 ### When to Use
 
 **Automatic (during project creation):**
-- ACM tools are automatically installed when you create a new project
+- LCMP tools are automatically installed when you create a new project
 - No manual intervention needed
 
 **Manual (standalone execution):**
-- Update ACM tools to latest version
+- Update LCMP tools to latest version
 - Install tools in existing project
 - Reinstall after corruption or deletion
 - Install to custom location
@@ -247,20 +247,20 @@ ping code.aws.dev
 
 # Check firewall/proxy settings
 # Retry the installation
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 ```
 
 **Access denied (HTTP 403) - Private Repository:**
 ```bash
 # Option 1: Use local ZIP file
 # Download manually from the repository
-python3 install_acm_tools.py --zip-file /path/to/acm-tools-main.zip --tools-dir ./tools
+python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
 
 # Option 2: Request repository access
 # Contact the repository owner
 
 # Option 3: Skip installation (if optional)
-python3 install_acm_tools.py --skip-on-error
+python3 install_framework_tools.py --skip-on-error
 ```
 
 **Permission denied:**
@@ -269,13 +269,13 @@ python3 install_acm_tools.py --skip-on-error
 ls -la ./tools
 
 # Or install to a different location
-python3 install_acm_tools.py --tools-dir ~/my-tools
+python3 install_framework_tools.py --tools-dir ~/my-tools
 ```
 
 **Dependency installation fails:**
 ```bash
 # Install dependencies manually
-cd tools/acm-tools
+cd tools/framework-tools
 pip3 install -r requirements.txt
 ```
 
@@ -284,31 +284,31 @@ pip3 install -r requirements.txt
 # If behind corporate proxy, set proxy environment variables
 export HTTP_PROXY=http://proxy.example.com:8080
 export HTTPS_PROXY=http://proxy.example.com:8080
-python3 install_acm_tools.py
+python3 install_framework_tools.py
 ```
 
 ### Integration with Project Creation
 
-The `install_acm_tools.py` script is automatically called by `create_project.py`:
+The `install_framework_tools.py` script is automatically called by `create_project.py`:
 
 1. Project structure is created
-2. ACM tools are downloaded and installed to `<project>/tools/acm-tools/`
+2. LCMP tools are downloaded and installed to `<project>/tools/framework-tools/`
 3. Dependencies are installed
 4. User is prompted for agent installation
 
-This ensures every new project has the latest ACM tools available.
+This ensures every new project has the latest LCMP tools available.
 
-### Updating ACM Tools
+### Updating LCMP Tools
 
-To update ACM tools in an existing project:
+To update LCMP tools in an existing project:
 
 ```bash
 cd my_existing_project
-python3 ../install_acm_tools.py --tools-dir ./tools
+python3 ../install_framework_tools.py --tools-dir ./tools
 ```
 
 This will:
-- Remove the old `tools/acm-tools` directory
+- Remove the old `tools/framework-tools` directory
 - Download the latest version
 - Install updated dependencies
 
@@ -367,14 +367,14 @@ python3 update_prompts.py ../my-project
 
 **Before (in structure/prompts):**
 ```markdown
-cd {{PROJECT_BASE_PATH}}/tools/acm-tools
+cd {{PROJECT_BASE_PATH}}/tools/framework-tools
 Input: {{LEGACY_SOURCE_CODE}}
 Output: {{COBOL_SOURCE_ANALYSIS_REPORT}}
 ```
 
 **After (in project/prompts):**
 ```markdown
-cd /Users/username/my-migration-project/tools/acm-tools
+cd /Users/username/my-migration-project/tools/framework-tools
 Input: /Users/username/my-migration-project/input/legacy/source
 Output: /Users/username/my-migration-project/output/analysis/source_code/reports/cobol_analysis.md
 ```
@@ -475,7 +475,7 @@ This ensures all projects use the latest prompt versions with correct paths.
 **Agent installation fails:**
 - Check CAO is working: `cao --help`
 - Verify provider CLI is installed (if required)
-- Retry manually: `cd project_name && python3 acm/install_agents.py`
+- Retry manually: `cd project_name && python3 lcmp/install_agents.py`
 
 ## uninstall_all.sh
 
@@ -648,7 +648,7 @@ Or follow manual installation steps:
 python3 install_cao.py
 python3 create_project.py my_project
 cd my_project
-python3 acm/install_agents.py
+python3 lcmp/install_agents.py
 ```
 
 ### Understanding Dependency Removal
@@ -750,7 +750,7 @@ To customize the scripts:
 - **[QUICK_START.md](QUICK_START.md)** - Quick start guide
 - **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** - Detailed installation instructions
 - **[README.md](README.md)** - Main project documentation
-- **[structure/doc/acm/acm.md](structure/doc/acm/acm.md)** - ACM framework documentation
+- **[structure/doc/lcmp/lcmp.md](structure/doc/lcmp/lcmp.md)** - LCMP framework documentation
 
 ## Support
 
@@ -793,8 +793,8 @@ python3 create_project.py project1
 python3 create_project.py project2
 
 # Install agents for each
-cd project1 && python3 acm/install_agents.py && cd ..
-cd project2 && python3 acm/install_agents.py && cd ..
+cd project1 && python3 lcmp/install_agents.py && cd ..
+cd project2 && python3 lcmp/install_agents.py && cd ..
 
 # When done with all projects, clean up
 ./uninstall_all.sh --remove-uv-packages  # Keeps uv for future use

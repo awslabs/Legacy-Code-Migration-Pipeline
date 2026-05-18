@@ -1,32 +1,32 @@
-# ACM (Agent Configuration Management) Framework
+# LCMP (Agent Configuration Management) Framework
 
-The ACM framework provides quality assurance, validation tools, and agent management for the legacy code migration process. It ensures that all deliverables meet specified standards, maintains consistency across migration projects, and manages the installation and configuration of AI agents.
+The LCMP framework provides quality assurance, validation tools, and agent management for the legacy code migration process. It ensures that all deliverables meet specified standards, maintains consistency across migration projects, and manages the installation and configuration of AI agents.
 
 ## Framework Components
 
 ### 1. Agent Installation and Management
 
-The ACM framework includes tools for installing and managing the 28 specialized AI agents used in the migration process.
+The LCMP framework includes tools for installing and managing the 28 specialized AI agents used in the migration process.
 
 #### install_agents.py
 
 A standalone script for installing or updating agents from the `agents` directory into CAO (CLI Agent Orchestrator).
 
-**Location**: `acm/install_agents.py` (copied to each project during creation)
+**Location**: `lcmp/install_agents.py` (copied to each project during creation)
 
 **Usage**:
 ```bash
 # Install all agents from the agents directory
-python acm/install_agents.py
+python lcmp/install_agents.py
 
 # Install with a specific provider
-python acm/install_agents.py --provider kiro_cli
+python lcmp/install_agents.py --provider kiro_cli
 
 # Install specific agent sources
-python acm/install_agents.py --agent-sources agent1.md agent2.md
+python lcmp/install_agents.py --agent-sources agent1.md agent2.md
 
 # Install from a custom agents directory
-python acm/install_agents.py --agents-dir /path/to/agents
+python lcmp/install_agents.py --agents-dir /path/to/agents
 ```
 
 **Options**:
@@ -58,16 +58,16 @@ python acm/install_agents.py --agents-dir /path/to/agents
 ```bash
 # Standard installation with Kiro CLI
 cd my_project
-python acm/install_agents.py
+python lcmp/install_agents.py
 
 # Install with Amazon Q CLI
-python acm/install_agents.py --provider q_cli
+python lcmp/install_agents.py --provider q_cli
 
 # Install only specific agents
-python acm/install_agents.py --agent-sources migration_supervisor.md code_generator.md
+python lcmp/install_agents.py --agent-sources migration_supervisor.md code_generator.md
 
 # Install from a different directory
-python acm/install_agents.py --agents-dir /path/to/custom/agents
+python lcmp/install_agents.py --agents-dir /path/to/custom/agents
 ```
 
 **Prerequisites**:
@@ -129,15 +129,15 @@ For more troubleshooting help, see the [Troubleshooting Guide](../../../TROUBLES
 
 ### 2. Deliverable Validation
 
-The ACM framework provides comprehensive validation tools for ensuring migration quality and completeness.
+The LCMP framework provides comprehensive validation tools for ensuring migration quality and completeness.
 
-## ACM Directory Structure
+## LCMP Directory Structure
 
-When the ACM directory is copied to a project, it maintains the following structure:
+When the LCMP directory is copied to a project, it maintains the following structure:
 
 ```
 project_name/
-├── acm/
+├── lcmp/
 │   ├── install_agents.py         # Agent installation script
 │   └── deliverable_validator.py  # Deliverable validation tool
 ├── agents/                       # Agent markdown files
@@ -157,8 +157,8 @@ project_name/
 
 1. **Create Project**: `python create_project.py <project_name>`
 2. **Install CAO**: `python install_cao.py` (if not already installed)
-3. **Install Agents**: `python acm/install_agents.py` (from project directory)
-4. **Update Agents**: Modify agent files, then run `python acm/install_agents.py` again
+3. **Install Agents**: `python lcmp/install_agents.py` (from project directory)
+4. **Update Agents**: Modify agent files, then run `python lcmp/install_agents.py` again
 5. **Use Agents**: Launch with CAO or your chosen provider
 
 ### Validation Workflow
@@ -178,20 +178,20 @@ project_name/
 
 ## Integration with Orchestration Architecture
 
-The ACM framework integrates with the 3-layer orchestration architecture at multiple points:
+The LCMP framework integrates with the 3-layer orchestration architecture at multiple points:
 
 1. **Specialist Level**: Specialists can self-validate deliverables before reporting completion
-2. **Reviewer Level**: Reviewers use ACM validation as part of their quality criteria checks
+2. **Reviewer Level**: Reviewers use LCMP validation as part of their quality criteria checks
 3. **Team Supervisor Level**: Supervisors can verify deliverables exist and are valid before proceeding
 4. **Migration Supervisor Level**: Can validate entire phase outputs before moving to next phase
 
-The iterative review process orchestrated by team supervisors ensures deliverables pass both ACM validation and reviewer quality checks before phase completion.
+The iterative review process orchestrated by team supervisors ensures deliverables pass both LCMP validation and reviewer quality checks before phase completion.
 
 For more information on the orchestration architecture, see [Orchestration Architecture Documentation](../orchestration_architecture.md)
 
 ## Framework Overview
 
-The ACM framework is built around the principle of template-driven validation, where every deliverable in the migration process has a corresponding template that defines its expected structure and content.
+The LCMP framework is built around the principle of template-driven validation, where every deliverable in the migration process has a corresponding template that defines its expected structure and content.
 
 ### Core Components
 
@@ -241,7 +241,7 @@ The underlying framework that supports:
 
 #### Orchestration Workflow
 - **Specialist Agents**: Can run validation before reporting completion
-- **Reviewer Agents**: Include ACM validation in quality criteria
+- **Reviewer Agents**: Include LCMP validation in quality criteria
 - **Team Supervisors**: Verify deliverables before creating review tasks
 - **Iterative Review**: Validation failures trigger remediation cycles
 - **Phase Completion**: All deliverables validated before phase approval
@@ -269,7 +269,7 @@ The underlying framework that supports:
 - **Template Compliance**: Generate outputs that match template structures
 - **Incremental Validation**: Validate deliverables as they're created (specialists can self-check)
 - **Error Handling**: Address validation issues promptly
-- **Iterative Improvement**: Reviewer feedback + ACM validation = high quality deliverables
+- **Iterative Improvement**: Reviewer feedback + LCMP validation = high quality deliverables
 - **Documentation**: Document any deviations from standard templates
 
 ### Quality Assurance

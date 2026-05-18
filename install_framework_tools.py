@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-ACM Tools Installation Script
+LCMP Tools Installation Script
 
-This script downloads and installs ACM tools from the AWS Code repository.
+This script downloads and installs LCMP tools from the AWS Code repository.
 It can be run standalone or as part of the project creation process.
 
 Features:
-1. Downloads ACM tools from AWS Code repository (or uses local ZIP file)
+1. Downloads LCMP tools from AWS Code repository (or uses local ZIP file)
 2. Extracts to project's ./tools directory
 3. Installs Python dependencies from requirements.txt
 4. Gracefully handles private repository access issues
 
 Usage: 
-    python install_acm_tools.py [OPTIONS]
+    python install_framework_tools.py [OPTIONS]
     
 Options:
     --tools-dir PATH       Target directory for tools (default: ./tools)
@@ -33,10 +33,10 @@ from pathlib import Path
 from typing import Optional
 
 
-# ACM Tools repository configuration
-ACM_TOOLS_URL = "https://code.aws.dev/personal_projects/alias_k/kerimman/acm-tools/-/archive/main/acm-tools-main.zip?ref_type=heads"
-ACM_TOOLS_ARCHIVE_NAME = "acm-tools-main"
-ACM_TOOLS_DEFAULT_ZIP = "acm-tools-main.zip"
+# LCMP Tools repository configuration
+LCMP_TOOLS_URL = "https://code.aws.dev/personal_projects/alias_k/kerimman/framework-tools/-/archive/main/framework-tools-main.zip?ref_type=heads"
+LCMP_TOOLS_ARCHIVE_NAME = "framework-tools-main"
+LCMP_TOOLS_DEFAULT_ZIP = "framework-tools-main.zip"
 
 
 def print_header(message: str) -> None:
@@ -97,7 +97,7 @@ def download_file(url: str, destination: Path) -> bool:
         
         # Create a request with headers
         req = urllib.request.Request(url)
-        req.add_header('User-Agent', 'ACM-Tools-Installer/1.0')
+        req.add_header('User-Agent', 'Framework-Tools-Installer/1.0')
         
         # Download with progress indication
         with urllib.request.urlopen(req, timeout=30) as response:
@@ -164,7 +164,7 @@ def extract_zip(zip_path: Path, extract_to: Path) -> Optional[Path]:
         
         print("   ✅ Extraction complete")
         
-        # Find the extracted directory (should be acm-tools-main)
+        # Find the extracted directory (should be framework-tools-main)
         extracted_dirs = [d for d in extract_to.iterdir() if d.is_dir()]
         
         if extracted_dirs:
@@ -213,9 +213,9 @@ def install_requirements(requirements_file: Path) -> bool:
     return success
 
 
-def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_error: bool = False) -> bool:
-    """Main installation function for ACM tools."""
-    print_header("ACM Tools Installation")
+def install_framework_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_error: bool = False) -> bool:
+    """Main installation function for LCMP tools."""
+    print_header("LCMP Tools Installation")
     
     print("Configuration:")
     print(f"  • Target directory: {tools_dir}")
@@ -226,13 +226,13 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
     # If no ZIP file specified, check for default local ZIP first
     if not zip_file:
         script_dir = Path(__file__).parent if '__file__' in globals() else Path.cwd()
-        default_zip = script_dir / ACM_TOOLS_DEFAULT_ZIP
+        default_zip = script_dir / LCMP_TOOLS_DEFAULT_ZIP
         
         if default_zip.exists():
             print(f"  • Using default ZIP file: {default_zip}")
             zip_file = default_zip
         else:
-            print(f"  • Source URL: {ACM_TOOLS_URL}")
+            print(f"  • Source URL: {LCMP_TOOLS_URL}")
     else:
         print(f"  • Using ZIP file: {zip_file}")
     
@@ -253,17 +253,17 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         # Try to download ZIP file
         temp_dir_obj = tempfile.TemporaryDirectory()
         temp_path = Path(temp_dir_obj.name)
-        zip_path = temp_path / "acm-tools.zip"
+        zip_path = temp_path / "framework-tools.zip"
         
-        print_step(1, 3, "Downloading ACM tools")
-        download_success = download_file(ACM_TOOLS_URL, zip_path)
+        print_step(1, 3, "Downloading LCMP tools")
+        download_success = download_file(LCMP_TOOLS_URL, zip_path)
         
         if not download_success:
             print("\n⚠️  Download failed, checking for local ZIP file...")
             
             # Try to find ZIP file in current directory
             script_dir = Path(__file__).parent if '__file__' in globals() else Path.cwd()
-            local_zip = script_dir / ACM_TOOLS_DEFAULT_ZIP
+            local_zip = script_dir / LCMP_TOOLS_DEFAULT_ZIP
             
             if local_zip.exists():
                 print(f"✓ Found local ZIP file: {local_zip}")
@@ -272,19 +272,19 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
                 temp_dir_obj = None
             else:
                 print(f"❌ Local ZIP file not found: {local_zip}")
-                print("\n❌ Failed to download ACM tools and no local ZIP file available")
+                print("\n❌ Failed to download LCMP tools and no local ZIP file available")
                 print("\n" + "=" * 60)
                 print("⚠️  ALTERNATIVE INSTALLATION METHODS")
                 print("=" * 60)
                 print("\n1. Manual Download:")
                 print(f"   • Download the ZIP file from the repository")
-                print(f"   • Save it as: {ACM_TOOLS_DEFAULT_ZIP}")
+                print(f"   • Save it as: {LCMP_TOOLS_DEFAULT_ZIP}")
                 print(f"   • Place it in the same directory as this script")
                 print(f"   • Run this installation step again")
                 print("\n2. Use custom ZIP file location:")
-                print("   • python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools")
+                print("   • python3 install_framework_tools.py --zip-file /path/to/framework-tools.zip --tools-dir ./tools")
                 print("\n3. Skip Installation:")
-                print("   • Continue without ACM tools")
+                print("   • Continue without LCMP tools")
                 print("   • Some validation features may not be available")
                 print("\n" + "=" * 60)
                 
@@ -292,7 +292,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
                     temp_dir_obj.cleanup()
                 
                 if skip_on_error:
-                    print("\n⚠️  Skipping ACM tools installation (--skip-on-error enabled)")
+                    print("\n⚠️  Skipping LCMP tools installation (--skip-on-error enabled)")
                     return True
                 
                 return False
@@ -301,7 +301,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
                 temp_dir_obj.cleanup()
             
             if skip_on_error:
-                print("\n⚠️  Skipping ACM tools installation (--skip-on-error enabled)")
+                print("\n⚠️  Skipping LCMP tools installation (--skip-on-error enabled)")
                 return True  # Return success to continue workflow
             
             return False
@@ -310,7 +310,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         # Step 2: Extract
         step_num = 2 if zip_file else 2
         total_steps = 2 if zip_file else 3
-        print_step(step_num, total_steps, "Extracting ACM tools")
+        print_step(step_num, total_steps, "Extracting LCMP tools")
         
         # Always use a temporary directory for extraction to avoid conflicts
         if zip_file:
@@ -324,7 +324,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         extracted_dir = extract_zip(zip_path, extract_path)
         
         if not extracted_dir:
-            print("\n❌ Failed to extract ACM tools")
+            print("\n❌ Failed to extract LCMP tools")
             if temp_dir_obj:
                 temp_dir_obj.cleanup()
             if zip_file and extract_temp_dir:
@@ -332,16 +332,16 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
             return False
         
         # Move to target directory
-        target_acm_dir = tools_dir / "acm-tools"
+        target_tools_dir = tools_dir / "framework-tools"
         
         # Remove existing directory if it exists
-        if target_acm_dir.exists():
-            print(f"   Removing existing directory: {target_acm_dir}")
-            shutil.rmtree(target_acm_dir)
+        if target_tools_dir.exists():
+            print(f"   Removing existing directory: {target_tools_dir}")
+            shutil.rmtree(target_tools_dir)
         
-        print(f"   Moving to: {target_acm_dir}")
-        shutil.move(str(extracted_dir), str(target_acm_dir))
-        print("   ✅ ACM tools installed")
+        print(f"   Moving to: {target_tools_dir}")
+        shutil.move(str(extracted_dir), str(target_tools_dir))
+        print("   ✅ LCMP tools installed")
         
         # Cleanup extraction temporary directory if used
         if zip_file and extract_temp_dir:
@@ -351,11 +351,11 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         step_num = 3 if not zip_file else 3
         total_steps = 3 if not zip_file else 2
         print_step(step_num, total_steps, "Installing dependencies")
-        requirements_file = target_acm_dir / "requirements.txt"
+        requirements_file = target_tools_dir / "requirements.txt"
         
         if not install_requirements(requirements_file):
             print("\n⚠️  Dependency installation had issues")
-            print("   ACM tools are installed but may not work correctly")
+            print("   LCMP tools are installed but may not work correctly")
             print("   Please install dependencies manually:")
             print(f"   pip3 install -r {requirements_file}")
             if temp_dir_obj:
@@ -377,10 +377,10 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
     # Success
     print_header("Installation Complete!")
     
-    print("✅ ACM tools successfully installed")
+    print("✅ LCMP tools successfully installed")
     print()
     print("Installation Summary:")
-    print(f"  • Location: {target_acm_dir}")
+    print(f"  • Location: {target_tools_dir}")
     print(f"  • Dependencies: Installed")
     if zip_file:
         print(f"  • Source: Local ZIP file")
@@ -388,8 +388,8 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
         print(f"  • Source: Downloaded from AWS Code")
     print()
     print("Next Steps:")
-    print("  • Explore tools: ls", str(target_acm_dir))
-    print("  • Read documentation: cat", str(target_acm_dir / "README.md"))
+    print("  • Explore tools: ls", str(target_tools_dir))
+    print("  • Read documentation: cat", str(target_tools_dir / "README.md"))
     print()
     
     return True
@@ -398,7 +398,7 @@ def install_acm_tools(tools_dir: Path, zip_file: Optional[Path] = None, skip_on_
 def main():
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(
-        description="Install ACM tools from AWS Code repository or local ZIP file"
+        description="Install LCMP tools from AWS Code repository or local ZIP file"
     )
     parser.add_argument(
         "--tools-dir",
@@ -435,15 +435,15 @@ def main():
                 sys.exit(1)
         
         # Run installation
-        success = install_acm_tools(tools_dir, zip_file, args.skip_on_error)
+        success = install_framework_tools(tools_dir, zip_file, args.skip_on_error)
         
         if success:
             sys.exit(0)
         else:
             print("\n❌ Installation failed")
             if not args.skip_on_error:
-                print("\nTip: Place acm-tools-main.zip in the same directory as this script, or use:")
-                print("     python3 install_acm_tools.py --zip-file /path/to/acm-tools.zip --tools-dir ./tools")
+                print("\nTip: Place framework-tools-main.zip in the same directory as this script, or use:")
+                print("     python3 install_framework_tools.py --zip-file /path/to/framework-tools.zip --tools-dir ./tools")
             sys.exit(1)
             
     except KeyboardInterrupt:

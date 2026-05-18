@@ -4,7 +4,7 @@
 - **Version:** 1.3
 - **Date:** 2026-03-19
 - **Status:** Proposal
-- **Purpose:** Architecture for scaling the Agentic Code Migrator to handle large engagements (50M+ projects) through parallel pod execution, Git-based artifact management, and relative path resolution.
+- **Purpose:** Architecture for scaling the Legacy Code Migration Pipeline to handle large engagements (50M+ projects) through parallel pod execution, Git-based artifact management, and relative path resolution.
 
 ---
 
@@ -32,7 +32,7 @@
 
 ### Current Limitations
 
-The Agentic Code Migrator currently operates as a single-threaded pipeline:
+The Legacy Code Migration Pipeline currently operates as a single-threaded pipeline:
 
 - **Sequential workpackage processing**: The `WORKPACKAGE_LOOP` in the business orchestration processes one workpackage at a time through Phases 3.0 → 3.0.1 → 3.1 → 3.1.1 → 3.2 → 3.2.1 before moving to the next.
 - **Single-machine execution**: All agents, supervisors, and specialists run on one machine with absolute paths resolved by `create_project.py`.

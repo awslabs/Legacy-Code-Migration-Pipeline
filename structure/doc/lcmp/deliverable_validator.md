@@ -19,13 +19,13 @@ The iterative review process ensures deliverables pass validation before phase c
 ### Python Script
 ```bash
 # Run from project root
-python3 acm/deliverable_validator.py
+python3 lcmp/deliverable_validator.py
 
 # Run with custom project path
-python3 acm/deliverable_validator.py --project-path /path/to/project
+python3 lcmp/deliverable_validator.py --project-path /path/to/project
 
 # Quiet mode (only show warnings)
-python3 acm/deliverable_validator.py --quiet
+python3 lcmp/deliverable_validator.py --quiet
 ```
 
 ### Shell Script (Recommended)

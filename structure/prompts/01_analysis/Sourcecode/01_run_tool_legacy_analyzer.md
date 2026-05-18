@@ -8,12 +8,12 @@ Execute the legacy analyzer tool to analyze the source code and generate analysi
 
 ### Run the Analysis
 
-For detailed documentation, see: `{{PROJECT_BASE_PATH}}/tools/acm-tools/scripts/README_CONFIGURABLE_ANALYSIS.md`
+For detailed documentation, see: `{{PROJECT_BASE_PATH}}/tools/framework-tools/scripts/README_CONFIGURABLE_ANALYSIS.md`
 
 Execute the analysis script:
 
 ```bash
-cd {{PROJECT_BASE_PATH}}/tools/acm-tools
+cd {{PROJECT_BASE_PATH}}/tools/framework-tools
 bash scripts/run_configurable_analysis.sh \
   {{SOURCE_CODE}} \
   {{SOURCE_CODE_ANALYSIS_OUTPUT}} 

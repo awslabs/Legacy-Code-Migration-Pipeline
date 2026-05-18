@@ -12,8 +12,7 @@ test_orchestration/
 test_e2e_integration/
 TEST_PROTOCOL_E2E.md
 carddemo/
-structure/tools/acm-tools/
+structure/tools/framework-tools/
 proposals/
-structure/input/legacy/atx/*
 structure/output/specifications/technical/*
 

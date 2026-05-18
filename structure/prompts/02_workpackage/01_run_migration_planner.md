@@ -11,7 +11,7 @@ Execute the migration planner tool to analyze migration flows and generate workp
 Execute the migration planner script:
 
 ```bash
-cd {{PROJECT_BASE_PATH}}/tools/acm-tools
+cd {{PROJECT_BASE_PATH}}/tools/framework-tools
 bash scripts/run_migration_planner.sh \
    {{SOURCE_CODE_ANALYSIS_OUTPUT}}/flows/Business_Flows.json \
    {{WORKPACKAGE_BASE_PATH}}
@@ -57,4 +57,4 @@ If the planning fails, check the console output for error messages. Common issue
 - Output directory is not writable
 - No migration flows found in analysis
 
-For detailed documentation, see: `{{PROJECT_BASE_PATH}}/tools/acm-tools/scripts/README_MIGRATION_PLANNER.md`
+For detailed documentation, see: `{{PROJECT_BASE_PATH}}/tools/framework-tools/scripts/README_MIGRATION_PLANNER.md`
