@@ -29,7 +29,6 @@ PROVIDER="kiro_cli"
 SKIP_VALIDATION=""
 PROJECT_NAME=""
 SKIP_AGENTS=""
-LCMP_TOOLS_ZIP=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -46,10 +45,6 @@ while [[ $# -gt 0 ]]; do
             SKIP_AGENTS="true"
             shift
             ;;
-        --framework-tools-zip)
-            LCMP_TOOLS_ZIP="$2"
-            shift 2
-            ;;
         --help)
             echo "Usage: ./install_all.sh <project_name> [OPTIONS]"
             echo ""
@@ -60,14 +55,12 @@ while [[ $# -gt 0 ]]; do
             echo "  --provider PROVIDER    CLI provider (kiro_cli, q_cli, claude_code; default: kiro_cli)"
             echo "  --skip-validation      Skip prerequisite validation (not recommended)"
             echo "  --skip-agents          Skip agent installation (use if agents already installed)"
-            echo "  --framework-tools-zip PATH   Path to local LCMP tools ZIP file (optional)"
             echo "  --help                 Show this help message"
             echo ""
             echo "Examples:"
             echo "  ./install_all.sh my_migration_project"
             echo "  ./install_all.sh my_project --provider q_cli"
             echo "  ./install_all.sh my_project --skip-agents"
-            echo "  ./install_all.sh my_project --framework-tools-zip ./framework-tools-main.zip"
             echo "  ./install_all.sh my_project --provider kiro_cli --skip-validation"
             exit 0
             ;;
@@ -126,11 +119,6 @@ if [ -n "$SKIP_AGENTS" ]; then
 else
     echo "  • Agent Installation: Enabled"
 fi
-if [ -n "$LCMP_TOOLS_ZIP" ]; then
-    echo "  • LCMP Tools ZIP: $LCMP_TOOLS_ZIP"
-else
-    echo "  • LCMP Tools ZIP: Will download from repository"
-fi
 echo ""
 
 # Check if project already exists
@@ -149,7 +137,7 @@ echo ""
 
 # Step 1: Install CAO
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 1/4: Installing CAO                                  ║${NC}"
+echo -e "${BLUE}║  Step 1/3: Installing CAO                                  ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -185,7 +173,7 @@ echo ""
 
 # Step 2: Create Project
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 2/4: Creating Project                                ║${NC}"
+echo -e "${BLUE}║  Step 2/3: Creating Project                                ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -207,7 +195,7 @@ echo ""
 # Step 3: Install Agents (Optional)
 if [ -n "$SKIP_AGENTS" ]; then
     echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║  Step 3/4: Skipping Agent Installation                     ║${NC}"
+    echo -e "${BLUE}║  Step 3/3: Skipping Agent Installation                     ║${NC}"
     echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${YELLOW}⚠️  Agent installation skipped (--skip-agents flag used)${NC}"
@@ -218,7 +206,7 @@ if [ -n "$SKIP_AGENTS" ]; then
     echo ""
 else
     echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║  Step 3/4: Installing Agents                               ║${NC}"
+    echo -e "${BLUE}║  Step 3/3: Installing Agents                               ║${NC}"
     echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 
@@ -252,135 +240,6 @@ else
     echo ""
 fi
 
-# Step 4: Install LCMP Tools (Optional)
-echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 4/5: Installing LCMP Tools (Optional)                 ║${NC}"
-echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
-echo ""
-
-echo "LCMP tools provide validation and analysis utilities for your migration project."
-echo ""
-
-# Check if custom ZIP file was provided
-if [ -n "$LCMP_TOOLS_ZIP" ]; then
-    echo "Custom LCMP tools ZIP file specified: $LCMP_TOOLS_ZIP"
-    echo ""
-fi
-
-# Ask user if they want to install LCMP tools
-read -p "Do you want to install LCMP tools? (y/N): " -r
-echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "Installing LCMP tools..."
-    echo ""
-    
-    # Check if custom ZIP file was provided
-    if [ -n "$LCMP_TOOLS_ZIP" ]; then
-        # Verify the ZIP file exists
-        if [ ! -f "$LCMP_TOOLS_ZIP" ]; then
-            echo -e "${RED}✗ LCMP tools ZIP file not found: $LCMP_TOOLS_ZIP${NC}"
-            echo "Skipping LCMP tools installation"
-        else
-            echo "Using custom ZIP file: $LCMP_TOOLS_ZIP"
-            python3 install_framework_tools.py --tools-dir "$PROJECT_NAME/tools" --zip-file "$LCMP_TOOLS_ZIP"
-            
-            if [ $? -eq 0 ] && [ -d "$PROJECT_NAME/tools/framework-tools" ]; then
-                echo ""
-                echo -e "${GREEN}✓ LCMP tools installed successfully from custom ZIP${NC}"
-            else
-                echo ""
-                echo -e "${YELLOW}⚠️  LCMP tools installation from custom ZIP had issues${NC}"
-                echo "You can retry manually:"
-                echo "  cd $PROJECT_NAME"
-                echo "  python3 ../install_framework_tools.py --tools-dir ./tools --zip-file $LCMP_TOOLS_ZIP"
-            fi
-        fi
-    else
-        # Install from default URL
-        echo "Attempting to download LCMP tools from repository..."
-        echo ""
-        python3 install_framework_tools.py --tools-dir "$PROJECT_NAME/tools" --skip-on-error
-        
-        echo ""
-        # Verify installation by checking if directory actually exists
-        if [ -d "$PROJECT_NAME/tools/framework-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/framework-tools 2>/dev/null)" ]; then
-            echo -e "${GREEN}✓ LCMP tools installed successfully${NC}"
-        else
-            echo -e "${YELLOW}⚠️  LCMP tools not installed${NC}"
-            echo ""
-            echo "This is expected if:"
-            echo "  • The repository is private or requires authentication"
-            echo "  • You have SSL certificate issues"
-            echo "  • You don't have network access to the repository"
-            echo ""
-            echo "To install LCMP tools later:"
-            echo "  1. Download framework-tools-main.zip manually from the repository"
-            echo "  2. Run: cd $PROJECT_NAME"
-            echo "  3. Run: python3 ../install_framework_tools.py --tools-dir ./tools --zip-file /path/to/framework-tools-main.zip"
-            echo ""
-            echo "  Or specify the ZIP file location:"
-            echo "  python3 ../install_framework_tools.py --tools-dir ./tools --zip-file /path/to/framework-tools-main.zip"
-        fi
-    fi
-else
-    echo -e "${YELLOW}⚠️  LCMP tools installation skipped${NC}"
-    echo ""
-    echo "To install LCMP tools later:"
-    echo "  1. Download framework-tools-main.zip and place it in the installation directory"
-    echo "  2. Run: cd $PROJECT_NAME"
-    echo "  3. Run: python3 ../install_framework_tools.py --tools-dir ./tools"
-fi
-
-echo ""
-
-# Step 5: Install Python Dependencies from Subprojects
-echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Step 5/5: Installing Python Dependencies                  ║${NC}"
-echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
-echo ""
-
-echo "Searching for requirements.txt files in project subfolders..."
-echo ""
-
-# Find all requirements.txt files in the project directory
-REQUIREMENTS_FILES=$(find "$PROJECT_NAME" -type f -name "requirements.txt" 2>/dev/null)
-
-if [ -z "$REQUIREMENTS_FILES" ]; then
-    echo -e "${YELLOW}⊘ No requirements.txt files found in project${NC}"
-    echo ""
-else
-    # Count the number of requirements files
-    REQUIREMENTS_COUNT=$(echo "$REQUIREMENTS_FILES" | wc -l | tr -d ' ')
-    echo "Found $REQUIREMENTS_COUNT requirements.txt file(s):"
-    echo ""
-    
-    # Display all found requirements files
-    echo "$REQUIREMENTS_FILES" | while read -r req_file; do
-        echo "  📄 $req_file"
-    done
-    echo ""
-    
-    echo "Installing dependencies from all requirements.txt files..."
-    echo ""
-    
-    # Install each requirements file
-    echo "$REQUIREMENTS_FILES" | while read -r req_file; do
-        echo -e "${BLUE}Installing from: $req_file${NC}"
-        
-        if pip install -r "$req_file"; then
-            echo -e "${GREEN}✓ Successfully installed dependencies from $req_file${NC}"
-            echo ""
-        else
-            echo -e "${YELLOW}⚠️  Some dependencies from $req_file may have failed${NC}"
-            echo ""
-        fi
-    done
-    
-    echo -e "${GREEN}✓ Python dependencies installation complete${NC}"
-    echo ""
-fi
-
 echo ""
 
 # Final Summary
@@ -396,11 +255,6 @@ if [ -n "$SKIP_AGENTS" ]; then
     echo "  ⊘ Agents installation skipped"
 else
     echo "  ✓ Agents installed with provider: $PROVIDER"
-fi
-if [ -d "$PROJECT_NAME/tools/framework-tools" ] && [ "$(ls -A $PROJECT_NAME/tools/framework-tools 2>/dev/null)" ]; then
-    echo "  ✓ LCMP tools installed"
-else
-    echo "  ⊘ LCMP tools not installed"
 fi
 echo ""
 

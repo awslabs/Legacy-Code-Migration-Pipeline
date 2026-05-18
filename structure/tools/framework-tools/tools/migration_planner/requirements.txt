@@ -1,0 +1,100 @@
+# Migration Planner Tool - Requirements (Placeholder)
+# ==================================================
+#
+# This file contains placeholder requirements for the Migration Planner tool.
+# The tool is currently in planning phase. These requirements represent the
+# planned dependencies for future implementation.
+
+# Current Dependencies (Minimal - Placeholder Phase)
+# -------------------------------------------------
+# No external dependencies required for placeholder implementation
+# All functionality is currently placeholder/mock
+
+# Planned Dependencies (Future Implementation)
+# -------------------------------------------
+
+# AI/LLM Integration (Planned)
+# ---------------------------
+# openai>=1.0.0              # OpenAI GPT integration
+# anthropic>=0.8.0           # Anthropic Claude integration  
+# langchain>=0.1.0           # LLM framework and utilities
+# transformers>=4.30.0       # Hugging Face transformers
+# torch>=2.0.0               # PyTorch for local models (optional)
+
+# Code Analysis and Parsing (Planned)
+# -----------------------------------
+# tree-sitter>=0.20.0        # Syntax tree parsing for multiple languages
+# pygments>=2.15.0           # Syntax highlighting and tokenization
+# ast>=3.8                   # Python AST analysis (built-in)
+# libcst>=1.0.0              # Concrete syntax tree for Python
+
+# Code Generation and Formatting (Planned)
+# ----------------------------------------
+# jinja2>=3.1.0              # Template engine for code generation
+# black>=23.0.0              # Python code formatting
+# autopep8>=2.0.0            # Python code style formatting
+# isort>=5.12.0              # Import sorting
+
+# Data Analysis and Planning (Planned)
+# ------------------------------------
+# pandas>=1.5.0              # Data analysis for migration planning
+# numpy>=1.21.0              # Numerical computing
+# networkx>=3.0              # Graph analysis for dependencies
+# matplotlib>=3.5.0          # Visualization for planning
+# seaborn>=0.11.0            # Statistical visualization
+
+# Configuration and Utilities (Planned)
+# -------------------------------------
+# pydantic>=2.0.0            # Data validation and settings
+# click>=8.1.0               # CLI framework (alternative to argparse)
+# rich>=13.0.0               # Rich text and beautiful formatting
+# typer>=0.9.0               # Modern CLI framework
+
+# Testing Framework (Planned)
+# ---------------------------
+# pytest>=7.4.0             # Test runner
+# pytest-cov>=4.1.0         # Coverage reporting
+# pytest-mock>=3.11.0       # Mocking utilities
+# hypothesis>=6.0.0          # Property-based testing
+
+# Development Tools (Planned)
+# ---------------------------
+# mypy>=1.5.0               # Static type checking
+# flake8>=6.0.0             # Linting
+# pre-commit>=3.0.0         # Git hooks for code quality
+
+# Integration Dependencies (Planned)
+# ---------------------------------
+# These will be inherited from other tools in the toolkit:
+# - Database adapters from shared infrastructure
+# - Configuration management from shared components
+# - SMF analysis integration from SMF Analyzer tool
+# - Static analysis integration from Legacy Analyzer tool
+
+# Installation Notes (Future)
+# ---------------------------
+# For AI features:
+#   pip install -r requirements.txt[ai]
+#
+# For local model support:
+#   pip install -r requirements.txt[local-models]
+#
+# For development:
+#   pip install -r requirements.txt[dev]
+#
+# Minimal installation (placeholder only):
+#   pip install -r requirements.txt
+
+# Environment Variables (Future)
+# -----------------------------
+# OPENAI_API_KEY - OpenAI API key for GPT integration
+# ANTHROPIC_API_KEY - Anthropic API key for Claude integration
+# HUGGINGFACE_TOKEN - Hugging Face token for model access
+# MIGRATION_PLANNER_CONFIG - Path to configuration file
+
+# Notes
+# -----
+# 1. This tool is currently a placeholder with no external dependencies
+# 2. Future implementation will require AI/LLM integration capabilities
+# 3. Dependencies will be added incrementally as features are implemented
+# 4. Integration with existing toolkit tools will reuse shared dependencies

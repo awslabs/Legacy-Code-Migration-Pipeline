@@ -1,0 +1,90 @@
+# Legacy Analyzer Tool Requirements
+# ================================
+# 
+# This file contains dependencies specific to the Legacy Analyzer tool for
+# mainframe static code analysis, dependency tracking, and migration planning.
+# The tool supports Python 3.8+ and analyzes COBOL, PL/I, JCL, REXX, Natural,
+# RPG, and Assembler source code.
+
+# Configuration Management
+# ------------------------
+PyYAML>=6.0               # YAML configuration file parsing for analysis settings
+
+# Testing Framework
+# -----------------
+pytest>=7.4.0             # Test runner for unit and integration tests
+pytest-cov>=4.1.0         # Coverage reporting for test quality
+pytest-mock>=3.11.0       # Mocking utilities for testing parsers
+hypothesis>=6.0.0         # Property-based testing for parser validation
+
+# Development Tools (Optional - for code quality)
+# -----------------------------------------------
+black>=23.0.0             # Code formatting (line length: 100)
+flake8>=6.0.0             # Linting and style checking
+mypy>=1.5.0               # Static type checking
+
+# Build and Distribution Tools (Optional - for packaging)
+# ------------------------------------------------------
+setuptools>=61.0          # Package building
+wheel>=0.40.0             # Distribution format
+
+# Runtime Dependencies (Built-in to Python)
+# -----------------------------------------
+# The following are part of Python standard library and don't need installation:
+# - sqlite3 (database operations)
+# - json (JSON parsing and generation)
+# - csv (CSV file handling)
+# - pathlib (path operations)
+# - datetime (date/time handling)
+# - subprocess (process execution)
+# - argparse (command-line argument parsing)
+# - logging (logging functionality)
+# - typing (type hints)
+# - dataclasses (data classes)
+# - enum (enumerations)
+# - abc (abstract base classes)
+# - collections (specialized container datatypes)
+# - itertools (iterator functions)
+# - functools (higher-order functions)
+# - re (regular expressions)
+# - os (operating system interface)
+# - sys (system-specific parameters)
+# - time (time-related functions)
+# - math (mathematical functions)
+# - tempfile (temporary files)
+# - shutil (file operations)
+# - unittest (unit testing framework)
+
+# Shared Dependencies
+# ------------------
+# Note: This tool depends on shared components from the migration toolkit:
+# - shared/database/ (database adapters and schemas)
+# - shared/utils/ (common utilities)
+# - shared/config/ (shared configuration management)
+# 
+# These dependencies are managed at the toolkit level and don't require
+# separate installation when the tool is used within the toolkit structure.
+
+# Language-Specific Analysis
+# -------------------------
+# The legacy analyzer includes parsers for:
+# - COBOL (dependency extraction, complexity analysis)
+# - PL/I (include analysis, procedure calls)
+# - JCL (job dependencies, dataset references)
+# - REXX (program calls, dataset access)
+# - Natural (using analysis, program calls)
+# - RPG (program calls, file access)
+# - Assembler (macro calls, program references)
+#
+# All parsers use only Python standard library features for maximum compatibility.
+
+# Analysis Capabilities
+# --------------------
+# - Static code analysis across multiple mainframe languages
+# - Dependency extraction and validation
+# - Complexity metrics (LOC, cyclomatic complexity, dependency counts)
+# - Flow analysis (entry points, call graphs, circular dependencies)
+# - Missing code detection
+# - CICS metadata integration
+# - Migration package planning
+# - Comprehensive reporting (text, JSON, CSV, HTML, markdown)

@@ -1,0 +1,16 @@
+{
+  "legacy_root": "input/legacy/legacy_code",
+  "jcl_extensions": [".jcl", ".JCL", ".proc", ".PROC", ".job"],
+  "cbl_extensions": [".cbl", ".CBL", ".cob", ".COB"],
+  "cpy_extensions": [".cpy", ".CPY"],
+  "ctl_extensions": [".ctl", ".CTL"],
+  "pli_extensions": [".inc", ".INC"],
+  "copybook_mappings": {
+    "ACCTDATA": "CVACT01Y",
+    "CUSTDATA": "CVCUS01Y"
+  },
+  "verbose": true,
+  "exclude_system_files": true,
+  "exclude_backups": true,
+  "exclude_duplicates": true
+}

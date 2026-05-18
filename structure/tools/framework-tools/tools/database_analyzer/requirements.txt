@@ -1,0 +1,4 @@
+# Database Analyzer Tool Requirements
+
+# No external dependencies required - uses Python standard library only
+# The tool is designed to be lightweight and self-contained

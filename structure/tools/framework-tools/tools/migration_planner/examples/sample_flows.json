@@ -1,0 +1,219 @@
+{
+  "flows": [
+    {
+      "flowId": "FLOW001",
+      "name": "Customer Account Management",
+      "scope": {
+        "programs": [
+          {
+            "name": "CBACT01C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBACT02C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBACT03C",
+            "type": "COBOL",
+            "isUtility": false
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 3,
+        "compositeScore": 8.5
+      },
+      "dataOperations": {
+        "databases": ["CARDDB", "CUSTDB"]
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": ["FLOW002", "FLOW003"]
+      }
+    },
+    {
+      "flowId": "FLOW002",
+      "name": "Transaction Processing",
+      "scope": {
+        "programs": [
+          {
+            "name": "CBTRN01C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBTRN02C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBTRN03C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBTRN04C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBTRN05C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "UTIL001",
+            "type": "COBOL",
+            "isUtility": true
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 6,
+        "compositeScore": 15.2
+      },
+      "dataOperations": {
+        "databases": ["TRANSDB", "CARDDB"]
+      },
+      "dependencies": {
+        "requiredFlows": ["FLOW001"],
+        "dependentFlows": ["FLOW004"]
+      }
+    },
+    {
+      "flowId": "FLOW003",
+      "name": "Statement Generation",
+      "scope": {
+        "programs": [
+          {
+            "name": "CBSTM01A",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBSTM02A",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBSTM03A",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "UTIL001",
+            "type": "COBOL",
+            "isUtility": true
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 4,
+        "compositeScore": 10.0
+      },
+      "dataOperations": {
+        "databases": ["CARDDB", "REPORTDB"]
+      },
+      "dependencies": {
+        "requiredFlows": ["FLOW001"],
+        "dependentFlows": []
+      }
+    },
+    {
+      "flowId": "FLOW004",
+      "name": "Fraud Detection",
+      "scope": {
+        "programs": [
+          {
+            "name": "CBFRD01C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBFRD02C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBFRD03C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBFRD04C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBFRD05C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBFRD06C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBFRD07C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "UTIL001",
+            "type": "COBOL",
+            "isUtility": true
+          },
+          {
+            "name": "UTIL002",
+            "type": "COBOL",
+            "isUtility": true
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 9,
+        "compositeScore": 22.5
+      },
+      "dataOperations": {
+        "databases": ["TRANSDB", "FRAUDDB"]
+      },
+      "dependencies": {
+        "requiredFlows": ["FLOW002"],
+        "dependentFlows": []
+      }
+    },
+    {
+      "flowId": "FLOW005",
+      "name": "Reporting Dashboard",
+      "scope": {
+        "programs": [
+          {
+            "name": "CBRPT01C",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "CBRPT02C",
+            "type": "COBOL",
+            "isUtility": false
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "compositeScore": 4.0
+      },
+      "dataOperations": {
+        "databases": []
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": []
+      }
+    }
+  ]
+}

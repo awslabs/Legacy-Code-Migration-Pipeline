@@ -83,53 +83,11 @@ python lcmp/install_agents.py
 python lcmp/install_agents.py --provider q_cli
 ```
 
-### Update LCMP Tools
-```bash
-# From project directory
-python ../install_framework_tools.py --tools-dir ./tools
-
-# Or from repository root
-python install_framework_tools.py --tools-dir my_project/tools
-```
-
 ### Update Prompts in Existing Project
 ```bash
 # After modifying prompts in structure/prompts
 python update_prompts.py /path/to/my_project
 ```
-
-## LCMP Tools Installation
-
-LCMP tools are automatically installed during project creation. If you need to install manually:
-
-### Standard Installation
-```bash
-python3 install_framework_tools.py
-```
-
-### Private Repository (Use Local ZIP)
-```bash
-# If repository is private, download ZIP manually then:
-python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
-```
-
-### Common Options
-```bash
-# Custom directory
-python3 install_framework_tools.py --tools-dir /custom/path
-
-# Skip on error (automation)
-python3 install_framework_tools.py --skip-on-error
-
-# Get help
-python3 install_framework_tools.py --help
-```
-
-### If Download Fails
-The repository may be private. Solutions:
-1. Download ZIP manually and use `--zip-file` option
-2. Request repository access from owner
-3. Use `--skip-on-error` to continue without LCMP tools
 
 ## Need Help?
 

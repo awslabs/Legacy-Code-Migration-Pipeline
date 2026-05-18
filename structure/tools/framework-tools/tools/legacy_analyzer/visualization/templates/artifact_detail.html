@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artifact Detail - {{ artifact_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .complexity-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .complexity-low { background-color: #2ecc71; color: white; }
+        .complexity-medium { background-color: #f39c12; color: white; }
+        .complexity-high { background-color: #e67e22; color: white; }
+        .complexity-very-high { background-color: #e74c3c; color: white; }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .list-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .list-section ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .list-section li {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: white;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+        .list-section li:hover {
+            background-color: #e8f4f8;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge-entry { background-color: #2ecc71; color: white; }
+        .badge-leaf { background-color: #95a5a6; color: white; }
+        .badge-god { background-color: #e74c3c; color: white; }
+        .timestamp {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .package-info {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ artifact_name }}</h1>
+        <p class="timestamp">Generated: {{ timestamp }}</p>
+        
+        {% if complexity_metrics %}
+        <h2>Complexity Metrics</h2>
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-label">Language</div>
+                <div class="metric-value">{{ complexity_metrics.language }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Lines of Code</div>
+                <div class="metric-value">{{ complexity_metrics.lines_of_code }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Cyclomatic Complexity</div>
+                <div class="metric-value">{{ complexity_metrics.cyclomatic_complexity }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Dependencies In</div>
+                <div class="metric-value">{{ complexity_metrics.dependency_count_in }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Dependencies Out</div>
+                <div class="metric-value">{{ complexity_metrics.dependency_count_out }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Composite Score</div>
+                <div class="metric-value">{{ "%.2f"|format(complexity_metrics.composite_score) }}</div>
+            </div>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <strong>Complexity Tier:</strong>
+            <span class="complexity-badge complexity-{{ complexity_metrics.complexity_tier.lower().replace('_', '-') }}">
+                {{ complexity_metrics.complexity_tier }}
+            </span>
+        </div>
+        
+        {% if complexity_metrics.is_god_program %}
+        <div class="warning-box">
+            <strong>⚠️ Warning:</strong> This is a "god program" with excessive complexity or dependencies!
+        </div>
+        {% endif %}
+        {% endif %}
+        
+        <h2>Dependencies</h2>
+        
+        {% if callers %}
+        <div class="list-section">
+            <h3>Called By ({{ callers|length }})
+                {% if not callers %}
+                <span class="badge badge-entry">ENTRY POINT</span>
+                {% endif %}
+            </h3>
+            <ul>
+                {% for caller in callers[:20] %}
+                <li>{{ caller }}</li>
+                {% endfor %}
+                {% if callers|length > 20 %}
+                <li><em>... and {{ callers|length - 20 }} more</em></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="list-section">
+            <h3>Called By <span class="badge badge-entry">ENTRY POINT</span></h3>
+            <p>This program is not called by any other program (entry point).</p>
+        </div>
+        {% endif %}
+        
+        {% if callees %}
+        <div class="list-section">
+            <h3>Calls ({{ callees|length }})</h3>
+            <ul>
+                {% for callee in callees[:20] %}
+                <li>{{ callee }}</li>
+                {% endfor %}
+                {% if callees|length > 20 %}
+                <li><em>... and {{ callees|length - 20 }} more</em></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="list-section">
+            <h3>Calls <span class="badge badge-leaf">LEAF PROGRAM</span></h3>
+            <p>This program does not call any other programs (leaf program).</p>
+        </div>
+        {% endif %}
+        
+        {% if copybooks %}
+        <div class="list-section">
+            <h3>Copybooks ({{ copybooks|length }})</h3>
+            <ul>
+                {% for copybook in copybooks[:20] %}
+                <li>{{ copybook }}</li>
+                {% endfor %}
+                {% if copybooks|length > 20 %}
+                <li><em>... and {{ copybooks|length - 20 }} more</em></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        {% if datasets %}
+        <div class="list-section">
+            <h3>Datasets ({{ datasets|length }})</h3>
+            <ul>
+                {% for dataset in datasets[:20] %}
+                <li>{{ dataset }}</li>
+                {% endfor %}
+                {% if datasets|length > 20 %}
+                <li><em>... and {{ datasets|length - 20 }} more</em></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        {% if flow %}
+        <h2>Program Flow</h2>
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-label">Maximum Depth</div>
+                <div class="metric-value">{{ flow.depth }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Programs</div>
+                <div class="metric-value">{{ flow.programs|length }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Copybooks</div>
+                <div class="metric-value">{{ flow.total_copybooks }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Datasets</div>
+                <div class="metric-value">{{ flow.total_datasets }}</div>
+            </div>
+            {% if flow.circular_dependencies %}
+            <div class="metric-card">
+                <div class="metric-label">Circular Dependencies</div>
+                <div class="metric-value">{{ flow.circular_dependencies|length }}</div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if package_assignment %}
+        <h2>Migration Package</h2>
+        <div class="package-info">
+            <strong>Assigned To:</strong> {{ package_assignment }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "flows": [
+    {
+      "flowId": "FLOW001",
+      "name": "Simple Batch Job",
+      "scope": {
+        "programs": [
+          {
+            "name": "BATCH01",
+            "type": "COBOL",
+            "isUtility": false
+          },
+          {
+            "name": "BATCH02",
+            "type": "COBOL",
+            "isUtility": false
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 2,
+        "compositeScore": 5.0
+      },
+      "dataOperations": {
+        "databases": ["TESTDB"]
+      },
+      "dependencies": {
+        "requiredFlows": [],
+        "dependentFlows": ["FLOW002"]
+      }
+    },
+    {
+      "flowId": "FLOW002",
+      "name": "Report Generation",
+      "scope": {
+        "programs": [
+          {
+            "name": "REPORT01",
+            "type": "COBOL",
+            "isUtility": false
+          }
+        ]
+      },
+      "complexity": {
+        "totalPrograms": 1,
+        "compositeScore": 2.0
+      },
+      "dataOperations": {
+        "databases": []
+      },
+      "dependencies": {
+        "requiredFlows": ["FLOW001"],
+        "dependentFlows": []
+      }
+    }
+  ]
+}

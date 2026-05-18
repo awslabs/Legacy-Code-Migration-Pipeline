@@ -1,0 +1,117 @@
+# SMF Migration Toolkit - Top-Level Requirements
+# ==============================================
+# 
+# This file contains the consolidated dependencies for the SMF Migration Toolkit.
+# The toolkit is organized as a tools-based monorepo with individual tools for
+# SMF analysis, legacy code analysis, and migration planning.
+#
+# For tool-specific dependencies, see:
+# - tools/smf-analyzer/requirements.txt
+# - tools/legacy-analyzer/requirements.txt  
+# - tools/migration-planner/requirements.txt
+
+# Core Dependencies (Common across all tools)
+# -------------------------------------------
+requests>=2.31.0          # HTTP client for documentation fetching
+beautifulsoup4>=4.12.0    # HTML parsing for smf_doc_parser
+lxml>=4.9.0               # XML/HTML processing backend for BeautifulSoup
+markdownify>=0.11.0       # HTML to Markdown conversion
+html2text>=2020.1.16     # Alternative HTML conversion utility
+PyYAML>=6.0               # YAML configuration file parsing
+
+# Testing Framework (Shared)
+# --------------------------
+pytest>=7.4.0             # Test runner
+pytest-cov>=4.1.0         # Coverage reporting
+pytest-mock>=3.11.0       # Mocking utilities for tests
+hypothesis>=6.0.0         # Property-based testing for validation
+responses>=0.23.0         # HTTP mocking for testing web scraping
+
+# Development Tools (Optional - for code quality)
+# -----------------------------------------------
+black>=23.0.0             # Code formatting (line length: 100)
+flake8>=6.0.0             # Linting and style checking
+mypy>=1.5.0               # Static type checking
+
+# Build and Distribution Tools
+# ---------------------------
+setuptools>=61.0          # Package building
+wheel>=0.40.0             # Distribution format
+
+# Tool-Specific Dependencies
+# -------------------------
+# The following dependencies are included from individual tool requirements:
+
+# From tools/smf-analyzer/requirements.txt:
+# - All SMF parsing, loading, and querying dependencies
+# - Database adapters and schema management
+# - SMF documentation parsing utilities
+
+# From tools/legacy-analyzer/requirements.txt:
+# - Static code analysis dependencies
+# - Multi-language parser support (COBOL, JCL, PL/I, etc.)
+# - Complexity analysis and flow visualization
+# - Migration package planning utilities
+
+# From tools/migration-planner/requirements.txt:
+# - Future AI/LLM integration dependencies
+# - Migration planning and code generation tools
+# - Rules extraction and transformation utilities
+
+# Database Support
+# ---------------
+# Note: SQLite is built into Python standard library (no external dependency)
+# PostgreSQL support is planned but not yet implemented
+# DuckDB support is planned for analytics
+
+# Optional Analytics Dependencies
+# ------------------------------
+# These are not required but can enhance analysis capabilities:
+# pandas>=1.5.0           # Data analysis (mentioned in examples)
+# numpy>=1.21.0           # Numerical computing
+# matplotlib>=3.5.0       # Plotting and visualization
+# seaborn>=0.11.0         # Statistical data visualization
+
+# Installation Notes
+# -----------------
+# For minimal installation (core functionality only):
+#   pip install -r requirements-minimal.txt
+#
+# For full installation (all tools and features):
+#   pip install -r requirements.txt
+#
+# For development (includes testing and code quality tools):
+#   pip install -r requirements-dev.txt
+#
+# For individual tool installation:
+#   pip install -r tools/smf-analyzer/requirements.txt
+#   pip install -r tools/legacy-analyzer/requirements.txt
+
+# Runtime Dependencies (Built-in to Python)
+# -----------------------------------------
+# The following are part of Python standard library and don't need installation:
+# - sqlite3 (database operations)
+# - json (JSON parsing and generation)
+# - csv (CSV file handling)
+# - pathlib (path operations)
+# - datetime (date/time handling)
+# - subprocess (process execution)
+# - argparse (command-line argument parsing)
+# - logging (logging functionality)
+# - typing (type hints)
+# - dataclasses (data classes)
+# - enum (enumerations)
+# - abc (abstract base classes)
+# - collections (specialized container datatypes)
+# - itertools (iterator functions)
+# - functools (higher-order functions)
+# - re (regular expressions)
+# - os (operating system interface)
+# - sys (system-specific parameters)
+# - time (time-related functions)
+# - math (mathematical functions)
+# - struct (binary data handling)
+# - io (I/O operations)
+# - tempfile (temporary files)
+# - shutil (file operations)
+# - unittest (unit testing framework)

@@ -210,9 +210,9 @@ project_name/
 ```
 
 **Note**: 
-- LCMP tools are automatically downloaded and installed during project creation
+- LCMP tools are included in the project source tree at `structure/tools/framework-tools/`
+- They are automatically copied when creating a new project with `create_project.py`
 - For detailed LCMP documentation, see [structure/doc/lcmp/lcmp.md](structure/doc/lcmp/lcmp.md)
-- To update LCMP tools: `python install_framework_tools.py --tools-dir ./tools`
 
 ## Usage
 
@@ -223,7 +223,7 @@ For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.m
 **Quick Start Steps:**
 
 1. **Install CAO**: Run `install_cao.py` to set up agent orchestration (one-time setup)
-2. **Initialize Project**: Use `create_project.py` to create your migration project (LCMP tools auto-installed)
+2. **Initialize Project**: Use `create_project.py` to create your migration project
 3. **Install Agents**: Run `lcmp/install_agents.py` from your project directory
 4. **Configure Paths**: Review `config/paths.cfg` (auto-configured)
 5. **Add Legacy Code**: Place source code in `input/legacy/`
@@ -231,7 +231,6 @@ For a comprehensive step-by-step guide, see the **[User Guide](docs/USER_GUIDE.m
 7. **Monitor Progress**: Check task files and deliverables
 8. **Validate Deliverables**: Use `./validate_deliverables.sh` to ensure quality
 9. **Update Agents**: Modify agent files and run `lcmp/install_agents.py` to reinstall
-10. **Update LCMP Tools**: Run `python ../install_framework_tools.py --tools-dir ./tools` when needed
 
 ### Understanding the Workflow
 
@@ -246,40 +245,6 @@ The framework uses a **supervisor-based orchestration model**:
 7. **Phase completes** only after review approval
 
 For detailed workflow information, see the [Orchestration Architecture Documentation](structure/doc/orchestration_architecture.md).
-
-### LCMP Tools Installation
-
-LCMP tools are automatically installed during project creation. For manual installation or updates:
-
-**Standard Installation:**
-```bash
-python3 install_framework_tools.py
-```
-
-**Private Repository (Use Local ZIP):**
-```bash
-# If repository is private, download ZIP manually then:
-python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
-```
-
-**Update Existing Project:**
-```bash
-cd my_project
-python3 ../install_framework_tools.py --tools-dir ./tools
-```
-
-**Available Options:**
-- `--tools-dir PATH` - Target directory (default: ./tools)
-- `--zip-file PATH` - Use local ZIP file instead of downloading
-- `--skip-on-error` - Continue on failure (for automation)
-
-**If Download Fails:**
-The repository may be private. Solutions:
-1. Download ZIP manually and use `--zip-file` option
-2. Request repository access from owner
-3. Use `--skip-on-error` to continue without LCMP tools
-
-For complete details, see [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) (install_framework_tools.py section) or [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) (LCMP Tools Installation Reference section).
 
 ### Using CAO Agents
 

@@ -72,66 +72,16 @@ git --version
 
 ## LCMP Tools Issues
 
-### LCMP Tools Download Fails
-
-**Problem**: `install_framework_tools.py` fails to download from AWS Code
-
-**Solution**:
-```bash
-# Check internet connection
-ping code.aws.dev
-
-# Check if behind proxy
-echo $HTTP_PROXY
-echo $HTTPS_PROXY
-
-# Set proxy if needed
-export HTTP_PROXY=http://proxy.example.com:8080
-export HTTPS_PROXY=http://proxy.example.com:8080
-
-# Retry installation
-python3 install_framework_tools.py --tools-dir ./tools
-```
-
-**Alternative**: Download manually
-```bash
-# Download the ZIP file manually from browser
-# URL: https://code.aws.dev/personal_projects/alias_k/kerimman/framework-tools/-/archive/main/framework-tools-main.zip
-
-# Extract to tools directory
-unzip framework-tools-main.zip -d tools/
-mv tools/framework-tools-main tools/framework-tools
-
-# Install dependencies
-cd tools/framework-tools
-pip3 install -r requirements.txt
-```
-
-### LCMP Tools Extraction Fails
-
-**Problem**: ZIP extraction fails or corrupted archive
-
-**Solution**:
-```bash
-# Remove corrupted download
-rm -rf /tmp/framework-tools*
-
-# Retry download
-python3 install_framework_tools.py --tools-dir ./tools
-
-# If still fails, download manually (see above)
-```
-
 ### LCMP Tools Dependencies Fail to Install
 
-**Problem**: `pip install -r requirements.txt` fails
+**Problem**: `pip install -r requirements.txt` fails for the framework tools
 
 **Solution**:
 ```bash
 # Ensure pip is up to date
 pip3 install --upgrade pip
 
-# Try installing dependencies manually
+# Install dependencies from the tools directory
 cd tools/framework-tools
 pip3 install -r requirements.txt --verbose
 
@@ -140,87 +90,6 @@ pip3 install <package-name>
 
 # Check Python version (requires 3.7+)
 python3 --version
-```
-
-### Permission Denied for Tools Directory
-
-**Problem**: Cannot write to tools directory
-
-**Solution**:
-```bash
-# Check directory permissions
-ls -la ./tools
-
-# Fix permissions
-chmod 755 ./tools
-
-# Or install to different location
-python3 install_framework_tools.py --tools-dir ~/my-tools
-
-# Or use sudo (not recommended)
-sudo python3 install_framework_tools.py --tools-dir ./tools
-```
-
-### LCMP Tools Already Exist
-
-**Problem**: Tools directory already exists
-
-**Solution**:
-```bash
-# The script automatically removes old version
-# But if you want to backup first:
-mv tools/framework-tools tools/framework-tools.backup
-
-# Then reinstall
-python3 install_framework_tools.py --tools-dir ./tools
-
-# Or force reinstall (script does this automatically)
-rm -rf tools/framework-tools
-python3 install_framework_tools.py --tools-dir ./tools
-```
-
-### Using Local ZIP File for Private Repository
-
-**Problem**: Repository is private and you can't download directly
-
-**Solution**:
-```bash
-# Step 1: Get the ZIP file
-# - Request access from repository owner
-# - Or receive the ZIP file through other means
-# - Or download manually if you have access
-
-# Step 2: Install from local ZIP
-python3 install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
-
-# Step 3: Verify installation
-ls -la tools/framework-tools/
-```
-
-**For Project Creation**:
-```bash
-# Create project first (will skip LCMP tools if download fails)
-python3 create_project.py my_project
-
-# Then install LCMP tools manually with local ZIP
-cd my_project
-python3 ../install_framework_tools.py --zip-file /path/to/framework-tools-main.zip --tools-dir ./tools
-```
-
-### Network Timeout During Download
-
-**Problem**: Download times out or is very slow
-
-**Solution**:
-```bash
-# Increase timeout (modify script if needed)
-# Or download manually and extract
-
-# Check network speed
-curl -o /dev/null https://code.aws.dev/
-
-# Try different network connection
-# Or download during off-peak hours
 ```
 
 ## Kiro CLI Issues
