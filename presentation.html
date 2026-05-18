@@ -380,20 +380,11 @@ sequenceDiagram
                     <p class="highlight">5 Sequential Phases</p>
                     <div class="mermaid">
 graph LR
-    P0["Phase 0
-    Preparation"] --> P1["Phase 1
-    Analysis"]
-    P1 --> P2["Phase 2
-    Workpackage
-    Planning"]
-    P2 --> P3["Phase 3
-    Business
-    Extraction"]
-    P3 --> P4["Phase 4
-    Code
-    Generation"]
-    P4 --> P5["Phase 5
-    Deployment"]
+    P0["Phase 0 - Preparation"] --> P1["Phase 1 - Analysis"]
+    P1 --> P2["Phase 2 - Workpackage Planning"]
+    P2 --> P3["Phase 3 - Business Extraction"]
+    P3 --> P4["Phase 4 - Code Generation"]
+    P4 --> P5["Phase 5 - Deployment"]
     
     style P0 fill:#95e1d3
     style P1 fill:#4ecdc4
@@ -720,8 +711,8 @@ graph TB
     QE --> DASH["Dashboard"]
     QE --> AI["AI Agents"]
     
-    LA --> |"Code Analysis"| INV["Inventory Data"]
-    LA --> |"Dependencies"| DEP["Dependency Graph"]
+    LA -->|Code Analysis| INV["Inventory Data"]
+    LA -->|Dependencies| DEP["Dependency Graph"]
     
     INV --> DB
     DEP --> DB
@@ -908,29 +899,19 @@ q chat --agent migration_supervisor</code></pre>
                     <h2>Step 5: Execution Flow</h2>
                     <div class="mermaid">
 graph TB
-    Start["Migration Supervisor
-    Starts"] --> Phase1["Delegate Phase 1
-    to Analysis Team"]
-    Phase1 --> Task1["Team Supervisor
-    Creates Task Files"]
-    Task1 --> Spec1["Specialists
-    Execute Work"]
-    Spec1 --> Rev1["Reviewers
-    Validate"]
+    Start["Migration Supervisor Starts"] --> Phase1["Delegate Phase 1 to Analysis Team"]
+    Phase1 --> Task1["Team Supervisor Creates Task Files"]
+    Task1 --> Spec1["Specialists Execute Work"]
+    Spec1 --> Rev1["Reviewers Validate"]
     Rev1 --> Check1{"Approved?"}
     Check1 -->|No| Spec1
-    Check1 -->|Yes| Phase2["Delegate Phase 2
-    to Planning Team"]
-    Phase2 --> Task2["Team Supervisor
-    Creates Task Files"]
-    Task2 --> Spec2["Specialists
-    Execute Work"]
-    Spec2 --> Rev2["Reviewers
-    Validate"]
+    Check1 -->|Yes| Phase2["Delegate Phase 2 to Planning Team"]
+    Phase2 --> Task2["Team Supervisor Creates Task Files"]
+    Task2 --> Spec2["Specialists Execute Work"]
+    Spec2 --> Rev2["Reviewers Validate"]
     Rev2 --> Check2{"Approved?"}
     Check2 -->|No| Spec2
-    Check2 -->|Yes| Continue["Continue to
-    Next Phases..."]
+    Check2 -->|Yes| Continue["Continue to Next Phases..."]
     
     style Start fill:#ff6b6b
     style Phase1 fill:#4ecdc4
@@ -981,13 +962,13 @@ flowchart TD
     B --> C[Prepare Source Files]
     C --> D[Configure Project]
     D --> E[Launch Migration Supervisor]
-    E --> F[Phase 1: Analysis]
-    F --> G[Phase 2: Planning]
-    G --> H[Phase 3: Business Extraction]
-    H --> I[Phase 4: Code Generation]
-    I --> J[Phase 5: Deployment]
+    E --> F["Phase 1: Analysis"]
+    F --> G["Phase 2: Planning"]
+    G --> H["Phase 3: Business Extraction"]
+    H --> I["Phase 4: Code Generation"]
+    I --> J["Phase 5: Deployment"]
     J --> K[Validate Deliverables]
-    K --> L{Quality OK?}
+    K --> L{"Quality OK?"}
     L -->|No| M[Remediate Issues]
     M --> K
     L -->|Yes| N[Migration Complete]
@@ -1165,7 +1146,16 @@ kiro-cli chat --agent migration_supervisor</code></pre>
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         
-        // Initialize Reveal.js first
+        // Initialize Mermaid first with startOnLoad
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true },
+            sequence: { useMaxWidth: true }
+        });
+
+        // Initialize Reveal.js
         Reveal.initialize({
             hash: true,
             slideNumber: true,
@@ -1174,25 +1164,12 @@ kiro-cli chat --agent migration_supervisor</code></pre>
             height: 720,
             margin: 0.1,
             minScale: 0.2,
-            maxScale: 2.0
-        }).then(() => {
-            // Initialize Mermaid after Reveal is ready
-            mermaid.initialize({ 
-                startOnLoad: false,
-                theme: 'default',
-                securityLevel: 'loose'
-            });
-            
-            // Render all Mermaid diagrams
-            mermaid.run({
+            maxScale: 2.0,
+            display: 'block'
+        }).then(async () => {
+            // Render all Mermaid diagrams after Reveal is ready
+            await mermaid.run({
                 querySelector: '.mermaid'
-            });
-            
-            // Re-render Mermaid on slide change
-            Reveal.on('slidechanged', () => {
-                mermaid.run({
-                    querySelector: '.mermaid'
-                });
             });
         });
     </script>

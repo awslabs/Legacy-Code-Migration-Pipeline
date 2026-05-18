@@ -8,6 +8,7 @@ __pycache__
 zapp.yaml
 docs/
 temp/
+testing/
 test_orchestration/
 test_e2e_integration/
 TEST_PROTOCOL_E2E.md
