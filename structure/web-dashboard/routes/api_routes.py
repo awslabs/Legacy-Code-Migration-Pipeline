@@ -72,12 +72,14 @@ def file_content():
             
             # Security: Check if resolved path is within project directory
             # This prevents path traversal attacks using ../ or symlinks
-            if not str(resolved_path).startswith(str(project_root_resolved)):
-                logger.error(f"Path traversal attempt detected: {file_path}")
+            try:
+                resolved_path.relative_to(project_root_resolved)
+            except ValueError:
+                logger.error("Path traversal attempt detected")
                 return jsonify({"error": "Access denied: File outside project directory"}), 403
                 
         except Exception as e:
-            logger.error(f"Invalid file path: {file_path}, error: {e}")
+            logger.error(f"Invalid file path provided, error: {type(e).__name__}")
             return jsonify({"error": "Invalid file path"}), 400
         
         if not resolved_path.exists():

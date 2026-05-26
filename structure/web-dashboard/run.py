@@ -29,11 +29,12 @@ if __name__ == '__main__':
     print()
     
     try:
+        is_debug = os.environ.get('FLASK_DEBUG', '0') == '1'
         app.run(
             host='0.0.0.0',
             port=5001,
-            debug=True,
-            use_reloader=True
+            debug=is_debug,
+            use_reloader=is_debug
         )
     except KeyboardInterrupt:
         print("\n👋 Dashboard stopped by user")

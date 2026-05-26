@@ -519,7 +519,7 @@ class AdminPanel {
     }
 
     renderMarkdownPreview(content, container) {
-        // Enhanced markdown rendering
+        // Enhanced markdown rendering with sanitization
         let html = content;
         
         // Split into lines for better processing
@@ -538,7 +538,7 @@ class AdminPanel {
                     processedLines.push('</code></pre>');
                     inCodeBlock = false;
                 } else {
-                    const language = line.trim().substring(3);
+                    const language = this.escapeHtml(line.trim().substring(3));
                     processedLines.push(`<pre><code class="language-${language}">`);
                     inCodeBlock = true;
                 }
@@ -554,7 +554,7 @@ class AdminPanel {
             if (line.match(/^#{1,6}\s/)) {
                 const level = line.match(/^#+/)[0].length;
                 const text = line.replace(/^#+\s*/, '');
-                processedLines.push(`<h${level}>${text}</h${level}>`);
+                processedLines.push(`<h${level}>${this.escapeHtml(text)}</h${level}>`);
                 continue;
             }
             
@@ -567,7 +567,7 @@ class AdminPanel {
                     inList = true;
                     listItems = [];
                 }
-                listItems.push(`<li>${this.processInlineMarkdown(text)}</li>`);
+                listItems.push(`<li>${this.processInlineMarkdown(this.escapeHtml(text))}</li>`);
                 continue;
             } else if (inList) {
                 // End of list
@@ -585,7 +585,7 @@ class AdminPanel {
             }
             
             // Handle regular paragraphs
-            processedLines.push(`<p>${this.processInlineMarkdown(line)}</p>`);
+            processedLines.push(`<p>${this.processInlineMarkdown(this.escapeHtml(line))}</p>`);
         }
         
         // Close any remaining list

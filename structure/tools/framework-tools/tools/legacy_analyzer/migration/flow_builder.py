@@ -1373,9 +1373,9 @@ class MigrationFlowBuilder:
         # Log warning if no complexity data found
         if programs_with_data == 0 and total_programs > 0:
             logger.warning(
-                f"No complexity data found for any programs in flow. "
-                f"Using default values (tier=UNKNOWN). "
-                f"Missing programs: {', '.join(programs[:5])}{'...' if len(programs) > 5 else ''}"
+                "No complexity data found for any programs in flow. "
+                "Using default values (tier=UNKNOWN). "
+                f"Missing program count: {min(total_programs, 5)}"
             )
         elif programs_with_data < total_programs:
             # Find which programs are missing
@@ -1387,11 +1387,11 @@ class MigrationFlowBuilder:
             """, programs)
             programs_with_metrics = {row[0] for row in cursor.fetchall()}
             
-            missing_programs = [p for p in programs if p not in programs_with_metrics]
+            missing_count = total_programs - programs_with_data
             
             logger.info(
                 f"Partial complexity data: {programs_with_data}/{total_programs} programs have metrics. "
-                f"Missing: {', '.join(missing_programs[:3])}{'...' if len(missing_programs) > 3 else ''}"
+                f"Missing count: {missing_count}"
             )
         
         # Calculate composite score
