@@ -60,27 +60,34 @@ def file_content():
         if not file_path:
             return jsonify({"error": "File path is required"}), 400
         
-        # Security check - ensure file is within project directory
-        full_path = Path(file_path)
-        if not full_path.is_absolute():
-            full_path = current_app.data_loader.project_root / file_path
+        # Sanitize: strip path to relative component only
+        # Remove any leading slashes or drive letters to force relative interpretation
+        from werkzeug.utils import safe_join
+        import os
         
-        try:
-            # Normalize and resolve to absolute path
-            project_root_resolved = current_app.data_loader.project_root.resolve()
-            resolved_path = full_path.resolve()
-            
-            # Security: Check if resolved path is within project directory
-            # This prevents path traversal attacks using ../ or symlinks
+        project_root_resolved = str(current_app.data_loader.project_root.resolve())
+        
+        # If absolute path provided, try to make it relative to project root
+        if Path(file_path).is_absolute():
             try:
-                resolved_path.relative_to(project_root_resolved)
+                file_path = str(Path(file_path).resolve().relative_to(project_root_resolved))
             except ValueError:
                 logger.error("Path traversal attempt detected")
                 return jsonify({"error": "Access denied: File outside project directory"}), 403
-                
-        except Exception as e:
-            logger.error(f"Invalid file path provided, error: {type(e).__name__}")
-            return jsonify({"error": "Invalid file path"}), 400
+        
+        # Use safe_join to prevent path traversal — this is recognized by CodeQL
+        # as a proper sanitizer for user-controlled path data
+        safe_path = safe_join(project_root_resolved, file_path)
+        if safe_path is None:
+            logger.error("Path traversal attempt detected")
+            return jsonify({"error": "Access denied: File outside project directory"}), 403
+        
+        resolved_path = Path(safe_path).resolve()
+        
+        # Double-check containment after symlink resolution
+        if not str(resolved_path).startswith(project_root_resolved + os.sep) and str(resolved_path) != project_root_resolved:
+            logger.error("Path traversal attempt detected via symlink")
+            return jsonify({"error": "Access denied: File outside project directory"}), 403
         
         if not resolved_path.exists():
             return jsonify({"error": "File not found"}), 404
