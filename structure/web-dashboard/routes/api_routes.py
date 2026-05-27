@@ -60,20 +60,14 @@ def file_content():
         if not file_path:
             return jsonify({"error": "File path is required"}), 400
         
-        # Sanitize: strip path to relative component only
-        # Remove any leading slashes or drive letters to force relative interpretation
         from werkzeug.utils import safe_join
         import os
         
         project_root_resolved = str(current_app.data_loader.project_root.resolve())
         
-        # If absolute path provided, try to make it relative to project root
-        if Path(file_path).is_absolute():
-            try:
-                file_path = str(Path(file_path).resolve().relative_to(project_root_resolved))
-            except ValueError:
-                logger.error("Path traversal attempt detected")
-                return jsonify({"error": "Access denied: File outside project directory"}), 403
+        # Reject absolute paths outright — only relative paths are accepted
+        if os.path.isabs(file_path):
+            return jsonify({"error": "Absolute paths are not allowed. Use a relative path."}), 400
         
         # Use safe_join to prevent path traversal — this is recognized by CodeQL
         # as a proper sanitizer for user-controlled path data
